@@ -1,4 +1,15 @@
 {
   "name": "logux.io",
-  "private": true
+  "private": true,
+  "scripts": {
+    "uikit": "parcel serve src/uikit.pug --open"
+  },
+  "browserslist": [
+    "defaults"
+  ],
+  "devDependencies": {
+    "parcel-bundler": "^1.12.3",
+    "pug": "^2.0.4",
+    "sugarss": "^2.0.0"
+  }
 }
