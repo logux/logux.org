@@ -7,8 +7,18 @@
   "browserslist": [
     "defaults"
   ],
+  "postcss": {
+    "plugins": {
+      "postcss-media-minmax": {},
+      "postcss-nested": {},
+      "postcss-hexrgba": {}
+    }
+  },
   "devDependencies": {
     "parcel-bundler": "^1.12.3",
+    "postcss-hexrgba": "^1.0.2",
+    "postcss-media-minmax": "^4.0.0",
+    "postcss-nested": "^4.1.2",
     "pug": "^2.0.4",
     "sugarss": "^2.0.0"
   }
