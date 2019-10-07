@@ -79,7 +79,10 @@
   },
   "lint-staged": {
     "*.js": "eslint",
-    "*.svg": "svgo",
+    "*.svg": [
+      "svgo",
+      "git add"
+    ],
     "*.css": [
       "stylelint --fix",
       "git add"
