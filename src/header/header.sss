@@ -1,19 +1,37 @@
 .header
   --header-shadow: rgba(0, 0, 0, 0.15)
+  --header-height: 63px
 
-  height: 63px
+  height: var(--header-height)
   box-shadow: 0 2px 8px 0 var(--header-shadow)
 
   @media (prefers-color-scheme: dark)
     --header-shadow: rgba(0, 0, 0, 0.15)
 
+  @media (width <= 1000px)
+    --header-height: 45px
+
 .header_logo
   display: inline-block
-  height: 63px
+  height: var(--header-height)
   padding: 0 39px
   font-family: Kurbanistika, sans-serif
   font-size: 39px
-  line-height: 63px
+  line-height: var(--header-height)
   color: var(--text)
   text-decoration: none
   text-transform: lowercase
+
+  &:hover
+    color: #f5a623
+
+  &:focus
+    color: #f5a623
+    box-shadow:
+      inset 0 0 0 2px #f5a623,
+      inset 0 0 7px 2px #fbd469,
+      0 0 7px 0 #fbd469
+
+  @media (width <= 1000px)
+    padding: 0 12px
+    font-size: 29px
