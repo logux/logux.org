@@ -6,7 +6,9 @@
   box-shadow: 0 2px 8px 0 var(--header-shadow)
 
   @media (prefers-color-scheme: dark)
-    --header-shadow: rgba(0, 0, 0, 0.15)
+    --header-shadow: rgba(0, 0, 0, 0.4)
+
+    background: #353535
 
   @media (width <= 1000px)
     --header-height: 45px
@@ -21,16 +23,6 @@
   color: var(--text)
   text-decoration: none
   text-transform: lowercase
-
-  &:hover
-    color: #f5a623
-
-  &:focus
-    color: #f5a623
-    box-shadow:
-      inset 0 0 0 2px #f5a623,
-      inset 0 0 7px 2px #fbd469,
-      0 0 7px 0 #fbd469
 
   @media (width <= 1000px)
     padding: 0 12px

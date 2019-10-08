@@ -15,8 +15,13 @@ button
   &::-moz-focus-inner
     border: 0
 
+  &:hover,
+  &:focus
+    background-color: rgba(#f5a623, 0.15)
+
   &:focus
     outline: none
+    box-shadow: inset 0 0 0 2px #f5a623
 
   &:active
     transform: scale(0.95)
