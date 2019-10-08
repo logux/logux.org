@@ -2,6 +2,7 @@
   "name": "logux.io",
   "private": true,
   "scripts": {
+    "securitytxt:sign": "gpg --digest-algo SHA512 --clearsign src/base/.well-known/security.txt",
     "uikit": "parcel serve src/uikit.pug --open",
     "lint": "eslint . && stylelint src/**/*.sss",
     "test": "yarn lint",

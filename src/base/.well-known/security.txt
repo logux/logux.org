@@ -1,0 +1,5 @@
+Contact: andrey@sitnik.ru
+
+Encryption: https://keybase.io/iskin/pgp_keys.asc
+
+Preferred-Languages: en, ru
