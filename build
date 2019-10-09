@@ -1,0 +1,17 @@
+#!/usr/bin/env node
+
+let { join } = require('path')
+let Bundler = require('parcel-bundler')
+
+let uikitBundler = new Bundler(join(__dirname, 'src', 'uikit.pug'), {
+  sourceMaps: false
+})
+
+async function build () {
+  await uikitBundler.bundle()
+}
+
+build().catch(e => {
+  process.stderr.write(e.stack + '\n')
+  process.exit(1)
+})
