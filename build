@@ -1,7 +1,11 @@
 #!/usr/bin/env node
 
+let { copyFile, mkdir } = require('fs').promises
 let { join } = require('path')
 let Bundler = require('parcel-bundler')
+
+const WELL_KNOWN = join(__dirname, 'src', 'well-known')
+const DIST = join(__dirname, 'dist')
 
 let uikitBundler = new Bundler(join(__dirname, 'src', 'uikit.pug'), {
   sourceMaps: false
@@ -9,6 +13,16 @@ let uikitBundler = new Bundler(join(__dirname, 'src', 'uikit.pug'), {
 
 async function build () {
   await uikitBundler.bundle()
+
+  await Promise.all([
+    copyFile(join(WELL_KNOWN, 'favicon.ico'), join(DIST, 'favicon.ico')),
+    copyFile(join(WELL_KNOWN, 'robots.txt'), join(DIST, 'robots.txt')),
+    mkdir(join(DIST, '.well-known'))
+  ])
+  await copyFile(
+    join(WELL_KNOWN, 'security.txt.asc'),
+    join(DIST, '.well-known', 'security.txt')
+  )
 }
 
 build().catch(e => {
