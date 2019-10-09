@@ -7,7 +7,9 @@
     "lint": "eslint . && stylelint src/**/*.sss",
     "test": "yarn lint && yarn build",
     "clean": "rimraf dist/ .cache",
-    "build": "rimraf dist/ && NODE_ENV=production ./build"
+    "build": "rimraf dist/ && NODE_ENV=production ./build",
+    "nginx": "podman run --rm -p 8000:80 -e PORT=80 $(buildah bud .)",
+    "nginx:shell": "podman run --rm -i $(buildah bud .) sh"
   },
   "devDependencies": {
     "@logux/eslint-config": "^32.2.0",
