@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-let { writeFile, readFile, copyFile } = require('fs').promises
+let { writeFile, readFile, copyFile, unlink } = require('fs').promises
 let { basename, join } = require('path')
 let posthtml = require('posthtml')
 let makeDir = require('make-dir')
@@ -53,15 +53,20 @@ async function generateWebManifest (getAsset) {
 }
 
 async function updateHtml (webmanifest) {
-  let file = join(DIST, 'uikit.html')
-  let html = await readFile(file)
+  let [html] = await Promise.all([
+    readFile(join(DIST, 'uikit.html')),
+    makeDir(join(DIST, 'uikit'))
+  ])
   function htmlPlugin (tree) {
     tree.match({ attrs: { rel: 'icon', sizes: '512x512' } }, () => {
       return { tag: 'link', attrs: { rel: 'manifest', href: webmanifest } }
     })
   }
   let fixed = posthtml().use(htmlPlugin).process(html, { sync: true }).html
-  await writeFile(file, fixed)
+  await Promise.all([
+    writeFile(join(DIST, 'uikit', 'index.html'), fixed),
+    unlink(join(DIST, 'uikit.html'))
+  ])
 }
 
 async function build () {
