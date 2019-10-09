@@ -1,28 +1,53 @@
 #!/usr/bin/env node
 
-let { copyFile, mkdir } = require('fs').promises
-let { join } = require('path')
+let { writeFile, readFile, copyFile, mkdir } = require('fs').promises
+let { basename, join } = require('path')
+let { existsSync } = require('fs')
 let Bundler = require('parcel-bundler')
 
+const BASE = join(__dirname, 'src', 'base')
 const WELL_KNOWN = join(__dirname, 'src', 'well-known')
 const DIST = join(__dirname, 'dist')
+
+function findAssets (bundle) {
+  return Array.from(bundle.childBundles).reduce((all, i) => {
+    return all.concat(findAssets(i))
+  }, [bundle.name])
+}
+
+function assetToUrl (assets, regexp) {
+  return '/' + basename(assets.find(i => regexp.test(i)))
+}
 
 let uikitBundler = new Bundler(join(__dirname, 'src', 'uikit.pug'), {
   sourceMaps: false
 })
 
 async function build () {
-  await uikitBundler.bundle()
+  let bundle = await uikitBundler.bundle()
+  let assets = findAssets(bundle)
 
+  // Well Known
   await Promise.all([
     copyFile(join(WELL_KNOWN, 'favicon.ico'), join(DIST, 'favicon.ico')),
-    copyFile(join(WELL_KNOWN, 'robots.txt'), join(DIST, 'robots.txt')),
-    mkdir(join(DIST, '.well-known'))
+    copyFile(join(WELL_KNOWN, 'robots.txt'), join(DIST, 'robots.txt'))
   ])
+  if (!existsSync(join(DIST, '.well-known'))) {
+    await mkdir(join(DIST, '.well-known'))
+  }
   await copyFile(
     join(WELL_KNOWN, 'security.txt.asc'),
     join(DIST, '.well-known', 'security.txt')
   )
+
+  // Web manifest
+  let manifestJson = JSON.parse(
+    await readFile(join(BASE, 'manifest.webmanifest'))
+  )
+  manifestJson.icons[0].src = assetToUrl(assets, /196\..*\.png/)
+  manifestJson.icons[1].src = assetToUrl(assets, /512\..*\.png/)
+  let manifestText = JSON.stringify(manifestJson)
+  await writeFile(join(DIST, 'manifest.webmanifest'), manifestText)
 }
 
 build().catch(e => {
