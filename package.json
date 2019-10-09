@@ -9,7 +9,8 @@
     "clean": "rimraf dist/ .cache",
     "build": "rimraf dist/ && NODE_ENV=production ./build",
     "nginx": "podman run --rm -p 8000:80 -e PORT=80 $(buildah bud .)",
-    "nginx:shell": "podman run --rm -i $(buildah bud .) sh"
+    "nginx:shell": "podman run --rm -i $(buildah bud .) sh",
+    "deploy": "gcloud builds --project logux-255417 submit"
   },
   "devDependencies": {
     "@logux/eslint-config": "^32.2.0",

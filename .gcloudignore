@@ -1,0 +1,9 @@
+node_modules/
+.cache/
+dist/
+
+.git/
+README.md
+.gitignore
+.travis.yml
+.editorconfig
