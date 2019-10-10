@@ -1,6 +1,7 @@
 {
   "name": "Logux Docs",
   "short_name": "Logux",
+  "background_color": "#fff",
   "theme_color": "#ffc40d",
   "icons": [
     {
