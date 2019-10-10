@@ -49,17 +49,20 @@ async function generateWebManifest (getAsset) {
   let hash = crypto.createHash('md5').update(text).digest('hex').slice(0, 8)
   let name = `manifest.${ hash }.webmanifest`
   await writeFile(join(DIST, name), text)
-  return '/' + name
+  return { url: '/' + name, theme: json.theme_color }
 }
 
-async function updateHtml (webmanifest) {
+async function updateHtml (manifest) {
   let [html] = await Promise.all([
     readFile(join(DIST, 'uikit.html')),
     makeDir(join(DIST, 'uikit'))
   ])
   function htmlPlugin (tree) {
     tree.match({ attrs: { rel: 'icon', sizes: '512x512' } }, () => {
-      return { tag: 'link', attrs: { rel: 'manifest', href: webmanifest } }
+      return [
+        { tag: 'link', attrs: { rel: 'manifest', href: manifest.url } },
+        { tag: 'meta', attrs: { name: 'theme-color', content: manifest.theme } }
+      ]
     })
   }
   let fixed = posthtml().use(htmlPlugin).process(html, { sync: true }).html
