@@ -4,7 +4,7 @@ let { readFile } = require('fs').promises
 let { request } = require('https')
 let { join } = require('path')
 
-let SECRETS_FILE = join(__dirname, 'secrets.json')
+let SECRETS_FILE = join(__dirname, '..', 'secrets.json')
 
 async function loadSecrets () {
   return JSON.parse(await readFile(SECRETS_FILE))

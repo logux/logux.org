@@ -37,6 +37,6 @@ steps:
       - --region=us-east1
       - --platform=managed
   - name: node:12
-    entrypoint: ./update-cdn
+    entrypoint: ./scripts/update-cdn
 images:
   - gcr.io/$PROJECT_ID/loguxio

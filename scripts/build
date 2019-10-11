@@ -7,11 +7,11 @@ let makeDir = require('make-dir')
 let Bundler = require('parcel-bundler')
 let crypto = require('crypto')
 
-const SRC = join(__dirname, 'src')
-const DIST = join(__dirname, 'dist')
+const SRC = join(__dirname, '..', 'src')
+const DIST = join(__dirname, '..', 'dist')
 
 async function compileAssets () {
-  let uikitBundler = new Bundler(join(__dirname, 'src', 'uikit.pug'), {
+  let uikitBundler = new Bundler(join(SRC, 'uikit.pug'), {
     sourceMaps: false
   })
   let bundle = await uikitBundler.bundle()
@@ -28,7 +28,7 @@ async function compileAssets () {
 }
 
 async function copyWellKnown () {
-  let wellFrom = join(__dirname, 'src', 'well-known')
+  let wellFrom = join(SRC, 'well-known')
   let wellTo = join(DIST, '.well-known')
   let files = ['favicon.ico', 'robots.txt']
   await makeDir(join(DIST, '.well-known'))
