@@ -1,6 +1,7 @@
 node_modules/
 .cache/
 dist/
+secrets.json
 
 .git/
 README.md

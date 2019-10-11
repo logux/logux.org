@@ -2,6 +2,7 @@
   "name": "logux.io",
   "private": true,
   "scripts": {
+    "secrets:decrypt": "gcloud kms --project logux-255417 decrypt --plaintext-file=secrets.json --ciphertext-file=secrets.json.enc --location=global --keyring=secrets --key=password",
     "securitytxt:sign": "gpg --digest-algo SHA512 --clearsign src/well-known/security.txt",
     "start": "parcel serve src/uikit.pug --open",
     "lint": "eslint . && stylelint src/**/*.sss",

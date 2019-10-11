@@ -3,11 +3,20 @@ steps:
     entrypoint: yarn
     args:
       - install
+      - --production
+  - name: 'gcr.io/cloud-builders/gcloud'
+    args:
+      - kms
+      - decrypt
+      - --plaintext-file=secrets.json
+      - --ciphertext-file=secrets.json.enc
+      - --location=global
+      - --keyring=secrets
+      - --key=password
   - name: node:12
     entrypoint: yarn
     args:
       - build
-      - --production
   - name: 'gcr.io/cloud-builders/docker'
     args:
       - build
