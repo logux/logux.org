@@ -1,14 +1,22 @@
 steps:
   - name: node:12
     entrypoint: yarn
-    args: ['install']
+    args:
+      - install
   - name: node:12
     entrypoint: yarn
-    args: ['build']
+    args:
+      - build
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['build', '-t', 'gcr.io/$PROJECT_ID/loguxio', '.']
+    args:
+      -- build
+      -- -t
+      -- gcr.io/$PROJECT_ID/loguxio
+      -- .
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['push', 'gcr.io/$PROJECT_ID/loguxio']
+    args:
+      -- push
+      -- gcr.io/$PROJECT_ID/loguxio
   - name: 'gcr.io/cloud-builders/gcloud'
     args:
       - beta
