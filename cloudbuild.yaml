@@ -10,14 +10,14 @@ steps:
       - --production
   - name: 'gcr.io/cloud-builders/docker'
     args:
-      -- build
-      -- -t
-      -- gcr.io/$PROJECT_ID/loguxio
-      -- .
+      - build
+      - -t
+      - gcr.io/$PROJECT_ID/loguxio
+      - .
   - name: 'gcr.io/cloud-builders/docker'
     args:
-      -- push
-      -- gcr.io/$PROJECT_ID/loguxio
+      - push
+      - gcr.io/$PROJECT_ID/loguxio
   - name: 'gcr.io/cloud-builders/gcloud'
     args:
       - beta
