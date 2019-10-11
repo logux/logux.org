@@ -36,5 +36,7 @@ steps:
       - --image=gcr.io/logux-255417/loguxio
       - --region=us-east1
       - --platform=managed
+  - name: node:12
+    entrypoint: ./update-cdn
 images:
   - gcr.io/$PROJECT_ID/loguxio

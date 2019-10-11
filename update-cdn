@@ -1,0 +1,50 @@
+#!/usr/bin/env node
+
+let { readFile } = require('fs').promises
+let { request } = require('https')
+let { join } = require('path')
+
+let SECRETS_FILE = join(__dirname, 'secrets.json')
+
+async function loadSecrets () {
+  return JSON.parse(await readFile(SECRETS_FILE))
+}
+
+function callCloudflare (credentials, command, opts) {
+  return new Promise((resolve, reject) => {
+    let req = request({
+      method: 'POST',
+      hostname: 'api.cloudflare.com',
+      path: `/client/v4/zones/${ credentials.zone }/${ command }`,
+      headers: {
+        'Authorization': `Bearer ${ credentials.token }`,
+        'Content-Type': 'application/json'
+      }
+    }, res => {
+      let data = ''
+      res.on('data', chunk => {
+        data += chunk
+      })
+      res.on('end', () => {
+        let answer = JSON.parse(data)
+        if (answer.success) {
+          resolve()
+        } else {
+          reject(new Error(answer.errors[0].message))
+        }
+      })
+    })
+    if (opts) req.write(JSON.stringify(opts))
+    req.on('error', reject)
+    req.end()
+  })
+}
+
+loadSecrets().then(async secrets => {
+  await callCloudflare(secrets.cloudflare, 'purge_cache', {
+    purge_everything: true
+  })
+}).catch(e => {
+  process.stderr.write(e.stack + '\n')
+  process.exit(1)
+})
