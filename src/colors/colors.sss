@@ -1,12 +1,13 @@
 html
   --colors-black: #1f1f1f
   --colors-text: var(--colors-black)
+  --colors-background: white
   --colors-accent: #f5a623
   --colors-hover: rgba(#f5a623, 0.15)
 
   color: var(--colors-text)
+  background: var(--colors-background)
 
-  @media (prefers-color-scheme: dark)
-    --text: white
-
-    background: var(--colors-black)
+  @dark
+    --colors-text: white
+    --colors-background: var(--colors-black)

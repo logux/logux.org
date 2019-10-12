@@ -1,16 +1,24 @@
-.header
-  --header-shadow: rgba(0, 0, 0, 0.15)
+html
   --header-height: 63px
 
+.header
+  --header-shadow: rgba(0, 0, 0, 0.15)
+
+  position: fixed
+  top: 0
+  display: flex
+  justify-content: space-between
+  width: 100%
   height: var(--header-height)
+  background: var(--colors-background)
   box-shadow: 0 2px 8px 0 var(--header-shadow)
 
-  @media (prefers-color-scheme: dark)
+  @mixin dark
     --header-shadow: rgba(0, 0, 0, 0.4)
 
     background: #353535
 
-  @media (width <= 1000px)
+  @mixin mobile
     --header-height: 45px
 
 .header_logo
@@ -20,13 +28,55 @@
   font-family: Kurbanistika, sans-serif
   font-size: 39px
   line-height: var(--header-height)
-  color: inherit
-  text-decoration: none
   text-transform: lowercase
 
   &:focus
     box-shadow: inset var(--base-focus)
 
-  @media (width <= 1000px)
+  @mixin mobile
     padding: 0 12px
     font-size: 29px
+
+.header_links
+  padding-right: 18px
+
+  @mixin mobile
+    padding-right: 0
+
+.header_link
+  position: relative
+  display: inline-block
+  height: var(--header-height)
+  padding: 0 18px
+  font-weight: bold
+  line-height: var(--header-height)
+
+  &[href]:hover
+    color: transparent
+
+    @mixin mobile
+      color: inherit
+
+  &:not([href])
+    box-shadow: inset 0 -3px var(--colors-text)
+
+  @mixin mobile
+    padding: 0 9px
+
+.header_hover
+  position: absolute
+  top: 0
+  display: none
+  width: 100%
+  height: 100%
+  font-family: Kurbanistika, sans-serif
+  font-size: 23px
+  font-weight: normal
+  color: var(--colors-text)
+  text-transform: lowercase
+
+  .header_link:hover &
+    display: block
+
+    @mixin mobile
+      display: none
