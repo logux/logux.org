@@ -1,4 +1,6 @@
 html
+  --base-focus: 0 0 0 3px var(--colors-accent)
+
   color-scheme: light dark
   font-family: "Work Sans", sans-serif
   font-size: 18px
@@ -9,9 +11,15 @@ html
 
 body
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0)
+  line-height: 1.5
+  scroll-behavior: smooth
+
+  @media (prefers-reduced-motion: reduce)
+    scroll-behavior: auto
 
 a
   color: #f55c23
+  text-decoration: none
 
 a,
 button
@@ -20,11 +28,20 @@ button
 
   &:hover,
   &:focus
-    background-color: rgba(#f5a623, 0.15)
+    background-color: var(--colors-hover)
 
   &:focus
     outline: none
-    box-shadow: inset 0 0 0 2px #f5a623
+    box-shadow: var(--base-focus)
+    transition: box-shadow 200ms
 
   &:active
-    transform: scale(0.95)
+    opacity: 0.4
+
+a:not([class])
+  &:hover
+    box-shadow: 0 0 0 2px var(--colors-hover)
+
+@media (prefers-reduced-motion: reduce)
+  *
+    transition: none !important

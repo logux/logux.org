@@ -1,10 +1,12 @@
-:root
-  --black: #1f1f1f
-  --text: var(--black)
+html
+  --colors-black: #1f1f1f
+  --colors-text: var(--colors-black)
+  --colors-accent: #f5a623
+  --colors-hover: rgba(#f5a623, 0.15)
 
-  color: var(--text)
+  color: var(--colors-text)
 
   @media (prefers-color-scheme: dark)
     --text: white
 
-    background: var(--black)
+    background: var(--colors-black)

@@ -1,7 +1,21 @@
 let lastDown, lastDownAt
 
+function activeParent (element) {
+  if (
+    element.tagName === 'A' ||
+    element.tagName === 'BUTTON' ||
+    (element.tagName === 'INPUT' && element.type === 'submit')
+  ) {
+    return element
+  } else if (element.parentElement) {
+    return activeParent(element.parentElement)
+  } else {
+    return null
+  }
+}
+
 document.addEventListener('mousedown', e => {
-  lastDown = e.target
+  lastDown = activeParent(e.target)
   lastDownAt = Date.now()
 })
 
