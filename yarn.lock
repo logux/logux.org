@@ -2659,9 +2659,9 @@ eslint-plugin-import@^2.18.2:
     resolve "^1.11.0"
 
 eslint-plugin-jest@^22.17.0:
-  version "22.17.0"
-  resolved "https://registry.yarnpkg.com/eslint-plugin-jest/-/eslint-plugin-jest-22.17.0.tgz#dc170ec8369cd1bff9c5dd8589344e3f73c88cf6"
-  integrity sha512-WT4DP4RoGBhIQjv+5D0FM20fAdAUstfYAf/mkufLNTojsfgzc5/IYW22cIg/Q4QBavAZsROQlqppiWDpFZDS8Q==
+  version "22.19.0"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-jest/-/eslint-plugin-jest-22.19.0.tgz#0cf90946a8c927d40a2c64458c89bb635d0f2a0b"
+  integrity sha512-4zUc3rh36ds0SXdl2LywT4YWA3zRe8sfLhz8bPp8qQPIKvynTTkNGwmSCMpl5d9QiZE2JxSinGF+WD8yU+O0Lg==
   dependencies:
     "@typescript-eslint/experimental-utils" "^1.13.0"
 
@@ -5485,6 +5485,13 @@ postcss-convert-values@^4.0.1:
   dependencies:
     postcss "^7.0.0"
     postcss-value-parser "^3.0.0"
+
+postcss-dark-theme-class@^0.1.0:
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/postcss-dark-theme-class/-/postcss-dark-theme-class-0.1.0.tgz#71ebb7a0bdee72cbb0d3ad73e0072a05989a392b"
+  integrity sha512-AgD6AUUlNAVhCSiCAY/Tav8CS2zqBjwvQLdRrCLKC13nCU8//bvuhZCN3ipTzXfrpuBHF15i8EUGdYuA/20zqA==
+  dependencies:
+    postcss "^7.0.18"
 
 postcss-discard-comments@^4.0.2:
   version "4.0.2"

@@ -16,6 +16,7 @@
   "dependencies": {
     "make-dir": "^3.0.0",
     "parcel-bundler": "^1.12.4",
+    "postcss-dark-theme-class": "^0.1.0",
     "postcss-hexrgba": "^1.0.2",
     "postcss-media-minmax": "^4.0.0",
     "postcss-mixins": "^6.2.2",
@@ -32,7 +33,7 @@
     "eslint-config-standard": "^14.1.0",
     "eslint-plugin-es5": "^1.4.1",
     "eslint-plugin-import": "^2.18.2",
-    "eslint-plugin-jest": "^22.17.0",
+    "eslint-plugin-jest": "^22.19.0",
     "eslint-plugin-node": "^10.0.0",
     "eslint-plugin-prefer-let": "^1.0.1",
     "eslint-plugin-promise": "^4.2.1",
@@ -68,7 +69,8 @@
       },
       "postcss-media-minmax": {},
       "postcss-nested": {},
-      "postcss-hexrgba": {}
+      "postcss-hexrgba": {},
+      "postcss-dark-theme-class": {}
     }
   },
   "eslintConfig": {
@@ -91,12 +93,15 @@
       "declaration-block-trailing-semicolon": null,
       "block-closing-brace-newline-before": null,
       "block-opening-brace-space-before": null,
-      "at-rule-no-unknown": [true, {
-        "ignoreAtRules": [
-          "define-mixin",
-          "mixin"
-        ]
-      }]
+      "at-rule-no-unknown": [
+        true,
+        {
+          "ignoreAtRules": [
+            "define-mixin",
+            "mixin"
+          ]
+        }
+      ]
     }
   },
   "husky": {

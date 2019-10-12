@@ -7,8 +7,10 @@ html( lang="en" )
   body
     - var category = 'guide'
     include header/header.pug
+    script( async src="/uikit.js" )
     article.text
       h1 Logux.io UI Kit
+      p Switch to <a href="#dark">dark</a> theme. Swith to <a href="#">default</a> theme.
       p Logux <strong>actions</strong> are very similar to <a href="#">Redux actions</a>. JSON objects describe what was changed in <a href="#">the application state</a>. Logux Core provides <code>BaseNode</code> class, which will synchronize actions between two nodes. <code>ClientNode</code> and <code>ServerNode</code> classes extend this class with small behaviour changes.
       ol
         li
