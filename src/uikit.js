@@ -1,6 +1,9 @@
+let htmlClasses = document.documentElement.classList
+
 function processHash () {
-  let isDark = location.hash.includes('dark')
-  document.documentElement.classList.toggle('is-dark', isDark)
+  console.log(location.hash, location.hash === '#light')
+  htmlClasses.toggle('is-light', location.hash === '#light')
+  htmlClasses.toggle('is-dark', location.hash === '#dark')
 }
 
 window.addEventListener('hashchange', processHash)
