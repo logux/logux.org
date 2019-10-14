@@ -1,6 +1,6 @@
 .text
   position: relative
-  padding: 42px 0
+  padding: 36px 0
 
   @mixin no-mobile
     left: calc(var(--aside-width) / 2)
@@ -9,3 +9,43 @@
 
   @mixin mobile
     padding: 24px 15px
+
+.text_title
+  margin-bottom: 24px
+  font-size: 48px
+  font-weight: 800
+
+  @mixin mobile
+    margin-bottom: 21px
+    font-size: 24px
+    font-weight: bold
+
+.text_subtitle
+  margin: 39px 0 21px 0
+  font-size: 24px
+  font-weight: 800
+
+  @mixin mobile
+    margin-bottom: 18px 0 12px 0
+    font-size: 18px
+    font-weight: bold
+
+.text_subsubtitle
+  margin-bottom: 21px
+  font-size: inherit
+  font-weight: bold
+
+  @mixin mobile
+    margin-bottom: 18px
+
+.text_block,
+.text_list,
+.text_example,
+.text_table
+  margin-bottom: 21px
+
+  @mixin mobile
+    margin-bottom: 18px
+
+.text_list
+  margin-left: 24px
