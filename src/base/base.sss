@@ -58,11 +58,10 @@ button
     box-shadow: var(--base-focus)
     transition: box-shadow 200ms
 
-  &:active
-    opacity: 0.4
-
-    @mixin mobile
-      opacity: 1
+  @mixin no-mobile
+    &:active
+      transition: none
+      transform: translateY(1px)
 
 a:not([class])
   color: inherit
