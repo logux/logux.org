@@ -28,7 +28,7 @@ html( lang="en" )
       p.text_block Logux Server removes action after processing and always look to a database for the latest value. As a result, you can’t undo actions on the server.
       pre.text_example const action = { type: 'user/add' }
       p.text_block However, you can change this behavior and have event sourcing on the server too.
-      h2.text_subtitle <code class="text_code">add()</code>
+      h2.text_subtitle <code>add()</code>
       h3.text_subsubtitle Parameters
       table.text_table
         tr
@@ -37,15 +37,15 @@ html( lang="en" )
           th Description
         tr
           td <code class="text_code">nodeId</code>
-          td <code class="text_code"><a href="#">string</a></code>
+          td <code><a href="#">string</a></code>
           td Unique current machine name.
         tr
           td <code class="text_code">reason</code>
-          td <code class="text_code"><a href="#">string</a> = 'error'</code>
+          td <code><a href="#">string</a> = 'error'</code>
           td Optional code for reason.
         tr
           td <code class="text_code">options</code>
-          td <code class="text_code"><a href="#">object</a>?</code>
+          td <code><a href="#">object</a>?</code>
           td Synchronization options.
       h3.text_subsubtitle Returns
       p.text_block <code class="text_code"><a href="#">Promise</a>&lt;<a href="#">boolean</a>></code>

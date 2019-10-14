@@ -24,6 +24,12 @@
     margin-bottom: 18px 0 12px 0
     font-size: 18px
 
+  code
+    font-size: 21px
+
+    @mixin mobile
+      font-size: 15px
+
 .text_subsubtitle
   margin-bottom: 21px
   font-size: inherit
@@ -42,3 +48,17 @@
 
 .text_list
   margin-left: 24px
+
+.text_code
+  padding: 3px 6px
+  font-size: 16px
+  background: #fbd469
+  border-radius: 4px
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1)
+
+  @mixin dark
+    font-size: 14px
+    background-color: rgba(255, 255, 255, 0.15)
+    box-shadow:
+      0 2px 8px rgba(0, 0, 0, 0.3),
+      inset 0 1px 0 rgba(255, 255, 255, 0.05)
