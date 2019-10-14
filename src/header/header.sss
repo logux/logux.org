@@ -14,7 +14,7 @@ html
   justify-content: space-between
   width: 100%
   height: var(--header-height)
-  background: var(--colors-background)
+  background: var(--base-background)
   box-shadow: 0 2px 8px 0 var(--header-shadow)
 
   @mixin dark
@@ -62,7 +62,7 @@ html
     box-shadow: inset var(--base-focus)
 
   &:not([href])
-    box-shadow: inset 0 -3px var(--colors-text)
+    box-shadow: inset 0 -3px var(--base-text)
 
   @mixin mobile
     padding: 0 9px
@@ -79,7 +79,7 @@ html
     font-family: Kurbanistika, sans-serif
     font-size: 23px
     font-weight: normal
-    color: var(--colors-text)
+    color: var(--base-text)
     text-align: center
     text-transform: lowercase
 

@@ -1,5 +1,10 @@
 html
-  --base-focus: 0 0 0 3px var(--colors-accent)
+  --base-black: #1f1f1f
+  --base-text: var(--base-black)
+  --base-background: white
+  --base-accent: #f5a623
+  --base-hover: rgba(#f5a623, 0.15)
+  --base-focus: 0 0 0 3px var(--base-accent)
   --base-above: 0 2px 8px rgba(0, 0, 0, 0.15)
   --base-above-focus:
     0 2px 8px 3px rgba(0, 0, 0, 0.15),
@@ -8,11 +13,15 @@ html
   color-scheme: light dark
   font-family: "Work Sans", sans-serif
   font-size: 18px
+  color: var(--base-text)
+  background: var(--base-background)
 
   @mixin mobile
     font-size: 16px
 
   @mixin dark
+    --base-text: white
+    --base-background: var(--base-black)
     --base-above:
       0 0 0 rgba(0, 0, 0, 0),
       0 2px 8px rgba(0, 0, 0, 0.3),
@@ -42,7 +51,7 @@ button
 
   &:hover,
   &:focus
-    background-color: var(--colors-hover)
+    background-color: var(--base-hover)
 
   &:focus
     outline: none
@@ -60,7 +69,7 @@ a:not([class])
   border-radius: 1px
 
   &:hover
-    box-shadow: 0 0 0 4px var(--colors-hover)
+    box-shadow: 0 0 0 4px var(--base-hover)
 
 a[class]
   color: inherit
