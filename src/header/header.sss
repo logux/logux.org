@@ -34,14 +34,14 @@ html
     box-shadow: inset var(--base-focus)
 
   @mixin mobile
-    padding: 0 12px
+    padding: 0 15px
     font-size: 29px
 
 .header_links
   padding-right: 18px
 
   @mixin mobile
-    padding-right: 3px
+    padding-right: 6px
 
 .header_link
   position: relative
@@ -64,21 +64,20 @@ html
     padding: 0 9px
 
 .header_hover
-  position: absolute
-  top: 0
-  left: 0
   display: none
-  width: 100%
-  height: 100%
-  font-family: Kurbanistika, sans-serif
-  font-size: 23px
-  font-weight: normal
-  color: var(--colors-text)
-  text-align: center
-  text-transform: lowercase
 
-  .header_link:hover &
-    display: block
+  @mixin no-mobile
+    position: absolute
+    top: 0
+    left: 0
+    width: 100%
+    height: 100%
+    font-family: Kurbanistika, sans-serif
+    font-size: 23px
+    font-weight: normal
+    color: var(--colors-text)
+    text-align: center
+    text-transform: lowercase
 
-    @mixin mobile
-      display: none
+    .header_link:hover &
+      display: block

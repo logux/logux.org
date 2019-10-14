@@ -1,0 +1,11 @@
+.text
+  position: relative
+  padding: 42px 0
+
+  @mixin no-mobile
+    left: calc(var(--aside-width) / 2)
+    max-width: 900px
+    margin: 0 auto
+
+  @mixin mobile
+    padding: 24px 15px
