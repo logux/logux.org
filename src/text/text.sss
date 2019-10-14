@@ -49,6 +49,22 @@
 .text_list
   margin-left: 24px
 
+.text_example
+  padding: 15px 18px
+  overflow: auto
+  font-size: 16px
+  border-radius: 4px
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15)
+
+  @mixin mobile
+    font-size: 14px
+
+  @mixin dark
+    background-color: rgba(255, 255, 255, 0.1)
+    box-shadow:
+      0 2px 8px 0 rgba(0, 0, 0, 0.3),
+      inset 0 1px 0 0 rgba(255, 255, 255, 0.1)
+
 .text_code
   padding: 3px 6px
   font-size: 16px
