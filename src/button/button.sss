@@ -1,0 +1,21 @@
+a.button,
+button.button
+  display: inline-block
+  height: 36px
+  padding: 0 15px
+  font-weight: bold
+  line-height: 36px
+  color: black
+  background: linear-gradient(to right, #fbd469, #f5a623)
+  border-radius: 4px
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15)
+
+  &:hover,
+  &:focus
+    background: #fbd469
+
+  &:focus
+    box-shadow: var(--base-focus), 0 2px 8px 3px rgba(0, 0, 0, 0.15)
+
+  &:active
+    box-shadow: none
