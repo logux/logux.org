@@ -18,10 +18,6 @@ body
   @media (prefers-reduced-motion: reduce)
     scroll-behavior: auto
 
-a
-  color: #f55c23
-  text-decoration: none
-
 a[href],
 button
   &::-moz-focus-inner
@@ -43,11 +39,14 @@ button
       opacity: 1
 
 a:not([class])
+  color: inherit
+
   &:hover
     box-shadow: 0 0 0 3px var(--colors-hover)
 
 a[class]
   color: inherit
+  text-decoration: none
 
 @media (prefers-reduced-motion: reduce)
   *
