@@ -56,12 +56,30 @@
   border-radius: 4px
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1)
 
-  .text_code-link &
-    text-decoration: underline
+  @mixin mobile
+    padding: 2px 4px
+    font-size: 14px
 
   @mixin dark
-    font-size: 14px
-    background-color: rgba(255, 255, 255, 0.15)
+    background: rgba(255, 255, 255, 0.15)
     box-shadow:
       0 2px 8px rgba(0, 0, 0, 0.3),
       inset 0 1px 0 rgba(255, 255, 255, 0.05)
+
+  .text_code-link &
+    text-decoration: underline
+
+  .text_code-link:hover &
+    background: #f2cc61
+
+    @mixin dark
+      background: rgba(255, 255, 255, 0.3)
+
+a.text_code-link
+  border-radius: 4px
+
+  &:hover
+    background: none
+
+  &:focus
+    box-shadow: inset var(--base-focus)

@@ -1,6 +1,6 @@
 let lastDown, lastDownAt
 
-function activeParent (element) {
+function clickableParent (element) {
   if (
     element.tagName === 'A' ||
     element.tagName === 'BUTTON' ||
@@ -8,14 +8,14 @@ function activeParent (element) {
   ) {
     return element
   } else if (element.parentElement) {
-    return activeParent(element.parentElement)
+    return clickableParent(element.parentElement)
   } else {
     return null
   }
 }
 
 document.addEventListener('mousedown', e => {
-  lastDown = activeParent(e.target)
+  lastDown = clickableParent(e.target)
   lastDownAt = Date.now()
 })
 
