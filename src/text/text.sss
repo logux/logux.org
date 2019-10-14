@@ -1,3 +1,9 @@
+html
+  --text-margin: 21px
+
+  @mixin mobile
+    --text-margin: 18px
+
 .text
   padding: 36px 0
 
@@ -39,66 +45,61 @@
 
 .text_block,
 .text_list,
-.text_example,
 .text_table
-  margin-bottom: 21px
-
-  @mixin mobile
-    margin-bottom: 18px
+  margin-bottom: var(--text-margin)
 
 .text_list
   margin-left: 24px
 
-.text_example
-  padding: 15px 18px
-  overflow: auto
-  font-size: 16px
-  border-radius: 4px
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15)
-
-  @mixin mobile
-    font-size: 14px
-
-  @mixin dark
-    background-color: rgba(255, 255, 255, 0.1)
-    box-shadow:
-      0 2px 8px 0 rgba(0, 0, 0, 0.3),
-      inset 0 1px 0 0 rgba(255, 255, 255, 0.1)
-
 .text_code
-  padding: 3px 6px
+  padding: 2px 6px
   font-size: 16px
   background: #fbd469
   border-radius: 4px
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1)
+  transition: box-shadow 200ms
 
   @mixin mobile
-    padding: 2px 4px
     font-size: 14px
 
   @mixin dark
-    background: rgba(255, 255, 255, 0.15)
+    background: rgba(255, 255, 255, 0.1)
     box-shadow:
+      0 0 0 rgba(0, 0, 0, 0),
       0 2px 8px rgba(0, 0, 0, 0.3),
       inset 0 1px 0 rgba(255, 255, 255, 0.05)
 
   .text_code-link &
     text-decoration: underline
 
-  .text_code-link:hover &
+  .text_code-link:hover &,
+  .text_code-link:focus &
     background: #f2cc61
 
     @mixin dark
       background: rgba(255, 255, 255, 0.3)
 
+  .text_code-link:focus &
+    box-shadow:
+      var(--base-focus),
+      0 2px 8px 3px rgba(0, 0, 0, 0.15)
+
+    @mixin dark
+      box-shadow:
+        var(--base-focus),
+        0 2px 8px 3px rgba(0, 0, 0, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.05)
+
+  .text_code-link:active &
+    box-shadow: none
+
 a.text_code-link
   border-radius: 4px
 
-  &:hover
-    background: none
-
+  &:hover,
   &:focus
-    box-shadow: inset var(--base-focus)
+    background: none
+    box-shadow: none
 
 .text_table
   border-collapse: collapse
