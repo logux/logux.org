@@ -99,3 +99,25 @@ a.text_code-link
 
   &:focus
     box-shadow: inset var(--base-focus)
+
+.text_table
+  border-collapse: collapse
+  border-top: 1px solid #e1e1e1
+
+  th,
+  td
+    padding: 12px 0
+    border-bottom: 1px solid #e1e1e1
+
+    @mixin mobile
+      padding: 6px 0
+
+  th
+    text-align: left
+
+  th + th,
+  td + td
+    padding-left: 51px
+
+    @mixin mobile
+      padding-left: 12px
