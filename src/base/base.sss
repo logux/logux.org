@@ -1,13 +1,13 @@
 html
   --base-black: #1f1f1f
   --base-text: var(--base-black)
-  --base-background: white
+  --base-background: #fff
   --base-accent: #f5a623
   --base-hover: rgba(#f5a623, 0.15)
   --base-focus: 0 0 0 3px var(--base-accent)
-  --base-above: 0 2px 8px rgba(0, 0, 0, 0.15)
+  --base-above: 0 2px 8px rgba(#000, 0.15)
   --base-above-focus:
-    0 2px 8px 3px rgba(0, 0, 0, 0.15),
+    0 2px 8px 3px rgba(#000, 0.15),
     var(--base-focus)
 
   color-scheme: light dark
@@ -20,15 +20,15 @@ html
     font-size: 16px
 
   @mixin dark
-    --base-text: white
+    --base-text: #fff
     --base-background: var(--base-black)
     --base-above:
-      0 0 0 rgba(0, 0, 0, 0),
-      0 2px 8px rgba(0, 0, 0, 0.3),
-      inset 0 1px 0 rgba(255, 255, 255, 0.1)
+      0 0 0 rgba(#000, 0),
+      0 2px 8px rgba(#000, 0.3),
+      inset 0 1px 0 rgba(#fff, 0.1)
     --base-shadow-focus:
-      0 2px 8px 3px rgba(0, 0, 0, 0.3),
-      inset 0 1px 0 rgba(255, 255, 255, 0.1),
+      0 2px 8px 3px rgba(#000, 0.3),
+      inset 0 1px 0 rgba(#fff, 0.1),
       var(--base-focus)
 
 *
@@ -36,7 +36,7 @@ html
   margin: 0
 
 body
-  -webkit-tap-highlight-color: rgba(0, 0, 0, 0)
+  -webkit-tap-highlight-color: rgba(#000, 0)
   padding-top: var(--header-height)
   line-height: 1.5
   scroll-behavior: smooth

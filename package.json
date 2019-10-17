@@ -105,7 +105,8 @@
             "mixin"
           ]
         }
-      ]
+      ],
+      "color-named": "never"
     }
   },
   "husky": {
