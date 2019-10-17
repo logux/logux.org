@@ -20,6 +20,7 @@
     "postcss-hexrgba": "^1.0.2",
     "postcss-media-minmax": "^4.0.0",
     "postcss-mixins": "^6.2.2",
+    "postcss-momentum-scrolling": "^1.9.15",
     "postcss-nested": "^4.1.2",
     "posthtml": "^0.12.0",
     "pug": "^2.0.4",
@@ -70,7 +71,8 @@
       "postcss-media-minmax": {},
       "postcss-nested": {},
       "postcss-hexrgba": {},
-      "postcss-dark-theme-class": {}
+      "postcss-dark-theme-class": {},
+      "postcss-momentum-scrolling": {}
     }
   },
   "eslintConfig": {
