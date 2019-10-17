@@ -2,9 +2,11 @@
 
 let { writeFile, readFile, copyFile, unlink } = require('fs').promises
 let { basename, join } = require('path')
+let postcssUrl = require('postcss-url')
 let posthtml = require('posthtml')
 let makeDir = require('make-dir')
 let Bundler = require('parcel-bundler')
+let postcss = require('postcss')
 let crypto = require('crypto')
 
 const SRC = join(__dirname, '..', 'src')
@@ -22,8 +24,8 @@ async function compileAssets () {
     }, [step.name])
   }
   let assets = findAssets(bundle)
-  return function getAsset (regexp) {
-    return assets.find(i => regexp.test(i))
+  return function getAssets (regexp) {
+    return assets.filter(i => regexp.test(i))
   }
 }
 
@@ -39,12 +41,12 @@ async function copyWellKnown () {
     ]))
 }
 
-async function generateWebManifest (getAsset) {
+async function generateWebManifest (getAssets) {
   let json = JSON.parse(
     await readFile(join(SRC, 'base', 'manifest.webmanifest'))
   )
-  json.icons[0].src = '/' + basename(getAsset(/196\..*\.png/))
-  json.icons[1].src = '/' + basename(getAsset(/512\..*\.png/))
+  json.icons[0].src = '/' + basename(getAssets(/196\..*\.png$/)[0])
+  json.icons[1].src = '/' + basename(getAssets(/512\..*\.png$/)[0])
   let text = JSON.stringify(json)
   let hash = crypto.createHash('md5').update(text).digest('hex').slice(0, 8)
   let name = `manifest.${ hash }.webmanifest`
@@ -52,7 +54,22 @@ async function generateWebManifest (getAsset) {
   return { url: '/' + name, theme: json.theme_color }
 }
 
-async function updateHtml (manifest) {
+async function findFilesInCSS (getAssets) {
+  let collected = []
+  let fileCollector = postcssUrl({
+    url ({ url }) {
+      collected.push(url)
+      return url
+    }
+  })
+  await Promise.all(getAssets(/\.css$/).map(async file => {
+    let css = await readFile(file)
+    await postcss([fileCollector]).process(css, { from: file })
+  }))
+  return collected
+}
+
+async function updateHtml (manifest, preloadFiles) {
   let [html] = await Promise.all([
     readFile(join(DIST, 'uikit.html')),
     makeDir(join(DIST, 'uikit'))
@@ -62,7 +79,9 @@ async function updateHtml (manifest) {
       return [
         { tag: 'link', attrs: { rel: 'manifest', href: manifest.url } },
         { tag: 'meta', attrs: { name: 'theme-color', content: manifest.theme } }
-      ]
+      ].concat(preloadFiles.map(href => ({
+        tag: 'link', attrs: { href, as: 'font' }
+      })))
     })
   }
   let fixed = posthtml().use(htmlPlugin).process(html, { sync: true }).html
@@ -73,12 +92,15 @@ async function updateHtml (manifest) {
 }
 
 async function build () {
-  let [getAsset] = await Promise.all([
+  let [getAssets] = await Promise.all([
     compileAssets(),
     copyWellKnown()
   ])
-  let webmanifest = await generateWebManifest(getAsset)
-  await updateHtml(webmanifest)
+  let [webmanifest, filesFromCSS] = await Promise.all([
+    generateWebManifest(getAssets),
+    findFilesInCSS(getAssets)
+  ])
+  await updateHtml(webmanifest, filesFromCSS)
 }
 
 build().catch(e => {
