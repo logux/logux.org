@@ -80,7 +80,7 @@ async function updateHtml (manifest, preloadFiles) {
         { tag: 'link', attrs: { rel: 'manifest', href: manifest.url } },
         { tag: 'meta', attrs: { name: 'theme-color', content: manifest.theme } }
       ].concat(preloadFiles.map(href => ({
-        tag: 'link', attrs: { href, as: 'font' }
+        tag: 'link', attrs: { rel: 'preload', href, as: 'font' }
       })))
     })
   }
