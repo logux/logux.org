@@ -79,8 +79,14 @@ async function updateHtml (manifest, preloadFiles) {
       return [
         { tag: 'link', attrs: { rel: 'manifest', href: manifest.url } },
         { tag: 'meta', attrs: { name: 'theme-color', content: manifest.theme } }
-      ].concat(preloadFiles.map(href => ({
-        tag: 'link', attrs: { rel: 'preload', href, as: 'font' }
+      ].concat(preloadFiles.map(url => ({
+        tag: 'link',
+        attrs: {
+          rel: 'preload',
+          href: url,
+          as: 'font',
+          crossorigin: true
+        }
       })))
     })
   }
