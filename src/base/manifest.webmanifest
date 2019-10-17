@@ -3,6 +3,7 @@
   "short_name": "Logux",
   "background_color": "#fff",
   "theme_color": "#ffc40d",
+  "display": "standalone",
   "icons": [
     {
       "src": "/base/196.png",
