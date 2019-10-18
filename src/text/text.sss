@@ -43,13 +43,8 @@ html
   @mixin mobile
     margin-bottom: 18px
 
-.text_block,
-.text_list,
-.text_table
+.text_block
   margin-bottom: var(--text-margin)
-
-.text_list
-  margin-left: 24px
 
 .text_code
   padding: 2px 6px
@@ -88,31 +83,3 @@ a.text_code-link
   &:focus
     background: none
     box-shadow: none
-
-.text_table
-  --text-table-border: 1px solid #e1e1e1
-
-  width: 100%
-  border-collapse: collapse
-  border-top: var(--text-table-border)
-
-  @mixin dark
-    --text-table-border: 1px solid #3e3e3e
-
-  th,
-  td
-    padding: 12px 0
-    border-bottom: var(--text-table-border)
-
-    @mixin mobile
-      padding: 6px 0
-
-  th
-    text-align: left
-
-  th + th,
-  td + td
-    padding-left: 51px
-
-    @mixin mobile
-      padding-left: 12px

@@ -12,12 +12,12 @@ html( lang="en" )
       h1.text_title Logux.io UI Kit
       p.text_block Theme switcher: <a href="#">auto</a>, <a href="#dark">dark</a>, <a href="#light">light</a>.
       p.text_block Logux <strong>actions</strong> are very similar to <a href="#">Redux actions</a>. JSON objects describe what was changed in <a href="#">the application state</a>. Logux Core provides <code class="text_code">BaseNode</code> class, which will synchronize actions between two nodes. <code class="text_code">ClientNode</code> and <code class="text_code">ServerNode</code> classes extend this class with small behaviour changes.
-      ol.text_list
+      ol.list
         li
           p.text_block They must have type property with a string value.
         li
           p.text_block You can use only string, number, boolean, null, array, and object as values.
-      ul.text_list
+      ul.list
         li
           p.text_block The <code class="text_code">standard Redux</code> way to dispatch actions. Action will not be sent to the server or another browser tab. There is no way to set action’s meta in this method.
           pre.code-block store.dispatch(action)
@@ -30,7 +30,7 @@ html( lang="en" )
       p.text_block However, you can change this behavior and have event sourcing on the server too.
       h2.text_subtitle <code>add()</code>
       h3.text_subsubtitle Parameters
-      table.text_table
+      table.table
         tr
           th Name
           th Type

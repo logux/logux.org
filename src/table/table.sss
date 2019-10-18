@@ -1,0 +1,28 @@
+.table
+  --text-table-border: 1px solid #e1e1e1
+
+  width: 100%
+  margin-bottom: var(--text-margin)
+  border-collapse: collapse
+  border-top: var(--text-table-border)
+
+  @mixin dark
+    --text-table-border: 1px solid #3e3e3e
+
+  th,
+  td
+    padding: 12px 0
+    border-bottom: var(--text-table-border)
+
+    @mixin mobile
+      padding: 6px 0
+
+  th
+    text-align: left
+
+  th + th,
+  td + td
+    padding-left: 51px
+
+    @mixin mobile
+      padding-left: 12px
