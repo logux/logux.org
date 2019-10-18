@@ -1,0 +1,29 @@
+.code
+  padding: 2px 6px
+  font-size: 16px
+  background: #fbd469
+  border-radius: 4px
+  box-shadow: var(--base-above)
+  transition: box-shadow 200ms
+
+  a&
+    text-decoration: underline
+
+  a&:hover,
+  a&:focus
+    background: #f2cc61
+
+    @mixin dark
+      background: rgba(#fff, 0.3)
+
+  a&:focus
+    box-shadow: var(--base-above-focus)
+
+  a&:active
+    box-shadow: none
+
+  @mixin mobile
+    font-size: 14px
+
+  @mixin dark
+    background: rgba(#fff, 0.1)
