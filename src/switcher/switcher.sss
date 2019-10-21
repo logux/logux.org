@@ -5,9 +5,12 @@
   border-bottom: 1px solid var(--base-border)
 
 .switcher_tabs button
-  padding: 10px 15px
+  padding: 6px 15px
   border-bottom: 3px solid transparent
 
   &[aria-selected]
     font-weight: bold
     border-color: var(--base-text)
+
+  @mixin mobile
+    padding: 6px 9px
