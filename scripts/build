@@ -2,12 +2,16 @@
 
 let { writeFile, readFile, copyFile, unlink } = require('fs').promises
 let { basename, join } = require('path')
+let { promisify } = require('util')
 let postcssUrl = require('postcss-url')
 let posthtml = require('posthtml')
 let makeDir = require('make-dir')
 let Bundler = require('parcel-bundler')
 let postcss = require('postcss')
 let crypto = require('crypto')
+let zlib = require('zlib')
+
+let gzip = promisify(zlib.gzip)
 
 const SRC = join(__dirname, '..', 'src')
 const DIST = join(__dirname, '..', 'dist')
@@ -17,19 +21,29 @@ async function compileAssets () {
     sourceMaps: false
   })
   let bundle = await uikitBundler.bundle()
-
   function findAssets (step) {
     return Array.from(step.childBundles).reduce((all, i) => {
       return all.concat(findAssets(i))
     }, [step.name])
   }
   let assets = findAssets(bundle)
-  return function getAssets (regexp) {
-    return assets.filter(i => regexp.test(i))
+  return {
+    get (regexp) {
+      return assets.filter(i => regexp.test(i))
+    },
+    find (regexp) {
+      return assets.find(i => regexp.test(i))
+    },
+    remove (path) {
+      assets = assets.filter(i => i !== path)
+    },
+    add (path) {
+      assets = assets.concat([path])
+    }
   }
 }
 
-async function copyWellKnown () {
+async function copyWellKnown (assets) {
   let wellFrom = join(SRC, 'well-known')
   let wellTo = join(DIST, '.well-known')
   let files = ['favicon.ico', 'robots.txt']
@@ -37,24 +51,27 @@ async function copyWellKnown () {
   await Promise.all(files
     .map(i => copyFile(join(wellFrom, i), join(DIST, i)))
     .concat([
-      join(wellFrom, 'security.txt.asc'), join(wellTo, 'security.txt')
+      copyFile(join(wellFrom, 'security.txt.asc'), join(wellTo, 'security.txt'))
     ]))
+  for (let file of files) assets.add(join(DIST, file))
+  assets.add(join(wellTo, 'security.txt'))
 }
 
-async function generateWebManifest (getAssets) {
+async function generateWebManifest (assets) {
   let json = JSON.parse(
     await readFile(join(SRC, 'base', 'manifest.webmanifest'))
   )
-  json.icons[0].src = '/' + basename(getAssets(/196\..*\.png$/)[0])
-  json.icons[1].src = '/' + basename(getAssets(/512\..*\.png$/)[0])
+  json.icons[0].src = '/' + basename(assets.find(/196\..*\.png$/))
+  json.icons[1].src = '/' + basename(assets.find(/512\..*\.png$/))
   let text = JSON.stringify(json)
   let hash = crypto.createHash('md5').update(text).digest('hex').slice(0, 8)
   let name = `manifest.${ hash }.webmanifest`
   await writeFile(join(DIST, name), text)
+  assets.add(join(DIST, name))
   return { url: '/' + name, theme: json.theme_color }
 }
 
-async function findFilesInCSS (getAssets) {
+async function findFilesInCSS (assets) {
   let collected = []
   let fileCollector = postcssUrl({
     url ({ url }) {
@@ -62,14 +79,14 @@ async function findFilesInCSS (getAssets) {
       return url
     }
   })
-  await Promise.all(getAssets(/\.css$/).map(async file => {
+  await Promise.all(assets.get(/\.css$/).map(async file => {
     let css = await readFile(file)
     await postcss([fileCollector]).process(css, { from: file })
   }))
   return collected
 }
 
-async function updateHtml (manifest, preloadFiles) {
+async function updateHtml (assets, manifest, preloadFiles) {
   let [html] = await Promise.all([
     readFile(join(DIST, 'uikit.html')),
     makeDir(join(DIST, 'uikit'))
@@ -91,22 +108,36 @@ async function updateHtml (manifest, preloadFiles) {
     })
   }
   let fixed = posthtml().use(htmlPlugin).process(html, { sync: true }).html
+  let oldFile = join(DIST, 'uikit.html')
+  let newFile = join(DIST, 'uikit', 'index.html')
   await Promise.all([
-    writeFile(join(DIST, 'uikit', 'index.html'), fixed),
-    unlink(join(DIST, 'uikit.html'))
+    writeFile(newFile, fixed),
+    unlink(oldFile)
   ])
+  assets.remove(oldFile)
+  assets.add(newFile)
+}
+
+async function compressAssets (assets) {
+  await Promise.all(assets
+    .get(/\.(js|css|ico|html|webmanifest|svg|txt)$/)
+    .map(async path => {
+      let content = await readFile(path)
+      let compressed = await gzip(content, { level: 9 })
+      await writeFile(path + '.gz', compressed)
+    })
+  )
 }
 
 async function build () {
-  let [getAssets] = await Promise.all([
-    compileAssets(),
-    copyWellKnown()
-  ])
+  let assets = await compileAssets()
   let [webmanifest, filesFromCSS] = await Promise.all([
-    generateWebManifest(getAssets),
-    findFilesInCSS(getAssets)
+    generateWebManifest(assets),
+    findFilesInCSS(assets),
+    copyWellKnown(assets)
   ])
-  await updateHtml(webmanifest, filesFromCSS)
+  await updateHtml(assets, webmanifest, filesFromCSS)
+  await compressAssets(assets)
 }
 
 build().catch(e => {
