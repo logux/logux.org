@@ -22,7 +22,7 @@ html
 
     background: #353535
 
-.header_logo
+a.header_logo
   display: inline-block
   height: var(--header-height)
   padding: 0 39px
@@ -31,7 +31,7 @@ html
   line-height: var(--header-height)
   text-transform: lowercase
 
-  &[href]:focus
+  &:focus
     box-shadow: inset var(--base-focus)
 
   @mixin mobile
@@ -44,7 +44,7 @@ html
   @mixin mobile
     padding-right: 6px
 
-.header_link
+a.header_link
   position: relative
   display: inline-block
   height: var(--header-height)
