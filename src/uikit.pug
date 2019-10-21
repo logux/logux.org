@@ -3,11 +3,22 @@ html( lang="en" )
   head
     meta( charset="utf-8" )
     title Logux.io UI Kit
-    include head.pug
+    meta( name="viewport" content="width=device-width" )
+    link( rel="shortcut icon" href="/base/32.png" sizes="32x32" )
+    link( rel="icon" href="/base/196.png" sizes="196x196" )
+    link( rel="icon" href="/base/512.png" sizes="512x512" )
+    link( rel="mask-icon" href="/base/pinned.svg" color="#ffc40d" )
+    link( rel="apple-touch-icon" href="/base/apple.png" )
+    meta( name="apple-mobile-web-app-title" content="Logux" )
+    script( defer src="/common.js" )
+    script( defer src="/guide.js" )
+    script( defer src="/uikit.js" )
+    link( rel="stylesheet" href="/common.sss" )
+    link( rel="stylesheet" href="/guide.sss" )
+    meta( property="og:image" content="/base/og.png" )
   body
     - var category = 'guide'
     include header/header.pug
-    script( async src="/uikit.js" )
     article.text
       h1.title Logux.io UI Kit
       p.text_block Theme switcher: <a href="#">auto</a>, <a href="#dark">dark</a>, <a href="#light">light</a>.
