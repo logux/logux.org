@@ -46,6 +46,11 @@ body
   @media (prefers-reduced-motion: reduce)
     scroll-behavior: auto
 
+*:focus
+  outline: none
+  box-shadow: var(--base-focus)
+  transition: box-shadow 200ms
+
 button
   display: inline-block
   font: inherit
@@ -62,11 +67,6 @@ button
   &:hover,
   &:focus
     background-color: var(--base-hover)
-
-  &:focus
-    outline: none
-    box-shadow: var(--base-focus)
-    transition: box-shadow 200ms
 
   @mixin no-mobile
     &:active
