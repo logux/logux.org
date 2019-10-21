@@ -1,0 +1,26 @@
+- let switcher = 0
+- let section = 0
+
+mixin switcher(...tabs)
+  - switcher += 1
+  - section = 0
+  .switcher
+    ul.switcher_tabs( role="tablist" )
+      each tab, i in tabs
+        li( role="presentation" )
+          button(
+            role="tab"
+            aria-selected=i === 0 && "true"
+            tabindex=i !== 0 && '-1'
+            id='sw' + switcher + 'tab' + (i + 1)
+          )= tab
+    block
+
+mixin switcher_section
+  - section += 1
+  section(
+    role="tabpanel"
+    aria-labelledby='sw' + switcher + 'tab' + section
+    hidden=section !== 1
+  )
+    block
