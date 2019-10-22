@@ -8,9 +8,13 @@
   padding: 6px 15px
   border-bottom: 3px solid transparent
 
+  &:not([aria-selected]):hover
+    border-radius: 4px
+
   &[aria-selected]
     font-weight: bold
     border-color: var(--base-title)
+    transition: border 400ms
 
     &:hover
       cursor: default
