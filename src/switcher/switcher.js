@@ -13,6 +13,7 @@ for (let switcher of switchers) {
 
   tabs.addEventListener('click', e => {
     if (e.target.tagName !== 'BUTTON') return
+    if (e.target === lastTab) return
     let section = byId[e.target.id]
     lastTab.removeAttribute('aria-selected', false)
     e.target.setAttribute('aria-selected', 'true')
@@ -34,6 +35,7 @@ for (let switcher of switchers) {
       if (!next) next = tabs.children[tabs.children.length - 1]
     } else if (e.code === 'ArrowDown') {
       e.preventDefault()
+      lastSection.setAttribute('tabindex', '-1')
       lastSection.focus()
     }
     if (next) {
@@ -43,4 +45,10 @@ for (let switcher of switchers) {
       nextTab.click()
     }
   })
+
+  for (let section of sections) {
+    section.addEventListener('blur', e => {
+      e.target.removeAttribute('tabindex')
+    })
+  }
 }
