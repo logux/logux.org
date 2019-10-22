@@ -4,7 +4,7 @@ for (let switcher of switchers) {
   let tabs = switcher.children[0]
   let sections = Array.from(switcher.children).slice(1)
   let lastSection = sections[0]
-  let lastTab = tabs.children[0].children[0]
+  let lastTab = tabs.children[0]
 
   let byId = sections.reduce((all, section) => {
     all[section.getAttribute('aria-labelledby')] = section
@@ -26,21 +26,24 @@ for (let switcher of switchers) {
   })
 
   tabs.addEventListener('keydown', e => {
-    let next
-    if (e.code === 'ArrowRight') {
-      next = lastTab.parentNode.nextSibling
-      if (!next) next = tabs.children[0]
+    let nextTab
+    if (e.code === 'Home') {
+      nextTab = tabs.children[0]
+    } else if (e.code === 'End') {
+      nextTab = tabs.children[tabs.children.length - 1]
+    } else if (e.code === 'ArrowRight') {
+      nextTab = lastTab.nextSibling
+      if (!nextTab) nextTab = tabs.children[0]
     } else if (e.code === 'ArrowLeft') {
-      next = lastTab.parentNode.previousSibling
-      if (!next) next = tabs.children[tabs.children.length - 1]
+      nextTab = lastTab.previousSibling
+      if (!nextTab) nextTab = tabs.children[tabs.children.length - 1]
     } else if (e.code === 'ArrowDown') {
       e.preventDefault()
       lastSection.setAttribute('tabindex', '-1')
       lastSection.focus()
     }
-    if (next) {
+    if (nextTab) {
       e.preventDefault()
-      let nextTab = next.children[0]
       nextTab.focus()
       nextTab.click()
     }
