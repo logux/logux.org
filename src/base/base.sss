@@ -1,6 +1,7 @@
 html
   --base-black: #1f1f1f
   --base-text: var(--base-black)
+  --base-title: var(--base-text)
   --base-background: #fff
   --base-border: #e1e1e1
   --base-accent: #f5a623
@@ -21,7 +22,8 @@ html
     font-size: 16px
 
   @mixin dark
-    --base-text: #fff
+    --base-text: #bbb
+    --base-title: #fff
     --base-background: var(--base-black)
     --base-border: #3e3e3e
     --base-above:
@@ -54,7 +56,7 @@ body
 button
   display: inline-block
   font: inherit
-  color: var(--base-text)
+  color: inherit
   cursor: pointer
   background: none
   border: none
@@ -74,7 +76,7 @@ button
       transform: translateY(1px)
 
 a:not([class])
-  color: inherit
+  color: var(--base-title)
   border-radius: 1px
 
   &:hover
