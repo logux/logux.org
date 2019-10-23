@@ -1,5 +1,7 @@
 let switchers = document.querySelectorAll('.switcher')
 
+let byValue = { }
+
 for (let switcher of switchers) {
   let tabs = switcher.children[0]
   let sections = Array.from(switcher.children).slice(1)
@@ -11,9 +13,12 @@ for (let switcher of switchers) {
     return all
   }, { })
 
+  let groupChanging = false
   tabs.addEventListener('click', e => {
     if (e.target.tagName !== 'BUTTON') return
     if (e.target === lastTab) return
+
+    let prevTop = e.target.getBoundingClientRect().top
     let section = byId[e.target.id]
     lastTab.removeAttribute('aria-selected', false)
     e.target.setAttribute('aria-selected', 'true')
@@ -23,6 +28,19 @@ for (let switcher of switchers) {
     section.removeAttribute('hidden', false)
     lastSection = section
     lastTab = e.target
+
+    if (!groupChanging) {
+      groupChanging = true
+      for (let i of byValue[e.target.innerText]) {
+        if (!i.hasAttribute('aria-selected')) {
+          i.click()
+        }
+      }
+      groupChanging = false
+    }
+
+    let diff = e.target.getBoundingClientRect().top - prevTop
+    window.scrollTo(window.scrollX, window.scrollY + diff)
   })
 
   tabs.addEventListener('keydown', e => {
@@ -53,5 +71,11 @@ for (let switcher of switchers) {
     section.addEventListener('blur', e => {
       e.target.removeAttribute('tabindex')
     })
+  }
+
+  for (let tab of tabs.children) {
+    let value = tab.innerText
+    if (!byValue[value]) byValue[value] = []
+    byValue[value].push(tab)
   }
 }
