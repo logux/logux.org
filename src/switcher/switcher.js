@@ -52,10 +52,30 @@ function findByAttr (array, attr, value) {
   return array.find(i => i.getAttribute(attr) === value)
 }
 
+function readOpenned () {
+  try {
+    let json = localStorage.switcherOpenned
+    return json ? JSON.parse(json) : []
+  } catch (e) {
+    return []
+  }
+}
+
+function writeOpenned (add, remove) {
+  setTimeout(() => {
+    let openned = new Set(readOpenned())
+    openned.add(add)
+    for (let i of remove) openned.delete(i)
+    try {
+      localStorage.switcherOpenned = JSON.stringify(Array.from(openned))
+    } catch (e) { }
+  }, 0)
+}
+
 let byValue = { }
 let open = new Map()
-
 let switchers = document.querySelectorAll('.switcher')
+
 for (let switcher of switchers) {
   let tabs = switcher.children[0]
   let firstTab = tabs.children[0]
@@ -64,9 +84,11 @@ for (let switcher of switchers) {
 
   let sections = Array.from(switcher.children).slice(1)
   let currentSection = sections[0]
+  let values = []
 
   for (let tab of tabs.children) {
     let section = findByAttr(sections, 'aria-labelledby', tab.id)
+    values.push(tab.innerText)
     addTo(byValue, tab.innerText, tab)
     open.set(tab, () => {
       currentTab = changeTab(currentTab, tab)
@@ -75,13 +97,18 @@ for (let switcher of switchers) {
   }
 
   tabs.addEventListener('click', e => {
-    if (e.target.tagName !== 'BUTTON') return
-    if (e.target === currentTab) return
-
-    keepScroll(e.target, () => {
-      open.get(e.target)()
-      for (let i of byValue[currentTab.innerText]) open.get(i)()
-    })
+    if (e.target.tagName === 'BUTTON' && e.target !== currentTab) {
+      let value = e.target.innerText
+      keepScroll(e.target, () => {
+        open.get(e.target)()
+        for (let similar of byValue[value]) {
+          if (similar !== e.target) {
+            open.get(similar)()
+          }
+        }
+      })
+      writeOpenned(value, values.filter(i => i !== value))
+    }
   })
 
   onKey(tabs, {
@@ -101,4 +128,8 @@ for (let switcher of switchers) {
       clickOnTab(lastTab)
     }
   })
+}
+
+for (let value of readOpenned()) {
+  for (let tab of byValue[value]) open.get(tab)()
 }
