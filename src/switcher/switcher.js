@@ -43,12 +43,13 @@ function onKey (el, keys) {
   })
 }
 
-function addToGroupByValue (group, els) {
-  for (let i of els) {
-    let value = i.innerText
-    if (!group[value]) group[value] = []
-    group[value].push(i)
-  }
+function addTo (group, key, el) {
+  if (!group[key]) group[key] = []
+  group[key].push(el)
+}
+
+function findByAttr (array, attr, value) {
+  return array.find(i => i.getAttribute(attr) === value)
 }
 
 let byValue = { }
@@ -64,12 +65,9 @@ for (let switcher of switchers) {
   let sections = Array.from(switcher.children).slice(1)
   let currentSection = sections[0]
 
-  addToGroupByValue(byValue, tabs.children)
-
   for (let tab of tabs.children) {
-    let section = sections.find(i => {
-      return i.getAttribute('aria-labelledby') === tab.id
-    })
+    let section = findByAttr(sections, 'aria-labelledby', tab.id)
+    addTo(byValue, tab.innerText, tab)
     open.set(tab, () => {
       currentTab = changeTab(currentTab, tab)
       currentSection = changeSection(currentSection, section)
