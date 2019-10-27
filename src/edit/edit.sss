@@ -1,13 +1,17 @@
 .edit
-  display: flex
-  align-items: baseline
-  justify-content: space-between
+  @mixin no-mobile
+    display: flex
+    align-items: baseline
+    justify-content: space-between
 
 .edit_link
   display: block
   float: right
   padding: 10px
   margin: -10px -10px 0 0
+
+  @mixin mobile
+    display: none
 
 .edit_link::before
   display: block

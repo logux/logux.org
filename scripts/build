@@ -15,6 +15,7 @@ let gzip = promisify(zlib.gzip)
 
 const SRC = join(__dirname, '..', 'src')
 const DIST = join(__dirname, '..', 'dist')
+const NON_MOBILE = [/edit.[^/]+.svg$/]
 
 async function compileAssets () {
   let uikitBundler = new Bundler(join(SRC, 'uikit.pug'), {
@@ -102,6 +103,7 @@ async function updateHtml (assets, manifest, preloadFiles) {
           rel: 'preload',
           href: url,
           as: extname(url) === '.woff2' ? 'font' : 'image',
+          media: NON_MOBILE.some(i => i.test(url)) && '(min-width: 941px)',
           crossorigin: true
         }
       })))
