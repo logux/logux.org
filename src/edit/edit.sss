@@ -1,0 +1,21 @@
+.edit
+  display: flex
+  align-items: baseline
+  justify-content: space-between
+
+.edit_link
+  display: block
+  float: right
+  padding: 10px
+  margin: -10px -10px 0 0
+
+.edit_link::before
+  display: block
+  width: 24px
+  height: 24px
+  content: ""
+  background-image: url(./edit.svg)
+  background-size: 100%
+
+  @mixin dark
+    filter: invert()

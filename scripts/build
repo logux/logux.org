@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 let { writeFile, readFile, copyFile, unlink } = require('fs').promises
-let { basename, join } = require('path')
+let { basename, join, extname } = require('path')
 let { promisify } = require('util')
 let postcssUrl = require('postcss-url')
 let posthtml = require('posthtml')
@@ -101,7 +101,7 @@ async function updateHtml (assets, manifest, preloadFiles) {
         attrs: {
           rel: 'preload',
           href: url,
-          as: 'font',
+          as: extname(url) === '.woff2' ? 'font' : 'image',
           crossorigin: true
         }
       })))
