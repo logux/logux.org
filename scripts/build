@@ -15,7 +15,7 @@ let gzip = promisify(zlib.gzip)
 
 const SRC = join(__dirname, '..', 'src')
 const DIST = join(__dirname, '..', 'dist')
-const NON_MOBILE = [/edit.[^/]+.svg$/]
+const NON_MOBILE = [/edit\.[^/]+\.svg$/, /link\.[^/]+\.svg$/]
 
 async function compileAssets () {
   let uikitBundler = new Bundler(join(SRC, 'uikit.pug'), {

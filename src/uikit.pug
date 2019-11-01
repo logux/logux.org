@@ -42,7 +42,8 @@ html( lang="en" )
               p.text_block <code class="code">preadd</code>: action is going to be added to the log. It is the only way to set <a href="#" class="code"><code>meta.reasons</code></a>. This event will not be called for cross-tab actions added in a different browser tab.
         +switcher_section
           p.text_block Clients can also create <code class="code">logux/undo</code> to revert action and ask other clients to revert it (if the developer allowed to re-send these actions on the server).
-      h2.title Subtitle
+      h2#subtitle.title
+        a.title_link( href="#subtitle" title="Direct link to section" ) Subtitle
       p.text_block By default, the server state is opposite to client state. Because server-side cache could be very big, the database is the single source of truth. You can use any database with Logux.
       p.text_block Logux Server removes action after processing and always look to a database for the latest value. As a result, you can’t undo actions on the server.
       +switcher('Node.js', 'Ruby on Rails', 'Any other HTTP server')
@@ -66,8 +67,10 @@ html( lang="en" )
           p.text_block Use Logux Rails gem
         +switcher_section
           p.text_block Write your own library
-      h2.title <code>add()</code>
-      h3.title Parameters
+      h2#code.title
+        a.title_link( href="#code" title="Direct link to section" ) <code>add()</code></a>
+      h3#parameters.title
+        a.title_link( href="#parameters" title="Direct link to section" ) Parameters
       table.table
         tr
           th Name
@@ -85,6 +88,7 @@ html( lang="en" )
           td <code class="code">options</code>
           td <code><a href="#">object</a>?</code>
           td Synchronization options.
-      h3.title Returns
+      h3#returns.title
+        a.title_link( href="#returns" title="Direct link to section" ) Returns
       p.text_block <code><a href="#">Promise</a>&lt;<a href="#">boolean</a>></code>
       a.button( href="#" ) Next chapter →

@@ -29,3 +29,24 @@ h3.title
 
   @mixin mobile
     margin-bottom: 18px
+
+a.title_link
+  position: relative
+
+  &:hover
+    text-decoration: underline
+    background: transparent
+
+.title_link:hover::before
+  @mixin no-mobile
+    position: absolute
+    top: calc(50% - 12px)
+    left: calc(-24px - 15px)
+    width: 24px
+    height: 24px
+    content: ""
+    background-image: url(./link.svg)
+    background-size: 100%
+
+    @mixin dark
+      filter: invert()
