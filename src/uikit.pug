@@ -40,6 +40,7 @@ html( lang="en" )
               pre.code-block store.dispatch(action)
             li
               p.text_block <code class="code">preadd</code>: action is going to be added to the log. It is the only way to set <a href="#" class="code"><code>meta.reasons</code></a>. This event will not be called for cross-tab actions added in a different browser tab.
+          p.text_block To stop the server press <kbd class="code">Command</kbd>+<kbd class="code">.</kbd> on Mac OS X and <kbd class="code">Ctrl</kbd>+<kbd class="code">C</kbd> on Linux and Windows.
         +switcher_section
           p.text_block Clients can also create <code class="code">logux/undo</code> to revert action and ask other clients to revert it (if the developer allowed to re-send these actions on the server).
       h2#subtitle.title
