@@ -21,6 +21,10 @@ html( lang="en" )
   body
     - var category = 'guide'
     include header/header.pug
+    .chat
+      button.button
+        .chat_icon
+        | Join chat
     article.text
       .edit
         h1.title Logux.io UI Kit
@@ -92,4 +96,3 @@ html( lang="en" )
       h3#returns.title
         a.title_link( href="#returns" title="Direct link to section" ) Returns
       p.text_block <code><a href="#">Promise</a>&lt;<a href="#">boolean</a>></code>
-      a.button( href="#" ) Next chapter →
