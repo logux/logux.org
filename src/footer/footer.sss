@@ -1,0 +1,63 @@
+.footer
+  position: relative
+
+a.footer_lurkers
+  @mixin no-mobile
+    position: absolute
+    right: 300px
+    bottom: 0
+    display: block
+    width: 108px
+    height: 47px
+    background-image: url(./lurkers-light.svg)
+    background-size: 100%
+
+    &:hover
+      background-color: transparent
+
+  @mixin dark-no-mobile
+    background-image: url(./lurkers-dark.svg)
+
+.footer_lurkers::before,
+.footer_lurkers::after
+  @mixin no-mobile
+    position: absolute
+    top: 25px
+    width: 26px
+    height: 13px
+    content: ""
+    transform: scaleY(0)
+    transform-origin: 0 0 0
+    animation: footer_blinking linear infinite
+
+.footer_lurkers::before
+  @mixin no-mobile
+    left: 14px
+    background: #1f1f1f
+    animation-duration: 3.0775s
+    animation-delay: 500ms
+
+  @mixin dark-no-mobile
+    background: #fff
+
+.footer_lurkers::after
+  @mixin no-mobile
+    left: 68px
+    background: #f5a623
+    animation-duration: 3s
+
+  @mixin dark-no-mobile
+    background: #fff
+
+@keyframes footer_blinking
+  from
+    transform: scaleY(0)
+
+  96%
+    transform: scaleY(0)
+
+  98%
+    transform: scaleY(1)
+
+  to
+    transform: scaleY(0)
