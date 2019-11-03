@@ -37,11 +37,12 @@ a.title_link
     text-decoration: underline
     background: transparent
 
-.title_link:hover::before
+.title_link::before
   @mixin no-mobile
     position: absolute
     top: calc(50% - 12px)
     left: calc(-24px - 15px)
+    display: none
     width: 24px
     height: 24px
     content: ""
@@ -50,3 +51,7 @@ a.title_link
 
     @mixin dark
       filter: invert()
+
+.title_link:hover::before
+  @mixin no-mobile
+    display: block
