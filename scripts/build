@@ -15,7 +15,11 @@ let gzip = promisify(zlib.gzip)
 
 const SRC = join(__dirname, '..', 'src')
 const DIST = join(__dirname, '..', 'dist')
-const NON_MOBILE = [/edit\.[^/]+\.svg$/, /link\.[^/]+\.svg$/]
+
+const PRELOAD_TYPES = {
+  '.woff2': 'font',
+  '.svg': 'image'
+}
 
 async function compileAssets () {
   let uikitBundler = new Bundler(join(SRC, 'uikit.pug'), {
@@ -75,8 +79,13 @@ async function generateWebManifest (assets) {
 async function findFilesInCSS (assets) {
   let collected = []
   let fileCollector = postcssUrl({
-    url ({ url }) {
-      collected.push(url)
+    url ({ url }, dir, ops, decl) {
+      let media = decl.parent.parent
+      if (media && media.name === 'media') {
+        collected.push([media.params, url])
+      } else {
+        collected.push([undefined, url])
+      }
       return url
     }
   })
@@ -97,16 +106,16 @@ async function updateHtml (assets, manifest, preloadFiles) {
       return [
         { tag: 'link', attrs: { rel: 'manifest', href: manifest.url } },
         { tag: 'meta', attrs: { name: 'theme-color', content: manifest.theme } }
-      ].concat(preloadFiles.map(url => ({
-        tag: 'link',
-        attrs: {
-          rel: 'preload',
-          href: url,
-          as: extname(url) === '.woff2' ? 'font' : 'image',
-          media: NON_MOBILE.some(i => i.test(url)) && '(min-width: 941px)',
-          crossorigin: true
+      ].concat(preloadFiles.map(([media, url]) => {
+        let as = PRELOAD_TYPES[extname(url)]
+        if (!as) throw new Error('Unknown type ' + extname(url))
+        return {
+          tag: 'link',
+          attrs: {
+            rel: 'preload', href: url, as, media, crossorigin: as === 'font'
+          }
         }
-      })))
+      }))
     })
   }
   let fixed = posthtml().use(htmlPlugin).process(html, { sync: true }).html
