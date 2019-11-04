@@ -14,7 +14,7 @@ module.exports = async function repackScripts (assets) {
     let bundle = await rollup({
       input, plugins: [terser()]
     })
-    let results = await bundle.generate({ format: 'esm' })
+    let results = await bundle.generate({ format: 'iife' })
     await writeFile(output, results.output[0].code)
   }))
 }
