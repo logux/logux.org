@@ -7,11 +7,11 @@ html
 .text
   @mixin no-mobile
     max-width: 900px
-    padding: 36px 10px
+    padding: 36px 10px calc(36px - 21px) 10px
     margin: 0 auto
 
   @mixin mobile
-    padding: 24px 15px
+    padding: 24px 15px calc(24px - 18px) 15px
 
 .text_block
   margin-bottom: var(--text-margin)
