@@ -18,7 +18,7 @@ html( lang="en" )
     link( rel="stylesheet" href="/common.sss" )
     link( rel="stylesheet" href="/guide.sss" )
     meta( property="og:image" content="/base/og.png" )
-    link( rel="preload" as="script" href="https://sidecar.gitter.im/dist/sidecar.v1.js" media="(min-width:941px)" crossorigin )
+    link( rel="preconnect" href="https://sidecar.gitter.im/" media="(min-width:941px)" )
   body
     - var category = 'guide'
     include header/header.pug

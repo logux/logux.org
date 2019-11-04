@@ -21,7 +21,9 @@ function initChat () {
   }
 }
 
-let saveData = navigator.connection && navigator.connection.saveData
-if (window.innerWidth > 940 && navigator.onLine && !saveData) {
-  initChat()
-}
+window.addEventListener('load', () => {
+  let saveData = navigator.connection && navigator.connection.saveData
+  if (window.innerWidth > 940 && navigator.onLine && !saveData) {
+    initChat()
+  }
+})
