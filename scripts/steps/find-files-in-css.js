@@ -7,8 +7,11 @@ module.exports = async function findFilesInCSS (assets) {
   let fileCollector = postcssUrl({
     url ({ url }, dir, ops, decl) {
       let media = decl.parent.parent
+      let rule = decl.parent
       if (media && media.name === 'media') {
-        collected.push([media.params, url])
+        if (!rule.selector.includes('html.is-dark')) {
+          collected.push([media.params, url])
+        }
       } else {
         collected.push([undefined, url])
       }
