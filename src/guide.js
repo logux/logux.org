@@ -1,1 +1,1 @@
-require('./switcher/switcher')
+import './switcher/switcher.js'

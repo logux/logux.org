@@ -1,2 +1,2 @@
-require('./base/base')
-require('./chat/chat')
+import './base/base.js'
+import './chat/chat.js'

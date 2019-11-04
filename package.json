@@ -79,10 +79,21 @@
     }
   },
   "eslintConfig": {
+    "parserOptions": {
+      "sourceType": "module"
+    },
     "extends": "@logux/eslint-config/node",
     "rules": {
       "node/no-unpublished-require": "off"
-    }
+    },
+    "overrides": [
+      {
+        "files": "src/**/*.js",
+        "rules": {
+          "node/no-unsupported-features/es-syntax": "off"
+        }
+      }
+    ]
   },
   "eslintIgnore": [
     "node_modules",
