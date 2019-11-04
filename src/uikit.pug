@@ -23,7 +23,7 @@ html( lang="en" )
     - var category = 'guide'
     include header/header.pug
     .chat
-      button.button
+      button.button( type="button" )
         .chat_icon
         | Join chat
     article.text
@@ -113,4 +113,4 @@ html( lang="en" )
       section.footer_section
         .footer_text Under the <a href="https://github.com/logux/logux.io/blob/master/LICENSE" rel="license">MIT</a> license
         .footer_text Sponsored by <a href="https://evilmartians.com/">Evil Martians</a>
-        a.footer_lurkers( href="https://evilmartians.com/" )
+        a.footer_lurkers( href="https://evilmartians.com/" aria-hidden )
