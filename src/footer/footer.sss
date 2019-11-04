@@ -1,11 +1,30 @@
 .footer
+  --footer-padding: 40px
+
+  display: flex
+  padding: 40px 38px
+  background: var(--base-panel)
+  border-top: 1px solid var(--base-border)
+
+  @mixin dark
+    border-top-color: var(--base-panel)
+
+.footer_section
   position: relative
+  width: 25%
+
+.footer_title
+  font-size: 18px
+  color: var(--base-title)
+
+.footer_link
+  margin-top: 7px
 
 a.footer_lurkers
   @mixin no-mobile
     position: absolute
-    right: 300px
-    bottom: 0
+    bottom: calc(-1 * var(--footer-padding))
+    left: 0
     display: block
     width: 108px
     height: 47px
