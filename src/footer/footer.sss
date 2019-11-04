@@ -1,17 +1,22 @@
 .footer
-  --footer-padding: 40px
-
-  display: flex
+  display: grid
+  grid-template-rows: auto
+  grid-template-columns: 1fr 1fr 1fr 1fr
   padding: 40px 38px
   background: var(--base-panel)
   border-top: 1px solid var(--base-border)
+
+  @mixin mobile
+    grid-template-rows: auto auto
+    grid-template-columns: 1fr 1fr
+    grid-gap: 24px
+    padding: 24px 15px
 
   @mixin dark
     border-top-color: var(--base-panel)
 
 .footer_section
   position: relative
-  width: 25%
 
 .footer_title
   font-size: 18px
@@ -23,7 +28,7 @@
 a.footer_lurkers
   @mixin no-mobile
     position: absolute
-    bottom: calc(-1 * var(--footer-padding))
+    bottom: -40px
     left: 0
     display: block
     width: 108px
