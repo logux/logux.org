@@ -17,7 +17,7 @@ function initChat () {
     let script = document.createElement('script')
     script.src = 'https://sidecar.gitter.im/dist/sidecar.v1.js'
     script.async = true
-    script.crossorigin = true
+    script.crossOrigin = ''
     document.head.appendChild(script)
   }
 }

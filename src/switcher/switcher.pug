@@ -9,7 +9,6 @@ mixin switcher(...tabs)
       each tab, i in tabs
         button(
           role="tab"
-          type="button"
           aria-selected=i === 0 && "true"
           aria-controls='sw' + switcher + 'tab' + (i + 1) + 'body'
           tabindex=i !== 0 && '-1'
