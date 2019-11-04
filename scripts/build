@@ -5,6 +5,7 @@ let findFilesInCSS = require('./steps/find-files-in-css')
 let compressAssets = require('./steps/compress-assets')
 let copyWellKnown = require('./steps/copy-well-known')
 let compileAssets = require('./steps/compile-assets')
+let repackScripts = require('./steps/repack-scripts')
 let updateHtml = require('./steps/update-html')
 
 async function build () {
@@ -12,7 +13,8 @@ async function build () {
   let [webmanifest, filesFromCSS] = await Promise.all([
     generateWebManifest(assets),
     findFilesInCSS(assets),
-    copyWellKnown(assets)
+    copyWellKnown(assets),
+    repackScripts(assets)
   ])
   await updateHtml(assets, webmanifest, filesFromCSS)
   await compressAssets(assets)
