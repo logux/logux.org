@@ -6,7 +6,7 @@
     "securitytxt:sign": "gpg --digest-algo SHA512 --clearsign src/well-known/security.txt",
     "start": "parcel serve src/uikit.pug --open",
     "lint": "eslint . scripts/* && stylelint src/**/*.sss",
-    "test": "yarn lint && yarn build",
+    "test": "yarn lint && yarn build && size-limit",
     "clean": "rimraf dist/ .cache",
     "build": "rimraf dist/ && NODE_ENV=production ./scripts/build",
     "nginx": "podman run --rm -p 8000:80 -e PORT=80 $(buildah bud .)",
@@ -17,7 +17,6 @@
     "make-dir": "^3.0.0",
     "parcel-bundler": "^1.12.4",
     "postcss": "^7.0.21",
-    "postcss-dark-theme-class": "^0.3.0",
     "postcss-hexrgba": "^2.0.0",
     "postcss-media-minmax": "^4.0.0",
     "postcss-mixins": "^6.2.3",
@@ -34,6 +33,7 @@
   "devDependencies": {
     "@logux/eslint-config": "^34.0.0",
     "@logux/sharec-config": "^0.5.5",
+    "@size-limit/file": "^2.1.6",
     "eslint": "^6.6.0",
     "eslint-config-standard": "^14.1.0",
     "eslint-plugin-es5": "^1.4.1",
@@ -76,7 +76,6 @@
       "postcss-media-minmax": {},
       "postcss-nested": {},
       "postcss-hexrgba": {},
-      "postcss-dark-theme-class": {},
       "postcss-momentum-scrolling": {}
     }
   },
@@ -139,6 +138,21 @@
       "git add"
     ]
   },
+  "size-limit": [
+    {
+      "path": [
+        "dist/uikit/index.html",
+        "dist/*.woff",
+        "dist/chat.*.svg",
+        "dist/edit.*.svg",
+        "dist/link.*.svg",
+        "dist/lurkers-light.*.svg",
+        "dist/*.js",
+        "dist/*.css"
+      ],
+      "limit": "9 KB"
+    }
+  ],
   "sharec": {
     "config": "@logux/sharec-config",
     "version": "0.5.3"
