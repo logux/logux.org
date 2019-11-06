@@ -5534,13 +5534,6 @@ postcss-convert-values@^4.0.1:
     postcss "^7.0.0"
     postcss-value-parser "^3.0.0"
 
-postcss-dark-theme-class@^0.3.0:
-  version "0.3.0"
-  resolved "https://registry.yarnpkg.com/postcss-dark-theme-class/-/postcss-dark-theme-class-0.3.0.tgz#98e91a99eca48baa5dd6f1bf6f5b0a40ed5165b4"
-  integrity sha512-SvkdGIo2T5qqa6qkXF63uNvThUOBERF82a5YAckFguPnI6yjqJQEooPbANfZJ/DjGlSG60ZyfF6Ngab4J+DwFw==
-  dependencies:
-    postcss "^7.0.21"
-
 postcss-discard-comments@^4.0.2:
   version "4.0.2"
   resolved "https://registry.yarnpkg.com/postcss-discard-comments/-/postcss-discard-comments-4.0.2.tgz#1fbabd2c246bff6aaad7997b2b0918f4d7af4033"

@@ -14,7 +14,6 @@ html( lang="en" )
     meta( name="apple-mobile-web-app-title" content="Logux" )
     script( defer src="/common.js" )
     script( defer src="/guide.js" )
-    script( defer src="/uikit.js" )
     link( rel="stylesheet" href="/common.sss" )
     link( rel="stylesheet" href="/guide.sss" )
     meta( property="og:image" content="/base/og.png" )
@@ -35,7 +34,6 @@ html( lang="en" )
         .edit
           h1.title Logux.io UI Kit
           a.edit_link( href="https://github.com/logux/logux.io" title="Edit the page on GitHub" )
-        p.text_block Theme switcher: <a href="#">auto</a>, <a href="#dark">dark</a>, <a href="#light">light</a>.
         p.text_block Logux <strong>actions</strong> are very similar to <a href="#">Redux actions</a>. JSON objects describe what was changed in <a href="#">the application state</a>. Logux Core provides <code class="code">BaseNode</code> class, which will synchronize actions between two nodes. <code class="code">ClientNode</code> and <code class="code">ServerNode</code> classes extend this class with small behaviour changes.
         +switcher('Node.js', 'Ruby on Rails')
           +switcher_section
