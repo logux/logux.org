@@ -1,19 +1,9 @@
-html
-  --header-height: 63px
-
-  @mixin mobile
-    --header-height: 45px
-
 .header
   --header-shadow: rgba(#000, 0.15)
 
-  position: fixed
-  top: 0
-  z-index: 10
   display: flex
   justify-content: space-between
-  width: 100%
-  height: var(--header-height)
+  height: var(--layout-header)
   color: var(--base-title)
   background: var(--base-panel)
   box-shadow: 0 2px 8px 0 var(--header-shadow)
@@ -23,11 +13,11 @@ html
 
 a.header_logo
   display: inline-block
-  height: var(--header-height)
+  height: var(--layout-header)
   padding: 0 39px
   font-family: Kurbanistika, sans-serif
   font-size: 39px
-  line-height: var(--header-height)
+  line-height: var(--layout-header)
   text-transform: lowercase
 
   &:focus
@@ -46,10 +36,10 @@ a.header_logo
 a.header_link
   position: relative
   display: inline-block
-  height: var(--header-height)
+  height: var(--layout-header)
   padding: 0 18px
   font-weight: bold
-  line-height: var(--header-height)
+  line-height: var(--layout-header)
 
   &[href]:hover
     color: transparent
