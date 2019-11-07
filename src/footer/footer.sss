@@ -10,7 +10,7 @@
     grid-template-rows: auto auto
     grid-template-columns: 1fr 1fr
     grid-gap: 24px
-    padding: 24px 15px
+    padding: 22px 15px
 
   @mixin dark
     border-top-color: var(--base-panel)
@@ -21,6 +21,9 @@
   @mixin mobile
     &.is-author
       grid-column: 1 / 3
+      padding-top: 23px
+      margin-top: 35px
+      border-top: 1px solid var(--base-border)
 
 .footer_title
   font-size: 18px
@@ -31,9 +34,6 @@
 
 .footer_text + .footer_text
   margin-top: 13px
-
-  @mixin mobile
-    margin-top: 5px
 
 a.footer_lurkers
   @mixin no-mobile
