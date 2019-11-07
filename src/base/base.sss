@@ -78,34 +78,6 @@ button
       transition: none
       transform: translateY(1px)
 
-a:not([class])
-  --background: var(--base-background)
-
-  color: var(--base-title)
-  text-decoration: none
-  text-shadow:
-    3px 0 var(--background),
-    2px 0 var(--background),
-    1px 0 var(--background),
-    -1px 0 var(--background),
-    -2px 0 var(--background),
-    -3px 0 var(--background)
-  background-image: linear-gradient(currentColor, currentColor)
-  background-repeat: no-repeat
-  background-position: center bottom 5%
-  background-origin: padding-box
-  background-size: 100% 0.5px
-  border-radius: 0.5px
-
-  &:hover
-    --background: #fef2de
-
-    box-shadow: 0 0 0 4px #fef2de
-
-a[class]
-  color: inherit
-  text-decoration: none
-
 code,
 pre,
 kbd
