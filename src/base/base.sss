@@ -79,13 +79,28 @@ button
       transform: translateY(1px)
 
 a:not([class])
+  --background: var(--base-background)
+
   color: var(--base-title)
-  border-radius: 4px
-  text-decoration-thickness: 0.5px
-  text-underline-offset: 3px
+  text-decoration: none
+  text-shadow:
+    3px 0 var(--background),
+    2px 0 var(--background),
+    1px 0 var(--background),
+    -1px 0 var(--background),
+    -2px 0 var(--background),
+    -3px 0 var(--background)
+  background-image: linear-gradient(currentColor, currentColor)
+  background-repeat: no-repeat
+  background-position: center bottom 5%
+  background-origin: padding-box
+  background-size: 100% 0.5px
+  border-radius: 0.5px
 
   &:hover
-    box-shadow: 0 0 0 4px var(--base-hover)
+    --background: #fef2de
+
+    box-shadow: 0 0 0 4px #fef2de
 
 a[class]
   color: inherit
