@@ -92,8 +92,13 @@ a[class]
   text-decoration: none
 
 code,
-pre
+pre,
+kbd
   font-family: 'Fira Code', monospace
+  font-size: 16px
+
+  @mixin mobile
+    font-size: 14px
 
 @media (prefers-reduced-motion: reduce)
   *
