@@ -1,15 +1,11 @@
 function initChat () {
-  let chat = document.querySelector('.chat')
-  if (chat) {
-    document.addEventListener('gitter-sidecar-ready', () => {
-      chat.classList.add('is-ready')
-    })
-
+  let button = document.querySelector('.chat a')
+  if (button) {
     window.gitter = {
       chat: {
         options: {
           room: 'logux/logux',
-          activationElement: '.chat button'
+          activationElement: '.chat a'
         }
       }
     }
