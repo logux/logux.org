@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 let generateWebManifest = require('./steps/generate-web-manifest')
+let downloadProject = require('./steps/download-project')
 let findFilesInCSS = require('./steps/find-files-in-css')
 let compressAssets = require('./steps/compress-assets')
 let copyWellKnown = require('./steps/copy-well-known')
@@ -14,7 +15,8 @@ async function build () {
     generateWebManifest(assets),
     findFilesInCSS(assets),
     copyWellKnown(assets),
-    repackScripts(assets)
+    repackScripts(assets),
+    downloadProject('logux')
   ])
   await updateHtml(assets, webmanifest, filesFromCSS)
   await compressAssets(assets)
