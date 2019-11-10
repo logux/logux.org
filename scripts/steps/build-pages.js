@@ -1,8 +1,9 @@
 let { join, dirname } = require('path')
 let rehypeStringify = require('rehype-stringify')
 let { writeFile } = require('fs').promises
-let unistVisit = require('unist-util-visit')
 let rehypeParse = require('rehype-parse')
+let unistVisit = require('unist-util-visit')
+let capitalize = require('capitalize')
 let unified = require('unified')
 let makeDir = require('make-dir')
 
@@ -159,8 +160,9 @@ async function put (layout, page) {
   let html = await unified()
     .use(rehypeStringify)
     .stringify(fixed)
+  let category = capitalize(dirname(page.file))
   return layout
-    .replace(/<title>[^<]+/, `<title>${ page.title } / Guide / Logux`)
+    .replace(/<title>[^<]+/, `<title>${ page.title } / ${ category } / Logux`)
     .replace(/<article([^>]+)>/, `$&${ html }`)
 }
 

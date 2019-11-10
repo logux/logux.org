@@ -13,6 +13,7 @@
     "deploy": "gcloud builds --project logux-255417 submit"
   },
   "dependencies": {
+    "capitalize": "^2.0.0",
     "globby": "^10.0.1",
     "make-dir": "^3.0.0",
     "parcel-bundler": "^1.12.4",
