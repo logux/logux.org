@@ -72,7 +72,7 @@ function converter ({ file }) {
           tag('h1', 'title', { }, node.children),
           tag('a', 'edit_link', {
             title: 'Edit the page on GitHub',
-            href: `https://github.com/logux/logux/blob/master/${ file }`
+            href: `https://github.com/logux/logux/edit/master/${ file }`
           })
         ]
       } else if (node.tagName === 'h2' || node.tagName === 'h3') {
