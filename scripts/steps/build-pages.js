@@ -57,6 +57,10 @@ function converter ({ file }) {
         node.properties.className = ['list']
       } else if (node.tagName === 'table') {
         node.properties.className = ['table']
+      } else if (node.tagName === 'pre') {
+        node.properties.className = ['code-block']
+      } else if (node.tagName === 'kbd') {
+        node.properties.className = ['code']
       } else if (node.tagName === 'code') {
         if (parent.tagName === 'pre') {
           delete node.properties.className
@@ -98,8 +102,8 @@ async function put (layout, page) {
   let fixed = await unified().use(converter, { file: page.file }).run(page.tree)
   let html = await unified().use(rehypeStringify).stringify(fixed)
   return layout
-    .replace(/<title>[^<]+/, `${ page.title } / Guide / Logux`)
-    .replace(/<article([^>]+)>/, `$0${ html }`)
+    .replace(/<title>[^<]+/, `<title>${ page.title } / Guide / Logux`)
+    .replace(/<article([^>]+)>/, `$&${ html }`)
 }
 
 async function cleanContent (html) {
@@ -114,7 +118,7 @@ async function cleanContent (html) {
 module.exports = async function buildPages (assets, uikit, guides) {
   let layout = await cleanContent(uikit)
   await Promise.all(guides.map(async page => {
-    let path = join(DIST, page.file.replace(/\.md$/, '.html'))
+    let path = join(DIST, join(page.file.replace(/\.md$/, ''), 'index.html'))
     let html = await put(layout, page)
     await makeDir(dirname(path))
     await writeFile(path, html)
