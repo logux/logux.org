@@ -3,7 +3,7 @@
   margin-bottom: var(--text-margin)
   overflow: auto
   font-size: 16px
-  color: var(--base-title)
+  color: #4d4d4c
   border-radius: 4px
   box-shadow: var(--base-above)
 
@@ -14,5 +14,103 @@
     margin-bottom: 18px
     font-size: 14px
 
-  @mixin dark
+// Based on Tomorrow https://github.com/jmblog/color-themes-for-highlightjs
+
+.code-block_comment,
+.code-block_quote
+  color: #8e908c
+
+.code-block_variable,
+.code-block_template-variable,
+.code-block_tag,
+.code-block_name,
+.code-block_selector-id,
+.code-block_selector-class,
+.code-block_regexp,
+.code-block_deletion
+  color: #c82829
+
+.code-block_number,
+.code-block_built_in,
+.code-block_builtin-name,
+.code-block_literal,
+.code-block_type,
+.code-block_params,
+.code-block_meta,
+.code-block_link
+  color: #f5871f
+
+.code-block_attribute
+  color: #eab700
+
+.code-block_string,
+.code-block_symbol,
+.code-block_bullet,
+.code-block_addition
+  color: #718c00
+
+.code-block_title,
+.code-block_section
+  color: #4271ae
+
+.code-block_keyword,
+.code-block_selector-tag
+  color: #8959a8
+
+.code-block_emphasis
+  font-style: italic
+
+.code-block_strong
+  font-weight: bold
+
+@mixin dark
+  .code-block
+    color: #999
     background-color: rgba(#fff, 0.1)
+
+  .code-block_comment,
+  .code-block_quote
+    color: #999
+
+  .code-block_variable,
+  .code-block_template-variable,
+  .code-block_tag,
+  .code-block_name,
+  .code-block_selector-id,
+  .code-block_selector-class,
+  .code-block_regexp,
+  .code-block_deletion
+    color: #f2777a
+
+  .code-block_number,
+  .code-block_built_in,
+  .code-block_builtin-name,
+  .code-block_literal,
+  .code-block_type,
+  .code-block_params,
+  .code-block_meta,
+  .code-block_link
+    color: #f99157
+
+  .code-block_attribute
+    color: #fc6
+
+  .code-block_string,
+  .code-block_symbol,
+  .code-block_bullet,
+  .code-block_addition
+    color: #9c9
+
+  .code-block_title,
+  .code-block_section
+    color: #69c
+
+  .code-block_keyword,
+  .code-block_selector-tag
+    color: #c9c
+
+  .code-block_emphasis
+    font-style: italic
+
+  .code-block_strong
+    font-weight: bold

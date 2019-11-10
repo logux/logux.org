@@ -45,7 +45,7 @@ html( lang="en" )
             ul.list
               li
                 p.text_block The <code class="code">standard Redux</code> way to dispatch actions. Action will not be sent to the server or another browser tab. There is no way to set action’s meta in this method.
-                pre.code-block store.dispatch(action)
+                pre.code-block server.undo(meta, <span class="code-block_string">'too late'</span>)
               li
                 p.text_block <code class="code">preadd</code>: action is going to be added to the log. It is the only way to set <a href="#" class="code"><code>meta.reasons</code></a>. This event will not be called for cross-tab actions added in a different browser tab.
             p.text_block To stop the server press <kbd class="code">Command</kbd>+<kbd class="code">.</kbd> on Mac OS X and <kbd class="code">Ctrl</kbd>+<kbd class="code">C</kbd> on Linux and Windows.
@@ -59,17 +59,19 @@ html( lang="en" )
           +switcher_section
             p.text_block Using Logux Server
             pre.code-block.
-              server.channel('counter', {
-                access () {
-                  // Access control is mandatory. API was designed to make it harder to write dangerous code.
-                  return true
-                },
-                async init (ctx) {
-                  // Load initial state when client subscribing to the channel.
-                  // You can use any database.
-                  let value = await db.get('counter')
-                  ctx.sendBack({ type: 'INC', value })
-                }
+              <span class="code-block_keyword">const</span> { Server } = <span class="code-block_built_in">require</span>(<span class="code-block_string">'@logux/server'</span>)
+
+              <span class="code-block_keyword">const</span> server = <span class="code-block_keyword">new</span> Server(
+                Server.loadOptions(process, {
+                  <span class="code-block_attr">subprotocol</span>: <span class="code-block_string">'1.0.0'</span>,
+                  <span class="code-block_attr">supports</span>: <span class="code-block_string">'1.x'</span>,
+                  <span class="code-block_attr">root</span>: __dirname
+                })
+              )
+
+              server.auth(<span class="code-block_function">(<span class="code-block_params">userId, token</span>) =&gt;</span> {
+                <span class="code-block_comment">// Allow only local users until we will have a proper authentication</span>
+                <span class="code-block_keyword">return</span> process.env.NODE_ENV === <span class="code-block_string">'development'</span>
               })
             p.text_block However, you can change this behavior and have event sourcing on the server too.
           +switcher_section
