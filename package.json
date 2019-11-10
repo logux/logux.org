@@ -161,7 +161,7 @@
         "dist/*.js",
         "dist/*.css"
       ],
-      "limit": "9 KB"
+      "limit": "10 KB"
     }
   ],
   "sharec": {
