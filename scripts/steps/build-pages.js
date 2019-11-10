@@ -19,7 +19,15 @@ function cleaner () {
 }
 
 function tag (tagName, cls, properties, children = []) {
-  properties.className = [cls]
+  if (Array.isArray(properties)) {
+    children = properties
+    properties = { }
+  }
+  if (typeof cls === 'object') {
+    properties = cls
+  } else {
+    properties.className = [cls]
+  }
   return { type: 'element', tagName, properties, children }
 }
 
@@ -31,6 +39,30 @@ function toText (nodes) {
       return toText(i.children)
     }
   }).join('')
+}
+
+function switcherToHTML (id, switchers) {
+  return tag('div', 'switcher', [
+    tag('div', 'switcher_tabs', { role: 'tablist' }, switchers.map((s, i) => {
+      return tag('button', {
+        'id': `sw${ id }tab${ i }`,
+        'role': 'tab',
+        'tabindex': i !== 0 && '-1',
+        'aria-controls': `sw${ id }tab${ i }body`,
+        'aria-selected': i === 0 && 'true'
+      }, [
+        { type: 'text', value: s[0] }
+      ])
+    })),
+    ...switchers.map((s, i) => {
+      return tag('section', {
+        'id': `sw${ id }tab${ i }body`,
+        'role': 'tabpanel',
+        'hidden': i !== 0,
+        'aria-labelledby': `sw${ id }tab${ i }`
+      }, s[1])
+    })
+  ])
 }
 
 function converter ({ file }) {
@@ -69,11 +101,33 @@ function converter ({ file }) {
         } else {
           node.properties.className = ['code']
         }
+      } else if (node.tagName === 'details') {
+        let converted = []
+        let switchers = []
+        let onPage = 0
+        for (let child of parent.children) {
+          if (child.tagName === 'details') {
+            switchers.push([
+              toText(child.children[0].children),
+              child.children.slice(1)
+            ])
+          } else if (switchers.length > 0) {
+            converted.push(switcherToHTML(onPage++, switchers))
+            switchers = []
+            converted.push(child)
+          } else {
+            converted.push(child)
+          }
+        }
+        if (switchers.length > 0) {
+          converted.push(switcherToHTML(onPage++, switchers))
+        }
+        parent.children = converted
       } else if (node.tagName === 'h1' && !node.properties.className) {
         node.tagName = 'div'
         node.properties = { className: ['edit'] }
         node.children = [
-          tag('h1', 'title', { }, node.children),
+          tag('h1', 'title', node.children),
           tag('a', 'edit_link', {
             title: 'Edit the page on GitHub',
             href: `https://github.com/logux/logux/edit/master/${ file }`
@@ -99,8 +153,12 @@ function converter ({ file }) {
 }
 
 async function put (layout, page) {
-  let fixed = await unified().use(converter, { file: page.file }).run(page.tree)
-  let html = await unified().use(rehypeStringify).stringify(fixed)
+  let fixed = await unified()
+    .use(converter, { file: page.file })
+    .run(page.tree)
+  let html = await unified()
+    .use(rehypeStringify)
+    .stringify(fixed)
   return layout
     .replace(/<title>[^<]+/, `<title>${ page.title } / Guide / Logux`)
     .replace(/<article([^>]+)>/, `$&${ html }`)

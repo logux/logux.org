@@ -10,6 +10,14 @@ let globby = require('globby')
 
 const ROOT = join(__dirname, '..', '..', '..', 'logux')
 
+function newlineCleaner () {
+  return tree => {
+    tree.children = tree.children.filter(i => {
+      return i.type !== 'text' || i.value !== '\n'
+    })
+  }
+}
+
 module.exports = async function processGuides () {
   let files = await globby('*/*.md', { cwd: ROOT, ignore: 'node_modules' })
   return Promise.all(files.map(async file => {
@@ -36,6 +44,7 @@ module.exports = async function processGuides () {
       .use(convertor)
       .use(remarkRehype, { allowDangerousHTML: true })
       .use(rehypeRaw)
+      .use(newlineCleaner)
       .run(tree)
     return { tree, title, file }
   }))
