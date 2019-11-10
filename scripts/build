@@ -7,6 +7,8 @@ let compressAssets = require('./steps/compress-assets')
 let copyWellKnown = require('./steps/copy-well-known')
 let compileAssets = require('./steps/compile-assets')
 let repackScripts = require('./steps/repack-scripts')
+let processGuides = require('./steps/process-guides')
+let buildPages = require('./steps/build-pages')
 let updateHtml = require('./steps/update-html')
 
 async function build () {
@@ -18,7 +20,11 @@ async function build () {
     repackScripts(assets),
     downloadProject('logux')
   ])
-  await updateHtml(assets, webmanifest, filesFromCSS)
+  let [guides, uikit] = await Promise.all([
+    processGuides(),
+    updateHtml(assets, webmanifest, filesFromCSS)
+  ])
+  await buildPages(assets, uikit, guides)
   await compressAssets(assets)
 }
 

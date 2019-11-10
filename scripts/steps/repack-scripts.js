@@ -11,9 +11,7 @@ module.exports = async function repackScripts (assets) {
     return [join(SRC, name), compiled]
   })
   await Promise.all(scripts.map(async ([input, output]) => {
-    let bundle = await rollup({
-      input, plugins: [terser()]
-    })
+    let bundle = await rollup({ input, plugins: [terser()] })
     let results = await bundle.generate({ format: 'iife' })
     await writeFile(output, results.output[0].code)
   }))

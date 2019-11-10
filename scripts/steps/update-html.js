@@ -21,7 +21,7 @@ module.exports = async function updateHtml (assets, manifest, preloadFiles) {
     readFile(join(DIST, 'uikit.html')),
     makeDir(join(DIST, 'uikit'))
   ])
-  function htmlPlugin () {
+  function optimizer () {
     return tree => unistFlatmap(tree, node => {
       let props = node.properties || { }
       if (props.rel && props.rel[0] === 'icon' && props.sizes === '512x512') {
@@ -42,7 +42,7 @@ module.exports = async function updateHtml (assets, manifest, preloadFiles) {
   }
   let fixed = await unified()
     .use(rehypeParse)
-    .use(htmlPlugin)
+    .use(optimizer)
     .use(rehypeStringify)
     .process(html)
   let oldFile = join(DIST, 'uikit.html')
@@ -53,5 +53,5 @@ module.exports = async function updateHtml (assets, manifest, preloadFiles) {
   ])
   assets.remove(oldFile)
   assets.add(newFile)
-  return fixed
+  return fixed.contents
 }
