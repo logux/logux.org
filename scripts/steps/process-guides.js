@@ -3,6 +3,7 @@ let remarkRehype = require('remark-rehype')
 let { readFile } = require('fs').promises
 let remarkParse = require('remark-parse')
 let unistVisit = require('unist-util-visit')
+let rehypeRaw = require('rehype-raw')
 let { join } = require('path')
 let unified = require('unified')
 let globby = require('globby')
@@ -21,7 +22,10 @@ module.exports = async function processGuides () {
           }
         })
         unistVisit(tree, 'link', node => {
-          node.url = node.url.replace(/\.md$/, '/')
+          node.url = node.url
+            .replace(/^..\//, '../../')
+            .replace(/^.\//, '../')
+            .replace(/\.md$/, '/')
         })
       }
     }
@@ -30,7 +34,8 @@ module.exports = async function processGuides () {
     tree = await unified()
       .use(remarkHighlight)
       .use(convertor)
-      .use(remarkRehype)
+      .use(remarkRehype, { allowDangerousHTML: true })
+      .use(rehypeRaw)
       .run(tree)
     return { tree, title, file }
   }))
