@@ -61,13 +61,13 @@ html( lang="en" )
             pre.code-block.
               <span class="code-block_keyword">const</span> { Server } = <span class="code-block_built_in">require</span>(<span class="code-block_string">'@logux/server'</span>)
 
-              <span class="code-block_keyword">const</span> server = <span class="code-block_keyword">new</span> Server(
-                Server.loadOptions(process, {
-                  <span class="code-block_attr">subprotocol</span>: <span class="code-block_string">'1.0.0'</span>,
-                  <span class="code-block_attr">supports</span>: <span class="code-block_string">'1.x'</span>,
-                  <span class="code-block_attr">root</span>: __dirname
-                })
-              )
+              <span class="code-block_function"><span class="code-block_keyword">function</span> <span class="code-block_title">usersReducers</span> (<span class="code-block_params">state = { }, action</span>) </span>{
+                <span class="code-block_keyword">if</span> (action.type === <span class="code-block_string">'user/name'</span>) {
+                  <span class="code-block_keyword">return</span> { ...state, <span class="code-block_attr">name</span>: action.name }
+                } <span class="code-block_keyword">else</span> {
+                  <span class="code-block_keyword">return</span> state
+                }
+              }
 
               server.auth(<span class="code-block_function">(<span class="code-block_params">userId, token</span>) =&gt;</span> {
                 <span class="code-block_comment">// Allow only local users until we will have a proper authentication</span>
