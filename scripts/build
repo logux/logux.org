@@ -10,6 +10,8 @@ let repackScripts = require('./steps/repack-scripts')
 let processGuides = require('./steps/process-guides')
 let buildPages = require('./steps/build-pages')
 let updateHtml = require('./steps/update-html')
+let readJsdoc = require('./steps/read-jsdoc')
+let buildApi = require('./steps/build-api')
 
 async function build () {
   let assets = await compileAssets()
@@ -22,11 +24,15 @@ async function build () {
     downloadProject('logux-core'),
     downloadProject('logux-server')
   ])
-  let [guides, uikit] = await Promise.all([
+  let [guides, nodeJsdoc, uikit] = await Promise.all([
     processGuides(),
+    readJsdoc('logux-core', 'logux-server'),
     updateHtml(assets, webmanifest, filesFromCSS)
   ])
-  await buildPages(assets, uikit, guides)
+  await Promise.all([
+    buildPages(assets, uikit, guides),
+    buildApi(assets, 'node-api', nodeJsdoc)
+  ])
   await compressAssets(assets)
 }
 
