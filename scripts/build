@@ -18,7 +18,9 @@ async function build () {
     findFilesInCSS(assets),
     copyWellKnown(assets),
     repackScripts(assets),
-    downloadProject('logux')
+    downloadProject('logux'),
+    downloadProject('logux-core'),
+    downloadProject('logux-server')
   ])
   let [guides, uikit] = await Promise.all([
     processGuides(),
