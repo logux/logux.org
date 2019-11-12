@@ -3704,6 +3704,11 @@ flat-cache@^2.0.1:
     rimraf "2.6.3"
     write "1.0.3"
 
+flatmap@0.0.3:
+  version "0.0.3"
+  resolved "https://registry.yarnpkg.com/flatmap/-/flatmap-0.0.3.tgz#1f18a4d938152d495965f9c958d923ab2dd669b4"
+  integrity sha1-Hxik2TgVLUlZZfnJWNkjqy3WabQ=
+
 flatted@^2.0.0:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/flatted/-/flatted-2.0.1.tgz#69e57caa8f0eacbc281d2e2cb458d46fdb449e08"
@@ -9359,6 +9364,14 @@ unist-builder@^1.0.1, unist-builder@^1.0.2:
   integrity sha512-v6xbUPP7ILrT15fHGrNyHc1Xda8H3xVhP7/HAIotHOhVPjH5dCXA097C3Rry1Q2O+HbOLCao4hfPB+EYEjHgVg==
   dependencies:
     object-assign "^4.1.0"
+
+unist-util-filter@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/unist-util-filter/-/unist-util-filter-2.0.0.tgz#93a80cf0cf0ec6dbaef5b7bfd196f65bfd4f3d75"
+  integrity sha512-N/c0IFRKiGKfAYtrCIe+CssNo6u3jUBx4a1i2G+IP0YCXZmw7HtuhMpGm6M9YsLFMHEQE2R5FMQPtY9IHCqydw==
+  dependencies:
+    flatmap "0.0.3"
+    unist-util-is "^4.0.0"
 
 unist-util-find-all-after@^1.0.2:
   version "1.0.5"

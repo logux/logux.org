@@ -38,6 +38,7 @@
     "rollup-plugin-terser": "^5.1.2",
     "sugarss": "^2.0.0",
     "unified": "^8.4.2",
+    "unist-util-filter": "^2.0.0",
     "unist-util-flatmap": "^1.0.0",
     "unist-util-visit": "^2.0.1",
     "unzipper": "^0.10.5"

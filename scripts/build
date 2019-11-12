@@ -8,6 +8,7 @@ let copyWellKnown = require('./steps/copy-well-known')
 let compileAssets = require('./steps/compile-assets')
 let repackScripts = require('./steps/repack-scripts')
 let processGuides = require('./steps/process-guides')
+let createLayout = require('./steps/create-layout')
 let buildPages = require('./steps/build-pages')
 let updateHtml = require('./steps/update-html')
 let readJsdoc = require('./steps/read-jsdoc')
@@ -29,9 +30,10 @@ async function build () {
     readJsdoc('logux-core', 'logux-server'),
     updateHtml(assets, webmanifest, filesFromCSS)
   ])
+  let layout = await createLayout(uikit)
   await Promise.all([
-    buildPages(assets, uikit, guides),
-    buildApi(assets, 'node-api', nodeJsdoc)
+    buildPages(assets, layout, guides),
+    buildApi(assets, layout, 'node-api', 'Node API', nodeJsdoc)
   ])
   await compressAssets(assets)
 }
