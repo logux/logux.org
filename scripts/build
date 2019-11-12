@@ -22,9 +22,9 @@ async function build () {
     copyWellKnown(assets),
     repackScripts(assets),
     downloadProject('logux'),
-    downloadProject('logux-core'),
-    downloadProject('logux-server')
+    downloadProject('logux-core')
   ])
+  await downloadProject('logux-server')
   let [guides, nodeJsdoc, uikit] = await Promise.all([
     processGuides(),
     readJsdoc('logux-core', 'logux-server'),
