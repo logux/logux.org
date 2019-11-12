@@ -1,10 +1,14 @@
 .footer
+  box-sizing: border-box
   display: grid
   grid-template-rows: auto
   grid-template-columns: 1fr 1fr 1fr
-  max-width: 900px
+  width: 100%
   padding: 40px 30px
   margin: 0 auto
+
+  @mixin no-mobile
+    max-width: 900px
 
   @mixin mobile
     grid-template-rows: auto auto
