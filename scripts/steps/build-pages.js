@@ -6,6 +6,7 @@ let makeDir = require('make-dir')
 const DIST = join(__dirname, '..', '..', 'dist')
 
 module.exports = async function buildPages (assets, layout, guides) {
+  process.stdout.write('Building HTML\n')
   await Promise.all(guides.map(async page => {
     let title = `${ page.title } / ${ capitalize(dirname(page.file)) }`
     let html = await layout.guide(page.file, title, page.tree)

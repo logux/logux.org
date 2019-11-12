@@ -19,6 +19,7 @@ function newlineCleaner () {
 }
 
 module.exports = async function processGuides () {
+  process.stdout.write('Converting guides\n')
   let files = await globby('*/*.md', { cwd: ROOT, ignore: 'node_modules' })
   return Promise.all(files.map(async file => {
     let title = ''

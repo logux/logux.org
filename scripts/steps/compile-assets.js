@@ -2,6 +2,7 @@ let { join } = require('path')
 let Bundler = require('parcel-bundler')
 
 module.exports = async function compileAssets () {
+  process.stdout.write('Compressing assets\n')
   let pugTemplate = join(__dirname, '..', '..', 'src', 'uikit.pug')
   let uikitBundler = new Bundler(pugTemplate, { sourceMaps: false })
   let bundle = await uikitBundler.bundle()
