@@ -112,7 +112,7 @@ function converter ({ file }) {
       } else if (node.tagName === 'code') {
         if (parent.tagName === 'pre') {
           delete node.properties.className
-        } else if (parent.tagName === 'a') {
+        } else if (parent.tagName === 'a' && !parent.properties.className) {
           parent.properties.className = ['code']
         } else {
           node.properties.className = ['code']
