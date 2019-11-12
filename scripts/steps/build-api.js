@@ -11,11 +11,17 @@ function tag (tagName, children) {
   return { type: 'element', tagName, properties: { }, children }
 }
 
-function toTree (title) {
+function toTree (title, jsdoc) {
   return {
     type: 'root',
     children: [
-      tag('h1', title)
+      tag('h1', title),
+      ...jsdoc
+        .filter(i => i.kind === 'class')
+        .sort((a, b) => a.name.localeCompare(b.name))
+        .map(cls => {
+          return tag('h2', cls.name)
+        })
     ]
   }
 }

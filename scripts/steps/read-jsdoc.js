@@ -13,5 +13,6 @@ module.exports = async function readJsdoc (...projects) {
       cwd: join(PROJECTS, i)
     })
   }))
-  return build(files.flat(), { hljs: { languages: ['js'] } })
+  let tree = await build(files.flat(), { hljs: { languages: ['js'] } })
+  return tree
 }
