@@ -140,15 +140,19 @@ function converter ({ file }) {
         }
         parent.children = converted
       } else if (node.tagName === 'h1' && !node.properties.className) {
-        node.tagName = 'div'
-        node.properties = { className: ['edit'] }
-        node.children = [
-          tag('h1', 'title', node.children),
-          tag('a', 'edit_link', {
-            title: 'Edit the page on GitHub',
-            href: `https://github.com/logux/logux/edit/master/${ file }`
-          })
-        ]
+        if (file) {
+          node.tagName = 'div'
+          node.properties = { className: ['edit'] }
+          node.children = [
+            tag('h1', 'title', node.children),
+            tag('a', 'edit_link', {
+              title: 'Edit the page on GitHub',
+              href: `https://github.com/logux/logux/edit/master/${ file }`
+            })
+          ]
+        } else {
+          node.properties.className = ['title']
+        }
       } else if (node.tagName === 'h2' || node.tagName === 'h3') {
         let slug = toSlug(node.children)
         node.properties.className = ['title']
@@ -193,11 +197,10 @@ module.exports = async function createLayout (uikit) {
 
   return {
     async guide (file, title, tree) {
-      return put(guideHtml, title, file, tree)
+      return put(guideHtml, file, title, tree)
     },
-    async api (file, title, tree) {
-      return put(apiHtml, file, title, tree)
-    },
-    tag
+    async api (title, tree) {
+      return put(apiHtml, false, title, tree)
+    }
   }
 }
