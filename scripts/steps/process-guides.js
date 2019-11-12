@@ -18,10 +18,10 @@ function newlineCleaner () {
   }
 }
 
-module.exports = async function processGuides () {
-  process.stdout.write('Converting guides\n')
+module.exports = async function processGuides (spin) {
+  spin.add('process-guides', { text: 'Converting guides' })
   let files = await globby('*/*.md', { cwd: ROOT, ignore: 'node_modules' })
-  return Promise.all(files.map(async file => {
+  let guides = await Promise.all(files.map(async file => {
     let title = ''
     function convertor () {
       return tree => {
@@ -49,4 +49,6 @@ module.exports = async function processGuides () {
       .run(tree)
     return { tree, title, file }
   }))
+  spin.succeed('process-guides', { text: 'Guide converted' })
+  return guides
 }

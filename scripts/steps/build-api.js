@@ -26,11 +26,15 @@ function toTree (title, jsdoc) {
   }
 }
 
-module.exports = async function buildApi (assets, layout, file, title, jsdoc) {
+module.exports = async function buildApi (
+  spin, assets, layout, file, title, jsdoc
+) {
+  spin.add('build-api', { text: 'Building API HTML' })
   let path = join(DIST, file, 'index.html')
   await makeDir(dirname(path))
   let tree = toTree(title, jsdoc)
   let html = await layout.api(title, tree)
   await writeFile(path, html)
   assets.add(path)
+  spin.succeed('build-api', { text: 'API HTML generated' })
 }

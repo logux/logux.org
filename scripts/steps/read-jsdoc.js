@@ -4,8 +4,8 @@ let globby = require('globby')
 
 const PROJECTS = join(__dirname, '..', '..', '..')
 
-module.exports = async function readJsdoc (...projects) {
-  process.stdout.write('Generating JSDoc\n')
+module.exports = async function readJsdoc (spin, ...projects) {
+  spin.add(`jsdoc${ projects.join() }`, { text: 'Generating JSDoc' })
   let files = await Promise.all(projects.map(i => {
     return globby('**/*.js', {
       absolute: true,
@@ -14,5 +14,6 @@ module.exports = async function readJsdoc (...projects) {
     })
   }))
   let tree = await build(files.flat(), { hljs: { languages: ['js'] } })
+  spin.succeed(`jsdoc${ projects.join() }`, { text: 'JSDoc generated' })
   return tree
 }

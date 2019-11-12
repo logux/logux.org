@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 
+let Spinnies = require('spinnies')
 let chalk = require('chalk')
 
 let generateWebManifest = require('./steps/generate-web-manifest')
@@ -11,31 +12,32 @@ let compileAssets = require('./steps/compile-assets')
 let repackScripts = require('./steps/repack-scripts')
 let processGuides = require('./steps/process-guides')
 let createLayout = require('./steps/create-layout')
-let buildPages = require('./steps/build-pages')
+let buildGuides = require('./steps/build-guides')
 let updateHtml = require('./steps/update-html')
 let readJsdoc = require('./steps/read-jsdoc')
 let buildApi = require('./steps/build-api')
 
 async function build () {
+  let spin = new Spinnies({ succeedColor: 'white' })
   let assets = await compileAssets()
   let [webmanifest, filesFromCSS] = await Promise.all([
     generateWebManifest(assets),
     findFilesInCSS(assets),
     copyWellKnown(assets),
     repackScripts(assets),
-    downloadProject('logux'),
-    downloadProject('logux-core'),
-    downloadProject('logux-server')
+    downloadProject(spin, 'logux'),
+    downloadProject(spin, 'logux-core'),
+    downloadProject(spin, 'logux-server')
   ])
   let [guides, nodeJsdoc, uikit] = await Promise.all([
-    processGuides(),
-    readJsdoc('logux-core', 'logux-server'),
+    processGuides(spin),
+    readJsdoc(spin, 'logux-core', 'logux-server'),
     updateHtml(assets, webmanifest, filesFromCSS)
   ])
   let layout = await createLayout(uikit)
   await Promise.all([
-    buildPages(assets, layout, guides),
-    buildApi(assets, layout, 'node-api', 'Node API', nodeJsdoc)
+    buildGuides(spin, assets, layout, guides),
+    buildApi(spin, assets, layout, 'node-api', 'Node API', nodeJsdoc)
   ])
   await compressAssets(assets)
 }
