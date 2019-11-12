@@ -1,5 +1,7 @@
 #!/usr/bin/env node
 
+let chalk = require('chalk')
+
 let generateWebManifest = require('./steps/generate-web-manifest')
 let downloadProject = require('./steps/download-project')
 let findFilesInCSS = require('./steps/find-files-in-css')
@@ -39,6 +41,6 @@ async function build () {
 }
 
 build().catch(e => {
-  process.stderr.write(e.stack + '\n')
+  process.stderr.write(chalk.red(e.stack) + '\n')
   process.exit(1)
 })
