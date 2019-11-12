@@ -21,7 +21,7 @@ module.exports = async function downloadProject (name) {
 
   await new Promise((resolve, reject) => {
     let url = `https://github.com/logux/${ repo }/archive/master.zip`
-    process.stdout.write(`Downloading ${ url }\n`)
+    process.stdout.write(`Downloading ${ url }…\n`)
     download(url, res => {
       let extract = Extract({ path: dirname(dir) })
       res.pipe(extract)
@@ -31,4 +31,5 @@ module.exports = async function downloadProject (name) {
     })
   })
   await rename(join(dir, '..', `${ repo }-master`), dir)
+  process.stdout.write(`${ name } downloaded\n`)
 }
