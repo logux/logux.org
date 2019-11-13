@@ -81,7 +81,7 @@ function switcherToHTML (id, switchers) {
   ])
 }
 
-function converter ({ file }) {
+function converter () {
   let slugs = { }
   function toSlug (nodes) {
     let text = toText(nodes)
@@ -90,7 +90,7 @@ function converter ({ file }) {
       .replace(/\s+/g, '-')
       .toLowerCase()
     if (slugs[slug]) {
-      throw new Error(`Dublicate slug by "${ text }" from ${ file }`)
+      throw new Error(`Dublicate slug by "${ text }"`)
     }
     slugs[slug] = true
     return slug
@@ -139,30 +139,29 @@ function converter ({ file }) {
           converted.push(switcherToHTML(onPage++, switchers))
         }
         parent.children = converted
-      } else if (node.tagName === 'h1' && !node.properties.className) {
-        if (file) {
+      } else if (/^h[123]$/.test(node.tagName) && !node.properties.className) {
+        node.properties.className = ['title']
+        if (!node.noSlug) {
+          let slug = toSlug(node.children)
+          node.properties.id = slug
+          node.children = [
+            tag('a', 'title_link', {
+              title: 'Direct link to section',
+              href: `#${ slug }`
+            }, node.children)
+          ]
+        }
+        if (node.editUrl) {
           node.tagName = 'div'
           node.properties = { className: ['edit'] }
           node.children = [
             tag('h1', 'title', node.children),
             tag('a', 'edit_link', {
               title: 'Edit the page on GitHub',
-              href: `https://github.com/logux/logux/edit/master/${ file }`
+              href: node.editUrl
             })
           ]
-        } else {
-          node.properties.className = ['title']
         }
-      } else if (node.tagName === 'h2' || node.tagName === 'h3') {
-        let slug = toSlug(node.children)
-        node.properties.className = ['title']
-        node.properties.id = slug
-        node.children = [
-          tag('a', 'title_link', {
-            title: 'Direct link to section',
-            href: `#${ slug }`
-          }, node.children)
-        ]
       } else if (cls.some(i => i.startsWith('hljs-'))) {
         node.properties.className = node.properties.className.map(i => {
           return i.replace(/^hljs-/, 'code-block_')
@@ -183,9 +182,9 @@ module.exports = async function createLayout (uikit) {
   let guideHtml = await cleanPage(uikit)
   let apiHtml = await cleanPage(uikit, /\/guide\./)
 
-  async function put (layout, file, title, tree) {
+  async function put (layout, title, tree) {
     let fixed = await unified()
-      .use(converter, { file })
+      .use(converter)
       .run(tree)
     let html = await unified()
       .use(rehypeStringify)
@@ -196,11 +195,11 @@ module.exports = async function createLayout (uikit) {
   }
 
   return {
-    async guide (file, title, tree) {
-      return put(guideHtml, file, title, tree)
+    async guide (title, tree) {
+      return put(guideHtml, title, tree)
     },
     async api (title, tree) {
-      return put(apiHtml, false, title, tree)
+      return put(apiHtml, title, tree)
     }
   }
 }

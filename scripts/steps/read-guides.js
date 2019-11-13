@@ -10,9 +10,13 @@ let globby = require('globby')
 
 const ROOT = join(__dirname, '..', '..', '..', 'logux')
 
-function newlineCleaner () {
+function htmlFixer (file) {
   return tree => {
     tree.children = tree.children.filter(i => {
+      if (i.tagName === 'h1') {
+        i.editUrl = `https://github.com/logux/logux/edit/master/${ file }`
+        i.noSlug = true
+      }
       return i.type !== 'text' || i.value !== '\n'
     })
   }
@@ -45,7 +49,7 @@ module.exports = async function readGuides (spin) {
       .use(convertor)
       .use(remarkRehype, { allowDangerousHTML: true })
       .use(rehypeRaw)
-      .use(newlineCleaner)
+      .use(htmlFixer, file)
       .run(tree)
     return { tree, title, file }
   }))
