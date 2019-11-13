@@ -10,9 +10,9 @@ let compressAssets = require('./steps/compress-assets')
 let copyWellKnown = require('./steps/copy-well-known')
 let compileAssets = require('./steps/compile-assets')
 let repackScripts = require('./steps/repack-scripts')
-let processGuides = require('./steps/process-guides')
 let createLayout = require('./steps/create-layout')
 let buildGuides = require('./steps/build-guides')
+let readGuides = require('./steps/read-guides')
 let updateHtml = require('./steps/update-html')
 let readJsdoc = require('./steps/read-jsdoc')
 let buildApi = require('./steps/build-api')
@@ -30,7 +30,7 @@ async function build () {
     downloadProject(spin, 'logux-server')
   ])
   let [guides, nodeJsdoc, uikit] = await Promise.all([
-    processGuides(spin),
+    readGuides(spin),
     readJsdoc(spin, 'logux-core', 'logux-server'),
     updateHtml(assets, webmanifest, filesFromCSS)
   ])
