@@ -8,8 +8,8 @@
     "lint": "eslint . scripts/* && stylelint src/**/*.sss",
     "test": "yarn lint && yarn build && size-limit",
     "clean": "rimraf dist/ .cache",
-    "build": "rimraf dist/ && NODE_ENV=production ./scripts/build",
-    "nginx": "podman build -t loguxio . && podman run --rm -p 8000:80 -e PORT=80 -it loguxio",
+    "build": "rimraf dist/* && NODE_ENV=production ./scripts/build",
+    "nginx": "podman build -t loguxio . && podman run -v ./dist/:/var/www/ --privileged --rm -p 8000:80 -e PORT=80 -it loguxio",
     "deploy": "gcloud builds --project logux-255417 submit"
   },
   "dependencies": {
