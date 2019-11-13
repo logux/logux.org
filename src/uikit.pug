@@ -32,7 +32,9 @@ html( lang="en" )
     .layout_body
       article.text
         .edit
-          h1.title Logux.io UI Kit
+          h1#home.title
+            a.title_link( href="#home" title="Direct link to section" )
+              | Logux.io UI Kit
           a.edit_link( href="https://github.com/logux/logux.io" title="Edit the page on GitHub" )
         p.text_block Logux <strong>actions</strong> are very similar to <a href="#">Redux actions</a>. JSON objects describe what was changed in <a href="#">the application state</a>. Logux Core provides <code class="code">BaseNode</code> class, which will synchronize actions between two nodes. <code class="code">ClientNode</code> and <code class="code">ServerNode</code> classes extend this class with small behaviour changes.
         +switcher('Node.js', 'Ruby on Rails')
@@ -52,7 +54,8 @@ html( lang="en" )
           +switcher_section
             p.text_block Clients can also create <code class="code">logux/undo</code> to revert action and ask other clients to revert it (if the developer allowed to re-send these actions on the server).
         h2#subtitle.title
-          a.title_link( href="#subtitle" title="Direct link to section" ) Subtitle
+          a.title_link( href="#subtitle" title="Direct link to section" )
+            | Subtitle
         p.text_block By default, the server state is opposite to client state. Because server-side cache could be very big, the database is the single source of truth. You can use any database with Logux.
         p.text_block Logux Server removes action after processing and always look to a database for the latest value. As a result, you can’t undo actions on the server.
         +switcher('Node.js', 'Ruby on Rails', 'Any other HTTP server')
@@ -79,7 +82,8 @@ html( lang="en" )
           +switcher_section
             p.text_block Write your own library
         h2#add.title
-          a.title_link( href="#add" title="Direct link to section" ) <code>add()</code></a>
+          a.title_link( href="#add" title="Direct link to section" )
+            | <code>add()</code>
         h3#parameters.title
           a.title_link( href="#parameters" title="Direct link to section" ) Parameters
         table.table

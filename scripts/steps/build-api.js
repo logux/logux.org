@@ -6,11 +6,11 @@ let makeDir = require('make-dir')
 
 const DIST = join(__dirname, '..', '..', 'dist')
 
-function tag (tagName, children) {
+function tag (tagName, children, opts) {
   if (typeof children === 'string') {
     children = [{ type: 'text', value: children }]
   }
-  return { type: 'element', tagName, properties: { }, children }
+  return { type: 'element', tagName, properties: { }, children, ...opts }
 }
 
 function toHtml (tree) {
@@ -29,8 +29,11 @@ function toTree (jsdoc) {
       .filter(i => i.kind === 'class')
       .sort((a, b) => a.name.localeCompare(b.name))
       .map(cls => {
+        let [, name, file] = cls.context.file.match(/^.*\/logux-([^/]+)\/(.*)/)
         return tag('article', [
-          tag('h1', cls.name),
+          tag('h1', cls.name, {
+            editUrl: `https://github.com/logux/${ name }/edit/master/${ file }`
+          }),
           ...toHtml(cls.description)
         ])
       })
