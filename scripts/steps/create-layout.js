@@ -2,6 +2,7 @@ let rehypeStringify = require('rehype-stringify')
 let unistFilter = require('unist-util-filter')
 let rehypeParse = require('rehype-parse')
 let unistVisit = require('unist-util-visit')
+let slugify = require('slugify')
 let unified = require('unified')
 
 function cleaner (removeAssets) {
@@ -85,10 +86,7 @@ function converter () {
   let slugs = { }
   function toSlug (nodes) {
     let text = toText(nodes)
-    let slug = text
-      .replace(/[^\w\d\s]/g, '')
-      .replace(/\s+/g, '-')
-      .toLowerCase()
+    let slug = slugify(text, { lower: true })
     if (slugs[slug]) {
       throw new Error(`Dublicate slug by "${ text }"`)
     }
@@ -109,7 +107,7 @@ function converter () {
         node.properties.className = ['code-block']
       } else if (node.tagName === 'kbd') {
         node.properties.className = ['code']
-      } else if (node.tagName === 'code') {
+      } else if (node.tagName === 'code' && !node.noClass) {
         if (parent.tagName === 'pre') {
           delete node.properties.className
         } else if (parent.tagName === 'a' && !parent.properties.className) {
@@ -153,14 +151,14 @@ function converter () {
         }
         if (node.editUrl) {
           node.tagName = 'div'
-          node.properties = { className: ['edit'] }
           node.children = [
-            tag('h1', 'title', node.children),
+            tag('h1', 'title', node.properties, node.children),
             tag('a', 'edit_link', {
               title: 'Edit the page on GitHub',
               href: node.editUrl
             })
           ]
+          node.properties = { className: ['edit'] }
         }
       } else if (cls.some(i => i.startsWith('hljs-'))) {
         node.properties.className = node.properties.className.map(i => {
