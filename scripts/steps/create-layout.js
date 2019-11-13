@@ -141,6 +141,7 @@ function converter () {
         node.properties.className = ['title']
         if (!node.noSlug) {
           let slug = toSlug(node.children)
+          if (node.slug) slug = node.slug
           node.properties.id = slug
           node.children = [
             tag('a', 'title_link', {

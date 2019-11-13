@@ -1,4 +1,5 @@
 let { join, dirname, sep } = require('path')
+let createFormatters = require('documentation/src/output/util/formatters')
 let { writeFile } = require('fs').promises
 let remarkRehype = require('remark-rehype')
 let unistVisit = require('unist-util-visit')
@@ -10,6 +11,8 @@ const DIST = join(__dirname, '..', '..', 'dist')
 const SIMPLE_TYPES = {
   string: true, object: true, function: true, boolean: true, number: true
 }
+
+let formatters = createFormatters()
 
 function tag (tagName, children, opts) {
   if (typeof children === 'string') {
@@ -86,12 +89,48 @@ function paramsHtml (params) {
   return [table]
 }
 
+function returnsHtml (returns) {
+  if (!returns) return []
+  let p = tag('p', [
+    { type: 'text', value: 'Returns ' },
+    tag('code', typeHtml(returns.type), { noClass: true }),
+    { type: 'text', value: '. ' },
+    ...toHtml(returns.description)[0].children
+  ])
+  return [p]
+}
+
 function exampleHtml (example) {
   if (!example) return []
   let pre = tag('pre', [
     tag('code', lowlight.highlight('js', example.description).value)
   ])
   return [pre]
+}
+
+function staticHtml (className, members) {
+  return members.flatMap(member => {
+    let name = [
+      tag('span', className + '.', {
+        properties: { className: ['title_extra'] }
+      }),
+      { type: 'text', value: member.name }
+    ]
+    if (member.kind === 'function') {
+      name.push(tag('span', formatters.parameters(member, true), {
+        properties: { className: ['title_extra'] }
+      }))
+    }
+    return [
+      tag('h2', [tag('code', name, { noClass: true })], {
+        slug: (className + '.' + member.name).toLowerCase()
+      }),
+      ...toHtml(member.description),
+      ...paramsHtml(member.params),
+      ...returnsHtml(member.returns[0]),
+      ...exampleHtml(member.examples[0])
+    ]
+  })
 }
 
 function classHtml (cls) {
@@ -101,7 +140,8 @@ function classHtml (cls) {
     }),
     ...toHtml(cls.description),
     ...paramsHtml(cls.tags.filter(i => i.title === 'param')),
-    ...exampleHtml(cls.examples[0])
+    ...exampleHtml(cls.examples[0]),
+    ...staticHtml(cls.name, cls.members.static)
   ])
 }
 

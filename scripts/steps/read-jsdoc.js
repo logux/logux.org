@@ -25,7 +25,7 @@ module.exports = async function readJsdoc (spin, ...projects) {
       cwd: join(PROJECTS, i)
     })
   }))
-  let tree = await build(files.flat(), { hljs: { languages: ['js'] } })
+  let tree = await build(files.flat(), { })
   if (projects.includes('logux-server')) {
     tree = trim(tree, ['Reconnect', 'LoguxError', 'ClientNode', 'WsConnection'])
   }
