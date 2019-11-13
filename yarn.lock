@@ -5465,7 +5465,7 @@ loud-rejection@^1.0.0:
     currently-unhandled "^0.4.1"
     signal-exit "^3.0.0"
 
-lowlight@^1.2.0:
+lowlight@^1.12.1, lowlight@^1.2.0:
   version "1.12.1"
   resolved "https://registry.yarnpkg.com/lowlight/-/lowlight-1.12.1.tgz#014acf8dd73a370e02ff1cc61debcde3bb1681eb"
   integrity sha512-OqaVxMGIESnawn+TU/QMV5BJLbUghUfjDWPAtFqDYDmDtr4FnB+op8xM+pR7nKlauHNUHXGt0VgWatFB8voS5w==

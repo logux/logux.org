@@ -2,8 +2,9 @@ let { join, dirname, sep } = require('path')
 let { writeFile } = require('fs').promises
 let remarkRehype = require('remark-rehype')
 let unistVisit = require('unist-util-visit')
-let slugify = require('slugify')
+let lowlight = require('lowlight')
 let makeDir = require('make-dir')
+let slugify = require('slugify')
 
 const DIST = join(__dirname, '..', '..', 'dist')
 const SIMPLE_TYPES = {
@@ -88,7 +89,7 @@ function paramsHtml (params) {
 function exampleHtml (example) {
   if (!example) return []
   let pre = tag('pre', [
-    tag('code', example.description)
+    tag('code', lowlight.highlight('js', example.description).value)
   ])
   return [pre]
 }
