@@ -85,13 +85,22 @@ function paramsHtml (params) {
   return [table]
 }
 
+function exampleHtml (example) {
+  if (!example) return []
+  let pre = tag('pre', [
+    tag('code', example.description)
+  ])
+  return [pre]
+}
+
 function classHtml (cls) {
   return tag('article', [
     tag('h1', cls.name, {
       editUrl: getEditUrl(cls.context.file)
     }),
     ...toHtml(cls.description),
-    ...paramsHtml(cls.tags.filter(i => i.title === 'param'))
+    ...paramsHtml(cls.tags.filter(i => i.title === 'param')),
+    ...exampleHtml(cls.examples[0])
   ])
 }
 
