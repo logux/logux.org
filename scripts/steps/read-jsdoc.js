@@ -26,8 +26,21 @@ module.exports = async function readJsdoc (spin, ...projects) {
     })
   }))
   let tree = await build(files.flat(), { })
+  for (let i of tree) {
+    if (i.kind === 'class' && i.augments.length > 0) {
+      let parentName = i.augments[0].name
+      let parent = tree.find(j => j.name === parentName)
+      if (parent) {
+        i.members.static.push(...parent.members.static)
+        i.members.instance.push(...parent.members.instance)
+      }
+    }
+  }
   if (projects.includes('logux-server')) {
-    tree = trim(tree, ['Reconnect', 'LoguxError', 'ClientNode', 'WsConnection'])
+    tree = trim(tree, [
+      'Reconnect', 'LoguxError', 'ClientNode',
+      'WsConnection', 'BaseServer', 'BaseNode'
+    ])
   }
   spin.succeed(`jsdoc${ projects.join() }`, { text: 'JSDoc generated' })
   return tree

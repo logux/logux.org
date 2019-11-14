@@ -15,6 +15,10 @@ const SIMPLE_TYPES = {
 
 let formatters = createFormatters()
 
+function byName (a, b) {
+  return a.name.localeCompare(b.name)
+}
+
 function tag (tagName, children, opts) {
   if (typeof children === 'string') {
     children = [{ type: 'text', value: children }]
@@ -99,15 +103,17 @@ function paramsHtml (params) {
       tag('th', 'Type'),
       tag('th', 'description')
     ]),
-    ...params.map(i => tag('tr', [
-      tag('td', [
-        tag('code', i.name)
-      ]),
-      tag('td', [
-        tag('code', typeHtml(i.type), { noClass: true })
-      ]),
-      tag('td', descToHtml(i.description))
-    ]))
+    ...params
+      .sort(byName)
+      .map(i => tag('tr', [
+        tag('td', [
+          tag('code', i.name)
+        ]),
+        tag('td', [
+          tag('code', typeHtml(i.type), { noClass: true })
+        ]),
+        tag('td', descToHtml(i.description))
+      ]))
   ])
   return [table]
 }
@@ -132,54 +138,40 @@ function exampleHtml (example) {
   return [pre]
 }
 
-function staticHtml (className, members) {
-  return members.flatMap(member => {
-    let name = [
-      tag('span', className + '.', {
-        properties: { className: ['title_extra'] }
-      }),
-      { type: 'text', value: member.name }
-    ]
-    if (member.kind === 'function') {
-      name.push(tag('span', formatters.parameters(member, true), {
-        properties: { className: ['title_extra'] }
-      }))
-    }
-    return [
-      tag('h2', [tag('code', name, { noClass: true })], {
-        slug: (className + '.' + member.name).toLowerCase()
-      }),
-      ...toHtml(member.description),
-      ...paramsHtml(member.params),
-      ...returnsHtml(member.returns[0]),
-      ...exampleHtml(member.examples[0])
-    ]
-  })
-}
-
-function instanceHtml (className, members) {
-  return members.flatMap(member => {
-    let name = [
-      tag('span', className + '#', {
-        properties: { className: ['title_extra'] }
-      }),
-      { type: 'text', value: member.name }
-    ]
-    if (member.kind === 'function') {
-      name.push(tag('span', formatters.parameters(member, true), {
-        properties: { className: ['title_extra'] }
-      }))
-    }
-    return [
-      tag('h2', [tag('code', name, { noClass: true })], {
-        slug: (className + '-' + member.name).toLowerCase()
-      }),
-      ...toHtml(member.description),
-      ...paramsHtml(member.params),
-      ...returnsHtml(member.returns[0]),
-      ...exampleHtml(member.examples[0])
-    ]
-  })
+function membersHtml (className, members, separator) {
+  let slugSep = separator === '#' ? '-' : separator
+  return members
+    .sort((a, b) => {
+      if (a.kind === 'function' && b.kind !== 'function') {
+        return 1
+      } else if (a.kind !== 'function' && b.kind === 'function') {
+        return -1
+      } else {
+        return byName(a, b)
+      }
+    })
+    .flatMap(member => {
+      let name = [
+        tag('span', className + separator, {
+          properties: { className: ['title_extra'] }
+        }),
+        { type: 'text', value: member.name }
+      ]
+      if (member.kind === 'function') {
+        name.push(tag('span', formatters.parameters(member, true), {
+          properties: { className: ['title_extra'] }
+        }))
+      }
+      return [
+        tag('h2', [tag('code', name, { noClass: true })], {
+          slug: (className + slugSep + member.name).toLowerCase()
+        }),
+        ...toHtml(member.description),
+        ...paramsHtml(member.params),
+        ...returnsHtml(member.returns[0]),
+        ...exampleHtml(member.examples[0])
+      ]
+    })
 }
 
 function classHtml (cls) {
@@ -190,8 +182,8 @@ function classHtml (cls) {
     ...toHtml(cls.description),
     ...paramsHtml(cls.tags.filter(i => i.title === 'param')),
     ...exampleHtml(cls.examples[0]),
-    ...staticHtml(cls.name, cls.members.static),
-    ...instanceHtml(cls.name, cls.members.instance)
+    ...membersHtml(cls.name, cls.members.static, '.'),
+    ...membersHtml(cls.name, cls.members.instance, '#')
   ])
 }
 
@@ -200,7 +192,7 @@ function toTree (jsdoc) {
     type: 'root',
     children: jsdoc
       .filter(i => i.kind === 'class')
-      .sort((a, b) => a.name.localeCompare(b.name))
+      .sort(byName)
       .map(classHtml)
   }
 }
