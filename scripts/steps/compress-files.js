@@ -4,7 +4,8 @@ let zlib = require('zlib')
 
 let gzip = promisify(zlib.gzip)
 
-module.exports = async function compressAssets (assets) {
+module.exports = async function compressFiles (spin, assets) {
+  spin.add('compress-files', { text: 'Compressing files' })
   await Promise.all(assets
     .get(/\.(js|css|ico|html|webmanifest|svg|txt)$/)
     .map(async path => {
@@ -13,4 +14,5 @@ module.exports = async function compressAssets (assets) {
       await writeFile(path + '.gz', compressed)
     })
   )
+  spin.succeed('compress-files', { text: 'Files compressed' })
 }

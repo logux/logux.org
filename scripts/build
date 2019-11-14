@@ -6,8 +6,8 @@ let chalk = require('chalk')
 let generateWebManifest = require('./steps/generate-web-manifest')
 let downloadProject = require('./steps/download-project')
 let findFilesInCSS = require('./steps/find-files-in-css')
-let compressAssets = require('./steps/compress-assets')
 let copyWellKnown = require('./steps/copy-well-known')
+let compressFiles = require('./steps/compress-files')
 let compileAssets = require('./steps/compile-assets')
 let repackScripts = require('./steps/repack-scripts')
 let createLayout = require('./steps/create-layout')
@@ -19,7 +19,7 @@ let buildApi = require('./steps/build-api')
 
 async function build () {
   let spin = new Spinnies({ succeedColor: 'white' })
-  let assets = await compileAssets()
+  let assets = await compileAssets(spin)
   let [webmanifest, filesFromCSS] = await Promise.all([
     generateWebManifest(assets),
     findFilesInCSS(assets),
@@ -39,7 +39,7 @@ async function build () {
     buildGuides(spin, assets, layout, guides),
     buildApi(spin, assets, layout, 'node-api', 'Node API', nodeJsdoc)
   ])
-  await compressAssets(assets)
+  await compressFiles(spin, assets)
 }
 
 build().catch(e => {

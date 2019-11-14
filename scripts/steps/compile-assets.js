@@ -1,10 +1,13 @@
 let { join } = require('path')
 let Bundler = require('parcel-bundler')
 
-module.exports = async function compileAssets () {
-  process.stdout.write('Compressing assets\n')
+module.exports = async function compileAssets (spin) {
+  spin.add('compile-assets', { text: 'Compiling assets' })
   let pugTemplate = join(__dirname, '..', '..', 'src', 'uikit.pug')
-  let uikitBundler = new Bundler(pugTemplate, { sourceMaps: false })
+  let uikitBundler = new Bundler(pugTemplate, {
+    sourceMaps: false,
+    logLevel: 2
+  })
   let bundle = await uikitBundler.bundle()
   function findAssets (step) {
     return Array.from(step.childBundles).reduce((all, i) => {
@@ -12,6 +15,7 @@ module.exports = async function compileAssets () {
     }, [step.name])
   }
   let assets = findAssets(bundle)
+  spin.succeed('compile-assets', { text: 'Assets compilied' })
   return {
     get (regexp) {
       return assets.filter(i => regexp.test(i))
