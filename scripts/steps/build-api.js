@@ -33,8 +33,8 @@ function descToHtml (desc) {
 
 function toHtml (tree) {
   unistVisit(tree, 'link', node => {
-    if (/^\w+$/.test(node.url)) {
-      node.url = '#' + node.url.toLowerCase()
+    if (/^[\w#.]+$/.test(node.url)) {
+      node.url = '#' + node.url.replace(/#/g, '-').toLowerCase()
     }
   })
   return remarkRehype()(tree).children
