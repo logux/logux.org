@@ -26,7 +26,13 @@ function callCloudflare (credentials, command, opts) {
         data += chunk
       })
       res.on('end', () => {
-        let answer = JSON.parse(data)
+        let answer
+        try {
+          answer = JSON.parse(data)
+        } catch (e) {
+          console.error(data)
+          process.exit(1)
+        }
         if (answer.success) {
           resolve()
         } else {
