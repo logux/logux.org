@@ -57,14 +57,27 @@ function typeHtml (type) {
     }
   } else if (type.type === 'StringLiteralType') {
     return [{ type: 'text', value: `"${ type.value }"` }]
+  } else if (type.type === 'UndefinedLiteral') {
+    return [{ type: 'text', value: 'undefined' }]
+  } else if (type.type === 'TypeApplication') {
+    return [
+      { type: 'text', value: type.expression.name + '<' },
+      ...typeHtml(type.applications[0]),
+      { type: 'text', value: '>' }
+    ]
+  } else if (type.type === 'BooleanLiteralType') {
+    return [{ type: 'text', value: type.value.toString() }]
   } else if (SIMPLE_TYPES[type.name]) {
     return [{ type: 'text', value: type.name }]
-  } else {
+  } else if (type.type === 'NameExpression') {
     let href = '#' + slugify(type.name, { lower: true })
     if (type.name === 'http.Server') {
       href = 'https://nodejs.org/api/http.html#http_class_http_server'
     }
     return [tag('a', type.name, { properties: { href } })]
+  } else {
+    console.error(type)
+    throw new Error(`Unknown type ${ type.type }`)
   }
 }
 
@@ -91,6 +104,7 @@ function paramsHtml (params) {
 
 function returnsHtml (returns) {
   if (!returns) return []
+  if (returns.type.type === 'UndefinedLiteral') return []
   let p = tag('p', [
     { type: 'text', value: 'Returns ' },
     tag('code', typeHtml(returns.type), { noClass: true }),
@@ -133,6 +147,31 @@ function staticHtml (className, members) {
   })
 }
 
+function instanceHtml (className, members) {
+  return members.flatMap(member => {
+    let name = [
+      tag('span', className + '.', {
+        properties: { className: ['title_extra'] }
+      }),
+      { type: 'text', value: member.name }
+    ]
+    if (member.kind === 'function') {
+      name.push(tag('span', formatters.parameters(member, true), {
+        properties: { className: ['title_extra'] }
+      }))
+    }
+    return [
+      tag('h2', [tag('code', name, { noClass: true })], {
+        slug: (className + '#' + member.name).toLowerCase()
+      }),
+      ...toHtml(member.description),
+      ...paramsHtml(member.params),
+      ...returnsHtml(member.returns[0]),
+      ...exampleHtml(member.examples[0])
+    ]
+  })
+}
+
 function classHtml (cls) {
   return tag('article', [
     tag('h1', cls.name, {
@@ -141,7 +180,8 @@ function classHtml (cls) {
     ...toHtml(cls.description),
     ...paramsHtml(cls.tags.filter(i => i.title === 'param')),
     ...exampleHtml(cls.examples[0]),
-    ...staticHtml(cls.name, cls.members.static)
+    ...staticHtml(cls.name, cls.members.static),
+    ...instanceHtml(cls.name, cls.members.instance)
   ])
 }
 
