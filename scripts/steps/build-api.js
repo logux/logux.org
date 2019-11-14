@@ -150,7 +150,7 @@ function staticHtml (className, members) {
 function instanceHtml (className, members) {
   return members.flatMap(member => {
     let name = [
-      tag('span', className + '.', {
+      tag('span', className + '#', {
         properties: { className: ['title_extra'] }
       }),
       { type: 'text', value: member.name }
@@ -162,7 +162,7 @@ function instanceHtml (className, members) {
     }
     return [
       tag('h2', [tag('code', name, { noClass: true })], {
-        slug: (className + '#' + member.name).toLowerCase()
+        slug: (className + '-' + member.name).toLowerCase()
       }),
       ...toHtml(member.description),
       ...paramsHtml(member.params),
