@@ -31,6 +31,7 @@
     "rehype-parse": "^6.0.2",
     "rehype-raw": "^4.0.1",
     "rehype-stringify": "^6.0.1",
+    "remark": "^11.0.2",
     "remark-highlight.js": "^5.1.1",
     "remark-html": "^10.0.0",
     "remark-parse": "^7.0.2",

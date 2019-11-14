@@ -6,6 +6,7 @@ let unistVisit = require('unist-util-visit')
 let lowlight = require('lowlight')
 let makeDir = require('make-dir')
 let slugify = require('slugify')
+let remark = require('remark')
 
 const DIST = join(__dirname, '..', '..', 'dist')
 const SIMPLE_TYPES = {
@@ -19,6 +20,15 @@ function tag (tagName, children, opts) {
     children = [{ type: 'text', value: children }]
   }
   return { type: 'element', tagName, properties: { }, children, ...opts }
+}
+
+function descToHtml (desc) {
+  if (desc.type === 'root') {
+    return toHtml(desc)
+  } else {
+    let md = desc.replace(/\{@link ([\w]+)}/, '[$1]($1)')
+    return toHtml(remark().parse(md))
+  }
 }
 
 function toHtml (tree) {
@@ -96,7 +106,7 @@ function paramsHtml (params) {
       tag('td', [
         tag('code', typeHtml(i.type), { noClass: true })
       ]),
-      tag('td', i.description)
+      tag('td', descToHtml(i.description))
     ]))
   ])
   return [table]
