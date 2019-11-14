@@ -138,6 +138,16 @@ function exampleHtml (example) {
   return [pre]
 }
 
+function propTypeHtml (type) {
+  if (!type) return []
+  let p = tag('p', [
+    { type: 'text', value: 'Type: ' },
+    tag('code', typeHtml(type), { noClass: true }),
+    { type: 'text', value: '. ' }
+  ])
+  return [p]
+}
+
 function membersHtml (className, members, separator) {
   let slugSep = separator === '#' ? '-' : separator
   return members
@@ -166,6 +176,7 @@ function membersHtml (className, members, separator) {
         tag('h2', [tag('code', name, { noClass: true })], {
           slug: (className + slugSep + member.name).toLowerCase()
         }),
+        ...propTypeHtml(member.type),
         ...toHtml(member.description),
         ...paramsHtml(member.params),
         ...returnsHtml(member.returns[0]),
@@ -174,12 +185,28 @@ function membersHtml (className, members, separator) {
     })
 }
 
-function classHtml (cls) {
+function extendsHtml (tree, augment) {
+  if (!augment) return []
+  if (!tree.some(j => j.name === augment.name)) return []
+  let p = tag('p', [
+    { type: 'text', value: 'Extends ' },
+    tag('code', [
+      tag('a', augment.name, {
+        properties: { href: '#' + augment.name.toLowerCase() }
+      })
+    ], { noClass: true }),
+    { type: 'text', value: '. ' }
+  ])
+  return [p]
+}
+
+function classHtml (tree, cls) {
   return tag('article', [
     tag('h1', cls.name, {
       editUrl: getEditUrl(cls.context.file)
     }),
     ...toHtml(cls.description),
+    ...extendsHtml(tree, cls.augments[0]),
     ...paramsHtml(cls.tags.filter(i => i.title === 'param')),
     ...exampleHtml(cls.examples[0]),
     ...membersHtml(cls.name, cls.members.static, '.'),
@@ -193,7 +220,7 @@ function toTree (jsdoc) {
     children: jsdoc
       .filter(i => i.kind === 'class')
       .sort(byName)
-      .map(classHtml)
+      .map(i => classHtml(jsdoc, i))
   }
 }
 
