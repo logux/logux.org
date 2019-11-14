@@ -5,8 +5,7 @@ let makeDir = require('make-dir')
 
 const DIST = join(__dirname, '..', '..', 'dist')
 
-module.exports = async function buildGuides (spin, assets, layout, guides) {
-  spin.add('build-pages', { text: 'Building guides HTML' })
+module.exports = async function buildGuides (assets, layout, guides) {
   await Promise.all(guides.map(async page => {
     let title = `${ page.title } / ${ capitalize(dirname(page.file)) }`
     let html = await layout.guide(title, page.tree)
@@ -15,5 +14,4 @@ module.exports = async function buildGuides (spin, assets, layout, guides) {
     await writeFile(path, html)
     assets.add(path)
   }))
-  spin.succeed('build-pages', { text: 'Guides HTML generated' })
 }

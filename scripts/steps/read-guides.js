@@ -22,8 +22,7 @@ function htmlFixer (file) {
   }
 }
 
-module.exports = async function readGuides (spin) {
-  spin.add('process-guides', { text: 'Reading guides' })
+module.exports = async function readGuides () {
   let files = await globby('*/*.md', { cwd: ROOT, ignore: 'node_modules' })
   let guides = await Promise.all(files.map(async file => {
     let title = ''
@@ -53,6 +52,5 @@ module.exports = async function readGuides (spin) {
       .run(tree)
     return { tree, title, file }
   }))
-  spin.succeed('process-guides', { text: 'Guides loaded' })
   return guides
 }

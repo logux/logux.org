@@ -14,13 +14,13 @@ function download (url, body) {
   })
 }
 
-module.exports = async function downloadProject (spin, name) {
+module.exports = async function downloadProject (spinner, name) {
   let repo = name.replace(/^logux-/, '')
   let dir = join(__dirname, '..', '..', '..', '..', name)
   if (existsSync(dir)) return
 
   let url = `https://github.com/logux/${ repo }/archive/master.zip`
-  spin.add(`download-${ name }`, { text: `Downloading ${ url }` })
+  spinner.add(`download-${ name }`, { text: `Downloading ${ url }` })
 
   await new Promise((resolve, reject) => {
     download(url, res => {
@@ -32,5 +32,5 @@ module.exports = async function downloadProject (spin, name) {
     })
   })
   await rename(join(dir, '..', `${ repo }-master`), dir)
-  spin.succeed(`download-${ name }`, { text: `${ name } downloaded` })
+  spinner.succeed(`download-${ name }`, { text: `${ name } downloaded` })
 }

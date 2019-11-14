@@ -10,8 +10,7 @@ function trim (tree, classes) {
   })
 }
 
-module.exports = async function readJsdoc (spin, ...projects) {
-  spin.add(`jsdoc${ projects.join() }`, { text: 'Generating JSDoc' })
+module.exports = async function readJsdoc (...projects) {
   let files = await Promise.all(projects.map(i => {
     let ignore = []
     if (i === 'logux-core' && projects.includes('logux-server')) {
@@ -42,6 +41,5 @@ module.exports = async function readJsdoc (spin, ...projects) {
       'WsConnection', 'BaseServer', 'BaseNode'
     ])
   }
-  spin.succeed(`jsdoc${ projects.join() }`, { text: 'JSDoc generated' })
   return tree
 }

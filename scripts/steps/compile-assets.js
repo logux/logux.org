@@ -1,8 +1,7 @@
 let { join } = require('path')
 let Bundler = require('parcel-bundler')
 
-module.exports = async function compileAssets (spin) {
-  spin.add('compile-assets', { text: 'Compiling assets' })
+module.exports = async function compileAssets () {
   let pugTemplate = join(__dirname, '..', '..', 'src', 'uikit.pug')
   let uikitBundler = new Bundler(pugTemplate, {
     sourceMaps: false,
@@ -15,7 +14,6 @@ module.exports = async function compileAssets (spin) {
     }, [step.name])
   }
   let assets = findAssets(bundle)
-  spin.succeed('compile-assets', { text: 'Assets compilied' })
   return {
     get (regexp) {
       return assets.filter(i => regexp.test(i))

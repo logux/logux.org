@@ -6,6 +6,7 @@ let chalk = require('chalk')
 let generateWebManifest = require('./steps/generate-web-manifest')
 let downloadProject = require('./steps/download-project')
 let findFilesInCSS = require('./steps/find-files-in-css')
+let cleanBuildDir = require('./steps/clean-build-dir')
 let copyWellKnown = require('./steps/copy-well-known')
 let compressFiles = require('./steps/compress-files')
 let compileAssets = require('./steps/compile-assets')
@@ -17,29 +18,56 @@ let updateHtml = require('./steps/update-html')
 let readJsdoc = require('./steps/read-jsdoc')
 let buildApi = require('./steps/build-api')
 
+let spinner = new Spinnies({ succeedColor: 'white' })
+
+let lastId = 0
+function spin (func, text) {
+  let id = (lastId++).toString()
+  return async (...args) => {
+    spinner.add(id, { text })
+    let result = await func(...args)
+    spinner.succeed(id)
+    return result
+  }
+}
+
+generateWebManifest = spin(generateWebManifest, 'Generating web manifest')
+findFilesInCSS = spin(findFilesInCSS, 'Generating preload list')
+copyWellKnown = spin(copyWellKnown, 'Copying static files')
+cleanBuildDir = spin(cleanBuildDir, 'Cleaning old files')
+compressFiles = spin(compressFiles, 'Compressing files')
+compileAssets = spin(compileAssets, 'Compiling assets')
+repackScripts = spin(repackScripts, 'Optimizing JS')
+createLayout = spin(createLayout, 'Creating layout')
+buildGuides = spin(buildGuides, 'Building buides HTML')
+readGuides = spin(readGuides, 'Reading guides')
+updateHtml = spin(updateHtml, 'Updating HTML layout')
+readJsdoc = spin(readJsdoc, 'Generating JSDoc')
+buildApi = spin(buildApi, 'Building API HTML')
+
 async function build () {
-  let spin = new Spinnies({ succeedColor: 'white' })
-  let assets = await compileAssets(spin)
+  await cleanBuildDir()
+  let assets = await compileAssets()
   let [webmanifest, filesFromCSS] = await Promise.all([
     generateWebManifest(assets),
     findFilesInCSS(assets),
     copyWellKnown(assets),
     repackScripts(assets),
-    downloadProject(spin, 'logux'),
-    downloadProject(spin, 'logux-core'),
-    downloadProject(spin, 'logux-server')
+    downloadProject(spinner, 'logux'),
+    downloadProject(spinner, 'logux-core'),
+    downloadProject(spinner, 'logux-server')
   ])
   let [guides, nodeJsdoc, uikit] = await Promise.all([
-    readGuides(spin),
-    readJsdoc(spin, 'logux-core', 'logux-server'),
+    readGuides(),
+    readJsdoc('logux-core', 'logux-server'),
     updateHtml(assets, webmanifest, filesFromCSS)
   ])
   let layout = await createLayout(uikit)
   await Promise.all([
-    buildGuides(spin, assets, layout, guides),
-    buildApi(spin, assets, layout, 'node-api', 'Node API', nodeJsdoc)
+    buildGuides(assets, layout, guides),
+    buildApi(assets, layout, 'node-api', 'Node API', nodeJsdoc)
   ])
-  await compressFiles(spin, assets)
+  await compressFiles(assets)
 }
 
 build().catch(e => {
