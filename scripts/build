@@ -39,11 +39,9 @@ compressFiles = spin(compressFiles, 'Compressing files')
 compileAssets = spin(compileAssets, 'Compiling assets')
 repackScripts = spin(repackScripts, 'Optimizing JS')
 createLayout = spin(createLayout, 'Creating layout')
-buildGuides = spin(buildGuides, 'Building buides HTML')
+buildGuides = spin(buildGuides, 'Building guides HTML')
 readGuides = spin(readGuides, 'Reading guides')
 updateHtml = spin(updateHtml, 'Updating HTML layout')
-readJsdoc = spin(readJsdoc, 'Generating JSDoc')
-buildApi = spin(buildApi, 'Building API HTML')
 
 async function build () {
   await cleanBuildDir()
@@ -59,15 +57,17 @@ async function build () {
     downloadProject(spinner, 'logux-client'),
     downloadProject(spinner, 'logux-redux')
   ])
-  let [guides, nodeJsdoc, uikit] = await Promise.all([
+  let [guides, nodeJsdoc, webJsdoc, uikit] = await Promise.all([
     readGuides(),
-    readJsdoc('logux-core', 'logux-server'),
+    readJsdoc(spinner, 'logux-server', 'logux-core'),
+    readJsdoc(spinner, 'logux-client', 'logux-redux', 'logux-core'),
     updateHtml(assets, webmanifest, filesFromCSS)
   ])
   let layout = await createLayout(uikit)
   await Promise.all([
     buildGuides(assets, layout, guides),
-    buildApi(assets, layout, 'node-api', 'Node API', nodeJsdoc)
+    buildApi(spinner, assets, layout, 'Node API', nodeJsdoc),
+    buildApi(spinner, assets, layout, 'Web API', webJsdoc)
   ])
   await compressFiles(assets)
 }

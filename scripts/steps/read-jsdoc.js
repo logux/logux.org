@@ -10,7 +10,10 @@ function trim (tree, classes) {
   })
 }
 
-module.exports = async function readJsdoc (...projects) {
+module.exports = async function readJsdoc (spinner, ...projects) {
+  let type = projects[0]
+  spinner.add(`${ type }-jsdoc`, { text: `Generating ${ type } JSDoc` })
+
   let files = await Promise.all(projects.map(i => {
     let ignore = []
     if (i === 'logux-core' && projects.includes('logux-server')) {
@@ -24,6 +27,7 @@ module.exports = async function readJsdoc (...projects) {
       cwd: join(PROJECTS, i)
     })
   }))
+
   let tree = await build(files.flat(), { })
   for (let i of tree) {
     if (i.kind === 'class' && i.augments.length > 0) {
@@ -35,11 +39,15 @@ module.exports = async function readJsdoc (...projects) {
       }
     }
   }
-  if (projects.includes('logux-server')) {
+  if (type === 'logux-server') {
     tree = trim(tree, [
       'Reconnect', 'LoguxError', 'ClientNode',
       'WsConnection', 'BaseServer', 'BaseNode'
     ])
+  } else if (type === 'logux-server') {
+    tree = trim(tree, ['ServerNode', 'BaseNode'])
   }
+
+  spinner.succeed(`${ type }-jsdoc`)
   return tree
 }

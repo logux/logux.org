@@ -229,11 +229,17 @@ function toTree (jsdoc) {
   }
 }
 
-module.exports = async function buildApi (assets, layout, file, title, jsdoc) {
+module.exports = async function buildApi (spin, assets, layout, title, jsdoc) {
+  let file = title.replace(/\s/g, '-').toLowerCase()
   let path = join(DIST, file, 'index.html')
+
+  spin.add(`${ file }-html`, { text: `Building ${ title } HTML` })
+
   await makeDir(dirname(path))
   let tree = toTree(jsdoc)
   let html = await layout.api(title, tree)
   await writeFile(path, html)
   assets.add(path)
+
+  spin.succeed(`${ file }-html`)
 }

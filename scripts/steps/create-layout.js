@@ -140,8 +140,7 @@ function converter () {
       } else if (/^h[123]$/.test(node.tagName) && !node.properties.className) {
         node.properties.className = ['title']
         if (!node.noSlug) {
-          let slug = toSlug(node.children)
-          if (node.slug) slug = node.slug
+          let slug = node.slug ? node.slug : toSlug(node.children)
           node.properties.id = slug
           node.children = [
             tag('a', 'title_link', {
