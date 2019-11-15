@@ -67,12 +67,30 @@ button
 
   &:hover,
   &:focus
+    --link-background: #fef2de
+
     background-color: var(--base-hover)
+
+    @mixin dark
+      --link-background: #3f331f
 
   @mixin no-mobile
     &:active
       transition: none
       transform: translateY(1px)
+
+a:not([class])
+  color: var(--base-title)
+  border-radius: 0.5px
+
+  @mixin thin-link
+
+  &:hover
+    box-shadow: 0 0 0 4px var(--link-background)
+
+a[class]
+  color: inherit
+  text-decoration: none
 
 strong
   color: var(--base-title)
