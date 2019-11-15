@@ -10,7 +10,12 @@ let remark = require('remark')
 
 const DIST = join(__dirname, '..', '..', 'dist')
 const SIMPLE_TYPES = {
-  string: true, object: true, function: true, boolean: true, number: true
+  string: true,
+  object: true,
+  function: true,
+  boolean: true,
+  number: true,
+  Promise: true
 }
 
 let formatters = createFormatters()
