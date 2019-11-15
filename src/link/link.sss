@@ -2,20 +2,9 @@ a:not([class])
   --link-background: var(--base-background)
 
   color: var(--base-title)
-  text-decoration: none
-  text-shadow:
-    3px 0 var(--link-background),
-    2px 0 var(--link-background),
-    1px 0 var(--link-background),
-    -1px 0 var(--link-background),
-    -2px 0 var(--link-background),
-    -3px 0 var(--link-background)
-  background-image: linear-gradient(currentColor, currentColor)
-  background-repeat: no-repeat
-  background-position: center bottom 5%
-  background-origin: padding-box
-  background-size: 100% 0.5px
   border-radius: 0.5px
+
+  @mixin thin-link
 
   &:hover
     --link-background: #fef2de
