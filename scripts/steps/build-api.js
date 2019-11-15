@@ -32,7 +32,9 @@ function tag (tagName, children, opts) {
 }
 
 function descToHtml (desc) {
-  if (desc.type === 'root') {
+  if (!desc) {
+    return []
+  } else if (desc.type === 'root') {
     return toHtml(desc)
   } else {
     let md = desc.replace(/\{@link ([\w]+)}/, '[$1]($1)')
@@ -41,6 +43,7 @@ function descToHtml (desc) {
 }
 
 function toHtml (tree) {
+  if (!tree) return []
   unistVisit(tree, 'link', node => {
     if (/^[\w#.]+$/.test(node.url)) {
       node.url = '#' + node.url.replace(/#/g, '-').toLowerCase()
@@ -165,7 +168,7 @@ function membersHtml (className, members, separator) {
         return byName(a, b)
       }
     })
-    .flatMap(member => {
+    .map(member => {
       let name = [
         tag('span', className + separator, {
           properties: { className: ['title_extra'] }
@@ -177,8 +180,10 @@ function membersHtml (className, members, separator) {
           properties: { className: ['title_extra'] }
         }))
       }
-      return [
-        tag('h2', [tag('code', name, { noClass: true })], {
+      return tag('section', [
+        tag('h2', [
+          tag('code', name, { noClass: true })
+        ], {
           slug: (className + slugSep + member.name).toLowerCase()
         }),
         ...propTypeHtml(member.type),
@@ -186,7 +191,7 @@ function membersHtml (className, members, separator) {
         ...paramsHtml(member.params),
         ...returnsHtml(member.returns[0]),
         ...exampleHtml(member.examples[0])
-      ]
+      ])
     })
 }
 
@@ -219,6 +224,39 @@ function classHtml (tree, cls) {
   ])
 }
 
+function standaloneHtml (node) {
+  let name = [{ type: 'text', value: node.name }]
+  if (node.kind === 'function') {
+    name.push(
+      tag('span', formatters.parameters(node, true), {
+        properties: { className: ['title_extra'] }
+      })
+    )
+  }
+  return tag('section', [
+    tag('h2', [
+      tag('code', name, { noClass: true })
+    ], {
+      slug: node.name.toLowerCase()
+    }),
+    ...propTypeHtml(node.type),
+    ...toHtml(node.description),
+    ...paramsHtml(node.params),
+    ...returnsHtml(node.returns[0]),
+    ...exampleHtml(node.examples[0])
+  ])
+}
+
+function listHtml (jsdoc, title, kind) {
+  let list = jsdoc.filter(i => i.kind === kind)
+  if (list.length === 0) return []
+  let article = tag('article', [
+    tag('h1', title, { noSlug: true }),
+    ...list.sort(byName).map(i => standaloneHtml(i))
+  ])
+  return [article]
+}
+
 function toTree (jsdoc) {
   return {
     type: 'root',
@@ -226,6 +264,9 @@ function toTree (jsdoc) {
       .filter(i => i.kind === 'class')
       .sort(byName)
       .map(i => classHtml(jsdoc, i))
+      .concat(listHtml(jsdoc, 'Types', 'typedef'))
+      .concat(listHtml(jsdoc, 'Functions', 'function'))
+      .concat(listHtml(jsdoc, 'Constants', 'constant'))
   }
 }
 
