@@ -55,7 +55,9 @@ async function build () {
     repackScripts(assets),
     downloadProject(spinner, 'logux'),
     downloadProject(spinner, 'logux-core'),
-    downloadProject(spinner, 'logux-server')
+    downloadProject(spinner, 'logux-server'),
+    downloadProject(spinner, 'logux-client'),
+    downloadProject(spinner, 'logux-redux')
   ])
   let [guides, nodeJsdoc, uikit] = await Promise.all([
     readGuides(),
