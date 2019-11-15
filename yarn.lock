@@ -2933,10 +2933,10 @@ doctypes@^1.1.0:
   resolved "https://registry.yarnpkg.com/doctypes/-/doctypes-1.1.0.tgz#ea80b106a87538774e8a3a4a5afe293de489e0a9"
   integrity sha1-6oCxBqh1OHdOijpKWv4pPeSJ4Kk=
 
-documentation@^12.1.3:
-  version "12.1.3"
-  resolved "https://registry.yarnpkg.com/documentation/-/documentation-12.1.3.tgz#b4434e813c9724d9216685d187742b029c9efa7f"
-  integrity sha512-OjXjmSxY6EGRR1YRxrnOLcWZhMsGtSplP2vwxM70ZEKh+uDvXDIGDG3rdIuPq0/lxgKhpEacctXR0PVCxOzv5A==
+documentation@^12.1.4:
+  version "12.1.4"
+  resolved "https://registry.yarnpkg.com/documentation/-/documentation-12.1.4.tgz#ec0aafbd9d3879a44189d2d4434953ae3a258598"
+  integrity sha512-GGS635tR8bBR/m/AuUZ6MCZmFXZA25Wk9S/TTHNe+EMkTCoDdlcft56dZCjF7voCmfnMqKRo8sXAukf/ciA5IA==
   dependencies:
     "@babel/core" "^7.1.2"
     "@babel/generator" "^7.1.3"
@@ -7656,9 +7656,9 @@ regex-not@^1.0.0, regex-not@^1.0.2:
     safe-regex "^1.1.0"
 
 regexp-tree@~0.1.1:
-  version "0.1.15"
-  resolved "https://registry.yarnpkg.com/regexp-tree/-/regexp-tree-0.1.15.tgz#be34245f2bf0694ce39bdb90988f126187a336d3"
-  integrity sha512-VQhue5y8rFzy2OVG6i6V8ImiNFEu1uLZLLeitc+a7yK1C8pluyubdRf6+n/qeb9SD8TlYqUHxiDrX+1v9dNuSg==
+  version "0.1.16"
+  resolved "https://registry.yarnpkg.com/regexp-tree/-/regexp-tree-0.1.16.tgz#0715feadb6f766aad7eac5ef4287d2c39acf2fc5"
+  integrity sha512-nXWhGJLTWLNdhWF1uqoXQgAOgv8mQGpgXTOk8BWp08YMOKCtn74VoyOJ+AXZ68Dj50Myd+msYs+aGRBzWJ5dJA==
 
 regexpp@^2.0.1:
   version "2.0.1"
