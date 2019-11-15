@@ -16,7 +16,7 @@ function download (url, body) {
 
 module.exports = async function downloadProject (spinner, name) {
   let repo = name.replace(/^logux-/, '')
-  let dir = join(__dirname, '..', '..', '..', '..', name)
+  let dir = join(__dirname, '..', '..', '..', name)
   if (existsSync(dir)) return
 
   let url = `https://github.com/logux/${ repo }/archive/master.zip`
