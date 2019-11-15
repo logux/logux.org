@@ -36,6 +36,10 @@ html
   justify-content: space-between
   overflow: auto
   scroll-padding-top: 9px
+  scroll-behavior: smooth
+
+  @media (prefers-reduced-motion: reduce)
+    scroll-behavior: auto
 
   @mixin mobile
     grid-column: 1
