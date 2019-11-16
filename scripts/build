@@ -18,6 +18,7 @@ let readJsdoc = require('./steps/read-jsdoc')
 let buildApi = require('./steps/build-api')
 
 async function prepareHtml () {
+  await cleanBuildDir()
   let assets = await compileAssets()
   let [webmanifest, filesFromCSS] = await Promise.all([
     generateWebManifest(assets),
@@ -47,7 +48,6 @@ async function prepareContent () {
 }
 
 async function build () {
-  await cleanBuildDir()
   let [[assets, layout], [guides, nodeJsdoc, webJsdoc]] = await Promise.all([
     prepareHtml(),
     prepareContent()
