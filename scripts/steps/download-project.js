@@ -4,6 +4,8 @@ let { Extract } = require('unzipper')
 let { rename } = require('fs').promises
 let { get } = require('https')
 
+let { step } = require('../lib/spinner')
+
 function download (url, body) {
   get(url, res => {
     if (res.statusCode >= 300 && res.statusCode <= 399) {
@@ -14,13 +16,13 @@ function download (url, body) {
   })
 }
 
-module.exports = async function downloadProject (spinner, name) {
+module.exports = async function downloadProject (name) {
   let repo = name.replace(/^logux-/, '')
   let dir = join(__dirname, '..', '..', '..', name)
   if (existsSync(dir)) return
 
   let url = `https://github.com/logux/${ repo }/archive/master.zip`
-  spinner.add(`download-${ name }`, { text: `Downloading ${ url }` })
+  let end = step(`Downloading ${ url }`)
 
   await new Promise((resolve, reject) => {
     download(url, res => {
@@ -32,5 +34,5 @@ module.exports = async function downloadProject (spinner, name) {
     })
   })
   await rename(join(dir, '..', `${ repo }-master`), dir)
-  spinner.succeed(`download-${ name }`, { text: `${ name } downloaded` })
+  end()
 }

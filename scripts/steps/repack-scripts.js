@@ -3,9 +3,11 @@ let { terser } = require('rollup-plugin-terser')
 let { rollup } = require('rollup')
 let { join } = require('path')
 
+let wrap = require('../lib/spinner')
+
 const SRC = join(__dirname, '..', '..', 'src')
 
-module.exports = async function repackScripts (assets) {
+async function repackScripts (assets) {
   let scripts = assets.get(/\.js$/).map(compiled => {
     let name = compiled.replace(/^.+[^\w](\w+)\.[\w\d]+\.js$/, '$1.js')
     return [join(SRC, name), compiled]
@@ -16,3 +18,5 @@ module.exports = async function repackScripts (assets) {
     await writeFile(output, results.output[0].code)
   }))
 }
+
+module.exports = wrap(repackScripts, 'Optimizing JS')

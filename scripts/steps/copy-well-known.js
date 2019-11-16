@@ -2,9 +2,11 @@ let { copyFile } = require('fs').promises
 let { join } = require('path')
 let makeDir = require('make-dir')
 
+let wrap = require('../lib/spinner')
+
 const DIST = join(__dirname, '..', '..', 'dist')
 
-module.exports = async function copyWellKnown (assets) {
+async function copyWellKnown (assets) {
   let wellFrom = join(__dirname, '..', '..', 'src', 'well-known')
   let wellTo = join(DIST, '.well-known')
   let files = ['favicon.ico', 'robots.txt']
@@ -17,3 +19,5 @@ module.exports = async function copyWellKnown (assets) {
   for (let file of files) assets.add(join(DIST, file))
   assets.add(join(wellTo, 'security.txt'))
 }
+
+module.exports = wrap(copyWellKnown, 'Copying static files')

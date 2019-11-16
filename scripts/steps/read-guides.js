@@ -8,6 +8,8 @@ let { join } = require('path')
 let unified = require('unified')
 let globby = require('globby')
 
+let wrap = require('../lib/spinner')
+
 const ROOT = join(__dirname, '..', '..', '..', 'logux')
 
 function htmlFixer (file) {
@@ -22,7 +24,7 @@ function htmlFixer (file) {
   }
 }
 
-module.exports = async function readGuides () {
+async function readGuides () {
   let files = await globby('*/*.md', { cwd: ROOT, ignore: 'node_modules' })
   let guides = await Promise.all(files.map(async file => {
     let title = ''
@@ -54,3 +56,5 @@ module.exports = async function readGuides () {
   }))
   return guides
 }
+
+module.exports = wrap(readGuides, 'Reading guides')

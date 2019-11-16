@@ -2,7 +2,9 @@ let { readFile } = require('fs').promises
 let postcssUrl = require('postcss-url')
 let postcss = require('postcss')
 
-module.exports = async function findFilesInCSS (assets) {
+let wrap = require('../lib/spinner')
+
+async function findFilesInCSS (assets) {
   let collected = []
   let fileCollector = postcssUrl({
     url ({ url }, dir, ops, decl) {
@@ -24,3 +26,5 @@ module.exports = async function findFilesInCSS (assets) {
   }))
   return collected
 }
+
+module.exports = wrap(findFilesInCSS, 'Generating preload list')

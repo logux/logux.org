@@ -8,6 +8,8 @@ let makeDir = require('make-dir')
 let slugify = require('slugify')
 let remark = require('remark')
 
+let { step } = require('../lib/spinner')
+
 const DIST = join(__dirname, '..', '..', 'dist')
 const SIMPLE_TYPES = {
   string: true,
@@ -270,11 +272,11 @@ function toTree (jsdoc) {
   }
 }
 
-module.exports = async function buildApi (spin, assets, layout, title, jsdoc) {
+module.exports = async function buildApi (assets, layout, title, jsdoc) {
   let file = title.replace(/\s/g, '-').toLowerCase()
   let path = join(DIST, file, 'index.html')
 
-  spin.add(`${ file }-html`, { text: `Building ${ title } HTML` })
+  let end = step(`Building ${ title } HTML`)
 
   await makeDir(dirname(path))
   let tree = toTree(jsdoc)
@@ -282,5 +284,5 @@ module.exports = async function buildApi (spin, assets, layout, title, jsdoc) {
   await writeFile(path, html)
   assets.add(path)
 
-  spin.succeed(`${ file }-html`)
+  end()
 }

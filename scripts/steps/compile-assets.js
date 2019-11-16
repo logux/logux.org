@@ -1,7 +1,9 @@
 let { join } = require('path')
 let Bundler = require('parcel-bundler')
 
-module.exports = async function compileAssets () {
+let wrap = require('../lib/spinner')
+
+async function compileAssets () {
   let pugTemplate = join(__dirname, '..', '..', 'src', 'uikit.pug')
   let uikitBundler = new Bundler(pugTemplate, {
     sourceMaps: false,
@@ -29,3 +31,5 @@ module.exports = async function compileAssets () {
     }
   }
 }
+
+module.exports = wrap(compileAssets, 'Compiling assets')

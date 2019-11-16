@@ -6,6 +6,8 @@ let rehypeParse = require('rehype-parse')
 let unified = require('unified')
 let makeDir = require('make-dir')
 
+let wrap = require('../lib/spinner')
+
 const DIST = join(__dirname, '..', '..', 'dist')
 const PRELOAD_TYPES = {
   '.woff2': 'font',
@@ -16,7 +18,7 @@ function tag (tagName, properties) {
   return { type: 'element', tagName, properties, children: [] }
 }
 
-module.exports = async function updateHtml (assets, manifest, preloadFiles) {
+async function updateHtml (assets, manifest, preloadFiles) {
   let [html] = await Promise.all([
     readFile(join(DIST, 'uikit.html')),
     makeDir(join(DIST, 'uikit'))
@@ -55,3 +57,5 @@ module.exports = async function updateHtml (assets, manifest, preloadFiles) {
   assets.add(newFile)
   return fixed.contents
 }
+
+module.exports = wrap(updateHtml, 'Updating HTML layout')

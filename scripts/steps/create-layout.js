@@ -5,6 +5,8 @@ let unistVisit = require('unist-util-visit')
 let slugify = require('slugify')
 let unified = require('unified')
 
+let wrap = require('../lib/spinner')
+
 function cleaner (removeAssets) {
   return tree => {
     unistVisit(tree, 'element', i => {
@@ -176,7 +178,7 @@ function converter () {
   }
 }
 
-module.exports = async function createLayout (uikit) {
+async function createLayout (uikit) {
   let guideHtml = await cleanPage(uikit)
   let apiHtml = await cleanPage(uikit, /\/guide\./)
 
@@ -201,3 +203,5 @@ module.exports = async function createLayout (uikit) {
     }
   }
 }
+
+module.exports = wrap(createLayout, 'Creating layout')

@@ -3,9 +3,11 @@ let { writeFile } = require('fs').promises
 let capitalize = require('capitalize')
 let makeDir = require('make-dir')
 
+let wrap = require('../lib/spinner')
+
 const DIST = join(__dirname, '..', '..', 'dist')
 
-module.exports = async function buildGuides (assets, layout, guides) {
+async function buildGuides (assets, layout, guides) {
   await Promise.all(guides.map(async page => {
     let title = `${ page.title } / ${ capitalize(dirname(page.file)) }`
     let html = await layout.guide(title, page.tree)
@@ -15,3 +17,5 @@ module.exports = async function buildGuides (assets, layout, guides) {
     assets.add(path)
   }))
 }
+
+module.exports = wrap(buildGuides, 'Building guides HTML')

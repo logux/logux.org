@@ -2,6 +2,8 @@ let { build } = require('documentation')
 let { join } = require('path')
 let globby = require('globby')
 
+let { step } = require('../lib/spinner')
+
 const PROJECTS = join(__dirname, '..', '..', '..')
 
 function trim (tree, classes) {
@@ -10,9 +12,9 @@ function trim (tree, classes) {
   })
 }
 
-module.exports = async function readJsdoc (spinner, ...projects) {
+module.exports = async function readJsdoc (...projects) {
   let type = projects[0]
-  spinner.add(`${ type }-jsdoc`, { text: `Generating ${ type } JSDoc` })
+  let end = step(`Generating ${ type } JSDoc`)
 
   let files = await Promise.all(projects.map(i => {
     let ignore = []
@@ -48,6 +50,6 @@ module.exports = async function readJsdoc (spinner, ...projects) {
     tree = trim(tree, ['ServerNode', 'BaseNode'])
   }
 
-  spinner.succeed(`${ type }-jsdoc`)
+  end()
   return tree
 }
