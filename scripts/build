@@ -17,27 +17,41 @@ let updateHtml = require('./steps/update-html')
 let readJsdoc = require('./steps/read-jsdoc')
 let buildApi = require('./steps/build-api')
 
-async function build () {
-  await cleanBuildDir()
+async function prepareHtml () {
   let assets = await compileAssets()
   let [webmanifest, filesFromCSS] = await Promise.all([
     generateWebManifest(assets),
     findFilesInCSS(assets),
     copyWellKnown(assets),
-    repackScripts(assets),
+    repackScripts(assets)
+  ])
+  let uikit = await updateHtml(assets, webmanifest, filesFromCSS)
+  let layout = await createLayout(uikit)
+  return [assets, layout]
+}
+
+async function prepareContent () {
+  await Promise.all([
     downloadProject('logux'),
     downloadProject('logux-core'),
     downloadProject('logux-server'),
     downloadProject('logux-client'),
     downloadProject('logux-redux')
   ])
-  let [guides, nodeJsdoc, webJsdoc, uikit] = await Promise.all([
+  let [guides, nodeJsdoc, webJsdoc] = await Promise.all([
     readGuides(),
     readJsdoc('logux-server', 'logux-core'),
-    readJsdoc('logux-client', 'logux-redux', 'logux-core'),
-    updateHtml(assets, webmanifest, filesFromCSS)
+    readJsdoc('logux-client', 'logux-redux', 'logux-core')
   ])
-  let layout = await createLayout(uikit)
+  return [guides, nodeJsdoc, webJsdoc]
+}
+
+async function build () {
+  await cleanBuildDir()
+  let [[assets, layout], [guides, nodeJsdoc, webJsdoc]] = await Promise.all([
+    prepareHtml(),
+    prepareContent()
+  ])
   await Promise.all([
     buildGuides(assets, layout, guides),
     buildApi(assets, layout, 'Node API', nodeJsdoc),
