@@ -24,5 +24,13 @@ function wrap (fn, text) {
   }
 }
 
+async function run (text, fn) {
+  let end = step(text)
+  let result = await fn()
+  end()
+  return result
+}
+
 module.exports = wrap
+module.exports.run = run
 module.exports.step = step

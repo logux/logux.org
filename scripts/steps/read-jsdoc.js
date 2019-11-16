@@ -2,7 +2,7 @@ let { build } = require('documentation')
 let { join } = require('path')
 let globby = require('globby')
 
-let { step } = require('../lib/spinner')
+let { run } = require('../lib/spinner')
 
 const PROJECTS = join(__dirname, '..', '..', '..')
 
@@ -13,43 +13,38 @@ function trim (tree, classes) {
 }
 
 module.exports = async function readJsdoc (...projects) {
-  let type = projects[0]
-  let end = step(`Generating ${ type } JSDoc`)
+  let type = projects[0].replace(/^logux-/, '')
 
-  let files = await Promise.all(projects.map(i => {
-    let ignore = []
-    if (i === 'logux-core' && projects.includes('logux-server')) {
-      ignore = [
-        'reconnect.js', 'logux-error.js', 'client-node.js', 'ws-connection.js'
-      ]
-    }
-    return globby('**/*.js', {
-      absolute: true,
-      ignore: ['node_modules', 'test', 'coverage', ...ignore],
-      cwd: join(PROJECTS, i)
-    })
-  }))
+  let files = await run(`Looking for ${ type } JSDoc`, async () => {
+    return Promise.all(projects.map(i => {
+      return globby('**/*.js', {
+        absolute: true,
+        ignore: ['node_modules', 'test', 'coverage'],
+        cwd: join(PROJECTS, i)
+      })
+    }))
+  })
 
-  let tree = await build(files.flat(), { })
-  for (let i of tree) {
-    if (i.kind === 'class' && i.augments.length > 0) {
-      let parentName = i.augments[0].name
-      let parent = tree.find(j => j.name === parentName)
-      if (parent) {
-        i.members.static.push(...parent.members.static)
-        i.members.instance.push(...parent.members.instance)
+  return run(`Generating ${ type } JSDoc`, async () => {
+    let tree = await build(files.flat(), { })
+    for (let i of tree) {
+      if (i.kind === 'class' && i.augments.length > 0) {
+        let parentName = i.augments[0].name
+        let parent = tree.find(j => j.name === parentName)
+        if (parent) {
+          i.members.static.push(...parent.members.static)
+          i.members.instance.push(...parent.members.instance)
+        }
       }
     }
-  }
-  if (type === 'logux-server') {
-    tree = trim(tree, [
-      'Reconnect', 'LoguxError', 'ClientNode',
-      'WsConnection', 'BaseServer', 'BaseNode'
-    ])
-  } else if (type === 'logux-server') {
-    tree = trim(tree, ['ServerNode', 'BaseNode'])
-  }
-
-  end()
-  return tree
+    if (type === 'server') {
+      tree = trim(tree, [
+        'Reconnect', 'LoguxError', 'ClientNode',
+        'WsConnection', 'BaseServer', 'BaseNode'
+      ])
+    } else if (type === 'server') {
+      tree = trim(tree, ['ServerNode', 'BaseNode'])
+    }
+    return tree
+  })
 }
