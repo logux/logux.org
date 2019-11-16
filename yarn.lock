@@ -969,12 +969,12 @@
   dependencies:
     globals "^12.2.0"
 
-"@logux/sharec-config@^0.5.5":
-  version "0.5.5"
-  resolved "https://registry.yarnpkg.com/@logux/sharec-config/-/sharec-config-0.5.5.tgz#61d097b8118f8aa2203aaddbf359af6c926df29e"
-  integrity sha512-BiUdXLRhNh8Nkbag3sLmOLbyjL6w1Kt1Z/D3T97sOhMWdvNj3mOODu4XADay3MJ/NmhAd5AKKwAGF3NKNe8wWg==
+"@logux/sharec-config@^0.5.6":
+  version "0.5.6"
+  resolved "https://registry.yarnpkg.com/@logux/sharec-config/-/sharec-config-0.5.6.tgz#6eac457f7f128ae82b347e88d45dd7a21811ebd1"
+  integrity sha512-AZcoQNFyMYIWR0oxtvNQJLx3aCAK281ZafGLVgXWAv1HuHt04C64ri9fYpN7myT0FVma6rx6+JqvjUGpfLw+xg==
   dependencies:
-    sharec "^2.12.1-beta"
+    sharec "^2.13.0-beta"
 
 "@mrmlnc/readdir-enhanced@^2.2.1":
   version "2.2.1"
@@ -8347,10 +8347,10 @@ shallow-copy@~0.0.1:
   resolved "https://registry.yarnpkg.com/shallow-copy/-/shallow-copy-0.0.1.tgz#415f42702d73d810330292cc5ee86eae1a11a170"
   integrity sha1-QV9CcC1z2BAzApLMXuhurhoRoXA=
 
-sharec@^2.12.1-beta:
-  version "2.12.1-beta"
-  resolved "https://registry.yarnpkg.com/sharec/-/sharec-2.12.1-beta.tgz#cdd06ba1c7e296a5d3a58ab35d3108387bca373f"
-  integrity sha512-n/BUcfchsxDgNbNASK0XzunPy6vbBRUqSDNIZ22ufkUCIMbB9jn/4HbXcNi4sBk3eEbNZnI7V4w38YExzNBZeQ==
+sharec@^2.13.0-beta:
+  version "2.13.0-beta"
+  resolved "https://registry.yarnpkg.com/sharec/-/sharec-2.13.0-beta.tgz#10cb5e5077d497afdf82c2829ccbfc073dfb53b2"
+  integrity sha512-BBFxEvpRSx/OHhlb2b8daRXuEOgc17UDaZqZfLaObWPrVFHYZ7+HwnW1zXzmVCX87fCdocNj0urRlDo/Ij5QKQ==
   dependencies:
     boxen "^4.1.0"
     chalk "^2.4.2"
