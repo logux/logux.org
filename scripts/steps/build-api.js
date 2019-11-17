@@ -84,11 +84,18 @@ function typeHtml (type) {
   } else if (type.type === 'UndefinedLiteral') {
     return [{ type: 'text', value: 'undefined' }]
   } else if (type.type === 'TypeApplication') {
-    return [
-      { type: 'text', value: type.expression.name + '<' },
-      ...typeHtml(type.applications[0]),
-      { type: 'text', value: '>' }
-    ]
+    if (type.expression.name === 'Array') {
+      return [
+        ...typeHtml(type.applications[0]),
+        { type: 'text', value: '[]' }
+      ]
+    } else {
+      return [
+        { type: 'text', value: type.expression.name + '<' },
+        ...typeHtml(type.applications[0]),
+        { type: 'text', value: '>' }
+      ]
+    }
   } else if (type.type === 'BooleanLiteralType') {
     return [{ type: 'text', value: type.value.toString() }]
   } else if (SIMPLE_TYPES[type.name]) {
