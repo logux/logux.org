@@ -1,17 +1,31 @@
 let Spinnies = require('spinnies')
-let { gray } = require('chalk')
+let { gray, green, bgWhite, bgGreen } = require('chalk')
 
 let spinner = new Spinnies({ succeedColor: 'white' })
 let lastId = 0
 
-function step (text) {
-  lastId++
-  let id = lastId.toString()
-  let start = Date.now()
-  spinner.add(id, { text })
-  return () => {
-    let time = Date.now() - start
-    spinner.succeed(id, { text: text + gray(` ${ time } ms`) })
+let step
+if (process.env.CI) {
+  step = text => {
+    process.stdout.write(`${ bgWhite.black(' START ') } ${ text }\n`)
+    let start = Date.now()
+    return () => {
+      let time = (Date.now() - start + ' ms')
+      process.stdout.write(
+        bgGreen.black(' DONE  ') + ' ' + green(text) + ' ' + gray(time) + '\n'
+      )
+    }
+  }
+} else {
+  step = text => {
+    lastId++
+    let id = lastId.toString()
+    let start = Date.now()
+    spinner.add(id, { text })
+    return () => {
+      let time = Date.now() - start
+      spinner.succeed(id, { text: text + gray(` ${ time } ms`) })
+    }
   }
 }
 
