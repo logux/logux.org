@@ -5,7 +5,7 @@ let spinner = new Spinnies({ succeedColor: 'white' })
 let lastId = 0
 
 let step
-if (process.env.CI || process.env.BUILD_ID) {
+if (process.env.CI) {
   step = text => {
     process.stdout.write(`${ bgWhite.black(' START ') } ${ text }\n`)
     let start = Date.now()

@@ -17,6 +17,8 @@ steps:
     entrypoint: yarn
     args:
       - build
+    env:
+      - 'CI=1'
   - name: 'gcr.io/cloud-builders/docker'
     args:
       - build
