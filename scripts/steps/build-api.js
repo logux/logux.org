@@ -91,6 +91,8 @@ function typeHtml (type) {
     return [{ type: 'text', value: `"${ type.value }"` }]
   } else if (type.type === 'UndefinedLiteral') {
     return [{ type: 'text', value: 'undefined' }]
+  } else if (type.type === 'NullLiteral') {
+    return [{ type: 'text', value: 'null' }]
   } else if (type.type === 'TypeApplication') {
     if (type.expression.name === 'Array') {
       return [
@@ -118,6 +120,29 @@ function typeHtml (type) {
     console.error(type)
     throw new Error(`Unknown type ${ type.type }`)
   }
+}
+
+function propertiesHtml (props) {
+  if (props.length === 0) return []
+  let table = tag('table', [
+    tag('tr', [
+      tag('th', 'Property'),
+      tag('th', 'Type'),
+      tag('th', 'description')
+    ]),
+    ...props
+      .sort(byName)
+      .map(i => tag('tr', [
+        tag('td', [
+          tag('code', i.name)
+        ]),
+        tag('td', [
+          tag('code', typeHtml(i.type), { noClass: true })
+        ]),
+        tag('td', descToHtml(i.description))
+      ]))
+  ])
+  return [table]
 }
 
 function paramsHtml (params) {
@@ -258,6 +283,7 @@ function standaloneHtml (node) {
     }),
     ...propTypeHtml(node.type),
     ...toHtml(node.description),
+    ...propertiesHtml(node.properties),
     ...paramsHtml(node.params),
     ...returnsHtml(node.returns[0]),
     ...exampleHtml(node.examples[0])
