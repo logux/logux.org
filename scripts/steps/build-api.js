@@ -10,6 +10,7 @@ let remark = require('remark')
 
 let { step } = require('../lib/spinner')
 
+const CAPITALIZED = /^[A-Z]/
 const DIST = join(__dirname, '..', '..', 'dist')
 const SIMPLE_TYPES = {
   string: true,
@@ -23,7 +24,13 @@ const SIMPLE_TYPES = {
 let formatters = createFormatters()
 
 function byName (a, b) {
-  return a.name.localeCompare(b.name)
+  if (CAPITALIZED.test(a.name) && !CAPITALIZED.test(b.name)) {
+    return -1
+  } else if (!CAPITALIZED.test(a.name) && CAPITALIZED.test(b.name)) {
+    return 1
+  } else {
+    return a.name.localeCompare(b.name)
+  }
 }
 
 function tag (tagName, children, opts) {
