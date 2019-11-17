@@ -266,7 +266,7 @@ function classHtml (tree, cls) {
   ])
 }
 
-function standaloneHtml (node) {
+function standaloneHtml (type, node) {
   let name = [{ type: 'text', value: node.name }]
   if (node.kind === 'function') {
     name.push(
@@ -275,13 +275,14 @@ function standaloneHtml (node) {
       })
     )
   }
+  let ownType = type !== 'Callbacks' ? propTypeHtml(node.type) : []
   return tag('section', [
     tag('h2', [
       tag('code', name, { noClass: true })
     ], {
       slug: node.name.toLowerCase()
     }),
-    ...propTypeHtml(node.type),
+    ...ownType,
     ...toHtml(node.description),
     ...propertiesHtml(node.properties),
     ...paramsHtml(node.params),
@@ -290,14 +291,17 @@ function standaloneHtml (node) {
   ])
 }
 
-function listHtml (jsdoc, title, kind) {
-  let list = jsdoc.filter(i => i.kind === kind)
+function listHtml (title, list) {
   if (list.length === 0) return []
   let article = tag('article', [
     tag('h1', title, { noSlug: true }),
-    ...list.sort(byName).map(i => standaloneHtml(i))
+    ...list.sort(byName).map(i => standaloneHtml(title, i))
   ])
   return [article]
+}
+
+function isCallback (node) {
+  return node.tags.some(i => i.title === 'callback')
 }
 
 function toTree (jsdoc) {
@@ -307,9 +311,14 @@ function toTree (jsdoc) {
       .filter(i => i.kind === 'class')
       .sort(byName)
       .map(i => classHtml(jsdoc, i))
-      .concat(listHtml(jsdoc, 'Functions', 'function'))
-      .concat(listHtml(jsdoc, 'Types', 'typedef'))
-      .concat(listHtml(jsdoc, 'Constants', 'constant'))
+      .concat(listHtml('Functions', jsdoc.filter(i => i.kind === 'function')))
+      .concat(listHtml('Callbacks', jsdoc.filter(i => {
+        return i.kind === 'typedef' && isCallback(i)
+      })))
+      .concat(listHtml('Types', jsdoc.filter(i => {
+        return i.kind === 'typedef' && !isCallback(i)
+      })))
+      .concat(listHtml('Constants', jsdoc.filter(i => i.kind === 'constant')))
   }
 }
 
