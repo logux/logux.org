@@ -25,10 +25,7 @@ async function read (type, files) {
     }
   }
   if (type === 'server') {
-    tree = trim(tree, [
-      'Reconnect', 'LoguxError', 'ClientNode',
-      'WsConnection', 'BaseServer', 'BaseNode'
-    ])
+    tree = trim(tree, ['Reconnect', 'ClientNode', 'WsConnection', 'BaseServer'])
   } else if (type === 'server') {
     tree = trim(tree, ['ServerNode', 'BaseNode'])
   }

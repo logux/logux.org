@@ -12,17 +12,32 @@ let { step } = require('../lib/spinner')
 
 const CAPITALIZED = /^[A-Z]/
 const DIST = join(__dirname, '..', '..', 'dist')
-const SIMPLE_TYPES = {
-  Promise: true,
-  Array: true,
-  function: true,
-  boolean: true,
-  string: true,
-  object: true,
-  number: true
+const EXTERNAL_TYPES = {
+  'BunyanLogger': 'https://github.com/trentm/node-bunyan',
+  'http.Server': 'https://nodejs.org/api/http.html#http_class_http_server'
 }
+const SIMPLE_TYPES = new Set([
+  'Observable',
+  'WebSocket',
+  'Promise',
+  'RegExp',
+  'Error',
+  'Array',
+  'function',
+  'boolean',
+  'string',
+  'object',
+  'number',
+  'any'
+])
 
 let formatters = createFormatters()
+
+function toSlug (type) {
+  let slug = type
+  if (!CAPITALIZED.test(slug)) slug = 'globals-' + slug
+  return slugify(slug).toLowerCase()
+}
 
 function byName (a, b) {
   if (CAPITALIZED.test(a.name) && !CAPITALIZED.test(b.name)) {
@@ -41,22 +56,27 @@ function tag (tagName, children, opts) {
   return { type: 'element', tagName, properties: { }, children, ...opts }
 }
 
-function descToHtml (desc) {
+function descToHtml (parent, desc) {
   if (!desc) {
     return []
   } else if (desc.type === 'root') {
-    return toHtml(desc)
+    return toHtml(parent, desc)
   } else {
     let md = desc.replace(/\{@link ([\w]+)}/, '[$1]($1)')
-    return toHtml(remark().parse(md))
+    return toHtml(parent, remark().parse(md))
   }
 }
 
-function toHtml (tree) {
+function toHtml (parent, tree) {
   if (!tree) return []
   unistVisit(tree, 'link', node => {
     if (/^[\w#.]+$/.test(node.url)) {
-      node.url = '#' + node.url.replace(/#/g, '-').toLowerCase()
+      let ref = node.children[0].value
+      if (ref.startsWith('#')) {
+        if (!parent) throw new Error(`Unknown parent for ${ ref }`)
+        ref = parent + ref
+      }
+      node.url = '#' + toSlug(ref.replace(/#/g, '-'))
     }
   })
   return remarkRehype()(tree).children
@@ -108,13 +128,10 @@ function typeHtml (type) {
     }
   } else if (type.type === 'BooleanLiteralType') {
     return [{ type: 'text', value: type.value.toString() }]
-  } else if (SIMPLE_TYPES[type.name]) {
+  } else if (SIMPLE_TYPES.has(type.name)) {
     return [{ type: 'text', value: type.name }]
   } else if (type.type === 'NameExpression') {
-    let href = '#' + slugify(type.name, { lower: true })
-    if (type.name === 'http.Server') {
-      href = 'https://nodejs.org/api/http.html#http_class_http_server'
-    }
+    let href = EXTERNAL_TYPES[type.name] || '#' + toSlug(type.name)
     return [tag('a', type.name, { properties: { href } })]
   } else {
     console.error(type)
@@ -122,13 +139,13 @@ function typeHtml (type) {
   }
 }
 
-function propertiesHtml (props) {
+function propertiesHtml (parent, props) {
   if (props.length === 0) return []
   let table = tag('table', [
     tag('tr', [
       tag('th', 'Property'),
       tag('th', 'Type'),
-      tag('th', 'description')
+      tag('th', 'Description')
     ]),
     ...props
       .sort(byName)
@@ -139,19 +156,19 @@ function propertiesHtml (props) {
         tag('td', [
           tag('code', typeHtml(i.type), { noClass: true })
         ]),
-        tag('td', descToHtml(i.description))
+        tag('td', descToHtml(parent, i.description))
       ]))
   ])
   return [table]
 }
 
-function paramsHtml (params) {
+function paramsHtml (parent, params) {
   if (params.length === 0) return []
   let table = tag('table', [
     tag('tr', [
       tag('th', 'Parameter'),
       tag('th', 'Type'),
-      tag('th', 'description')
+      tag('th', 'Description')
     ]),
     ...params
       .sort(byName)
@@ -162,20 +179,20 @@ function paramsHtml (params) {
         tag('td', [
           tag('code', typeHtml(i.type), { noClass: true })
         ]),
-        tag('td', descToHtml(i.description))
+        tag('td', descToHtml(parent, i.description))
       ]))
   ])
   return [table]
 }
 
-function returnsHtml (returns) {
+function returnsHtml (parent, returns) {
   if (!returns) return []
   if (returns.type.type === 'UndefinedLiteral') return []
   let p = tag('p', [
     { type: 'text', value: 'Returns ' },
     tag('code', typeHtml(returns.type), { noClass: true }),
     { type: 'text', value: '. ' },
-    ...toHtml(returns.description)[0].children
+    ...toHtml(parent, returns.description)[0].children
   ])
   return [p]
 }
@@ -229,9 +246,10 @@ function membersHtml (className, members, separator) {
           slug: (className + slugSep + member.name).toLowerCase()
         }),
         ...propTypeHtml(member.type),
-        ...toHtml(member.description),
-        ...paramsHtml(member.params),
-        ...returnsHtml(member.returns[0]),
+        ...toHtml(className, member.description),
+        ...paramsHtml(className, member.params),
+        ...returnsHtml(className, member.returns[0]),
+        ...propertiesHtml(className, member.properties),
         ...exampleHtml(member.examples[0])
       ])
     })
@@ -244,7 +262,7 @@ function extendsHtml (tree, augment) {
     { type: 'text', value: 'Extends ' },
     tag('code', [
       tag('a', augment.name, {
-        properties: { href: '#' + augment.name.toLowerCase() }
+        properties: { href: '#' + toSlug(augment.name) }
       })
     ], { noClass: true }),
     { type: 'text', value: '. ' }
@@ -257,9 +275,9 @@ function classHtml (tree, cls) {
     tag('h1', cls.name, {
       editUrl: getEditUrl(cls.context.file)
     }),
-    ...toHtml(cls.description),
+    ...toHtml(cls.name, cls.description),
     ...extendsHtml(tree, cls.augments[0]),
-    ...paramsHtml(cls.tags.filter(i => i.title === 'param')),
+    ...paramsHtml(cls.name, cls.tags.filter(i => i.title === 'param')),
     ...exampleHtml(cls.examples[0]),
     ...membersHtml(cls.name, cls.members.static, '.'),
     ...membersHtml(cls.name, cls.members.instance, '#')
@@ -280,13 +298,13 @@ function standaloneHtml (type, node) {
     tag('h2', [
       tag('code', name, { noClass: true })
     ], {
-      slug: node.name.toLowerCase()
+      slug: toSlug(node.name)
     }),
     ...ownType,
-    ...toHtml(node.description),
-    ...propertiesHtml(node.properties),
-    ...paramsHtml(node.params),
-    ...returnsHtml(node.returns[0]),
+    ...toHtml(undefined, node.description),
+    ...propertiesHtml(undefined, node.properties),
+    ...paramsHtml(undefined, node.params),
+    ...returnsHtml(undefined, node.returns[0]),
     ...exampleHtml(node.examples[0])
   ])
 }

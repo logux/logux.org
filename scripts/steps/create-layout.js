@@ -28,6 +28,27 @@ function cleaner (removeAssets) {
   }
 }
 
+function checker (title) {
+  return tree => {
+    let ids = new Set()
+    unistVisit(tree, 'element', node => {
+      let id = node.properties.id
+      if (id) {
+        if (ids.has(id)) throw new Error(`Dublicate ID #${ id } in ${ title }`)
+        ids.add(id)
+      }
+    })
+    unistVisit(tree, 'element', node => {
+      let href = node.properties.href
+      if (href && href.startsWith('#')) {
+        if (!ids.has(href.slice(1))) {
+          throw new Error(`${ title } has no ${ href } ID`)
+        }
+      }
+    })
+  }
+}
+
 async function cleanPage (html, removeAssets) {
   let cleaned = await unified()
     .use(rehypeParse)
@@ -85,15 +106,8 @@ function switcherToHTML (id, switchers) {
 }
 
 function converter () {
-  let slugs = { }
   function toSlug (nodes) {
-    let text = toText(nodes)
-    let slug = slugify(text, { lower: true })
-    if (slugs[slug]) {
-      throw new Error(`Dublicate slug by "${ text }"`)
-    }
-    slugs[slug] = true
-    return slug
+    return slugify(toText(nodes), { lower: true })
   }
 
   return tree => {
@@ -185,6 +199,7 @@ async function createLayout (uikit) {
   async function put (layout, title, tree) {
     let fixed = await unified()
       .use(converter)
+      .use(checker, title)
       .run(tree)
     let html = await unified()
       .use(rehypeStringify)
