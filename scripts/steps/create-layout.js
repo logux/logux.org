@@ -108,6 +108,8 @@ function switcherToHTML (id, switchers) {
 function converter () {
   function toSlug (nodes) {
     return slugify(toText(nodes), { lower: true })
+      .replace(/":/g, '')
+      .replace(/node\.js/g, 'nodejs')
   }
 
   return tree => {
