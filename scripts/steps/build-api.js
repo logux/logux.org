@@ -280,8 +280,8 @@ function toTree (jsdoc) {
       .filter(i => i.kind === 'class')
       .sort(byName)
       .map(i => classHtml(jsdoc, i))
-      .concat(listHtml(jsdoc, 'Types', 'typedef'))
       .concat(listHtml(jsdoc, 'Functions', 'function'))
+      .concat(listHtml(jsdoc, 'Types', 'typedef'))
       .concat(listHtml(jsdoc, 'Constants', 'constant'))
   }
 }
