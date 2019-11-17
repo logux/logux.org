@@ -13,12 +13,13 @@ let { step } = require('../lib/spinner')
 const CAPITALIZED = /^[A-Z]/
 const DIST = join(__dirname, '..', '..', 'dist')
 const SIMPLE_TYPES = {
-  string: true,
-  object: true,
+  Promise: true,
+  Array: true,
   function: true,
   boolean: true,
-  number: true,
-  Promise: true
+  string: true,
+  object: true,
+  number: true
 }
 
 let formatters = createFormatters()
