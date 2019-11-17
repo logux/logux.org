@@ -9,13 +9,18 @@ function trim (tree, classes) {
 
 async function read (type, files) {
   let tree = await build(files.flat(), { })
-  for (let i of tree) {
-    if (i.kind === 'class' && i.augments.length > 0) {
-      let parentName = i.augments[0].name
-      let parent = tree.find(j => j.name === parentName)
+  for (let node of tree) {
+    if (node.kind === 'class' && node.augments.length > 0) {
+      let parentName = node.augments[0].name
+      let parent = tree.find(i => i.name === parentName)
       if (parent) {
-        i.members.static.push(...parent.members.static)
-        i.members.instance.push(...parent.members.instance)
+        for (let area of ['static', 'instance']) {
+          for (let i of parent.members[area]) {
+            if (node.members[area].every(j => j.name !== i.name)) {
+              node.members[area].push(i)
+            }
+          }
+        }
       }
     }
   }
