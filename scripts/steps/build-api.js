@@ -63,14 +63,14 @@ function tag (tagName, children, opts) {
   return { type: 'element', tagName, properties: { }, children, ...opts }
 }
 
-function descToHtml (parent, desc) {
+function tableDesc (parent, desc) {
   if (!desc) {
     return []
   } else if (desc.type === 'root') {
-    return toHtml(parent, desc)
+    return toHtml(parent, desc)[0].children
   } else {
     let md = desc.replace(/\{@link ([\w]+)}/, '[$1]($1)')
-    return toHtml(parent, remark().parse(md))
+    return toHtml(parent, remark().parse(md))[0].children
   }
 }
 
@@ -163,7 +163,7 @@ function propertiesHtml (parent, props) {
         tag('td', [
           tag('code', typeHtml(i.type), { noClass: true })
         ]),
-        tag('td', descToHtml(parent, i.description))
+        tag('td', tableDesc(parent, i.description))
       ]))
   ])
   return [table]
@@ -186,7 +186,7 @@ function paramsHtml (parent, params) {
         tag('td', [
           tag('code', typeHtml(i.type), { noClass: true })
         ]),
-        tag('td', descToHtml(parent, i.description))
+        tag('td', tableDesc(parent, i.description))
       ]))
   ])
   return [table]
