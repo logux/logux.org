@@ -146,15 +146,15 @@ function typeHtml (type) {
   }
 }
 
-function propertiesHtml (parent, props) {
-  if (props.length === 0) return []
+function tableHtml (parent, name, list) {
+  if (list.length === 0) return []
   let table = tag('table', [
     tag('tr', [
       tag('th', 'Property'),
       tag('th', 'Type'),
       tag('th', 'Description')
     ]),
-    ...props
+    ...list
       .sort(byName)
       .map(i => tag('tr', [
         tag('td', [
@@ -169,27 +169,12 @@ function propertiesHtml (parent, props) {
   return [table]
 }
 
+function propertiesHtml (parent, props) {
+  return tableHtml(parent, 'Properties', props)
+}
+
 function paramsHtml (parent, params) {
-  if (params.length === 0) return []
-  let table = tag('table', [
-    tag('tr', [
-      tag('th', 'Parameter'),
-      tag('th', 'Type'),
-      tag('th', 'Description')
-    ]),
-    ...params
-      .sort(byName)
-      .map(i => tag('tr', [
-        tag('td', [
-          tag('code', i.name)
-        ]),
-        tag('td', [
-          tag('code', typeHtml(i.type), { noClass: true })
-        ]),
-        tag('td', tableDesc(parent, i.description))
-      ]))
-  ])
-  return [table]
+  return tableHtml(parent, 'Parameter', params)
 }
 
 function returnsHtml (parent, returns) {
