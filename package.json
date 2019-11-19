@@ -5,7 +5,7 @@
     "secrets:decrypt": "gcloud kms --project logux-255417 decrypt --plaintext-file=secrets.json --ciphertext-file=secrets.json.enc --location=global --keyring=secrets --key=password",
     "securitytxt:sign": "gpg --digest-algo SHA512 --clearsign src/well-known/security.txt",
     "start:uikit": "parcel serve src/uikit.pug --open",
-    "lint": "eslint . scripts/* && stylelint src/**/*.sss",
+    "lint": "eslint . scripts/build scripts/update-cdn && stylelint src/**/*.sss",
     "test": "yarn lint && yarn build && size-limit",
     "clean": "rimraf dist/ .cache",
     "build": "NODE_ENV=production ./scripts/build",

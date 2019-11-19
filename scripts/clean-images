@@ -8,7 +8,7 @@ main () {
     gcloud container images list-tags $IMAGE \
       --filter='-tags:*' --format='get(digest)'
   ); do
-    gcloud container images delete -q "${IMAGE}@${digest}"
+    gcloud container images delete "${IMAGE}@${digest}"
     let DELETED=DELETED+1
   done
   echo "Deleted ${DELETED} images in ${IMAGE}"

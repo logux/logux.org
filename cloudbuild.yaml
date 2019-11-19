@@ -40,7 +40,7 @@ steps:
       - --platform=managed
   - name: node:13
     entrypoint: ./scripts/update-cdn
-  - name: 'gcr.io/cloud-builders/docker'
+  - name: 'gcr.io/cloud-builders/gcloud'
     entrypoint: ./scripts/clean-images
 images:
   - gcr.io/$PROJECT_ID/loguxio
