@@ -6,6 +6,10 @@
   box-shadow: var(--base-above)
   transition: box-shadow 200ms
 
+  @media (prefers-color-scheme: light)
+    &::selection
+      background: var(--base-accent)
+
   kbd&
     font-size: 14px
     border-bottom: 2px solid var(--base-accent)
