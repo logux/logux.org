@@ -94,17 +94,17 @@ html( lang="en" )
             th Type
             th Description
           tr
-            td <code class="code">nodeId</code>
-            td <code><a href="#">string</a></code>
+            td <code class="code">log</code>
+            td <code><a href="#">Log</a></code>
             td Unique current machine name.
           tr
             td <code class="code">reason</code>
-            td <code><a href="#">string</a> = 'error'</code>
+            td <code>string = 'error'</code>
             td Optional code for reason.
           tr
-            td <code class="code">options</code>
-            td <code><a href="#">object</a>?</code>
-            td Synchronization options.
+            td <code class="code">opts.allowDangerousProtocol</code>
+            td <code>boolean?</code>
+            td Do not show warning when using <code class="code">ws://</code> in production
         h3#returns.title
           a.title_link( href="#returns" title="Direct link to section" ) Returns
         p.text_block <code><a href="#">Promise</a>&lt;<a href="#">boolean</a>></code>
