@@ -1,20 +1,25 @@
 html
-  --text-margin: 21px
+  --text-after: 21px
+  --list-side: 30px
 
   @mixin mobile
-    --text-margin: 18px
+    --text-after: 18px
+    --list-side: 15px
 
 .text
   box-sizing: border-box
   width: 100%
+  padding: var(--list-side)
 
   @mixin no-mobile
     max-width: 900px
-    padding: 36px 30px calc(36px - 21px) 30px
+    padding-top: 36px
+    padding-bottom: calc(36px - 21px)
     margin: 0 auto
 
   @mixin mobile
-    padding: 24px 15px calc(24px - 18px) 15px
+    padding-top: 24px
+    padding-bottom: calc(24px - 18px)
 
 .text_block
-  margin-bottom: var(--text-margin)
+  margin-bottom: var(--text-after)
