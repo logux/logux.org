@@ -39,6 +39,13 @@ function toSlug (type) {
   return slugify(slug).toLowerCase()
 }
 
+function toSourceUrl ({ file, loc }) {
+  return file.replace(
+    /^.*\/logux-([^/]+)\/(.*)$/,
+    'https://github.com/logux/$1/blob/master/$2'
+  ) + `#L${ loc.start.line }L${ loc.end.line }`
+}
+
 function byName (a, b) {
   if (CAPITALIZED.test(a.name) && !CAPITALIZED.test(b.name)) {
     return -1
@@ -243,6 +250,7 @@ function membersHtml (className, members, separator) {
         tag('h2', [
           tag('code', name, { noClass: true })
         ], {
+          sourceUrl: toSourceUrl(member.context),
           slug: (className + slugSep + member.name).toLowerCase()
         }),
         ...propTypeHtml(member.type),
@@ -298,6 +306,7 @@ function standaloneHtml (type, node) {
     tag('h2', [
       tag('code', name, { noClass: true })
     ], {
+      sourceUrl: toSourceUrl(node.context),
       slug: toSlug(node.name)
     }),
     ...ownType,

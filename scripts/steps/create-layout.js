@@ -167,6 +167,13 @@ function converter () {
             }, node.children)
           ]
         }
+        if (node.sourceUrl) {
+          node.children = [
+            tag('a', 'title_source', {
+              href: node.sourceUrl, title: 'Source code'
+            })
+          ].concat(node.children)
+        }
         if (node.editUrl) {
           node.tagName = 'div'
           node.children = [
