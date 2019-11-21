@@ -9,9 +9,9 @@
     width: 100%
 
   @mixin mobile
-    width: calc(100% + var(--list-side) + var(--list-side))
-    margin-right: calc(var(--list-side) * -1)
-    margin-left: calc(var(--list-side) * -1)
+    width: calc(100% + var(--text-side) + var(--text-side))
+    margin-right: calc(var(--text-side) * -1)
+    margin-left: calc(var(--text-side) * -1)
 
   th,
   td
@@ -35,4 +35,4 @@
       padding: 6px 12px 6px 0
 
       &:first-child
-        padding-left: var(--list-side)
+        padding-left: var(--text-side)

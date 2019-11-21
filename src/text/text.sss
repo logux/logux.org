@@ -1,15 +1,15 @@
 html
   --text-after: 18px
-  --list-side: 30px
+  --text-side: 30px
 
   @mixin mobile
     --text-after: 15px
-    --list-side: 15px
+    --text-side: 15px
 
 .text
   box-sizing: border-box
   width: 100%
-  padding: var(--list-side)
+  padding: var(--text-side)
 
   @mixin no-mobile
     max-width: 900px
