@@ -47,11 +47,13 @@ a.footer_lurkers
     display: block
     width: 108px
     height: 47px
-    background-image: url(./lurkers-light.svg)
     background-size: 100%
 
     &:hover
       background-color: transparent
+
+  @mixin light-no-mobile
+    background-image: url(./lurkers-light.svg)
 
   @mixin dark-no-mobile
     background-image: url(./lurkers-dark.svg)
