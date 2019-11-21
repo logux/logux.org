@@ -1,6 +1,7 @@
 let remarkHighlight = require('remark-highlight.js')
 let remarkRehype = require('remark-rehype')
 let { readFile } = require('fs').promises
+let unistFlatmap = require('unist-util-flatmap')
 let remarkParse = require('remark-parse')
 let unistVisit = require('unist-util-visit')
 let rehypeRaw = require('rehype-raw')
@@ -31,12 +32,37 @@ function htmlFixer (file) {
   }
 }
 
+function html (value) {
+  return { type: 'html', value }
+}
+
+function npmToYarn (value) {
+  return value
+    .replace(/^npm i(nstall)? /, 'yarn add ')
+    .replace(/--save-dev/, '--dev')
+    .replace(/^npm /, 'yarn ')
+}
+
 async function readGuides () {
   let files = await globby('*/*.md', { cwd: ROOT, ignore: 'node_modules' })
   let guides = await Promise.all(files.map(async file => {
     let title = ''
     function convertor () {
       return tree => {
+        unistFlatmap(tree, node => {
+          if (node.lang === 'sh' && node.value.startsWith('npm ')) {
+            return [
+              html('<details><summary>npm</summary>'),
+              node,
+              html('</details>'),
+              html('<details><summary>Yarn</summary>'),
+              { type: 'code', lang: 'sh', value: npmToYarn(node.value) },
+              html('</details>')
+            ]
+          } else {
+            return [node]
+          }
+        })
         unistVisit(tree, 'heading', node => {
           if (node.depth === 1) {
             title = node.children[0].value
