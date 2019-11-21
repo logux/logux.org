@@ -117,6 +117,11 @@ function converter () {
       let cls = node.properties.className || []
       if (node.tagName === 'article') {
         node.properties.className = ['text']
+        node.children.push({
+          type: 'element',
+          tagName: 'hr',
+          properties: { className: ['line'] }
+        })
       } else if (node.tagName === 'p') {
         node.properties.className = ['text_block']
       } else if (node.tagName === 'ul' || node.tagName === 'ol') {

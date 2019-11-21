@@ -9,16 +9,11 @@ html
 .text
   box-sizing: border-box
   width: 100%
-  padding: var(--text-side)
+  padding: 0 var(--text-side)
 
   @mixin no-mobile
     max-width: 900px
-    padding-top: 39px
-    padding-bottom: calc(69px - var(--text-after))
     margin: 0 auto
-
-  @mixin mobile
-    padding-bottom: calc(36px - var(--text-after))
 
 .text_block
   margin-bottom: var(--text-after)
