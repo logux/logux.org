@@ -18,8 +18,6 @@
     border-color: var(--base-title)
 
 .switcher_tabs button
-  padding: 3px 12px
-  margin: 0 -12px
   border-radius: 4px
 
   &[aria-selected]
@@ -29,5 +27,10 @@
       cursor: default
       background: transparent
 
+  @mixin no-mobile
+    padding: 3px 12px
+    margin: 0 -12px
+
   @mixin mobile
     padding: 6px 9px
+    margin: 0 -9px
