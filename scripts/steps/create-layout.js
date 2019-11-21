@@ -84,14 +84,19 @@ function toText (nodes) {
 function switcherToHTML (id, switchers) {
   return tag('div', 'switcher', [
     tag('div', 'switcher_tabs', { role: 'tablist' }, switchers.map((s, i) => {
-      return tag('button', {
-        'id': `sw${ id }tab${ i }`,
-        'role': 'tab',
-        'tabindex': i !== 0 && '-1',
-        'aria-controls': `sw${ id }tab${ i }body`,
-        'aria-selected': i === 0 && 'true'
+      return tag('li', {
+        className: i === 0 ? ['is-open'] : [],
+        role: 'presentation'
       }, [
-        { type: 'text', value: s[0] }
+        tag('button', {
+          'id': `sw${ id }tab${ i }`,
+          'role': 'tab',
+          'tabindex': i !== 0 && '-1',
+          'aria-controls': `sw${ id }tab${ i }body`,
+          'aria-selected': i === 0 && 'true'
+        }, [
+          { type: 'text', value: s[0] }
+        ])
       ])
     })),
     ...switchers.map((s, i) => {

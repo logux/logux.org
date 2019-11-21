@@ -18,17 +18,16 @@ function htmlFixer (file) {
       {
         type: 'element',
         tagName: 'article',
-        children: tree.children,
-        properties: { }
+        properties: { },
+        children: tree.children.filter(i => {
+          if (i.tagName === 'h1') {
+            i.editUrl = `https://github.com/logux/logux/edit/master/${ file }`
+            i.noSlug = true
+          }
+          return i.type !== 'text' || i.value !== '\n'
+        })
       }
     ]
-    tree.children = tree.children.filter(i => {
-      if (i.tagName === 'h1') {
-        i.editUrl = `https://github.com/logux/logux/edit/master/${ file }`
-        i.noSlug = true
-      }
-      return i.type !== 'text' || i.value !== '\n'
-    })
   }
 }
 

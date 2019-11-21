@@ -7,7 +7,9 @@ function keepScroll (el, cb) {
 
 function changeTab (from, to) {
   from.removeAttribute('aria-selected')
+  from.parentNode.classList.remove('is-open')
   to.setAttribute('aria-selected', 'true')
+  to.parentNode.classList.add('is-open')
   from.setAttribute('tabindex', '-1')
   to.removeAttribute('tabindex')
   return to
@@ -78,15 +80,16 @@ let switchers = document.querySelectorAll('.switcher')
 
 for (let switcher of switchers) {
   let tabs = switcher.children[0]
-  let firstTab = tabs.children[0]
-  let lastTab = tabs.children[tabs.children.length - 1]
+  let firstTab = tabs.children[0].children[0]
+  let lastTab = tabs.children[tabs.children.length - 1].children[0]
   let currentTab = firstTab
 
   let sections = Array.from(switcher.children).slice(1)
   let currentSection = sections[0]
   let values = []
 
-  for (let tab of tabs.children) {
+  for (let li of tabs.children) {
+    let tab = li.children[0]
     let section = findByAttr(sections, 'aria-labelledby', tab.id)
     values.push(tab.innerText)
     addTo(byValue, tab.innerText, tab)
@@ -116,10 +119,18 @@ for (let switcher of switchers) {
       focusOnce(currentSection)
     },
     ArrowRight () {
-      clickOnTab(currentTab.nextSibling || firstTab)
+      if (currentTab === lastTab) {
+        clickOnTab(firstTab)
+      } else {
+        clickOnTab(currentTab.parentNode.nextSibling.children[0])
+      }
     },
     ArrowLeft () {
-      clickOnTab(currentTab.previousSibling || lastTab)
+      if (currentTab === firstTab) {
+        clickOnTab(lastTab)
+      } else {
+        clickOnTab(currentTab.parentNode.previousSibling.children[0])
+      }
     },
     Home () {
       clickOnTab(firstTab)

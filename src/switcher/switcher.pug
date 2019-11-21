@@ -5,15 +5,16 @@ mixin switcher(...tabs)
   - switcher += 1
   - section = 0
   .switcher
-    .switcher_tabs( role="tablist" )
+    ul.switcher_tabs( role="tablist" )
       each tab, i in tabs
-        button(
-          role="tab"
-          aria-selected=i === 0 && "true"
-          aria-controls='sw' + switcher + 'tab' + (i + 1) + 'body'
-          tabindex=i !== 0 && '-1'
-          id='sw' + switcher + 'tab' + (i + 1)
-        )= tab
+        li( role="presentation" class=i === 0 && 'is-open'  )
+          button(
+            role="tab"
+            aria-selected=i === 0 && "true"
+            aria-controls='sw' + switcher + 'tab' + (i + 1) + 'body'
+            tabindex=i !== 0 && '-1'
+            id='sw' + switcher + 'tab' + (i + 1)
+          )= tab
     block
 
 mixin switcher_section

@@ -2,16 +2,28 @@
   display: flex
   margin-bottom: var(--text-after)
   color: var(--base-title)
+  list-style: none
   border-bottom: 1px solid var(--base-border)
 
-.switcher_tabs button
-  padding: 6px 15px
+.switcher_tabs li
+  position: relative
+  padding-top: 3px
+  margin-left: 30px
   border-bottom: 3px solid transparent
-  border-radius: 4px 4px 0 0
+
+  &:first-child
+    margin-left: 0
+
+  &.is-open
+    border-color: var(--base-title)
+
+.switcher_tabs button
+  padding: 3px 12px
+  margin: 0 -12px
+  border-radius: 4px
 
   &[aria-selected]
     font-weight: bold
-    border-color: var(--base-title)
 
     &:hover
       cursor: default
