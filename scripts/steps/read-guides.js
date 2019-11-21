@@ -14,6 +14,14 @@ const ROOT = join(__dirname, '..', '..', '..', 'logux')
 
 function htmlFixer (file) {
   return tree => {
+    tree.children = [
+      {
+        type: 'element',
+        tagName: 'article',
+        children: tree.children,
+        properties: { }
+      }
+    ]
     tree.children = tree.children.filter(i => {
       if (i.tagName === 'h1') {
         i.editUrl = `https://github.com/logux/logux/edit/master/${ file }`

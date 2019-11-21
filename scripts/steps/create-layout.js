@@ -115,7 +115,9 @@ function converter () {
   return tree => {
     unistVisit(tree, 'element', (node, index, parent) => {
       let cls = node.properties.className || []
-      if (node.tagName === 'p') {
+      if (node.tagName === 'article') {
+        node.properties.className = ['text']
+      } else if (node.tagName === 'p') {
         node.properties.className = ['text_block']
       } else if (node.tagName === 'ul' || node.tagName === 'ol') {
         node.properties.className = ['list']
@@ -215,7 +217,8 @@ async function createLayout (uikit) {
       .stringify(fixed)
     return layout
       .replace(/<title>[^<]+/, `<title>${ title } / Logux`)
-      .replace(/<article([^>]+)>/, `$&${ html }`)
+      .replace(/<\/article>/, '')
+      .replace(/<article([^>]+)>/, `${ html }`)
   }
 
   return {

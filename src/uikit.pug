@@ -39,6 +39,7 @@ html( lang="en" )
         p.text_block Logux <strong>actions</strong> are very similar to <a href="#">Redux actions</a>. JSON objects describe what was changed in <a href="#">the application state</a>. Logux Core provides <code class="code">BaseNode</code> class, which will synchronize actions between two nodes. <code class="code">ClientNode</code> and <code class="code">ServerNode</code> classes extend this class with small behaviour changes.
         +switcher('Node.js', 'Ruby on Rails')
           +switcher_section
+            p.text_block You can use only string, number, boolean, null, array, and object as values.
             ol.list
               li
                 p.text_block They must have type property with a string value.
@@ -107,7 +108,21 @@ html( lang="en" )
             td Do not show warning when using <code class="code">ws://</code> in production
         h3#returns.title
           a.title_link( href="#returns" title="Direct link to section" ) Returns
-        p.text_block <code><a href="#">Promise</a>&lt;<a href="#">boolean</a>></code>
+        p.text_block <code><a href="#">Promise</a>&lt;<a href="#">boolean</a></code>
+
+      article.text
+        h1#h1.title
+          a.title_link( href="#h1" title="Direct link to section" )
+            | Title 1
+        p.text_block Logux architecture was designed to be peer-to-peer and flexible. You can build different architecture on top of core concepts depends on your needs.
+        h2#h2.title
+          a.title_link( href="#h2" title="Direct link to section" )
+            | Title 2
+        p.text_block Logux architecture was designed to be peer-to-peer and flexible. You can build different architecture on top of core concepts depends on your needs.
+        h3#h3.title
+          a.title_link( href="#h3" title="Direct link to section" )
+            | Title 3
+        p.text_block Logux architecture was designed to be peer-to-peer and flexible. You can build different architecture on top of core concepts depends on your needs.
 
       footer.footer
         section.footer_section

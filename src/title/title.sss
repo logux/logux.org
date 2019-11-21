@@ -1,20 +1,27 @@
 .title
+  line-height: 1.2
   color: var(--base-title)
 
 h1.title
-  margin-bottom: 24px
-  font-size: 48px
+  @mixin no-mobile
+    margin-top: 39px
+    margin-bottom: 39px
+    font-size: 48px
 
   @mixin mobile
-    margin-bottom: 21px
+    margin-top: 24px
+    margin-bottom: 24px
     font-size: 24px
 
 h2.title
-  margin: 39px 0 21px 0
-  font-size: 24px
+  @mixin no-mobile
+    margin-top: 39px
+    margin-bottom: 24px
+    font-size: 24px
 
   @mixin mobile
-    margin: 18px 0 12px 0
+    margin-top: 24px
+    margin-bottom: 21px
     font-size: 18px
 
   code
@@ -24,10 +31,14 @@ h2.title
       font-size: 15px
 
 h3.title
-  margin-bottom: 21px
   font-size: inherit
 
+  @mixin no-mobile
+    margin-top: 24px
+    margin-bottom: 21px
+
   @mixin mobile
+    margin-top: 21px
     margin-bottom: 18px
 
 a.title_link
@@ -46,7 +57,7 @@ a.title_link
     left: calc(-24px - 15px)
     display: none
     width: 24px
-    height: 24px
+    height: 24px 0
     content: ""
     background-image: url(./link.svg)
     background-size: 100%
