@@ -44,7 +44,9 @@ function npmToYarn (value) {
 }
 
 async function readGuides () {
-  let files = await globby('*/*.md', { cwd: ROOT, ignore: 'node_modules' })
+  let files = await globby('**/*.md', {
+    cwd: ROOT, ignore: ['node_modules', 'README.md']
+  })
   let guides = await Promise.all(files.map(async file => {
     let title = ''
     function convertor () {

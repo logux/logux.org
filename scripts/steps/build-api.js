@@ -342,7 +342,7 @@ module.exports = async function buildApi (assets, layout, title, jsdoc) {
 
   await makeDir(dirname(path))
   let tree = toTree(jsdoc)
-  let html = await layout.api(title, tree)
+  let html = await layout.api(title, `/${ file }/`, tree)
   await writeFile(path, html)
   assets.add(path)
 

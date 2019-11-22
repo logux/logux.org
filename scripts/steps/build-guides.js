@@ -1,4 +1,4 @@
-let { join, dirname } = require('path')
+let { join, dirname, sep } = require('path')
 let { writeFile } = require('fs').promises
 let capitalize = require('capitalize')
 let makeDir = require('make-dir')
@@ -7,11 +7,27 @@ let wrap = require('../lib/spinner')
 
 const DIST = join(__dirname, '..', '..', 'dist')
 
+function dirToTitle (dir) {
+  return capitalize(dir)
+    .replace(/-\w/, i => ' ' + i.slice(1).toUpperCase())
+    .replace('Ws', 'Web Socket')
+    .replace('Backend', 'Back-end')
+}
+
 async function buildGuides (assets, layout, guides) {
   await Promise.all(guides.map(async page => {
-    let title = `${ page.title } / ${ capitalize(dirname(page.file)) }`
-    let html = await layout.guide(title, page.tree)
-    let path = join(DIST, join(page.file.replace(/\.md$/, ''), 'index.html'))
+    let title, categoryUrl
+    let dirs = join(page.file.replace(/\.md$/, ''))
+    if (dirname(page.file) === 'recipes') {
+      categoryUrl = '/recipes/authentication/'
+    } else if (dirname(dirname(page.file)) === 'protocols') {
+      categoryUrl = '/protocols/ws/spec/'
+    } else {
+      categoryUrl = '/guide/architecture/core/'
+    }
+    title = dirs.split(sep).reverse().map(i => dirToTitle(i)).join(' / ')
+    let html = await layout.guide(title, categoryUrl, page.tree)
+    let path = join(DIST, dirs, 'index.html')
     await makeDir(dirname(path))
     await writeFile(path, html)
     assets.add(path)

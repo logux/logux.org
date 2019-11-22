@@ -9,17 +9,24 @@ let wrap = require('../lib/spinner')
 
 function cleaner (removeAssets) {
   return tree => {
-    unistVisit(tree, 'element', i => {
-      if (i.tagName === 'article') {
-        i.children = []
+    unistVisit(tree, 'element', node => {
+      let cls = node.properties.className || []
+      if (node.tagName === 'article') {
+        node.children = []
+      } else if (node.tagName === 'a') {
+        if (cls.some(i => i === 'menu_link')) {
+          node.properties.className = cls.filter(i => i !== 'is-current')
+        }
+      } else if (cls[0] === 'submenu') {
+        node.children = []
       }
     })
     if (!removeAssets) return tree
-    return unistFilter(tree, 'element', i => {
-      let props = i.properties || {}
-      if (i.tagName === 'script') {
+    return unistFilter(tree, 'element', node => {
+      let props = node.properties || {}
+      if (node.tagName === 'script') {
         return !removeAssets.test(props.src)
-      } else if (i.tagName === 'link' && props.rel[0] === 'stylesheet') {
+      } else if (node.tagName === 'link' && props.rel[0] === 'stylesheet') {
         return !removeAssets.test(props.href)
       } else {
         return true
@@ -217,7 +224,7 @@ async function createLayout (uikit) {
   let guideHtml = await cleanPage(uikit)
   let apiHtml = await cleanPage(uikit, /\/guide\./)
 
-  async function put (layout, title, tree) {
+  async function put (layout, categoryUrl, title, tree) {
     let fixed = await unified()
       .use(converter)
       .use(checker, title)
@@ -226,17 +233,21 @@ async function createLayout (uikit) {
       .use(rehypeStringify)
       .stringify(fixed)
     return layout
+      .replace(
+        `class="menu_link" href="${ categoryUrl }"`,
+        `class="menu_link is-current" href="${ categoryUrl }"`
+      )
       .replace(/<title>[^<]+/, `<title>${ title } / Logux`)
       .replace(/<\/article>/, '')
       .replace(/<article([^>]+)>/, `${ html }`)
   }
 
   return {
-    async guide (title, tree) {
-      return put(guideHtml, title, tree)
+    async guide (title, categoryUrl, tree) {
+      return put(guideHtml, categoryUrl, title, tree)
     },
-    async api (title, tree) {
-      return put(apiHtml, title, tree)
+    async api (title, categoryUrl, tree) {
+      return put(apiHtml, categoryUrl, title, tree)
     }
   }
 }
