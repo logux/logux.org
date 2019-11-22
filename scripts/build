@@ -11,10 +11,10 @@ let compressFiles = require('./steps/compress-files')
 let compileAssets = require('./steps/compile-assets')
 let repackScripts = require('./steps/repack-scripts')
 let createLayout = require('./steps/create-layout')
-let buildGuides = require('./steps/build-guides')
-let readGuides = require('./steps/read-guides')
 let updateHtml = require('./steps/update-html')
+let buildDocs = require('./steps/build-docs')
 let readJsdoc = require('./steps/read-jsdoc')
+let readDocs = require('./steps/read-docs')
 let buildApi = require('./steps/build-api')
 
 async function prepareHtml () {
@@ -40,7 +40,7 @@ async function prepareContent () {
     downloadProject('logux-redux')
   ])
   let [guides, nodeJsdoc, webJsdoc] = await Promise.all([
-    readGuides(),
+    readDocs(),
     readJsdoc('logux-server', 'logux-core'),
     readJsdoc('logux-client', 'logux-redux', 'logux-core')
   ])
@@ -53,7 +53,7 @@ async function build () {
     prepareContent()
   ])
   await Promise.all([
-    buildGuides(assets, layout, guides),
+    buildDocs(assets, layout, guides),
     buildApi(assets, layout, 'Node API', nodeJsdoc),
     buildApi(assets, layout, 'Web API', webJsdoc)
   ])

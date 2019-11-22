@@ -14,7 +14,7 @@ function dirToTitle (dir) {
     .replace('Backend', 'Back-end')
 }
 
-async function buildGuides (assets, layout, guides) {
+async function buildDocs (assets, layout, guides) {
   await Promise.all(guides.map(async page => {
     let title, categoryUrl
     let dirs = join(page.file.replace(/\.md$/, ''))
@@ -26,7 +26,7 @@ async function buildGuides (assets, layout, guides) {
       categoryUrl = '/guide/architecture/core/'
     }
     title = dirs.split(sep).reverse().map(i => dirToTitle(i)).join(' / ')
-    let html = await layout.guide(title, categoryUrl, page.tree)
+    let html = await layout.doc(categoryUrl, title, page.tree)
     let path = join(DIST, dirs, 'index.html')
     await makeDir(dirname(path))
     await writeFile(path, html)
@@ -34,4 +34,4 @@ async function buildGuides (assets, layout, guides) {
   }))
 }
 
-module.exports = wrap(buildGuides, 'Building guides HTML')
+module.exports = wrap(buildDocs, 'Building docs HTML')

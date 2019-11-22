@@ -43,7 +43,7 @@ function npmToYarn (value) {
     .replace(/^npm /, 'yarn ')
 }
 
-async function readGuides () {
+async function readDocs () {
   let files = await globby('**/*.md', {
     cwd: ROOT, ignore: ['node_modules', 'README.md']
   })
@@ -92,4 +92,4 @@ async function readGuides () {
   return guides
 }
 
-module.exports = wrap(readGuides, 'Reading guides')
+module.exports = wrap(readDocs, 'Reading docs')

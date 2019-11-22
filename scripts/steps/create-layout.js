@@ -243,10 +243,10 @@ async function createLayout (uikit) {
   }
 
   return {
-    async guide (title, categoryUrl, tree) {
+    async doc (categoryUrl, title, tree) {
       return put(guideHtml, categoryUrl, title, tree)
     },
-    async api (title, categoryUrl, tree) {
+    async api (categoryUrl, title, tree) {
       return put(apiHtml, categoryUrl, title, tree)
     }
   }
