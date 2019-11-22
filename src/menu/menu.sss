@@ -1,7 +1,95 @@
 .menu
-  height: 100%
-  background: var(--base-panel)
-  border-right: 1px solid var(--base-border)
+  position: relative
+  box-sizing: border-box
+  display: flex
+  flex-direction: column
+  min-height: 100%
+  padding: 15px 9px
+  text-align: center
+  list-style: none
+
+  @mixin mobile
+    padding-bottom: 70px
+
+.menu_hidden
+  @mixin mobile
+    display: none
+
+a.menu_skip
+  position: absolute
+
+  &:not(:focus)
+    right: 100%
+    opacity: 0
+
+  &:focus
+    top: 9px
+    right: 9px
+    left: 9px
+    height: 39px
+    padding: 0 12px
+    line-height: 39px
+    color: var(--base-title)
+    white-space: nowrap
+    background: var(--base-panel)
+    border-radius: 4px
+
+a.menu_home
+  display: block
+  padding: 9px 0
+  margin-top: -9px
+  font-family: Kurbanistika, sans-serif
+  font-size: 38px
+  font-weight: normal
+  line-height: 1
+  color: var(--base-title)
+  text-transform: lowercase
+  border-radius: 4px
+
+.menu_home::before
+  display: block
+  width: 78px
+  height: 78px
+  margin: 7px auto
+  content: ""
+
+  @mixin light
+    background: url(./logo-light.svg)
 
   @mixin dark
-    border-right-color: var(--base-panel)
+    background: url(./logo-dark.svg)
+
+a.menu_link
+  display: block
+  height: 39px
+  font-weight: bold
+  line-height: 39px
+  color: var(--base-title)
+  border-radius: 4px
+
+  &:not(.is-open):hover
+    font-family: Kurbanistika, "Work Sans", sans-serif
+    font-size: 25px
+    font-weight: normal
+    text-transform: lowercase
+
+  &.is-open
+    color: #000
+    background: var(--base-gradient)
+
+.menu li:not(.menu_hidden)
+  padding-top: 9px
+
+.menu_bottom
+  display: flex
+  flex-direction: column
+  flex-grow: 1
+  justify-content: flex-end
+
+.menu_separator
+  height: 1px
+  margin: 15px 0 6px 0
+  background: var(--base-border)
+
+  &:first-child
+    margin: 6px 0 15px 0

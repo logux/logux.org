@@ -1,0 +1,38 @@
+.submenu
+  padding: 15px 9px
+  font-size: 16px
+  list-style: none
+
+.submenu_text,
+a.submenu_link
+  height: 30px
+  padding: 0 9px
+  overflow: hidden
+  line-height: 30px
+  color: var(--base-title)
+  text-overflow: ellipsis
+  white-space: nowrap
+
+.submenu_link
+  display: block
+  border-radius: 4px
+
+  &.is-open
+    color: #000
+    background: var(--base-gradient)
+
+.submenu_title
+  padding: 3px 0
+  margin-top: 15px
+  font-size: 18px
+  font-weight: bold
+
+  li:first-child &
+    margin-top: 0
+
+.submenu ul,
+.submenu ol
+  list-style: none
+
+.submenu li li
+  padding: 3px 0

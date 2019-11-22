@@ -13,12 +13,23 @@ html
   --base-above-focus:
     0 2px 8px 3px rgba(#000, 0.15),
     var(--base-focus)
+  --base-gradient:
+    linear-gradient(
+      to right,
+      var(--base-light-accent),
+      var(--base-accent)
+    )
 
   color-scheme: light dark
   font-family: "Work Sans", sans-serif
   font-size: 18px
   color: var(--base-text)
   background: var(--base-background)
+  scroll-padding-top: 12px
+  scroll-behavior: smooth
+
+  @media (prefers-reduced-motion: reduce)
+    scroll-behavior: auto
 
   @mixin mobile
     font-size: 16px
@@ -27,7 +38,7 @@ html
     --base-text: #bbb
     --base-title: #fff
     --base-background: var(--base-black)
-    --base-panel: #353535
+    --base-panel: #2a2a2a
     --base-border: #3e3e3e
     --base-above:
       0 0 0 rgba(#000, 0),
