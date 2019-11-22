@@ -1,20 +1,22 @@
 html
   --scroll-color: #aaa
 
-  scrollbar-color: var(--scroll-color) transparent
-  scrollbar-width: thin
+  @mixin no-mobile
+    scrollbar-color: var(--scroll-color) transparent
+    scrollbar-width: thin
 
-  @mixin dark
-    --scroll-color: var(--base-border)
+    @mixin dark
+      --scroll-color: var(--base-border)
 
-::-webkit-scrollbar
-  width: 8px
-  height: 8px
-  background: transparent
+@mixin no-mobile
+  ::-webkit-scrollbar
+    width: 8px
+    height: 8px
+    background: transparent
 
-::-webkit-scrollbar-thumb
-  background: var(--scroll-color)
-  -webkit-border-radius: 1ex
+  ::-webkit-scrollbar-thumb
+    background: var(--scroll-color)
+    -webkit-border-radius: 1ex
 
 @media (width <= 1100px)
   body
