@@ -235,7 +235,7 @@ async function createLayout (uikit) {
     return layout
       .replace(
         `class="menu_link" href="${ categoryUrl }"`,
-        `class="menu_link is-current" href="${ categoryUrl }"`
+        'class="menu_link is-current"'
       )
       .replace(/<title>[^<]+/, `<title>${ title } / Logux`)
       .replace(/<\/article>/, '')
