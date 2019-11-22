@@ -15,3 +15,8 @@ html
 ::-webkit-scrollbar-thumb
   background: var(--scroll-color)
   -webkit-border-radius: 1ex
+
+@media (width <= 1100px)
+  body
+    &.has-no-scroll
+      overflow: hidden
