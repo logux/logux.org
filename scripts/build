@@ -33,7 +33,7 @@ async function prepareHtml () {
 
 async function prepareContent () {
   await Promise.all([
-    downloadProject('logux'),
+    downloadProject('logux-docs'),
     downloadProject('logux-core'),
     downloadProject('logux-server'),
     downloadProject('logux-client'),
