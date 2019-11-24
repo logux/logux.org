@@ -1,5 +1,5 @@
 import { parentPort, workerData } from 'worker_threads'
-import { Extract } from 'unzipper'
+import unzipper from 'unzipper'
 import { get } from 'https'
 
 function download (url, body) {
@@ -15,7 +15,7 @@ function download (url, body) {
 let [url, path] = workerData
 
 download(url, res => {
-  let extract = Extract({ path })
+  let extract = unzipper.Extract({ path })
   res.pipe(extract)
   res.on('error', e => {
     throw e
