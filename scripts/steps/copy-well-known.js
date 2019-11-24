@@ -5,18 +5,17 @@ import makeDir from 'make-dir'
 import { SRC, DIST } from '../lib/dirs.js'
 import wrap from '../lib/spinner.js'
 
+let FILES = ['logo.svg', 'favicon.ico', 'robots.txt', 'security.txt']
+
 async function copyWellKnown (assets) {
-  let from = join(SRC, 'well-known')
-  let to = join(DIST, '.well-known')
-  let files = ['favicon.ico', 'robots.txt']
   await makeDir(join(DIST, '.well-known'))
-  await Promise.all(files
-    .map(i => fs.copyFile(join(from, i), join(DIST, i)))
-    .concat([
-      fs.copyFile(join(from, 'security.txt.asc'), join(to, 'security.txt'))
-    ]))
-  for (let file of files) assets.add(join(DIST, file))
-  assets.add(join(to, 'security.txt'))
+  await Promise.all(FILES.map(i => {
+    let from = join(SRC, 'well-known', i)
+    let to = join(DIST, i)
+    if (i === 'security.txt') to = join(DIST, '.well-known', i)
+    assets.add(to)
+    return fs.copyFile(from, to)
+  }))
 }
 
 export default wrap(copyWellKnown, 'Copying static files')
