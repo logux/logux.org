@@ -7,7 +7,7 @@ import downloadProject from './steps/download-project.js'
 import findFilesInCSS from './steps/find-files-in-css.js'
 import cleanBuildDir from './steps/clean-build-dir.js'
 import copyWellKnown from './steps/copy-well-known.js'
-// import compressFiles from './steps/compress-files.js'
+import compressFiles from './steps/compress-files.js'
 import compileAssets from './steps/compile-assets.js'
 import repackScripts from './steps/repack-scripts.js'
 import createLayout from './steps/create-layout.js'
@@ -57,7 +57,7 @@ async function build () {
     buildApi(assets, layout, 'Node API', nodeJsdoc),
     buildApi(assets, layout, 'Web API', webJsdoc)
   ])
-  // await compressFiles(assets)
+  await compressFiles(assets)
 }
 
 build().catch(e => {
