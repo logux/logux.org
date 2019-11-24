@@ -4,7 +4,7 @@ steps:
     args:
       - install
       - --production
-      - --no-node-version-check
+      - --ignore-engines
   - name: 'gcr.io/cloud-builders/gcloud'
     args:
       - kms
