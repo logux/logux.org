@@ -4,6 +4,7 @@ steps:
     args:
       - install
       - --production
+      - --no-node-version-check
   - name: 'gcr.io/cloud-builders/gcloud'
     args:
       - kms
@@ -14,10 +15,12 @@ steps:
       - --keyring=secrets
       - --key=password
   - name: node:13
-    entrypoint: yarn
+    entrypoint: node
     args:
-      - build
+      - --experimental-modules
+      - ./script/build
     env:
+      - 'NODE_ENV=production'
       - 'CI=1'
   - name: 'gcr.io/cloud-builders/docker'
     args:
@@ -39,7 +42,10 @@ steps:
       - --region=us-east1
       - --platform=managed
   - name: node:13
-    entrypoint: ./scripts/update-cdn
+    entrypoint: node
+    args:
+      - --experimental-modules
+      - ./scripts/update-cdn
   - name: 'gcr.io/cloud-builders/gcloud'
     entrypoint: ./scripts/clean-images
 images:
