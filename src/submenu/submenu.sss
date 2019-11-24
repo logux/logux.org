@@ -1,4 +1,5 @@
 .submenu
+  width: 100%
   padding: 15px 9px
   font-size: 16px
   list-style: none
@@ -13,6 +14,14 @@ a.submenu_link
   text-overflow: ellipsis
   white-space: nowrap
 
+  .submenu > li > &
+    margin-top: 15px
+    font-size: 18px
+    font-weight: bold
+
+  .submenu > li:first-child > &
+    margin-top: 0
+
 .submenu_link
   display: block
   border-radius: 4px
@@ -21,18 +30,12 @@ a.submenu_link
     color: #000
     background: var(--base-gradient)
 
-.submenu_title
-  padding-top: 3px
-  margin-top: 15px
-  font-size: 18px
-  font-weight: bold
-
-  li:first-child &
-    margin-top: 0
+.submenu_extra
+  opacity: 0.4
 
 .submenu ul,
 .submenu ol
   list-style: none
 
-.submenu li li
+.submenu li
   padding-top: 3px

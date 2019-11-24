@@ -26,7 +26,7 @@ async function buildDocs (assets, layout, guides) {
       categoryUrl = '/guide/architecture/core/'
     }
     title = dirs.split(sep).reverse().map(i => dirToTitle(i)).join(' / ')
-    let html = await layout.doc(categoryUrl, title, page.tree)
+    let html = await layout.doc(categoryUrl, [], title, page.tree)
     let path = join(DIST, dirs, 'index.html')
     await makeDir(dirname(path))
     await writeFile(path, html)

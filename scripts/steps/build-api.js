@@ -30,6 +30,12 @@ const SIMPLE_TYPES = new Set([
   'number',
   'any'
 ])
+const KINDS = [
+  ['Functions', i => i.kind === 'function'],
+  ['Callbacks', i => i.kind === 'typedef' && isCallback(i)],
+  ['Types', i => i.kind === 'typedef' && !isCallback(i)],
+  ['Constants', i => i.kind === 'constant']
+]
 
 let formatters = createFormatters()
 
@@ -53,6 +59,16 @@ function byName (a, b) {
     return 1
   } else {
     return a.name.localeCompare(b.name)
+  }
+}
+
+function byTypeAndName (a, b) {
+  if (a.kind === 'function' && b.kind !== 'function') {
+    return 1
+  } else if (a.kind !== 'function' && b.kind === 'function') {
+    return -1
+  } else {
+    return byName(a, b)
   }
 }
 
@@ -210,15 +226,7 @@ function propTypeHtml (type) {
 function membersHtml (className, members, separator) {
   let slugSep = separator === '#' ? '-' : separator
   return members
-    .sort((a, b) => {
-      if (a.kind === 'function' && b.kind !== 'function') {
-        return 1
-      } else if (a.kind !== 'function' && b.kind === 'function') {
-        return -1
-      } else {
-        return byName(a, b)
-      }
-    })
+    .sort(byTypeAndName)
     .map(member => {
       let name = [
         tag('span', className + separator, {
@@ -317,21 +325,60 @@ function isCallback (node) {
 }
 
 function toTree (jsdoc) {
-  return {
+  let tree = {
     type: 'root',
     children: jsdoc
       .filter(i => i.kind === 'class')
       .sort(byName)
       .map(i => classHtml(jsdoc, i))
-      .concat(listHtml('Functions', jsdoc.filter(i => i.kind === 'function')))
-      .concat(listHtml('Callbacks', jsdoc.filter(i => {
-        return i.kind === 'typedef' && isCallback(i)
-      })))
-      .concat(listHtml('Types', jsdoc.filter(i => {
-        return i.kind === 'typedef' && !isCallback(i)
-      })))
-      .concat(listHtml('Constants', jsdoc.filter(i => i.kind === 'constant')))
   }
+  for (let [title, filter] of KINDS) {
+    let items = jsdoc.filter(filter)
+    if (items.length > 0) {
+      tree.children.push(...listHtml(title, items))
+    }
+  }
+  return tree
+}
+
+function submenuName (node) {
+  return node.name + (node.kind === 'function' ? '()' : '')
+}
+
+function toSubmenu (jsdoc) {
+  let submenu = jsdoc
+    .filter(i => i.kind === 'class')
+    .sort(byName)
+    .map(cls => ({
+      code: cls.name,
+      link: '#' + cls.name.toLowerCase(),
+      ul: [
+        ...cls.members.static.sort(byTypeAndName).map(i => {
+          return {
+            code: '.' + submenuName(i),
+            link: '#' + (cls.name + '.' + i.name).toLowerCase()
+          }
+        }),
+        ...cls.members.instance.sort(byTypeAndName).map(i => {
+          return {
+            code: '#' + submenuName(i),
+            link: '#' + (cls.name + '-' + i.name).toLowerCase()
+          }
+        })
+      ]
+    }))
+  for (let [title, filter] of KINDS) {
+    let items = jsdoc.filter(filter)
+    if (items.length > 0) {
+      submenu.push({
+        text: title,
+        ul: items.map(i => {
+          return { code: submenuName(i), link: '#' + toSlug(i.name) }
+        })
+      })
+    }
+  }
+  return submenu
 }
 
 module.exports = async function buildApi (assets, layout, title, jsdoc) {
@@ -342,7 +389,8 @@ module.exports = async function buildApi (assets, layout, title, jsdoc) {
 
   await makeDir(dirname(path))
   let tree = toTree(jsdoc)
-  let html = await layout.api(`/${ file }/`, title, tree)
+  let submenu = toSubmenu(jsdoc)
+  let html = await layout.api(`/${ file }/`, submenu, title, tree)
   await writeFile(path, html)
   assets.add(path)
 

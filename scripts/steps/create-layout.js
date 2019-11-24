@@ -220,15 +220,70 @@ function converter () {
   }
 }
 
+function submenuText (node) {
+  if (node.code) {
+    let code = node.code
+    let text = []
+    if (code.startsWith('.') || code.startsWith('#')) {
+      text.push(tag('span', 'submenu_extra', [
+        { type: 'text', value: code.slice(0, 1) }
+      ]))
+      code = code.slice(1)
+    }
+    if (code.endsWith('()')) {
+      text.push(
+        { type: 'text', value: code.slice(0, -2) },
+        tag('span', 'submenu_extra', [{ type: 'text', value: '()' }])
+      )
+    } else {
+      text.push({ type: 'text', value: code })
+    }
+    return tag('code', { }, text)
+  } else {
+    return { type: 'text', value: node.text }
+  }
+}
+
+function generateSubmenu (links) {
+  return {
+    type: 'root',
+    children: links.map(i => {
+      let children = []
+      if (i.link) {
+        children.push(
+          tag('a', 'submenu_link', { href: i.link }, [submenuText(i)])
+        )
+      } else {
+        children.push(
+          tag('div', 'submenu_text', [submenuText(i)])
+        )
+      }
+      if (i.ul) {
+        children.push(
+          tag('ul', { }, i.ul.map(j => {
+            return tag('li', { }, [
+              tag('a', 'submenu_link', { href: j.link }, [submenuText(j)])
+            ])
+          }))
+        )
+      }
+      return tag('li', { }, children)
+    })
+  }
+}
+
 async function createLayout (uikit) {
   let guideHtml = await cleanPage(uikit)
   let apiHtml = await cleanPage(uikit, /\/guide\./)
 
-  async function put (layout, categoryUrl, title, tree) {
+  async function put (layout, categoryUrl, links, title, tree) {
     let fixed = await unified()
       .use(converter)
       .use(checker, title)
       .run(tree)
+    let submenu = await unified()
+      .use(rehypeStringify)
+      .stringify(generateSubmenu(links))
     let html = await unified()
       .use(rehypeStringify)
       .stringify(fixed)
@@ -237,17 +292,18 @@ async function createLayout (uikit) {
         `class="menu_link" href="${ categoryUrl }"`,
         'class="menu_link is-current"'
       )
+      .replace('<ul class="submenu">', '$&' + submenu)
       .replace(/<title>[^<]+/, `<title>${ title } / Logux`)
       .replace(/<\/article>/, '')
       .replace(/<article([^>]+)>/, `${ html }`)
   }
 
   return {
-    async doc (categoryUrl, title, tree) {
-      return put(guideHtml, categoryUrl, title, tree)
+    async doc (categoryUrl, links, title, tree) {
+      return put(guideHtml, categoryUrl, links, title, tree)
     },
-    async api (categoryUrl, title, tree) {
-      return put(apiHtml, categoryUrl, title, tree)
+    async api (categoryUrl, links, title, tree) {
+      return put(apiHtml, categoryUrl, links, title, tree)
     }
   }
 }
