@@ -12,7 +12,7 @@ import globby from 'globby'
 import { PROJECTS } from '../lib/dirs.js'
 import wrap from '../lib/spinner.js'
 
-const ROOT = join(PROJECTS, 'logux')
+const ROOT = join(PROJECTS, 'logux-docs')
 
 function htmlFixer (file) {
   return tree => {
