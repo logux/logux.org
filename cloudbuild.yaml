@@ -18,7 +18,7 @@ steps:
     entrypoint: node
     args:
       - --experimental-modules
-      - ./script/build
+      - ./scripts/build
     env:
       - 'NODE_ENV=production'
       - 'CI=1'
