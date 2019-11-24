@@ -1,23 +1,22 @@
-let { copyFile } = require('fs').promises
-let { join } = require('path')
-let makeDir = require('make-dir')
+import { promises as fs } from 'fs'
+import { join } from 'path'
+import makeDir from 'make-dir'
 
-let wrap = require('../lib/spinner')
-
-const DIST = join(__dirname, '..', '..', 'dist')
+import { SRC, DIST } from '../lib/dirs.js'
+import wrap from '../lib/spinner.js'
 
 async function copyWellKnown (assets) {
-  let wellFrom = join(__dirname, '..', '..', 'src', 'well-known')
-  let wellTo = join(DIST, '.well-known')
+  let from = join(SRC, 'well-known')
+  let to = join(DIST, '.well-known')
   let files = ['favicon.ico', 'robots.txt']
   await makeDir(join(DIST, '.well-known'))
   await Promise.all(files
-    .map(i => copyFile(join(wellFrom, i), join(DIST, i)))
+    .map(i => fs.copyFile(join(from, i), join(DIST, i)))
     .concat([
-      copyFile(join(wellFrom, 'security.txt.asc'), join(wellTo, 'security.txt'))
+      fs.copyFile(join(from, 'security.txt.asc'), join(to, 'security.txt'))
     ]))
   for (let file of files) assets.add(join(DIST, file))
-  assets.add(join(wellTo, 'security.txt'))
+  assets.add(join(to, 'security.txt'))
 }
 
-module.exports = wrap(copyWellKnown, 'Copying static files')
+export default wrap(copyWellKnown, 'Copying static files')

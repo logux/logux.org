@@ -1,11 +1,10 @@
-let { join, dirname, sep } = require('path')
-let { writeFile } = require('fs').promises
-let capitalize = require('capitalize')
-let makeDir = require('make-dir')
+import { join, dirname, sep } from 'path'
+import { promises as fs } from 'fs'
+import capitalize from 'capitalize'
+import makeDir from 'make-dir'
 
-let wrap = require('../lib/spinner')
-
-const DIST = join(__dirname, '..', '..', 'dist')
+import { DIST } from '../lib/dirs.js'
+import wrap from '../lib/spinner.js'
 
 function dirToTitle (dir) {
   return capitalize(dir)
@@ -29,9 +28,9 @@ async function buildDocs (assets, layout, guides) {
     let html = await layout.doc(categoryUrl, [], title, page.tree)
     let path = join(DIST, dirs, 'index.html')
     await makeDir(dirname(path))
-    await writeFile(path, html)
+    await fs.writeFile(path, html)
     assets.add(path)
   }))
 }
 
-module.exports = wrap(buildDocs, 'Building docs HTML')
+export default wrap(buildDocs, 'Building docs HTML')

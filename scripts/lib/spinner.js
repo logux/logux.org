@@ -1,18 +1,21 @@
-let Spinnies = require('spinnies')
-let { gray, green, bgWhite, bgGreen } = require('chalk')
+import Spinnies from 'spinnies'
+import chalk from 'chalk'
+
+const START = chalk.bgWhite.black(' START ')
+const DONE = chalk.bgGreen.black(' DONE  ')
 
 let spinner = new Spinnies({ succeedColor: 'white' })
 let lastId = 0
 
-let step
+export let step
 if (process.env.CI) {
   step = text => {
-    process.stdout.write(`${ bgWhite.black(' START ') } ${ text }\n`)
+    process.stdout.write(`${ START } ${ text }\n`)
     let start = Date.now()
     return () => {
       let time = (Date.now() - start + ' ms')
       process.stdout.write(
-        bgGreen.black(' DONE  ') + ' ' + green(text) + ' ' + gray(time) + '\n'
+        DONE + ' ' + chalk.green(text) + ' ' + chalk.gray(time) + '\n'
       )
     }
   }
@@ -24,12 +27,19 @@ if (process.env.CI) {
     spinner.add(id, { text })
     return () => {
       let time = Date.now() - start
-      spinner.succeed(id, { text: text + gray(` ${ time } ms`) })
+      spinner.succeed(id, { text: text + chalk.gray(` ${ time } ms`) })
     }
   }
 }
 
-function wrap (fn, text) {
+export async function run (text, fn) {
+  let end = step(text)
+  let result = await fn()
+  end()
+  return result
+}
+
+export default function wrap (fn, text) {
   return async (...args) => {
     let end = step(text)
     let result = await fn(...args)
@@ -37,14 +47,3 @@ function wrap (fn, text) {
     return result
   }
 }
-
-async function run (text, fn) {
-  let end = step(text)
-  let result = await fn()
-  end()
-  return result
-}
-
-module.exports = wrap
-module.exports.run = run
-module.exports.step = step

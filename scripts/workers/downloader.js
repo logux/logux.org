@@ -1,6 +1,6 @@
-let { parentPort, workerData } = require('worker_threads')
-let { Extract } = require('unzipper')
-let { get } = require('https')
+import { parentPort, workerData } from 'worker_threads'
+import { Extract } from 'unzipper'
+import { get } from 'https'
 
 function download (url, body) {
   get(url, res => {

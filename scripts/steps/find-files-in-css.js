@@ -1,8 +1,8 @@
-let { readFile } = require('fs').promises
-let postcssUrl = require('postcss-url')
-let postcss = require('postcss')
+import { promises as fs } from 'fs'
+import postcssUrl from 'postcss-url'
+import postcss from 'postcss'
 
-let wrap = require('../lib/spinner')
+import wrap from '../lib/spinner.js'
 
 async function findFilesInCSS (assets) {
   let collected = []
@@ -21,10 +21,10 @@ async function findFilesInCSS (assets) {
     }
   })
   await Promise.all(assets.get(/\.css$/).map(async file => {
-    let css = await readFile(file)
+    let css = await fs.readFile(file)
     await postcss([fileCollector]).process(css, { from: file })
   }))
   return collected
 }
 
-module.exports = wrap(findFilesInCSS, 'Generating preload list')
+export default wrap(findFilesInCSS, 'Generating preload list')

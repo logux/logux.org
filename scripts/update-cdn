@@ -1,13 +1,13 @@
 #!/usr/bin/env node
 
-let { readFile } = require('fs').promises
-let { request } = require('https')
-let { join } = require('path')
+import { promises as fs } from 'fs'
+import { request } from 'https'
+import { join } from 'path'
 
-let SECRETS_FILE = join(__dirname, '..', 'secrets.json')
+import { ROOT } from './lib/dirs.js'
 
 async function loadSecrets () {
-  return JSON.parse(await readFile(SECRETS_FILE))
+  return JSON.parse(await fs.readFile(join(ROOT, 'secrets.json')))
 }
 
 function callCloudflare (credentials, command, opts) {

@@ -1,5 +1,5 @@
-let { parentPort, workerData } = require('worker_threads')
-let { build } = require('documentation')
+import { parentPort, workerData } from 'worker_threads'
+import documentation from 'documentation'
 
 function trim (tree, classes) {
   return tree.filter(i => {
@@ -8,7 +8,7 @@ function trim (tree, classes) {
 }
 
 async function read (type, files) {
-  let tree = await build(files.flat(), { })
+  let tree = await documentation.build(files.flat(), { })
   for (let node of tree) {
     if (node.kind === 'class' && node.augments.length > 0) {
       let parentName = node.augments[0].name

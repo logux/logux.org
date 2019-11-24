@@ -1,17 +1,17 @@
-let { join, dirname, sep } = require('path')
-let createFormatters = require('documentation/src/output/util/formatters')
-let { writeFile } = require('fs').promises
-let remarkRehype = require('remark-rehype')
-let unistVisit = require('unist-util-visit')
-let lowlight = require('lowlight')
-let makeDir = require('make-dir')
-let slugify = require('slugify')
-let remark = require('remark')
+import { join, dirname, sep } from 'path'
+import documentation from 'documentation'
+import { promises as fs } from 'fs'
+import remarkRehype from 'remark-rehype'
+import unistVisit from 'unist-util-visit'
+import lowlight from 'lowlight'
+import makeDir from 'make-dir'
+import slugify from 'slugify'
+import remark from 'remark'
 
-let { step } = require('../lib/spinner')
+import { step } from '../lib/spinner.js'
+import { DIST } from '../lib/dirs.js'
 
 const CAPITALIZED = /^[A-Z]/
-const DIST = join(__dirname, '..', '..', 'dist')
 const EXTERNAL_TYPES = {
   'BunyanLogger': 'https://github.com/trentm/node-bunyan',
   'http.Server': 'https://nodejs.org/api/http.html#http_class_http_server'
@@ -37,7 +37,7 @@ const KINDS = [
   ['Constants', i => i.kind === 'constant']
 ]
 
-let formatters = createFormatters()
+let formatters = documentation.util.createFormatters()
 
 function toSlug (type) {
   let slug = type
@@ -381,7 +381,7 @@ function toSubmenu (jsdoc) {
   return submenu
 }
 
-module.exports = async function buildApi (assets, layout, title, jsdoc) {
+export default async function buildApi (assets, layout, title, jsdoc) {
   let file = title.replace(/\s/g, '-').toLowerCase()
   let path = join(DIST, file, 'index.html')
 
@@ -391,7 +391,7 @@ module.exports = async function buildApi (assets, layout, title, jsdoc) {
   let tree = toTree(jsdoc)
   let submenu = toSubmenu(jsdoc)
   let html = await layout.api(`/${ file }/`, submenu, title, tree)
-  await writeFile(path, html)
+  await fs.writeFile(path, html)
   assets.add(path)
 
   end()

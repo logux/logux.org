@@ -1,17 +1,18 @@
-let remarkHighlight = require('remark-highlight.js')
-let remarkRehype = require('remark-rehype')
-let { readFile } = require('fs').promises
-let unistFlatmap = require('unist-util-flatmap')
-let remarkParse = require('remark-parse')
-let unistVisit = require('unist-util-visit')
-let rehypeRaw = require('rehype-raw')
-let { join } = require('path')
-let unified = require('unified')
-let globby = require('globby')
+import { promises as fs } from 'fs'
+import remarkHighlight from 'remark-highlight.js'
+import remarkRehype from 'remark-rehype'
+import unistFlatmap from 'unist-util-flatmap'
+import remarkParse from 'remark-parse'
+import unistVisit from 'unist-util-visit'
+import rehypeRaw from 'rehype-raw'
+import { join } from 'path'
+import unified from 'unified'
+import globby from 'globby'
 
-let wrap = require('../lib/spinner')
+import { PROJECTS } from '../lib/dirs.js'
+import wrap from '../lib/spinner.js'
 
-const ROOT = join(__dirname, '..', '..', '..', 'logux')
+const ROOT = join(PROJECTS, 'logux')
 
 function htmlFixer (file) {
   return tree => {
@@ -78,7 +79,7 @@ async function readDocs () {
         })
       }
     }
-    let md = await readFile(join(ROOT, file))
+    let md = await fs.readFile(join(ROOT, file))
     let tree = await unified().use(remarkParse).parse(md)
     tree = await unified()
       .use(remarkHighlight)
@@ -92,4 +93,4 @@ async function readDocs () {
   return guides
 }
 
-module.exports = wrap(readDocs, 'Reading docs')
+export default wrap(readDocs, 'Reading docs')

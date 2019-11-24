@@ -1,13 +1,13 @@
-let { Worker } = require('worker_threads')
-let { join } = require('path')
-let globby = require('globby')
+import { Worker } from 'worker_threads'
+import { join } from 'path'
+import globby from 'globby'
 
-let { run } = require('../../lib/spinner')
+import { PROJECTS, WORKERS } from '../lib/dirs.js'
+import { run } from '../lib/spinner.js'
 
-const PROJECTS = join(__dirname, '..', '..', '..', '..')
-const WORKER = join(__dirname, 'worker.js')
+const JSDOCER = join(WORKERS, 'jsdocer.js')
 
-module.exports = async function readJsdoc (...projects) {
+export default async function readJsdoc (...projects) {
   let type = projects[0].replace(/^logux-/, '')
 
   let files = await run(`Looking for ${ type } JSDoc`, async () => {
@@ -22,7 +22,7 @@ module.exports = async function readJsdoc (...projects) {
 
   return run(`Generating ${ type } JSDoc`, async () => {
     return new Promise((resolve, reject) => {
-      let worker = new Worker(WORKER, { workerData: [type, files] })
+      let worker = new Worker(JSDOCER, { workerData: [type, files] })
       worker.on('message', resolve)
       worker.on('error', reject)
     })

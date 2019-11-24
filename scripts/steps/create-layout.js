@@ -1,11 +1,11 @@
-let rehypeStringify = require('rehype-stringify')
-let unistFilter = require('unist-util-filter')
-let rehypeParse = require('rehype-parse')
-let unistVisit = require('unist-util-visit')
-let slugify = require('slugify')
-let unified = require('unified')
+import rehypeStringify from 'rehype-stringify'
+import unistFilter from 'unist-util-filter'
+import rehypeParse from 'rehype-parse'
+import unistVisit from 'unist-util-visit'
+import slugify from 'slugify'
+import unified from 'unified'
 
-let wrap = require('../lib/spinner')
+import wrap from '../lib/spinner.js'
 
 function cleaner (removeAssets) {
   return tree => {
@@ -308,4 +308,4 @@ async function createLayout (uikit) {
   }
 }
 
-module.exports = wrap(createLayout, 'Creating layout')
+export default wrap(createLayout, 'Creating layout')

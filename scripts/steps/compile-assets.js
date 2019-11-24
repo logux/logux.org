@@ -1,20 +1,22 @@
-let { join } = require('path')
-let Bundler = require('parcel-bundler')
+import { join } from 'path'
+import Bundler from 'parcel-bundler'
 
-let wrap = require('../lib/spinner')
+import { SRC } from '../lib/dirs.js'
+import wrap from '../lib/spinner.js'
+
+function findAssets (step) {
+  return Array.from(step.childBundles).reduce((all, i) => {
+    return all.concat(findAssets(i))
+  }, [step.name])
+}
 
 async function compileAssets () {
-  let pugTemplate = join(__dirname, '..', '..', 'src', 'uikit.pug')
+  let pugTemplate = join(SRC, 'uikit.pug')
   let uikitBundler = new Bundler(pugTemplate, {
     sourceMaps: false,
     logLevel: 2
   })
   let bundle = await uikitBundler.bundle()
-  function findAssets (step) {
-    return Array.from(step.childBundles).reduce((all, i) => {
-      return all.concat(findAssets(i))
-    }, [step.name])
-  }
   let assets = findAssets(bundle)
   return {
     get (regexp) {
@@ -32,4 +34,4 @@ async function compileAssets () {
   }
 }
 
-module.exports = wrap(compileAssets, 'Compiling assets')
+export default wrap(compileAssets, 'Compiling assets')

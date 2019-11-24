@@ -1,16 +1,11 @@
-let { existsSync } = require('fs')
-let { promisify } = require('util')
-let { join } = require('path')
-let rimraf = promisify(require('rimraf'))
+import { join } from 'path'
+import del from 'del'
 
-let wrap = require('../lib/spinner')
-
-const DIST = join(__dirname, '..', '..', 'dist')
+import wrap from '../lib/spinner.js'
+import { DIST } from '../lib/dirs.js'
 
 async function cleanBuildDir () {
-  if (existsSync(DIST)) {
-    await rimraf(join(DIST, '*'))
-  }
+  await del(join(DIST, '*'))
 }
 
-module.exports = wrap(cleanBuildDir, 'Cleaning old files')
+export default wrap(cleanBuildDir, 'Cleaning old files')

@@ -1,14 +1,14 @@
-let { writeFile, readFile, unlink } = require('fs').promises
-let { extname, join } = require('path')
-let rehypeStringify = require('rehype-stringify')
-let unistFlatmap = require('unist-util-flatmap')
-let rehypeParse = require('rehype-parse')
-let unified = require('unified')
-let makeDir = require('make-dir')
+import { promises as fs } from 'fs'
+import { extname, join } from 'path'
+import rehypeStringify from 'rehype-stringify'
+import unistFlatmap from 'unist-util-flatmap'
+import rehypeParse from 'rehype-parse'
+import unified from 'unified'
+import makeDir from 'make-dir'
 
-let wrap = require('../lib/spinner')
+import { DIST } from '../lib/dirs.js'
+import wrap from '../lib/spinner.js'
 
-const DIST = join(__dirname, '..', '..', 'dist')
 const PRELOAD_TYPES = {
   '.woff2': 'font',
   '.svg': 'image'
@@ -20,7 +20,7 @@ function tag (tagName, properties) {
 
 async function updateHtml (assets, manifest, preloadFiles) {
   let [html] = await Promise.all([
-    readFile(join(DIST, 'uikit.html')),
+    fs.readFile(join(DIST, 'uikit.html')),
     makeDir(join(DIST, 'uikit'))
   ])
   function optimizer () {
@@ -50,12 +50,12 @@ async function updateHtml (assets, manifest, preloadFiles) {
   let oldFile = join(DIST, 'uikit.html')
   let newFile = join(DIST, 'uikit', 'index.html')
   await Promise.all([
-    writeFile(newFile, fixed.contents),
-    unlink(oldFile)
+    fs.writeFile(newFile, fixed.contents),
+    fs.unlink(oldFile)
   ])
   assets.remove(oldFile)
   assets.add(newFile)
   return fixed.contents
 }
 
-module.exports = wrap(updateHtml, 'Updating HTML layout')
+export default wrap(updateHtml, 'Updating HTML layout')
