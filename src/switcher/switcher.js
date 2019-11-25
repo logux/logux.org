@@ -142,5 +142,6 @@ for (let switcher of switchers) {
 }
 
 for (let value of readOpenned()) {
-  for (let tab of byValue[value]) open.get(tab)()
+  let tabs = byValue[value] || []
+  for (let tab of tabs) open.get(tab)()
 }
