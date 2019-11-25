@@ -28,6 +28,8 @@ function cleaner (removeAssets) {
         return !removeAssets.test(props.src)
       } else if (node.tagName === 'link' && props.rel[0] === 'stylesheet') {
         return !removeAssets.test(props.href)
+      } else if (node.tagName === 'link' && props.rel[0] === 'preload') {
+        return !removeAssets.test(props.href)
       } else {
         return true
       }
@@ -188,7 +190,7 @@ function converter () {
         }
         if (node.sourceUrl) {
           node.children = [
-            tag('a', 'title_source', {
+            tag('a', 'source', {
               href: node.sourceUrl, title: 'Source code'
             })
           ].concat(node.children)
@@ -270,7 +272,7 @@ function generateSubmenu (links) {
 }
 
 async function createLayout (uikit) {
-  let guideHtml = await cleanPage(uikit)
+  let guideHtml = await cleanPage(uikit, /\/(api|github)\./)
   let apiHtml = await cleanPage(uikit, /\/guide\./)
 
   async function put (layout, categoryUrl, links, title, tree) {

@@ -84,10 +84,12 @@
   margin-right: 9px
 
 .layout_open::before
-  background: url(./open.svg)
+  @media (width < 1024px)
+    background: url(./open.svg)
 
 .layout_close::before
-  background: url(./close.svg)
+  @media (width < 1024px)
+    background: url(./close.svg)
 
 a.layout_chat
   padding: 0 15px
@@ -96,13 +98,14 @@ a.layout_chat
   background: var(--base-gradient)
 
 .layout_chat::before
-  display: inline-block
-  width: 24px
-  height: 24px
-  margin-right: 9px
-  vertical-align: -14%
-  content: ""
-  background: url(./chat.svg)
+  @media (width < 1024px)
+    display: inline-block
+    width: 24px
+    height: 24px
+    margin-right: 9px
+    vertical-align: -14%
+    content: ""
+    background: url(./chat.svg)
 
 .layout_open,
 .layout_close,

@@ -17,6 +17,7 @@ html( lang="en" )
     script( defer src="/guide.js" )
     link( rel="stylesheet" href="/common.sss" )
     link( rel="stylesheet" href="/guide.sss" )
+    link( rel="stylesheet" href="/api.sss" )
     meta( property="og:image" content="/base/og.png" )
     link( rel="preconnect" href="https://sidecar.gitter.im/" media="(min-width:941px)" )
   body.layout
@@ -151,7 +152,7 @@ html( lang="en" )
           +switcher_section
             p.text_block Write your own library
         h2#add.title
-          a.title_source( href="#" title="Source code" )
+          a.source( href="#" title="Source code" )
           a.title_link( href="#add" title="Direct link to section" )
             code
               | <span class="title_extra">Class.</span>add<span class="title_extra">(action, meta)</span>
