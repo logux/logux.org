@@ -96,6 +96,14 @@ a:not([class])
 
   @mixin thin-link
 
+  strong &
+    @supports not (text-underline-offset: 0)
+      background-position: center bottom 2%
+      background-size: 100% 1px
+
+    @supports (text-underline-offset: 0)
+      text-decoration-thickness: 1px
+
   &:hover
     box-shadow: 0 0 0 4px var(--link-background)
 
