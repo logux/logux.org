@@ -27,44 +27,56 @@ function span (cls, value) {
   }
 }
 
+function highlightLines (node, cb) {
+  if (!node.data) node.data = { }
+  node.data.hChildren = node.value
+    .split('\n')
+    .map(cb)
+    .flatMap((line, i) => i === 0 ? line : [text('\n'), ...line])
+}
+
 function iniandBashHighlight () {
   return tree => {
     unistVisit(tree, 'code', node => {
-      if (!node.data) node.data = { }
       if (node.lang === 'sh' || node.lang === 'bash') {
-        node.data.hChildren = node.value
-          .split('\n')
-          .map(line => line
-            .split(' ')
-            .map((word, i, all) => {
-              if (i === 0 && (word === 'npx' || word === 'sudo')) {
-                return span('code-block_keyword', word)
-              } else if (
-                i === 0 ||
-                (i === 1 && all[0] === 'npx') ||
-                (i === 1 && all[0] === 'npm' && word === 'i') ||
-                (i === 1 && all[0] === 'yarn' && word === 'add')
-              ) {
-                return span('code-block_literal', word)
-              } else {
-                return text(word)
-              }
-            })
-            .flatMap((word, i) => i === 0 ? word : [text(' '), word])
-          )
-          .flatMap((line, i) => i === 0 ? line : [text('\n'), ...line])
-      } else if (node.lang === 'ini') {
-        node.data.hChildren = node.value
-          .split('\n')
-          .map(line => {
-            let [name, value] = line.split('=')
-            return [
-              span('code-block_params', name),
-              text('='),
-              span('code-block_string', value)
-            ]
+        highlightLines(node, line => line
+          .split(' ')
+          .map((word, i, all) => {
+            if (i === 0 && (word === 'npx' || word === 'sudo')) {
+              return span('code-block_keyword', word)
+            } else if (
+              i === 0 ||
+              (i === 1 && all[0] === 'npx') ||
+              (i === 1 && all[0] === 'npm' && word === 'i') ||
+              (i === 1 && all[0] === 'yarn' && word === 'add')
+            ) {
+              return span('code-block_literal', word)
+            } else {
+              return text(word)
+            }
           })
-          .flatMap((line, i) => i === 0 ? line : [text('\n'), ...line])
+          .flatMap((word, i) => i === 0 ? word : [text(' '), word])
+        )
+      } else if (node.lang === 'ini') {
+        highlightLines(node, line => {
+          let [name, value] = line.split('=')
+          return [
+            span('code-block_params', name),
+            text('='),
+            span('code-block_string', value)
+          ]
+        })
+      } else if (node.lang === 'diff') {
+        highlightLines(node, line => {
+          let code = line.slice(2)
+          if (line[0] === '+') {
+            return [span('code-block_addition', code)]
+          } else if (line[0] === '-') {
+            return [span('code-block_deletion', code)]
+          } else {
+            return [span('code-block_untouched', code)]
+          }
+        })
       }
     })
   }
@@ -140,7 +152,7 @@ async function readDocs () {
     tree = await unified()
       .use(convertor)
       .use(iniandBashHighlight)
-      .use(remarkHighlight, { exclude: ['bash', 'sh', 'ini'] })
+      .use(remarkHighlight, { exclude: ['bash', 'sh', 'ini', 'diff'] })
       .use(remarkRehype, { allowDangerousHTML: true })
       .use(rehypeRaw)
       .use(htmlFixer, file)

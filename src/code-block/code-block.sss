@@ -69,6 +69,20 @@
 .code-block_strong
   font-weight: bold
 
+.code-block_addition::before,
+.code-block_deletion::before,
+.code-block_untouched::before
+  margin-left: -8px
+
+.code-block_addition::before
+  content: "+ "
+
+.code-block_deletion::before
+  content: "- "
+
+.code-block_untouched::before
+  content: "  "
+
 @mixin dark
   .code-block
     color: #ccc
