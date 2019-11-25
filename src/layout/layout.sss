@@ -11,14 +11,13 @@
   left: 0
   z-index: 2
   display: flex
-  width: 100vw
-  max-width: 400px
+  width: 400px
   background: var(--base-panel)
 
   @mixin light
     box-shadow: 1px 0 0 var(--base-border)
 
-  @media (width >= 400px) and (width < 1024px)
+  @media (width >= 450px) and (width < 1024px)
     box-shadow: 1px 0 0 var(--base-border), 0 2px 8px rgba(#000, 0.3)
 
   @mixin dark
@@ -27,6 +26,9 @@
   @media (width < 1024px)
     &:not(.is-open)
       display: none
+
+  @media (width < 450px)
+    width: 100vw
 
   @supports (backdrop-filter: blur(15px))
     @media (width < 1024px)
