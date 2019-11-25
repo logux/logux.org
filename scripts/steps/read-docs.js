@@ -14,6 +14,62 @@ import wrap from '../lib/spinner.js'
 
 const ROOT = join(PROJECTS, 'logux-docs')
 
+function text (value) {
+  return { type: 'text', value }
+}
+
+function span (cls, value) {
+  return {
+    type: 'element',
+    tagName: 'span',
+    properties: { className: [cls] },
+    children: [text(value)]
+  }
+}
+
+function iniandBashHighlight () {
+  return tree => {
+    unistVisit(tree, 'code', node => {
+      if (!node.data) node.data = { }
+      if (node.lang === 'sh' || node.lang === 'bash') {
+        node.data.hChildren = node.value
+          .split('\n')
+          .map(line => line
+            .split(' ')
+            .map((word, i, all) => {
+              if (i === 0 && (word === 'npx' || word === 'sudo')) {
+                return span('code-block_keyword', word)
+              } else if (
+                i === 0 ||
+                (i === 1 && all[0] === 'npx') ||
+                (i === 1 && all[0] === 'npm' && word === 'i') ||
+                (i === 1 && all[0] === 'yarn' && word === 'add')
+              ) {
+                return span('code-block_literal', word)
+              } else {
+                return text(word)
+              }
+            })
+            .flatMap((word, i) => i === 0 ? word : [text(' '), word])
+          )
+          .flatMap((line, i) => i === 0 ? line : [text('\n'), ...line])
+      } else if (node.lang === 'ini') {
+        node.data.hChildren = node.value
+          .split('\n')
+          .map(line => {
+            let [name, value] = line.split('=')
+            return [
+              span('code-block_params', name),
+              text('='),
+              span('code-block_string', value)
+            ]
+          })
+          .flatMap((line, i) => i === 0 ? line : [text('\n'), ...line])
+      }
+    })
+  }
+}
+
 function htmlFixer (file) {
   return tree => {
     tree.children = [
@@ -82,8 +138,9 @@ async function readDocs () {
     let md = await fs.readFile(join(ROOT, file))
     let tree = await unified().use(remarkParse).parse(md)
     tree = await unified()
-      .use(remarkHighlight)
       .use(convertor)
+      .use(iniandBashHighlight)
+      .use(remarkHighlight, { exclude: ['bash', 'sh', 'ini'] })
       .use(remarkRehype, { allowDangerousHTML: true })
       .use(rehypeRaw)
       .use(htmlFixer, file)
