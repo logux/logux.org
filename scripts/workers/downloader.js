@@ -27,3 +27,8 @@ download(url, res => {
     parentPort.postMessage(true)
   })
 })
+
+process.on('unhandledRejection', e => {
+  e.stack = `Downloading ${ url }\n${ e.stack }`
+  throw e
+})
