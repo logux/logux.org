@@ -68,11 +68,6 @@ a.menu_link
   color: var(--base-title)
   border-radius: 4px
 
-  li.is-bottom &
-    height: 36px
-    font-size: 16px
-    line-height: 36px
-
   &:not(.is-current):hover
     font-family: Kurbanistika, "Work Sans", sans-serif
     font-size: 25px
@@ -83,13 +78,15 @@ a.menu_link
     color: #000
     background: var(--base-gradient)
 
-  .menu li.is-bottom &.chat
-    height: 57px
+  .menu li &.chat
+    height: 60px
 
 .menu_extra
   position: relative
-  top: -12px
+  top: -4px
+  font-size: 16px
   font-weight: normal
+  line-height: 1
 
   a.menu_link:not(.is-current):hover &
     font-family: "Work Sans", sans-serif

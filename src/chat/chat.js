@@ -1,4 +1,4 @@
-let buttons = document.querySelectorAll('.chat')
+let button = document.querySelector('.chat')
 
 function isSimpleClick (e) {
   return e.button === 0 && !e.metaKey && !e.ctrlKey && !e.shiftKey && !e.altKey
@@ -20,21 +20,22 @@ function initChat () {
 
   document.addEventListener('gitter-sidecar-instance-started', ({ detail }) => {
     let show = true
-    for (let button of buttons) {
-      button.addEventListener('click', e => {
-        if (isSimpleClick(e)) {
-          e.preventDefault()
-          detail.chat.toggleChat(show)
-          show = !show
-        }
-      })
-    }
+    button.addEventListener('click', e => {
+      console.log(1)
+      if (isSimpleClick(e)) {
+        e.preventDefault()
+        detail.chat.toggleChat(show)
+        show = !show
+      }
+    })
   })
 }
 
-if (buttons.length > 0) {
+if (button) {
   window.addEventListener('load', () => {
     let saveData = navigator.connection && navigator.connection.saveData
-    if (navigator.onLine && !saveData) initChat()
+    if (window.innerWidth > 940 && navigator.onLine && !saveData) {
+      initChat()
+    }
   })
 }
