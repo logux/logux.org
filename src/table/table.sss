@@ -30,9 +30,25 @@
       padding-left: 51px
 
   @mixin mobile
-    th,
-    td
-      padding: 6px 12px 6px 0
+    tr
+      display: grid
+      grid-template-rows: auto auto
+      grid-template-columns: 1fr 1fr
 
-      &:first-child
-        padding-left: var(--text-side)
+    th
+      display: none
+
+    td
+      &:first-child,
+      &:nth-child(2)
+        padding: 12px var(--text-side)
+        border-bottom: none
+
+      &:nth-child(2)
+        text-align: right
+
+      &:nth-child(3)
+        grid-column-start: 1
+        grid-column-end: 3
+        padding: 0 var(--text-side)
+        padding-bottom: 12px
