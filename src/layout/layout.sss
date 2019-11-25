@@ -1,8 +1,8 @@
 .layout
   position: relative
 
-  @media (width > 1100px)
-    padding-left: 420px
+  @media (width >= 1024px)
+    padding-left: 400px
 
 .layout_aside
   position: fixed
@@ -12,24 +12,24 @@
   z-index: 2
   display: flex
   width: 100vw
-  max-width: 420px
+  max-width: 400px
   background: var(--base-panel)
 
   @mixin light
     box-shadow: 1px 0 0 var(--base-border)
 
+  @media (width >= 400px) and (width < 1024px)
+    box-shadow: 1px 0 0 var(--base-border), 0 2px 8px rgba(#000, 0.3)
+
   @mixin dark
     box-shadow: 0 2px 8px rgba(#000, 0.3)
 
-  @media (width <= 1100px) and (width >= 420px)
-    box-shadow: 1px 0 0 var(--base-border), 0 2px 8px rgba(#000, 0.3)
-
-  @media (width <= 1100px)
+  @media (width < 1024px)
     &:not(.is-open)
       display: none
 
   @supports (backdrop-filter: blur(15px))
-    @media (width <= 1100px)
+    @media (width < 1024px)
       background: transparent
       backdrop-filter: blur(15px)
 
@@ -43,7 +43,7 @@
 .layout_menu
   flex-grow: 0
   flex-shrink: 0
-  width: 170px
+  width: 150px
   border-right: 1px solid var(--base-border)
 
 .layout_submenu
@@ -55,10 +55,10 @@
   justify-content: space-between
 
 .layout_float
-  @media (width > 1100px)
+  @media (width >= 1024px)
     display: none
 
-  @media (width <= 1100px)
+  @media (width < 1024px)
     position: fixed
     bottom: 15px
     left: 15px
