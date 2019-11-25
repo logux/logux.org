@@ -14,7 +14,7 @@
     grid-template-rows: auto auto
     grid-template-columns: 1fr 1fr
     grid-gap: 24px
-    padding: 22px 15px
+    padding: 22px var(--text-side) 75px var(--text-side)
 
   @mixin dark
     border-top-color: var(--base-panel)
@@ -40,22 +40,27 @@
   margin-top: 13px
 
 a.footer_lurkers
+  position: absolute
+  display: block
+  width: 108px
+  height: 47px
+  background-size: 100%
+
+  &:hover
+    background-color: transparent
+
   @mixin no-mobile
-    position: absolute
     bottom: -40px
     left: 0
-    display: block
-    width: 108px
-    height: 47px
-    background-size: 100%
 
-    &:hover
-      background-color: transparent
+  @mixin mobile
+    right: var(--text-side)
+    bottom: -75px
 
-  @mixin light-no-mobile
+  @mixin light
     background-image: url(./lurkers-light.svg)
 
-  @mixin dark-no-mobile
+  @mixin dark
     background-image: url(./lurkers-dark.svg)
 
 .footer_lurkers::before,
