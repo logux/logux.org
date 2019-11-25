@@ -5,6 +5,7 @@
 
 .submenu_text,
 a.submenu_link
+  display: block
   height: 33px
   padding: 0 9px
   overflow: hidden
@@ -12,6 +13,11 @@ a.submenu_link
   color: var(--base-title)
   text-overflow: ellipsis
   white-space: nowrap
+  border-radius: 4px
+
+  &.is-current
+    color: #000
+    background: var(--base-gradient)
 
   .submenu > li:not(.is-flat) > &
     margin-top: 15px
@@ -20,14 +26,6 @@ a.submenu_link
 
   .submenu > li:first-child > &
     margin-top: 0
-
-.submenu_link
-  display: block
-  border-radius: 4px
-
-  &.is-current
-    color: #000
-    background: var(--base-gradient)
 
 .submenu_extra
   opacity: 0.4

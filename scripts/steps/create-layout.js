@@ -242,10 +242,10 @@ function submenuItem (node) {
   } else {
     text = [{ type: 'text', value: node.text }]
   }
-  if (node.link) {
-    let className = ['submenu_link']
-    if (node.isCurrent) className.push('is-current')
-    return tag('a', { className, href: node.link }, text)
+  if (node.isCurrent) {
+    return tag('div', { className: ['submenu_text', 'is-current'] }, text)
+  } else if (node.link) {
+    return tag('a', 'submenu_link', { href: node.link }, text)
   } else {
     return tag('div', 'submenu_text', text)
   }
