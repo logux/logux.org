@@ -1,14 +1,8 @@
 #!/usr/bin/env node
 
-import { promises as fs } from 'fs'
 import { request } from 'https'
-import { join } from 'path'
 
-import { ROOT } from './lib/dirs.js'
-
-async function loadSecrets () {
-  return JSON.parse(await fs.readFile(join(ROOT, 'secrets.json')))
-}
+import loadSecrets from './lib/load-secrets.js'
 
 function callCloudflare (credentials, command, opts) {
   return new Promise((resolve, reject) => {
@@ -46,10 +40,8 @@ function callCloudflare (credentials, command, opts) {
   })
 }
 
-loadSecrets().then(async secrets => {
-  await callCloudflare(secrets.cloudflare, 'purge_cache', {
-    purge_everything: true
-  })
+loadSecrets().then(({ cloudflare }) => {
+  return callCloudflare(cloudflare, 'purge_cache', { purge_everything: true })
 }).catch(e => {
   process.stderr.write(e.stack + '\n')
   process.exit(1)

@@ -5,6 +5,7 @@
   flex-direction: column
   min-height: 100%
   padding: 15px 9px
+  font-size: 18px
   text-align: center
   list-style: none
 
@@ -67,6 +68,11 @@ a.menu_link
   color: var(--base-title)
   border-radius: 4px
 
+  li.is-bottom &
+    height: 36px
+    font-size: 16px
+    line-height: 36px
+
   &:not(.is-current):hover
     font-family: Kurbanistika, "Work Sans", sans-serif
     font-size: 25px
@@ -77,14 +83,27 @@ a.menu_link
     color: #000
     background: var(--base-gradient)
 
-.menu li:not(.menu_hidden)
-  padding-top: 9px
+  .menu li.is-bottom &.chat
+    height: 57px
 
-.menu_bottom
-  display: flex
-  flex-direction: column
-  flex-grow: 1
-  justify-content: flex-end
+.menu_extra
+  position: relative
+  top: -12px
+  font-weight: normal
+
+  a.menu_link:not(.is-current):hover &
+    font-family: "Work Sans", sans-serif
+    font-size: 16px
+
+.menu li
+  &:not(.menu_hidden)
+    padding-top: 9px
+
+  &.is-separated
+    display: flex
+    flex-direction: column
+    flex-grow: 1
+    justify-content: flex-end
 
 .menu_separator
   height: 1px

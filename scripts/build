@@ -10,6 +10,7 @@ import copyWellKnown from './steps/copy-well-known.js'
 import compressFiles from './steps/compress-files.js'
 import compileAssets from './steps/compile-assets.js'
 import repackScripts from './steps/repack-scripts.js'
+import getChatUsers from './steps/get-chat-users.js'
 import createLayout from './steps/create-layout.js'
 import updateHtml from './steps/update-html.js'
 import buildDocs from './steps/build-docs.js'
@@ -19,7 +20,10 @@ import buildApi from './steps/build-api.js'
 
 async function prepareHtml () {
   await cleanBuildDir()
-  let assets = await compileAssets()
+  let [assets, chatUsers] = await Promise.all([
+    compileAssets(),
+    getChatUsers()
+  ])
   let [webmanifest, filesFromCSS] = await Promise.all([
     generateWebManifest(assets),
     findFilesInCSS(assets),
@@ -27,7 +31,7 @@ async function prepareHtml () {
     repackScripts(assets)
   ])
   let uikit = await updateHtml(assets, webmanifest, filesFromCSS)
-  let layout = await createLayout(uikit)
+  let layout = await createLayout(uikit, chatUsers)
   return [assets, layout]
 }
 

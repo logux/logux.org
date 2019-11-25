@@ -7,7 +7,7 @@ import unified from 'unified'
 
 import wrap from '../lib/spinner.js'
 
-function cleaner (removeAssets) {
+function cleaner ({ chatUsers, removeAssets }) {
   return tree => {
     unistVisit(tree, 'element', node => {
       let cls = node.properties.className || []
@@ -19,6 +19,8 @@ function cleaner (removeAssets) {
         }
       } else if (cls[0] === 'submenu') {
         node.children = []
+      } else if (cls[0] === 'menu_extra') {
+        node.children = [{ type: 'text', value: `(${ chatUsers } people)` }]
       }
     })
     if (!removeAssets) return tree
@@ -58,10 +60,10 @@ function checker (title) {
   }
 }
 
-async function cleanPage (html, removeAssets) {
+async function cleanPage (html, chatUsers, removeAssets) {
   let cleaned = await unified()
     .use(rehypeParse)
-    .use(cleaner, removeAssets)
+    .use(cleaner, { chatUsers, removeAssets })
     .use(rehypeStringify)
     .process(html)
   return cleaned.contents
@@ -271,9 +273,9 @@ function generateSubmenu (links) {
   }
 }
 
-async function createLayout (uikit) {
-  let guideHtml = await cleanPage(uikit, /\/(api|github)\./)
-  let apiHtml = await cleanPage(uikit, /\/guide\./)
+async function createLayout (uikit, chatUsers) {
+  let guideHtml = await cleanPage(uikit, chatUsers, /\/(api|github)\./)
+  let apiHtml = await cleanPage(uikit, chatUsers, /\/guide\./)
 
   async function put (layout, categoryUrl, links, title, tree) {
     let fixed = await unified()
