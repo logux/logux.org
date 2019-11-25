@@ -220,10 +220,10 @@ function converter () {
   }
 }
 
-function submenuText (node) {
+function submenuItem (node) {
+  let text = []
   if (node.code) {
     let code = node.code
-    let text = []
     if (code.startsWith('.') || code.startsWith('#')) {
       text.push(tag('span', 'submenu_extra', [
         { type: 'text', value: code.slice(0, 1) }
@@ -238,9 +238,16 @@ function submenuText (node) {
     } else {
       text.push({ type: 'text', value: code })
     }
-    return tag('code', { }, text)
+    text = [tag('code', { }, text)]
   } else {
-    return { type: 'text', value: node.text }
+    text = [{ type: 'text', value: node.text }]
+  }
+  if (node.link) {
+    let className = ['submenu_link']
+    if (node.isCurrent) className.push('is-current')
+    return tag('a', { className, href: node.link }, text)
+  } else {
+    return tag('div', 'submenu_text', text)
   }
 }
 
@@ -248,26 +255,16 @@ function generateSubmenu (links) {
   return {
     type: 'root',
     children: links.map(i => {
-      let children = []
-      if (i.link) {
-        children.push(
-          tag('a', 'submenu_link', { href: i.link }, [submenuText(i)])
-        )
-      } else {
-        children.push(
-          tag('div', 'submenu_text', [submenuText(i)])
-        )
-      }
-      if (i.ul) {
-        children.push(
-          tag('ul', { }, i.ul.map(j => {
-            return tag('li', { }, [
-              tag('a', 'submenu_link', { href: j.link }, [submenuText(j)])
-            ])
+      let list = []
+      list.push(submenuItem(i))
+      if (i.ul || i.ol) {
+        list.push(
+          tag(i.ul ? 'ul' : 'ol', { }, (i.ul || i.ol).map(j => {
+            return tag('li', { }, [submenuItem(j)])
           }))
         )
       }
-      return tag('li', { }, children)
+      return tag('li', { className: (i.ul || i.ol) ? [] : ['is-flat'] }, list)
     })
   }
 }
