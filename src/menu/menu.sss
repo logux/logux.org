@@ -39,26 +39,12 @@ a.menu_home
   display: block
   padding: 9px 0
   margin-top: -9px
-  font-family: Kurbanistika, sans-serif
-  font-size: 38px
-  font-weight: normal
   line-height: 1
-  color: var(--base-title)
-  text-transform: lowercase
   border-radius: 4px
 
-.menu_home::before
-  display: block
+.menu_logotype
   width: 78px
-  height: 78px
-  margin: 7px auto
-  content: ""
-
-  @mixin light
-    background: url(./logo-light.svg)
-
-  @mixin dark
-    background: url(./logo-dark.svg)
+  height: 117px
 
 a.menu_link
   display: block
@@ -69,10 +55,11 @@ a.menu_link
   border-radius: 4px
 
   &:not(.is-current):hover
-    font-family: Kurbanistika, "Work Sans", sans-serif
-    font-size: 25px
-    font-weight: normal
-    text-transform: lowercase
+    @mixin no-mobile
+      font-family: Kurbanistika, sans-serif
+      font-size: 25px
+      font-weight: normal
+      text-transform: lowercase
 
   &.is-current
     color: #000
@@ -106,6 +93,9 @@ a.menu_link
   height: 1px
   margin: 15px 0 6px 0
   background: var(--base-border)
+
+  @mixin no-mobile
+    font-family: Kurbanistika, sans-serif
 
   &:first-child
     margin: 6px 0 15px 0

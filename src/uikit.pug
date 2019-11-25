@@ -28,7 +28,10 @@ html( lang="en" )
           li.menu_hidden
             a.menu_skip( href="#main" ) Skip navigation
           li
-            a.menu_home( rel="home" href="/" ) Logux
+            a.menu_home( rel="home" href="/" )
+              picture.menu_logotype
+                source( srcset="/menu/logotype-dark.svg" media="(prefers-color-scheme: dark)" )
+                img( src="/menu/logotype-light.svg" alt="Logux logotype" height="117" width="78" )
             .menu_separator
           li
             a.menu_link.is-current( href="/guide/architecture/core/" ) Guide
