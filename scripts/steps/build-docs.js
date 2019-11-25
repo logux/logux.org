@@ -9,6 +9,7 @@ import wrap from '../lib/spinner.js'
 function toTitle (file) {
   if (file === 'starting') file = 'starting-project'
   if (file === 'spec') file = 'specification'
+  if (file === 'node-server') file = 'node.js-server'
   return capitalize(file)
     .replace(/-\w/, i => ' ' + i.slice(1).toUpperCase())
     .replace('Ws', 'Web Socket')

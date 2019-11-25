@@ -129,6 +129,12 @@ function converter () {
   }
 
   return tree => {
+    unistVisit(tree, 'text', node => {
+      node.value = node.value.replace(
+        /(^|\s)(the|a|for|in|an|to|if|so|when|with|by|and|or|is|this|to) /gi,
+        '$1$2 '
+      )
+    })
     unistVisit(tree, 'element', (node, index, parent) => {
       let cls = node.properties.className || []
       if (node.tagName === 'article') {
