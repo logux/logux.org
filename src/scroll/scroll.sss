@@ -1,14 +1,14 @@
 html
   --scroll-color: #aaa
 
-  @mixin no-mobile
+  @mixin dark
+    --scroll-color: var(--base-border)
+
+@mixin no-mobile
+  *
     scrollbar-color: var(--scroll-color) transparent
     scrollbar-width: thin
 
-    @mixin dark
-      --scroll-color: var(--base-border)
-
-@mixin no-mobile
   ::-webkit-scrollbar
     width: 4px
     height: 4px
