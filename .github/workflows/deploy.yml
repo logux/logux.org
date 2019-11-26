@@ -33,18 +33,18 @@ jobs:
           CI: 1
           GITTER_ROOM_ID: ${{ secrets.GITTER_ROOM_ID }}
           GITTER_TOKEN: ${{ secrets.GITTER_TOKEN }}
-      - name: Build Docker image
+      - name: Build image
         run: docker build -t gcr.io/${{ secrets.GCLOUD_PROJECT }}/${{ secrets.GCLOUD_APP }} .
       - name: Setup Google Cloud
-        uses: actions/gcloud/auth@1.0.1
+        uses: actions/gcloud/auth@master
         env:
           GCLOUD_AUTH: ${{ secrets.GCLOUD_AUTH }}
       - name: Configure Docker to use Google Cloud Platform
-        uses: actions/gcloud/cli@1.0.1
+        uses: actions/gcloud/cli@master
         with:
           args: "auth configure-docker"
-      - name: Push image to Google Cloud Registry
-        uses: actions/gcloud/cli@1.0.1
+      - name: Push image to registry
+        uses: actions/gcloud/cli@master
         with:
           entrypoint: sh
           args: -c "docker push gcr.io/${{ secrets.GCLOUD_PROJECT }}/${{ secrets.GCLOUD_APP }}"
@@ -52,12 +52,16 @@ jobs:
         uses: actions/gcloud/cli@master
         with:
           args: components install beta --quiet
-      - name: Deploy on Google Cloud Run
+      - name: Deploy image to the server
         uses: actions/gcloud/cli@master
         with:
           args: "cloud beta run deploy ${{ secrets.GCLOUD_APP }} --quiet --image gcr.io/${{ secrets.GCLOUD_PROJECT }}/${{ secrets.GCLOUD_APP }} --project ${{ secrets.GCLOUD_PROJECT }} --region=us-east1 --platform managed"
-      - name: Clean previous images from Google Cloud Registry
+      - name: Clean CDN
         run: ./scripts/update-cdn
         env:
           CLOUDFLARE_ZONE: ${{ secrets.CLOUDFLARE_ZONE }}
           CLOUDFLARE_TOKEN: ${{ secrets.CLOUDFLARE_TOKEN }}
+      - name: Clean previous images from registry
+        uses: actions/gcloud/cli@master
+        with:
+          entrypoint: ./scripts/clean-images
