@@ -8,8 +8,7 @@
     "test": "yarn lint && yarn build && size-limit",
     "clean": "del-cli dist/ .cache",
     "build": "NODE_ENV=production ./scripts/build",
-    "start": "podman build -t loguxio . && podman run -v ./dist/:/var/www/ --privileged --rm -p 8000:80 -e PORT=80 -it loguxio",
-    "deploy": "gcloud builds --project logux-255417 submit"
+    "start": "podman build -t loguxio . && podman run -v ./dist/:/var/www/ --privileged --rm -p 8000:80 -e PORT=80 -it loguxio"
   },
   "dependencies": {
     "capitalize": "^2.0.1",
