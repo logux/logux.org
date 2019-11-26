@@ -35,4 +35,4 @@ jobs:
           GITTER_ROOM_ID: ${{ secrets.GITTER_ROOM_ID }}
           GITTER_TOKEN: ${{ secrets.GITTER_TOKEN }}
       - name: Build Docker image
-        run: docker build -t gcr.io/logux-255417/loguxio
+        run: docker build -t gcr.io/logux-255417/loguxio .
