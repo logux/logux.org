@@ -46,7 +46,7 @@ jobs:
         env:
           GCLOUD_AUTH: ${{ secrets.GCLOUD_AUTH }}
       - name: Configure Docker to use Google Cloud
-        run: gcloud auth configure-docker"
+        run: gcloud auth configure-docker
       - name: Push image to registry
         run: docker push gcr.io/${{ secrets.GCLOUD_PROJECT }}/${{ secrets.GCLOUD_APP }}"
       - name: Deploy image to the server
