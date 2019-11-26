@@ -1,6 +1,6 @@
 import { request } from 'https'
+import chalk from 'chalk'
 
-import loadSecrets from '../lib/load-secrets.js'
 import wrap from '../lib/spinner.js'
 
 function callGitter (token, command) {
@@ -10,7 +10,7 @@ function callGitter (token, command) {
       hostname: 'api.gitter.im',
       path: `/v1/${ command }`,
       headers: {
-        'Authorization': `Bearer ${ token }`,
+        'Authorization': `Bearer ${ process.env.GITTER_TOKEN }`,
         'Content-Type': 'application/json'
       }
     }, res => {
@@ -39,8 +39,13 @@ function callGitter (token, command) {
 }
 
 async function getChatUsers () {
-  let { gitter } = await loadSecrets()
-  let room = await callGitter(gitter.token, `rooms/${ gitter.roomId }`)
+  if (!process.env.GITTER_ROOM_ID) {
+    process.stderr.write(chalk.yellow(
+      'Using non-real chat users number because of the lack of Gitter token\n'
+    ))
+    return 42
+  }
+  let room = await callGitter(`rooms/${ process.env.GITTER_ROOM_ID }`)
   return room.userCount
 }
 
