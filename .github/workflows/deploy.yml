@@ -43,7 +43,9 @@ jobs:
         run: |
           echo "$GCLOUD_AUTH" | base64 --decode > "$HOME"/service-account-key.json
           gcloud auth activate-service-account --key-file=$HOME/service-account-key.json
-      - name: Configure Docker to use Google Cloud Platform
+        env:
+          GCLOUD_AUTH: ${{ secrets.GCLOUD_AUTH }}
+      - name: Configure Docker to use Google Cloud
         run: gcloud auth configure-docker"
       - name: Push image to registry
         run: docker push gcr.io/${{ secrets.GCLOUD_PROJECT }}/${{ secrets.GCLOUD_APP }}"
