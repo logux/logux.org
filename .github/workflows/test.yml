@@ -26,8 +26,8 @@ jobs:
             yarn-all-
       - name: Install build dependencies
         run: yarn install
-      - name: Build
+      - name: Build and test
         run: yarn test
         env:
           CI: 1
-          GITTER_USERS: 43
+          NO_CONTENT: 1

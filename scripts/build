@@ -20,10 +20,7 @@ import buildApi from './steps/build-api.js'
 
 async function prepareHtml () {
   await cleanBuildDir()
-  let [assets, chatUsers] = await Promise.all([
-    compileAssets(),
-    getChatUsers()
-  ])
+  let assets = await compileAssets()
   let [webmanifest, filesFromCSS] = await Promise.all([
     generateWebManifest(assets),
     findFilesInCSS(assets),
@@ -31,8 +28,7 @@ async function prepareHtml () {
     repackScripts(assets)
   ])
   let uikit = await updateHtml(assets, webmanifest, filesFromCSS)
-  let layout = await createLayout(uikit, chatUsers)
-  return [assets, layout]
+  return [assets, uikit]
 }
 
 async function prepareContent () {
@@ -52,14 +48,20 @@ async function prepareContent () {
 }
 
 async function build () {
-  let [[assets, layout], [guides, nodeJsdoc, webJsdoc]] = await Promise.all([
+  if (process.env.NO_CONTENT) {
+    await prepareHtml()
+    return
+  }
+  let [users, [assets, uikit], [guides, nodeApi, webApi]] = await Promise.all([
+    getChatUsers(),
     prepareHtml(),
     prepareContent()
   ])
+  let layout = await createLayout(uikit, users)
   await Promise.all([
     buildDocs(assets, layout, guides),
-    buildApi(assets, layout, 'Node API', nodeJsdoc),
-    buildApi(assets, layout, 'Web API', webJsdoc)
+    buildApi(assets, layout, 'Node API', nodeApi),
+    buildApi(assets, layout, 'Web API', webApi)
   ])
   await compressFiles(assets)
 }
