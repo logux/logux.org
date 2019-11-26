@@ -5,7 +5,9 @@ import makeDir from 'make-dir'
 import { SRC, DIST } from '../lib/dirs.js'
 import wrap from '../lib/spinner.js'
 
-let FILES = ['logo.svg', 'favicon.ico', 'robots.txt', 'security.txt']
+let FILES = [
+  'logo.svg', 'logotype.svg', 'favicon.ico', 'robots.txt', 'security.txt'
+]
 
 async function copyWellKnown (assets) {
   await makeDir(join(DIST, '.well-known'))
