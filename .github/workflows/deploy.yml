@@ -39,7 +39,11 @@ jobs:
         uses: actions/gcloud/auth@master
         env:
           GCLOUD_AUTH: ${{ secrets.GCLOUD_AUTH }}
-      - name: Push image to GCR
+      - name: Configure Docker to use Google Cloud Platform
+        uses: actions/gcloud/cli@master
+        with:
+          args: "auth configure-docker"
+      - name: Push image to Google Cloud Registry
         uses: actions/gcloud/cli@master
         with:
           entrypoint: sh
