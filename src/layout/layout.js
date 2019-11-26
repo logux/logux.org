@@ -1,6 +1,4 @@
-function isSimpleClick (e) {
-  return e.button === 0 && !e.metaKey && !e.ctrlKey && !e.shiftKey && !e.altKey
-}
+import isSimpleClick from '../../lib/is-simple-click.js'
 
 let aside = document.querySelector('.layout_aside')
 let links = document.querySelectorAll('.layout_aside a[href^="#"]')

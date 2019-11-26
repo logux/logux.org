@@ -1,8 +1,7 @@
-let button = document.querySelector('.chat')
+import isSimpleClick from '../../lib/is-simple-click.js'
+import isSaveDate from '../../lib/is-save-data.js'
 
-function isSimpleClick (e) {
-  return e.button === 0 && !e.metaKey && !e.ctrlKey && !e.shiftKey && !e.altKey
-}
+let button = document.querySelector('.chat')
 
 function initChat () {
   window.gitter = {
@@ -33,9 +32,6 @@ function initChat () {
 
 if (button) {
   window.addEventListener('load', () => {
-    let saveData = navigator.connection && navigator.connection.saveData
-    if (window.innerWidth > 940 && navigator.onLine && !saveData) {
-      initChat()
-    }
+    if (!isSaveDate()) initChat()
   })
 }
