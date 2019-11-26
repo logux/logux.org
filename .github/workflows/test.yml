@@ -17,6 +17,10 @@ jobs:
         with:
           node-version: '>=13.2'
       - name: Install dependencies
-        run: yarn install
-      - name: Build and test
-        run: yarn test
+        run: yarn install --production
+      - name: Build
+        run: yarn build
+        env:
+          CI: 1
+          GITTER_ROOM_ID: ${{ secrets.GITTER_ROOM_ID }}
+          GITTER_TOKEN: ${{ secrets.GITTER_TOKEN }}
