@@ -4,7 +4,7 @@
   "scripts": {
     "securitytxt:sign": "gpg --digest-algo SHA512 --clearsign src/well-known/security.txt",
     "start:uikit": "parcel serve src/uikit.pug --open",
-    "lint": "eslint . scripts/build scripts/update-cdn && stylelint src/**/*.sss",
+    "lint": "eslint . scripts/build scripts/clean-cdn && stylelint src/**/*.sss",
     "test": "yarn lint && yarn build && size-limit",
     "clean": "del-cli dist/ .cache",
     "build": "NODE_ENV=production ./scripts/build",
