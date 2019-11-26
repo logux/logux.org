@@ -50,7 +50,7 @@ jobs:
       - name: Push image to registry
         run: docker push gcr.io/${{ secrets.GCLOUD_PROJECT }}/${{ secrets.GCLOUD_APP }}
       - name: Deploy image to the server
-        run: gcloud cloud beta run deploy ${{ secrets.GCLOUD_APP }} --quiet --image gcr.io/${{ secrets.GCLOUD_PROJECT }}/${{ secrets.GCLOUD_APP }} --project ${{ secrets.GCLOUD_PROJECT }} --region=us-east1 --platform managed
+        run: gcloud beta run deploy ${{ secrets.GCLOUD_APP }} --quiet --image gcr.io/${{ secrets.GCLOUD_PROJECT }}/${{ secrets.GCLOUD_APP }} --project ${{ secrets.GCLOUD_PROJECT }} --region=us-east1 --platform managed
       - name: Clean CDN
         run: ./scripts/update-cdn
         env:
