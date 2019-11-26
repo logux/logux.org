@@ -11,6 +11,10 @@ export default async function loadSecrets () {
       gitter: {
         roomId: process.env.GITTER_ROOM_ID,
         token: process.env.GITTER_TOKEN
+      },
+      cloudflare: {
+        zone: process.env.CLOUDFLARE_ZONE,
+        token: process.env.CLOUDFLARE_TOKEN
       }
     }
   }

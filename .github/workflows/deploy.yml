@@ -36,19 +36,28 @@ jobs:
       - name: Build Docker image
         run: docker build -t gcr.io/${{ secrets.GCLOUD_PROJECT }}/${{ secrets.GCLOUD_APP }} .
       - name: Setup Google Cloud
-        uses: actions/gcloud/auth@master
+        uses: actions/gcloud/auth@1.0.1
         env:
           GCLOUD_AUTH: ${{ secrets.GCLOUD_AUTH }}
       - name: Configure Docker to use Google Cloud Platform
-        uses: actions/gcloud/cli@master
+        uses: actions/gcloud/cli@1.0.1
         with:
           args: "auth configure-docker"
       - name: Push image to Google Cloud Registry
-        uses: actions/gcloud/cli@master
+        uses: actions/gcloud/cli@1.0.1
         with:
           entrypoint: sh
           args: -c "docker push gcr.io/${{ secrets.GCLOUD_PROJECT }}/${{ secrets.GCLOUD_APP }}"
+      - name: Install Google Cloud beta commands
+        uses: actions/gcloud/cli@master
+        with:
+          args: components install beta --quiet
       - name: Deploy on Google Cloud Run
         uses: actions/gcloud/cli@master
         with:
           args: "cloud beta run deploy ${{ secrets.GCLOUD_APP }} --quiet --image gcr.io/${{ secrets.GCLOUD_PROJECT }}/${{ secrets.GCLOUD_APP }} --project ${{ secrets.GCLOUD_PROJECT }} --region=us-east1 --platform managed"
+      - name: Clean previous images from Google Cloud Registry
+        run: ./scripts/update-cdn
+        env:
+          CLOUDFLARE_ZONE: ${{ secrets.CLOUDFLARE_ZONE }}
+          CLOUDFLARE_TOKEN: ${{ secrets.CLOUDFLARE_TOKEN }}
