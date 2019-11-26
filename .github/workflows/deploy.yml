@@ -28,9 +28,11 @@ jobs:
             yarn-production-
       - name: Install dependencies
         run: yarn install --production
-      - name: Build
+      - name: Build static files
         run: yarn build
         env:
           CI: 1
           GITTER_ROOM_ID: ${{ secrets.GITTER_ROOM_ID }}
           GITTER_TOKEN: ${{ secrets.GITTER_TOKEN }}
+      - name: Build Docker image
+        run: docker build -t gcr.io/logux-255417/loguxio
