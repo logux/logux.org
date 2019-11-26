@@ -39,8 +39,6 @@ function callGitter (token, command) {
 }
 
 async function getChatUsers () {
-  if (process.env.TRAVIS) return 42
-  if (process.env.GITTER_USERS) return parseInt(process.env.GITTER_USERS)
   let { gitter } = await loadSecrets()
   let room = await callGitter(gitter.token, `rooms/${ gitter.roomId }`)
   return room.userCount
