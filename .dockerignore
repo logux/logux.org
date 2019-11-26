@@ -6,3 +6,8 @@ lib/
 mixins/
 .cache/
 .git/
+.editorconfig
+LICENSE
+package.json
+README.md
+yarn.lock
