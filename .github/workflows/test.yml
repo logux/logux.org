@@ -1,4 +1,4 @@
-name: Deploy to GCR
+name: Test
 
 on:
   push:
@@ -17,6 +17,6 @@ jobs:
         with:
           node-version: '>=13.2'
       - name: Install dependencies
-        run: yarn install --production
+        run: yarn install
       - name: Build and test
         run: yarn test
