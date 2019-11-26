@@ -48,3 +48,7 @@ jobs:
         with:
           entrypoint: sh
           args: -c "docker push gcr.io/${{ secrets.GCLOUD_PROJECT }}/${{ secrets.GCLOUD_APP }}"
+      - name: Deploy on Google Cloud Run
+        uses: actions/gcloud/cli@master
+        with:
+          args: "cloud beta run deploy ${{ secrets.GCLOUD_APP }} --quiet --image gcr.io/${{ secrets.GCLOUD_PROJECT }}/${{ secrets.GCLOUD_APP }} --project ${{ secrets.GCLOUD_PROJECT }} --region=us-east1 --platform managed"
