@@ -3,7 +3,7 @@ import chalk from 'chalk'
 
 import wrap from '../lib/spinner.js'
 
-function callGitter (token, command) {
+function callGitter (command) {
   return new Promise((resolve, reject) => {
     let req = request({
       method: 'GET',
