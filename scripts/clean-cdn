@@ -2,16 +2,14 @@
 
 import { request } from 'https'
 
-import loadSecrets from './lib/load-secrets.js'
-
-function callCloudflare (credentials, command, opts) {
+function callCloudflare (command, opts) {
   return new Promise((resolve, reject) => {
     let req = request({
       method: 'POST',
       hostname: 'api.cloudflare.com',
-      path: `/client/v4/zones/${ credentials.zone }/${ command }`,
+      path: `/client/v4/zones/${ process.env.CLOUDFLARE_ZONE }/${ command }`,
       headers: {
-        'Authorization': `Bearer ${ credentials.token }`,
+        'Authorization': `Bearer ${ process.env.CLOUDFLARE_TOKEN }`,
         'Content-Type': 'application/json'
       }
     }, res => {
@@ -40,9 +38,7 @@ function callCloudflare (credentials, command, opts) {
   })
 }
 
-loadSecrets().then(({ cloudflare }) => {
-  return callCloudflare(cloudflare, 'purge_cache', { purge_everything: true })
-}).catch(e => {
+callCloudflare('purge_cache', { purge_everything: true }).catch(e => {
   process.stderr.write(e.stack + '\n')
   process.exit(1)
 })
