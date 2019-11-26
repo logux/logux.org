@@ -6,8 +6,7 @@ on:
       - master
 
 jobs:
-  build:
-    name: Test
+  deploy:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout the repository
@@ -35,4 +34,13 @@ jobs:
           GITTER_ROOM_ID: ${{ secrets.GITTER_ROOM_ID }}
           GITTER_TOKEN: ${{ secrets.GITTER_TOKEN }}
       - name: Build Docker image
-        run: docker build -t gcr.io/logux-255417/loguxio .
+        run: docker build -t gcr.io/${{ secrets.GCLOUD_PROJECT }}/${{ secrets.GCLOUD_APP }} .
+      - name: Setup Google Cloud
+        uses: actions/gcloud/auth@master
+        env:
+          GCLOUD_AUTH: ${{ secrets.GCLOUD_AUTH }}
+      - name: Push image to GCR
+        uses: actions/gcloud/cli@master
+        with:
+          entrypoint: sh
+          args: -c "docker push gcr.io/${{ secrets.GCLOUD_PROJECT }}/${{ secrets.GCLOUD_APP }}"
