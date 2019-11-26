@@ -1,0 +1,26 @@
+name: Deploy to GCR
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the repository
+        uses: actions/checkout@v1
+      - name: Install Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: '>=13.2'
+      - name: Install dependencies
+        run: yarn install --production
+      - name: Build and test
+        run: yarn test
+      - name: Build Docker image
+        uses: actions/docker/cli@master
+        with:
+          args: build -t gcr.io/logux-255417/loguxio .
