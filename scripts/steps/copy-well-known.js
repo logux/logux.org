@@ -14,7 +14,10 @@ async function copyWellKnown (assets) {
   await Promise.all(FILES.map(i => {
     let from = join(SRC, 'well-known', i)
     let to = join(DIST, i)
-    if (i === 'security.txt') to = join(DIST, '.well-known', i)
+    if (i === 'security.txt') {
+      from += '.asc'
+      to = join(DIST, '.well-known', i)
+    }
     assets.add(to)
     return fs.copyFile(from, to)
   }))
