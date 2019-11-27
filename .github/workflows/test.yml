@@ -24,7 +24,7 @@ jobs:
           key: yarn-all-${{ hashFiles('**/yarn.lock') }}
           restore-keys: |
             yarn-all-
-      - name: Install build dependencies
+      - name: Install all dependencies
         run: yarn install
       - name: Build and test
         run: yarn test
