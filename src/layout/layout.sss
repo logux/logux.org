@@ -4,6 +4,9 @@
   @media (width >= 1024px)
     padding-left: 400px
 
+  @media (width >= 1280px)
+    padding-left: 450px
+
 .layout_aside
   position: fixed
   top: 0
@@ -11,11 +14,14 @@
   left: 0
   z-index: 2
   display: flex
-  width: 400px
+  width: 450px
   background: var(--base-panel)
 
   @mixin light
     box-shadow: 1px 0 0 var(--base-border)
+
+  @media (width < 1280px)
+    width: 400px
 
   @media (width >= 450px) and (width < 1024px)
     box-shadow: 1px 0 0 var(--base-border), 0 2px 8px rgba(#000, 0.3)
@@ -45,8 +51,11 @@
 .layout_menu
   flex-grow: 0
   flex-shrink: 0
-  width: 150px
+  width: 180px
   border-right: 1px solid var(--base-border)
+
+  @media (width < 1280px)
+    width: 150px
 
 .layout_submenu
   flex-grow: 1
