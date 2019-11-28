@@ -69,7 +69,7 @@ async function cleanPage (html, chatUsers, removeAssets) {
   return cleaned.contents
 }
 
-function tag (tagName, cls, properties, children = []) {
+function tag (tagName, cls, properties = { }, children = []) {
   if (Array.isArray(properties)) {
     children = properties
     properties = { }
@@ -219,11 +219,11 @@ function converter () {
           return i.replace(/^hljs-/, 'code-block_')
         })
       } else if (node.tagName === 'a' && parent.tagName === 'strong') {
-        if (toText(node.children) === 'Next chapter →') {
-          parent.tagName = 'a'
-          parent.properties = node.properties
-          parent.children = node.children
-          parent.properties.className = ['button']
+        if (toText(node.children) === 'Next chapter') {
+          parent.tagName = 'div'
+          parent.properties.className = ['next']
+          node.properties.className = ['button']
+          node.children.push(tag('span', 'next_icon'))
         }
       }
     })
@@ -281,7 +281,7 @@ function generateSubmenu (links) {
 
 async function createLayout (uikit, chatUsers) {
   let guideHtml = await cleanPage(uikit, chatUsers, /\/(api|github)\./)
-  let apiHtml = await cleanPage(uikit, chatUsers, /\/guide\./)
+  let apiHtml = await cleanPage(uikit, chatUsers, /\/(guide|next)\./)
 
   async function put (layout, categoryUrl, links, title, tree) {
     let fixed = await unified()
