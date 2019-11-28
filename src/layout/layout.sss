@@ -82,12 +82,6 @@
     left: 15px
     z-index: 3
 
-.layout_open,
-.layout_close
-  position: relative
-  width: 45px
-  background: var(--base-light-accent)
-
 .layout_open::before,
 .layout_close::before
   position: absolute
@@ -109,13 +103,7 @@
   @media (width < 1024px)
     background: url(./close.svg)
 
-a.layout_chat
-  padding: 0 15px
-  font-weight: bold
-  color: #000
-  background: var(--base-gradient)
-
-.layout_chat::before
+.layout_chat
   @media (width < 1024px)
     display: inline-block
     width: 24px
@@ -124,26 +112,3 @@ a.layout_chat
     vertical-align: -14%
     content: ""
     background: url(./chat.svg)
-
-.layout_open,
-.layout_close,
-a.layout_chat
-  display: inline-block
-  height: 45px
-  line-height: 45px
-  vertical-align: bottom
-  border-radius: 4px
-  box-shadow: var(--base-above)
-
-  &[hidden]
-    display: none
-
-  &:hover
-    background: var(--base-accent)
-
-  &:focus
-    background: var(--base-light-accent)
-    box-shadow: var(--base-above-focus)
-
-  &:active
-    box-shadow: none

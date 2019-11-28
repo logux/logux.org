@@ -1,14 +1,22 @@
 a.button,
 button.button
+  position: relative
   display: inline-block
   height: 45px
   padding: 0 18px
   font-weight: bold
   line-height: 45px
   color: #000
+  vertical-align: bottom
   background: var(--base-gradient)
   border-radius: 4px
   box-shadow: var(--base-above)
+
+  @mixin mobile
+    padding: 0 15px
+
+  &[hidden]
+    display: none
 
   &:hover,
   &:focus
@@ -19,3 +27,11 @@ button.button
 
   &:active
     box-shadow: none
+
+  &.is-square
+    width: 45px
+    background: var(--base-light-accent)
+
+    &:hover,
+    &:focus
+      background: var(--base-accent)

@@ -4,7 +4,7 @@ let aside = document.querySelector('.layout_aside')
 let links = document.querySelectorAll('.layout_aside a[href^="#"]')
 let close = document.querySelector('.layout_close')
 let open = document.querySelector('.layout_open')
-let chat = document.querySelector('.layout_chat')
+let chat = document.querySelector('.layout_float a')
 
 let closed = true
 if (open && close && aside) {
