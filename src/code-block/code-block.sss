@@ -13,6 +13,12 @@
   @mixin no-mobile
     border-radius: 4px
 
+    .text_block + &
+      margin-top: -6px
+
+      li &
+        margin-top: 0
+
   @mixin mobile
     padding: 12px var(--text-side)
     margin-right: calc(var(--text-side) * -1)

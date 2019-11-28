@@ -2,5 +2,9 @@
   margin-bottom: var(--text-after)
   margin-left: 24px
 
+  @mixin no-mobile
+    .text_block + &
+      margin-top: -6px
+
   > li
     --text-after: 15px
