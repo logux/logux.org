@@ -8,7 +8,7 @@ import wrap from '../lib/spinner.js'
 
 async function repackScripts (assets) {
   let scripts = assets.get(/\.js$/).map(compiled => {
-    let name = compiled.replace(/^.+[^\w](\w+)\.[\w\d]+\.js$/, '$1.js')
+    let name = compiled.replace(/^.+\W(\w+)\.\w+\.js$/, '$1.js')
     return [join(SRC, name), compiled]
   })
   await Promise.all(scripts.map(async ([input, output]) => {

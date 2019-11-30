@@ -131,7 +131,7 @@ function converter () {
   return tree => {
     unistVisit(tree, 'text', node => {
       node.value = node.value.replace(
-        /(^|\s)(the|a|for|in|an|to|if|so|when|with|by|and|or|is|this|to) /gi,
+        /(^|\s)(the|a|for|in|an|to|if|so|when|with|by|and|or|is|this) /gi,
         '$1$2 '
       )
     })
@@ -184,7 +184,7 @@ function converter () {
           converted.push(switcherToHTML(onPage++, switchers))
         }
         parent.children = converted
-      } else if (/^h[123]$/.test(node.tagName) && !node.properties.className) {
+      } else if (/^h[1-3]$/.test(node.tagName) && !node.properties.className) {
         node.properties.className = ['title']
         if (!node.noSlug) {
           let slug = node.slug ? node.slug : toSlug(node.children)
