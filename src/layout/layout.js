@@ -31,3 +31,13 @@ for (let link of links) {
     if (!closed && isSimpleClick(e)) close.click()
   })
 }
+
+if (
+  window.matchMedia('(display-mode: standalone)').matches ||
+  window.navigator.standalone
+) {
+  let external = document.querySelectorAll('.layout a[href^="https://"]')
+  for (let link of external) {
+    link.setAttribute('target', '_blank')
+  }
+}
