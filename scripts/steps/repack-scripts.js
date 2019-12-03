@@ -25,7 +25,7 @@ async function repackScripts (assets) {
         .replace(/\\/g, '/')
         .replace(/\/index\.html$/, '/')
     })
-    .filter(i => i !== '/service.js')
+    .filter(i => i !== '/service.js' && i !== '/uikit/')
 
   await Promise.all(scripts.map(async ([input, output]) => {
     let plugins = [
