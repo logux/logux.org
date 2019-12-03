@@ -27,11 +27,11 @@ function cleaner ({ chatUsers, removeAssets }) {
     return unistFilter(tree, 'element', node => {
       let props = node.properties || {}
       if (node.tagName === 'script') {
-        return !removeAssets.test(props.src)
+        return !removeAssets.some(i => props.src.includes(i))
       } else if (node.tagName === 'link' && props.rel[0] === 'stylesheet') {
-        return !removeAssets.test(props.href)
+        return !removeAssets.some(i => props.href.includes(i))
       } else if (node.tagName === 'link' && props.rel[0] === 'preload') {
-        return !removeAssets.test(props.href)
+        return !removeAssets.some(i => props.href.includes(i))
       } else {
         return true
       }
@@ -280,10 +280,7 @@ function generateSubmenu (links) {
 }
 
 async function createLayout (uikit, chatUsers) {
-  let guideHtml = await cleanPage(uikit, chatUsers, /\/(api|github)\./)
-  let apiHtml = await cleanPage(uikit, chatUsers, /\/(guide|next)\./)
-
-  async function put (layout, categoryUrl, links, title, tree) {
+  return async function (categoryUrl, links, title, tree) {
     let fixed = await unified()
       .use(converter)
       .use(checker, title)
@@ -294,6 +291,12 @@ async function createLayout (uikit, chatUsers) {
     let html = await unified()
       .use(rehypeStringify)
       .stringify(fixed)
+    let ignore = []
+    if (!html.includes(' class="source"')) ignore.push('/github.')
+    if (!html.includes(' class="next"')) ignore.push('/right.')
+    if (!html.includes(' class="switcher"')) ignore.push('/switcher.')
+    if (!html.includes(' class="title_link"')) ignore.push('/link.')
+    let layout = await cleanPage(uikit, chatUsers, ignore)
     return layout
       .replace(
         `class="menu_link" href="${ categoryUrl }"`,
@@ -303,15 +306,6 @@ async function createLayout (uikit, chatUsers) {
       .replace(/<title>[^<]+/, `<title>${ title } / Logux`)
       .replace(/<\/article>/, '')
       .replace(/<article([^>]+)>/, `${ html }`)
-  }
-
-  return {
-    async doc (categoryUrl, links, title, tree) {
-      return put(guideHtml, categoryUrl, links, title, tree)
-    },
-    async api (categoryUrl, links, title, tree) {
-      return put(apiHtml, categoryUrl, links, title, tree)
-    }
   }
 }
 
