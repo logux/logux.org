@@ -28,8 +28,12 @@ async function repackScripts (assets) {
     .filter(i => {
       return i !== '/service.js' &&
              i !== '/uikit/' &&
-             i !== 'robots.txt' &&
-            !i.startWith('/.well-known/')
+             i !== '/logo.svg' &&
+             i !== '/logotype.svg' &&
+             i !== '/favicon.ico' &&
+             i !== '/robots.txt' &&
+             !i.startsWith('/og.') &&
+             !i.startsWith('/.well-known/')
     })
 
   await Promise.all(scripts.map(async ([input, output]) => {
