@@ -20,7 +20,6 @@ function initChat () {
   document.addEventListener('gitter-sidecar-instance-started', ({ detail }) => {
     let show = true
     button.addEventListener('click', e => {
-      console.log(1)
       if (isSimpleClick(e)) {
         e.preventDefault()
         detail.chat.toggleChat(show)
