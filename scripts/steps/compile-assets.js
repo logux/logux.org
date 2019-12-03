@@ -3,6 +3,7 @@ import Bundler from 'parcel-bundler'
 
 import { SRC } from '../lib/dirs.js'
 import wrap from '../lib/spinner.js'
+import hash from '../lib/hash.js'
 
 function findAssets (step) {
   return Array.from(step.childBundles).reduce((all, i) => {
@@ -18,6 +19,7 @@ async function compileAssets () {
   })
   let bundle = await uikitBundler.bundle()
   let assets = findAssets(bundle)
+  let hashes = { }
   return {
     map (fn) {
       return assets.map(fn)
@@ -31,8 +33,14 @@ async function compileAssets () {
     remove (path) {
       assets = assets.filter(i => i !== path)
     },
-    add (path) {
+    add (path, content) {
+      if (content) {
+        hashes[path] = hash(content)
+      }
       assets = assets.concat([path])
+    },
+    hash (path) {
+      return hashes[path]
     }
   }
 }

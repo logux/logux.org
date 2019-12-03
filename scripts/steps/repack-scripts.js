@@ -7,6 +7,7 @@ import rollup from 'rollup'
 
 import { SRC, DIST } from '../lib/dirs.js'
 import wrap from '../lib/spinner.js'
+import hash from '../lib/hash.js'
 
 async function repackScripts (assets) {
   let scripts = assets.get(/\.js$/).map(compiled => {
@@ -35,6 +36,12 @@ async function repackScripts (assets) {
              !i.startsWith('/og.') &&
              !i.startsWith('/.well-known/')
     })
+  let cacheBuster = hash(
+    toCache
+      .filter(i => i.endsWith('/'))
+      .map(i => assets.hash(join(DIST, i)))
+      .join()
+  )
 
   await Promise.all(scripts.map(async ([input, output]) => {
     let plugins = [
@@ -49,7 +56,11 @@ async function repackScripts (assets) {
     }
     let bundle = await rollup.rollup({ input, plugins })
     let results = await bundle.generate({ format: 'iife' })
-    await fs.writeFile(output, results.output[0].code)
+    let code = results.output[0].code
+    if (output.endsWith('service.js')) {
+      code = `'${ cacheBuster }';${ code }`
+    }
+    await fs.writeFile(output, code)
   }))
 }
 

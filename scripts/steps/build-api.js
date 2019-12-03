@@ -392,7 +392,7 @@ export default async function buildApi (assets, layout, title, jsdoc) {
   let submenu = toSubmenu(jsdoc)
   let html = await layout.api(`/${ file }/`, submenu, title, tree)
   await fs.writeFile(path, html)
-  assets.add(path)
+  assets.add(path, html)
 
   end()
 }

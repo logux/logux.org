@@ -78,7 +78,7 @@ async function buildDocs (assets, layout, guides) {
     let path = join(DIST, dirs, 'index.html')
     await makeDir(dirname(path))
     await fs.writeFile(path, html)
-    assets.add(path)
+    assets.add(path, html)
   }))
 }
 
