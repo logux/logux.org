@@ -1,10 +1,11 @@
 import injectProcessEnv from 'rollup-plugin-inject-process-env'
+import { join, relative } from 'path'
 import { promises as fs } from 'fs'
-import { join } from 'path'
+import replace from '@rollup/plugin-replace'
 import terser from 'rollup-plugin-terser'
 import rollup from 'rollup'
 
-import { SRC } from '../lib/dirs.js'
+import { SRC, DIST } from '../lib/dirs.js'
 import wrap from '../lib/spinner.js'
 
 async function repackScripts (assets) {
@@ -18,14 +19,26 @@ async function repackScripts (assets) {
     return [join(SRC, name), compiled]
   })
 
-  await Promise.all(scripts.map(async ([input, output]) => {
-    let bundle = await rollup.rollup({
-      input,
-      plugins: [
-        injectProcessEnv({ NODE_ENV: 'production' }),
-        terser.terser()
-      ]
+  let toCache = assets
+    .map(i => {
+      return '/' + relative(DIST, i)
+        .replace(/\\/g, '/')
+        .replace(/\/index\.html$/, '/')
     })
+    .filter(i => i !== '/service.js')
+
+  await Promise.all(scripts.map(async ([input, output]) => {
+    let plugins = [
+      injectProcessEnv({ NODE_ENV: 'production' }),
+      terser.terser()
+    ]
+    if (output.endsWith('service.js')) {
+      plugins = [
+        replace({ FILES: JSON.stringify(toCache) }),
+        ...plugins
+      ]
+    }
+    let bundle = await rollup.rollup({ input, plugins })
     let results = await bundle.generate({ format: 'iife' })
     await fs.writeFile(output, results.output[0].code)
   }))

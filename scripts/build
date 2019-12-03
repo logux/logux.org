@@ -24,8 +24,7 @@ async function prepareHtml () {
   let [webmanifest, filesFromCSS] = await Promise.all([
     generateWebManifest(assets),
     findFilesInCSS(assets),
-    copyWellKnown(assets),
-    repackScripts(assets)
+    copyWellKnown(assets)
   ])
   let uikit = await updateHtml(assets, webmanifest, filesFromCSS)
   return [assets, uikit]
@@ -63,6 +62,7 @@ async function build () {
     buildApi(assets, layout, 'Node API', nodeApi),
     buildApi(assets, layout, 'Web API', webApi)
   ])
+  await repackScripts(assets)
   await compressFiles(assets)
 }
 

@@ -19,6 +19,9 @@ async function compileAssets () {
   let bundle = await uikitBundler.bundle()
   let assets = findAssets(bundle)
   return {
+    map (fn) {
+      return assets.map(fn)
+    },
     get (regexp) {
       return assets.filter(i => regexp.test(i))
     },
