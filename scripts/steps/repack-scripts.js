@@ -55,7 +55,7 @@ async function repackScripts (assets) {
       ]
     }
     let bundle = await rollup.rollup({ input, plugins })
-    let results = await bundle.generate({ format: 'iife' })
+    let results = await bundle.generate({ format: 'iife', strict: false })
     let code = results.output[0].code
     if (output.endsWith('service.js')) {
       code = `'${ cacheBuster }';${ code }`
