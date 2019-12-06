@@ -180,7 +180,7 @@
         "!dist/lurkers-dark.*.svg",
         "!dist/logotype-dark.*.svg"
       ],
-      "limit": "15 KB"
+      "limit": "17 KB"
     }
   ],
   "sharec": {
