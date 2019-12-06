@@ -6,19 +6,29 @@ let close = document.querySelector('.layout_close')
 let open = document.querySelector('.layout_open')
 let chat = document.querySelector('.layout_float a')
 
+let prevScroll
 let closed = true
 if (open && close && aside) {
   open.addEventListener('click', () => {
     closed = false
-    document.body.classList.add('has-no-scroll')
+
+    prevScroll = window.scrollY
+    document.body.style.top = `-${ prevScroll }px`
+    document.body.classList.add('is-locked')
+
     aside.classList.add('is-open')
     open.setAttribute('hidden', true)
     chat.setAttribute('hidden', true)
     close.removeAttribute('hidden')
   })
+
   close.addEventListener('click', () => {
     closed = true
-    document.body.classList.remove('has-no-scroll')
+
+    document.body.style.top = ''
+    document.body.classList.remove('is-locked')
+    window.scrollTo(0, prevScroll)
+
     aside.classList.remove('is-open')
     open.removeAttribute('hidden')
     chat.removeAttribute('hidden')
@@ -26,18 +36,10 @@ if (open && close && aside) {
   })
 }
 
+window.matchMedia('(min-width: 1023px)').addListener(close.click)
+
 for (let link of links) {
   link.addEventListener('click', e => {
     if (!closed && isSimpleClick(e)) close.click()
   })
-}
-
-if (
-  window.matchMedia('(display-mode: standalone)').matches ||
-  window.navigator.standalone
-) {
-  let external = document.querySelectorAll('.layout a[href^="https://"]')
-  for (let link of external) {
-    link.setAttribute('target', '_blank')
-  }
 }
