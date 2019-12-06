@@ -51,7 +51,7 @@
   "devDependencies": {
     "@logux/eslint-config": "^35.0.1",
     "@logux/sharec-config": "^0.5.6",
-    "@size-limit/file": "^2.2.1",
+    "@size-limit/file": "^2.2.2",
     "del-cli": "^3.0.0",
     "eslint": "^6.7.2",
     "eslint-config-standard": "^14.1.0",
@@ -172,7 +172,7 @@
         "dist/*.js",
         "dist/*.css"
       ],
-      "limit": "14 KB"
+      "limit": "13 KB"
     }
   ],
   "sharec": {
