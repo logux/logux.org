@@ -185,6 +185,9 @@ function converter () {
         }
         parent.children = converted
       } else if (/^h[1-3]$/.test(node.tagName) && !node.properties.className) {
+        unistVisit(node, 'element', i => {
+          if (i.tagName === 'code') i.noClass = true
+        })
         node.properties.className = ['title']
         if (!node.noSlug) {
           let slug = node.slug ? node.slug : toSlug(node.children)
