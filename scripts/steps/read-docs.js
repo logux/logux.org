@@ -134,16 +134,17 @@ async function readDocs () {
             return [node]
           }
         })
-        unistVisit(tree, 'heading', node => {
-          if (node.depth === 1) {
-            title = node.children[0].value
+        unistVisit(tree, node => {
+          if (node.type === 'heading') {
+            if (node.depth === 1) {
+              title = node.children[0].value
+            }
+          } else if (node.type === 'link' || node.type === 'definition') {
+            node.url = node.url
+              .replace(/^..\//, '../../')
+              .replace(/^.\//, '../')
+              .replace(/\.md(#.+)?$/, '/$1')
           }
-        })
-        unistVisit(tree, 'link', node => {
-          node.url = node.url
-            .replace(/^..\//, '../../')
-            .replace(/^.\//, '../')
-            .replace(/\.md$/, '/')
         })
       }
     }
