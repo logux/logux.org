@@ -165,14 +165,22 @@
       "path": [
         "dist/uikit/index.html",
         "dist/*.woff",
-        "dist/chat.*.svg",
-        "dist/edit.*.svg",
-        "dist/link.*.svg",
-        "dist/lurkers-light.*.svg",
+        "dist/*.svg",
         "dist/*.js",
-        "dist/*.css"
+        "dist/*.css",
+        "!dist/service.js",
+        "!dist/logo.svg",
+        "!dist/logotype.svg",
+        "!dist/open.*.svg",
+        "!dist/close.*.svg",
+        "!dist/chat.*.svg",
+        "!dist/pinned.*.svg",
+        "!dist/favicon.*.svg",
+        "!dist/chain-dark.*.svg",
+        "!dist/lurkers-dark.*.svg",
+        "!dist/logotype-dark.*.svg"
       ],
-      "limit": "13 KB"
+      "limit": "15 KB"
     }
   ],
   "sharec": {
