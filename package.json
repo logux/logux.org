@@ -155,7 +155,7 @@
       "svgo",
       "git add"
     ],
-    "*.css": [
+    "*.sss": [
       "stylelint --fix",
       "git add"
     ]
