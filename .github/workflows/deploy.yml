@@ -64,13 +64,11 @@ jobs:
     runs-on: ubuntu-latest
     needs: deploy
     steps:
-      - name: Install Node.js
-        uses: actions/setup-node@master
       - name: Audit website
         uses: treosh/lighthouse-ci-action@v2
         with:
           temporaryPublicStorage: true
-          url: |
+          urls: |
             https://logux.io/guide/architecture/core/
             https://logux.io/uikit
       - name: Save results
