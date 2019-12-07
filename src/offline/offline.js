@@ -4,8 +4,10 @@ function init () {
   navigator.serviceWorker.register('/service.js')
 }
 
+let forceOffline = location.search.includes('offline')
+
 if (process.env.NODE_ENV === 'production') {
-  if (!isSaveDate() && navigator.serviceWorker) {
+  if ((forceOffline || !isSaveDate()) && navigator.serviceWorker) {
     init()
   } else if (localStorage.appinstalled) {
     init()

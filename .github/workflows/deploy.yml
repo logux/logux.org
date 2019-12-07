@@ -74,7 +74,7 @@ jobs:
         uses: treosh/lighthouse-ci-action@v2
         with:
           configPath: ./lighthouserc.json
-          urls: https://logux.io/guide/architecture/core/
+          urls: https://logux.io/guide/architecture/core/?offline
       - name: Save results
         uses: actions/upload-artifact@v1
         with:
