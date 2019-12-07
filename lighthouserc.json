@@ -1,8 +1,15 @@
 {
   "ci": {
+    "collect": {
+      "numberOfRuns": 3,
+      "url": [
+        "https://logux.io/guide/architecture/core/?offline"
+      ]
+    },
     "assert": {
       "preset": "lighthouse:all",
       "assertions": {
+        "time-to-first-byte": ["error", { "minScore": 0 }],
         "critical-request-chains": ["error", { "minScore": 0 }],
         "mainthread-work-breakdown": ["error", { "minScore": 0.90 }],
         "max-potential-fid": ["error", { "minScore": 0.4 }],
