@@ -74,6 +74,7 @@ jobs:
         uses: treosh/lighthouse-ci-action@v2
         with:
           temporaryPublicStorage: true
+          configPath: ./lighthouserc.json
           urls: |
             https://logux.io/
       - name: Save results
