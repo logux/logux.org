@@ -64,13 +64,14 @@ jobs:
     runs-on: ubuntu-latest
     needs: deploy
     steps:
+      - name: Warm CDN
+        run: wget --page-requisites https://logux.io
       - name: Audit website
         uses: treosh/lighthouse-ci-action@v2
         with:
           temporaryPublicStorage: true
           urls: |
-            https://logux.io/guide/architecture/core/
-            https://logux.io/uikit
+            https://logux.io/
       - name: Save results
         uses: actions/upload-artifact@v1
         with:
