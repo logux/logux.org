@@ -73,6 +73,7 @@ jobs:
       - name: Audit website
         uses: treosh/lighthouse-ci-action@v2
         with:
+          temporaryPublicStorage: true
           configPath: ./lighthouserc.json
       - name: Save results
         uses: actions/upload-artifact@v1

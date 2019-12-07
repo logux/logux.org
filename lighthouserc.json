@@ -15,9 +15,6 @@
         "max-potential-fid": ["error", { "minScore": 0.4 }],
         "speed-index": ["error", { "minScore": 0.95 }]
       }
-    },
-    "upload": {
-      "target": "temporary-public-storage"
     }
   }
 }
