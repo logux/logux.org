@@ -71,7 +71,7 @@ jobs:
       - name: Warm CDN
         run: wget --page-requisites https://logux.io
       - name: Audit website
-        uses: treosh/lighthouse-ci-action@v2
+        uses: treosh/lighthouse-ci-action@master
         with:
           temporaryPublicStorage: true
           configPath: ./lighthouserc.json
