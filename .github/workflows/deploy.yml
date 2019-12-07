@@ -73,7 +73,7 @@ jobs:
       - name: Audit website
         uses: treosh/lighthouse-ci-action@v2
         with:
-          configPath: ./lighthouserc.json
+          configPath: ./lighthouserc.yml
           urls: https://logux.io/guide/architecture/core/?offline
       - name: Save results
         uses: actions/upload-artifact@v1
