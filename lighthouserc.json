@@ -1,3 +1,10 @@
 {
-  "preset": "lighthouse:all"
+  "ci": {
+    "assert": {
+      "preset": "lighthouse:all"
+    },
+    "upload": {
+      "target": "temporary-public-storage"
+    }
+  }
 }
