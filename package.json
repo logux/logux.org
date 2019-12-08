@@ -3,12 +3,12 @@
   "private": true,
   "scripts": {
     "securitytxt:sign": "gpg --digest-algo SHA512 --clearsign src/well-known/security.txt",
-    "start:uikit": "parcel serve src/uikit.pug --open",
+    "start": "parcel serve src/uikit.pug --open",
     "lint": "eslint . scripts/build scripts/clean-cdn && stylelint src/**/*.sss",
     "test": "yarn lint && yarn build && size-limit",
     "clean": "del-cli dist/ .cache",
     "build": "NODE_ENV=production ./scripts/build",
-    "start": "podman build -t loguxio . && podman run -v ./dist/:/var/www/ --privileged --rm -p 8000:80 -e PORT=80 -it loguxio"
+    "nginx": "podman build -t loguxio . && podman run -v ./dist/:/var/www/ --privileged --rm -p 8000:80 -e PORT=80 -it loguxio"
   },
   "dependencies": {
     "@rollup/plugin-replace": "^2.2.1",
