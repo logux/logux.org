@@ -144,7 +144,7 @@ html( lang="en" )
                 pre.code-block server.undo(meta, <span class="code-block_string">'too late'</span>)
               li
                 p.text_block #[code.code preadd]: action is going to be added to the log. It is the only way to set #[a.code(href="#") #[code meta.reasons]]. This event will not be called for cross-tab actions added in a different browser tab.
-            p.text_block To stop the server press #[kbd.code Command]+#[kbd.code .] on Mac OS X and #[kbd.code Ctrl]+#[kbd.code C] on Linux and Windows.
+            p.text_block To stop the server press #[kbd.code Ctrl]+#[kbd.code C] on Linux and Windows.
           +switcher_section
             p.text_block Clients can also create #[code.code logux/undo] to revert action and ask other clients to revert it (if the developer allowed to re-send these actions on the server).
           .next
@@ -183,7 +183,7 @@ html( lang="en" )
           a.source( href="#" title="Source code" )
           a.title_link( href="#add" title="Direct link to section" )
             code
-              | #[span.title_extra Class.]add#[span.title_extra (action, meta)]
+              | #[span.title_extra Class#]add#[span.title_extra (action, meta)]
         h3#parameters.title
           a.title_link( href="#parameters" title="Direct link to section" ) Parameters
         table.table
