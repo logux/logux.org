@@ -1,6 +1,4 @@
 html
-  --scroll-color: #bbb
-
   scroll-padding-top: 12px
 
   @media (width >= 1024px)
@@ -9,19 +7,9 @@ html
   @media (prefers-reduced-motion: reduce)
     scroll-behavior: auto
 
-  @mixin dark
-    --scroll-color: var(--base-border)
-
 @mixin no-mobile
   *
-    scrollbar-color: var(--scroll-color) transparent
     scrollbar-width: thin
-
-  ::-webkit-scrollbar
-    background: transparent
-
-  ::-webkit-scrollbar-thumb
-    background: var(--scroll-color)
 
 body.is-locked
   position: fixed

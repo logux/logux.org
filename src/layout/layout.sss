@@ -51,10 +51,7 @@
 
   @mixin no-mobile
     &:not(:hover)
-      scrollbar-width: none
-
-      &::-webkit-scrollbar
-        display: none
+      overflow: hidden
 
 .layout_menu
   flex-grow: 0
