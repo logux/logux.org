@@ -8,12 +8,26 @@ a.submenu_link
   display: block
   height: 33px
   padding: 0 9px
-  overflow: hidden
+  overflow-x: hidden
+  overflow-y: visible
   line-height: 33px
   color: var(--base-title)
   text-overflow: ellipsis
   white-space: nowrap
   border-radius: 4px
+
+  &::after
+    position: absolute
+    right: 9px
+    left: 9px
+    display: block
+    height: 36px
+    margin-top: -33px
+    content: ''
+
+  &:active::after
+    height: 34px
+    margin-top: -34px
 
   &.is-current
     color: #000

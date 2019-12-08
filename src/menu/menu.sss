@@ -54,6 +54,15 @@ a.menu_link
   color: var(--base-title)
   border-radius: 4px
 
+  &::after
+    position: absolute
+    right: 9px
+    left: 9px
+    display: block
+    height: 48px
+    margin-top: -37px
+    content: ''
+
   &:not(.is-current):hover
     @mixin no-mobile
       font-family: Kurbanistika, sans-serif
@@ -67,6 +76,15 @@ a.menu_link
 
   .menu li &.chat
     height: 60px
+
+.menu li:last-child a::after
+  height: 72px
+  margin-top: -53px
+
+.menu li .menu_separator + a::after,
+.menu li:nth-child(3) a::after
+  height: 56px
+  margin-top: -45px
 
 .menu_extra
   position: relative
