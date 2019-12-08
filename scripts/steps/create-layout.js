@@ -221,7 +221,7 @@ function converter () {
         node.properties.className = node.properties.className.map(i => {
           return i.replace(/^hljs-/, 'code-block_')
         })
-      } else if (node.tagName === 'a' && parent.tagName === 'strong') {
+      } else if (node.tagName === 'a' && parent.tagName === 'p') {
         if (toText(node.children) === 'Next chapter') {
           parent.tagName = 'div'
           parent.properties.className = ['next']
