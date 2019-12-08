@@ -207,8 +207,11 @@ function returnsHtml (parent, returns) {
 
 function exampleHtml (example) {
   if (!example) return []
+  let highlighted = lowlight.highlight('js', example.description, {
+    prefix: 'code-block_'
+  })
   let pre = tag('pre', [
-    tag('code', lowlight.highlight('js', example.description).value)
+    tag('code', highlighted.value)
   ])
   return [pre]
 }
