@@ -136,7 +136,6 @@ function converter () {
       )
     })
     unistVisit(tree, 'element', (node, index, parent) => {
-      let cls = node.properties.className || []
       if (node.tagName === 'article') {
         node.properties.className = ['text']
         node.children.push({
@@ -217,10 +216,6 @@ function converter () {
           ]
           node.properties = { className: ['edit'] }
         }
-      } else if (cls.some(i => i.startsWith('hljs-'))) {
-        node.properties.className = node.properties.className.map(i => {
-          return i.replace(/^hljs-/, 'code-block_')
-        })
       } else if (node.tagName === 'a' && parent.tagName === 'p') {
         if (toText(node.children) === 'Next chapter') {
           parent.tagName = 'div'

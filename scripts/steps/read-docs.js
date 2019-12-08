@@ -153,7 +153,10 @@ async function readDocs () {
     tree = await unified()
       .use(convertor)
       .use(iniandBashHighlight)
-      .use(remarkHighlight, { exclude: ['bash', 'sh', 'ini', 'diff'] })
+      .use(remarkHighlight, {
+        exclude: ['bash', 'sh', 'ini', 'diff'],
+        prefix: 'code-block_'
+      })
       .use(remarkRehype, { allowDangerousHTML: true })
       .use(rehypeRaw)
       .use(htmlFixer, file)

@@ -7775,10 +7775,10 @@ rehype-stringify@^6.0.1:
     hast-util-to-html "^6.0.0"
     xtend "^4.0.0"
 
-remark-highlight.js@^5.1.1:
-  version "5.1.1"
-  resolved "https://registry.yarnpkg.com/remark-highlight.js/-/remark-highlight.js-5.1.1.tgz#4045b915200238278839d91d41be01258211703a"
-  integrity sha512-e8iD5SMw94rjAHxQTGdJn/RzNYt0zpQ6+nVJ1ZX9GqDWhgOm0pm+bVlABsTkZbtoM3GKQ187vbHQ+nTs4Fl9vQ==
+remark-highlight.js@^5.2.0:
+  version "5.2.0"
+  resolved "https://registry.yarnpkg.com/remark-highlight.js/-/remark-highlight.js-5.2.0.tgz#6d8d22085e0c76573744b7e3706fc232269f5b02"
+  integrity sha512-5tCr1CfdXDYzR8HCAnohlr1rK8DjUTFxEZdr+QEul5o13+EOEt5RrO8U6Znf8Faj5rVLcMJtxLPq6hHrZFo33A==
   dependencies:
     lowlight "^1.2.0"
     unist-util-visit "^1.0.0"
