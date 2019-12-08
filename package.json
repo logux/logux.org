@@ -98,7 +98,8 @@
       "postcss-media-minmax": {},
       "postcss-nested": {},
       "postcss-hexrgba": {},
-      "postcss-momentum-scrolling": {}
+      "postcss-momentum-scrolling": {},
+      "autoprefixer": {}
     }
   },
   "eslintConfig": {
