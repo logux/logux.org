@@ -9,10 +9,13 @@ import wrap from '../lib/spinner.js'
 
 function cleaner ({ chatUsers, removeAssets }) {
   return tree => {
-    unistVisit(tree, 'element', node => {
+    unistVisit(tree, 'element', (node, index, parent) => {
       let cls = node.properties.className || []
       if (node.tagName === 'article') {
         node.children = []
+        parent.children = parent.children.filter(i => {
+          return i.tagName !== 'article' || i === node
+        })
       } else if (node.tagName === 'a') {
         if (cls.some(i => i === 'menu_link')) {
           node.properties.className = cls.filter(i => i !== 'is-current')
