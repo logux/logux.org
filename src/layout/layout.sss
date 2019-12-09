@@ -49,9 +49,19 @@
   overflow-y: auto
   overscroll-behavior: contain
 
+.layout_submenu
   @mixin no-mobile
-    &:not(:hover)
+    .layout_pad:not(:hover) &
       overflow: hidden
+
+.layout_pad
+  flex-grow: 1
+  height: 100%
+  overflow: hidden
+
+  @mixin no-mobile
+    padding-right: 20px
+    margin-right: -20px
 
 .layout_menu
   flex-grow: 0
@@ -61,9 +71,6 @@
 
   @media (width < 1280px)
     width: 150px
-
-.layout_submenu
-  flex-grow: 1
 
 .layout_main
   display: flex
