@@ -9,13 +9,10 @@ import wrap from '../lib/spinner.js'
 
 function cleaner ({ chatUsers, removeAssets }) {
   return tree => {
-    unistVisit(tree, 'element', (node, index, parent) => {
+    unistVisit(tree, 'element', node => {
       let cls = node.properties.className || []
       if (node.tagName === 'article') {
         node.children = []
-        parent.children = parent.children.filter(i => {
-          return i.tagName !== 'article' || i === node
-        })
       } else if (node.tagName === 'a') {
         if (cls.some(i => i === 'menu_link')) {
           node.properties.className = cls.filter(i => i !== 'is-current')
@@ -26,10 +23,13 @@ function cleaner ({ chatUsers, removeAssets }) {
         node.children = [{ type: 'text', value: `(${ chatUsers } people)` }]
       }
     })
-    if (!removeAssets) return tree
+    let articles = 0
     return unistFilter(tree, 'element', node => {
-      let props = node.properties || {}
-      if (node.tagName === 'script') {
+      let props = node.properties || { }
+      if (node.tagName === 'article') {
+        articles += 1
+        return articles === 1
+      } if (node.tagName === 'script') {
         return !removeAssets.some(i => props.src.includes(i))
       } else if (node.tagName === 'link' && props.rel[0] === 'stylesheet') {
         return !removeAssets.some(i => props.href.includes(i))
