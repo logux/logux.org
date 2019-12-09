@@ -11,8 +11,9 @@
       "assertions": {
         "mainthread-work-breakdown": ["error", { "minScore": 0.90 }],
         "critical-request-chains": "off",
+        "first-meaningful-paint": ["error", { "minScore": 0.95 }],
         "time-to-first-byte": ["error", { "minScore": 0 }],
-        "max-potential-fid": ["error", { "minScore": 0.4 }],
+        "max-potential-fid": ["error", { "minScore": 0.35 }],
         "speed-index": ["error", { "minScore": 0.95 }]
       }
     }
