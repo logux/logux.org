@@ -53,15 +53,17 @@
     &:not(:hover)
       overflow: hidden
 
-.layout_submenu-hover-area
-  position: absolute
-  right: -20px
+@mixin no-mobile
+  .layout_submenu-hover-area
+    position: absolute
+    right: -20px
 
-  &::before
-    position: fixed
-    top: 0
-    bottom: 0
-    width: 20px
+    &::before
+      position: fixed
+      top: 0
+      bottom: 0
+      width: 20px
+      content: ""
 
 .layout_menu
   flex-grow: 0
