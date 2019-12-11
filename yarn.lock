@@ -6734,6 +6734,13 @@ postcss-colormin@^4.0.3:
     postcss "^7.0.0"
     postcss-value-parser "^3.0.0"
 
+postcss-combine-media-query@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/postcss-combine-media-query/-/postcss-combine-media-query-1.0.0.tgz#5723870d5d8fdae76584b68c93e7ac133fad15a8"
+  integrity sha512-Tpu7eigki8soukzOa8bAAXq3HrYLBDhjtq4mgMUQt/r/LTDwdSJtoZNLGT95j0WPVzoz+02G/+Y3YpBG8f/+3A==
+  dependencies:
+    postcss "^7.0.21"
+
 postcss-convert-values@^4.0.1:
   version "4.0.1"
   resolved "https://registry.yarnpkg.com/postcss-convert-values/-/postcss-convert-values-4.0.1.tgz#ca3813ed4da0f812f9d43703584e449ebe189a7f"

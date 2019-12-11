@@ -1,10 +1,11 @@
 import { promises as fs } from 'fs'
+import combineMedia from 'postcss-combine-media-query'
 import postcssUrl from 'postcss-url'
 import postcss from 'postcss'
 
 import wrap from '../lib/spinner.js'
 
-async function findFilesInCSS (assets) {
+async function repackStyles (assets) {
   let collected = []
   let fileCollector = postcssUrl({
     url ({ url }, dir, ops, decl) {
@@ -20,11 +21,13 @@ async function findFilesInCSS (assets) {
       return url
     }
   })
+  let processor = postcss([fileCollector, combineMedia])
   await Promise.all(assets.get(/\.css$/).map(async file => {
     let css = await fs.readFile(file)
-    await postcss([fileCollector]).process(css, { from: file })
+    let result = await processor.process(css, { from: file })
+    await fs.writeFile(file, result.css)
   }))
   return collected
 }
 
-export default wrap(findFilesInCSS, 'Generating preload list')
+export default wrap(repackStyles, 'Repacking media queries')
