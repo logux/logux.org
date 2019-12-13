@@ -49,9 +49,10 @@
   overflow-y: auto
   overscroll-behavior: contain
 
-  @mixin no-mobile
-    .layout_hover:not(:hover) &
-      overflow: hidden
+@mixin no-mobile
+  .layout_menu:not(:hover),
+  .layout_hover:not(:hover) .layout_submenu
+    overflow: hidden
 
 .layout_hover
   flex-grow: 1
