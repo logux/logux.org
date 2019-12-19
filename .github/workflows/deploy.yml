@@ -74,6 +74,7 @@ jobs:
       - name: Audit website
         uses: treosh/lighthouse-ci-action@master
         with:
+          runs: 3
           temporaryPublicStorage: true
           configPath: ./lighthouserc.json
       - name: Save results

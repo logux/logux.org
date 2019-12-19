@@ -1,7 +1,6 @@
 {
   "ci": {
     "collect": {
-      "numberOfRuns": 3,
       "url": [
         "https://logux.io/guide/architecture/core/?offline"
       ]
