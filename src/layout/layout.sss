@@ -34,13 +34,12 @@
     &:not(.is-open)
       display: none
 
-  @media (width < 450px)
-    width: 100vw
-
-  @supports (backdrop-filter: blur(15px))
-    @media (width < 1024px)
+    @supports (backdrop-filter: blur(15px))
       background: transparent
       backdrop-filter: blur(15px)
+
+  @media (width < 450px)
+    width: 100vw
 
 .layout_menu,
 .layout_submenu
