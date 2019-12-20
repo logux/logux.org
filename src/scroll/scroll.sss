@@ -1,11 +1,11 @@
 html
   scroll-padding-top: 12px
 
-  @media (width >= 1024px)
-    scroll-behavior: smooth
+  @media (width <= 1024px)
+    scroll-behavior: auto !important
 
   @media (prefers-reduced-motion: reduce)
-    scroll-behavior: auto
+    scroll-behavior: auto !important
 
 @mixin no-mobile
   *
