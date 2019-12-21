@@ -10,11 +10,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout the repository
-        uses: actions/checkout@master
+        uses: actions/checkout@v2
         with:
           fetch-depth: 1
       - name: Install Node.js
-        uses: actions/setup-node@master
+        uses: actions/setup-node@v1
         with:
           node-version: '>=13.2'
       - name: Get Yarn cache
