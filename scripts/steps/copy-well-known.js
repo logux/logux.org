@@ -18,7 +18,9 @@ async function copyWellKnown (assets) {
       let to = join(DIST, i.slice(0, -1))
       let files = await copyDir(from, to)
       for (let file of files) {
-        assets.add(file.dest)
+        if (file.dest !== to) {
+          assets.add(file.dest)
+        }
       }
     } else {
       let from = join(SRC, 'well-known', i)
