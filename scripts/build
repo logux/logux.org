@@ -13,6 +13,7 @@ import getChatUsers from './steps/get-chat-users.js'
 import repackStyles from './steps/repack-styles.js'
 import createLayout from './steps/create-layout.js'
 import updateHtml from './steps/update-html.js'
+import buildPages from './steps/build-pages.js'
 import buildDocs from './steps/build-docs.js'
 import readJsdoc from './steps/read-jsdoc.js'
 import readDocs from './steps/read-docs.js'
@@ -59,6 +60,7 @@ async function build () {
   let layout = await createLayout(uikit, users)
   await Promise.all([
     buildDocs(assets, layout, guides),
+    buildPages(assets, layout),
     buildApi(assets, layout, 'Node API', nodeApi),
     buildApi(assets, layout, 'Web API', webApi)
   ])

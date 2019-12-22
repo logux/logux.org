@@ -20,6 +20,7 @@ html( lang="en" )
     script( defer src="/switcher.js" )
     link( rel="stylesheet" href="/common.sss" )
     link( rel="stylesheet" href="/switcher.sss" )
+    link( rel="stylesheet" href="/branding.sss" )
     meta( property="og:image" content="/base/og.png" )
     link( rel="preconnect" href="https://sidecar.gitter.im/" media="(min-width:941px)" )
   body.layout
@@ -44,6 +45,8 @@ html( lang="en" )
             a.menu_link( href="/node-api/" ) Node API
           li
             a.menu_link( href="/protocols/ws/spec/" ) Protocols
+          li
+            a.menu_link( href="/branding/" ) Branding
           li.is-separated
             .menu_separator
             a.menu_link( href="https://twitter.com/logux_io" rel="me" ) Twitter
@@ -132,7 +135,7 @@ html( lang="en" )
         +edit('https://github.com/logux/logux.io')
           +title1('home')
             | Logux.io UI Kit
-        p.text_block Logux #[strong actions] are very similar to #[strong #[a(href="#") Redux actions]]. JSON objects describe what was changed in #[a(href="#") the application state]. Logux Core provides #[code.code BaseNode] class, which will synchronize actions between two nodes. #[code.code ClientNode] and #[code.code ServerNode] classes extend this class with small behaviour changes.
+        p.text_block Logux #[strong actions] are very similar to #[strong #[a( href="#" ) Redux actions]]. JSON objects describe what was changed in #[a( href="#" ) the application state]. Logux Core provides #[code.code BaseNode] class, which will synchronize actions between two nodes. #[code.code ClientNode] and #[code.code ServerNode] classes extend this class with small behaviour changes.
         +switcher('Node.js', 'Ruby on Rails')
           +switcher_section
             p.text_block You can use only string, number, boolean, null, array, and object as values.
@@ -148,7 +151,7 @@ html( lang="en" )
                   :lowlight( lang="javascript" prefix="code-block_" )
                     server.undo(meta, 'too late')
               li
-                p.text_block #[code.code preadd]: action is going to be added to the log. It is the only way to set #[a.code(href="#") #[code meta.reasons]]. This event will not be called for cross-tab actions added in a different browser tab.
+                p.text_block #[code.code preadd]: action is going to be added to the log. It is the only way to set #[a.code( href="#" ) #[code meta.reasons]]. This event will not be called for cross-tab actions added in a different browser tab.
             p.text_block To stop the server press #[kbd.code Ctrl]+#[kbd.code C] on Linux and Windows.
           +switcher_section
             p.text_block Clients can also create #[code.code logux/undo] to revert action and ask other clients to revert it (if the developer allowed to re-send these actions on the server).
@@ -159,6 +162,11 @@ html( lang="en" )
         +title2('subtitle')
           | Subtitle
         p.text_block By default, the server state is opposite to client state. Because server-side cache could be very big, the database is the single source of truth. You can use any database with Logux.
+        .asset
+          a( href="https://logux.io/branding/logo.svg" download )
+            img( src="https://logux.io/branding/logo.svg" height="150" width="150" )
+          a( href="https://logux.io/branding/logo-dark.svg" download )
+            img.is-dark( src="https://logux.io/branding/logo-dark.svg" height="150" width="150" )
         p.text_block Logux Server removes action after processing and always look to a database for the latest value. As a result, you can’t undo actions on the server.
         +switcher('Node.js', 'Ruby on Rails', 'Any other HTTP server')
           +switcher_section
@@ -196,7 +204,7 @@ html( lang="en" )
             th Description
           tr
             td: code.code log
-            td: code: a(href="#") Log
+            td: code: a( href="#" ) Log
             td Unique current machine name.
           tr
             td: code.code reason
@@ -208,7 +216,7 @@ html( lang="en" )
             td Do not show warning when using #[code.code ws://] in production
         +title3('returns')
           | Returns
-        p.text_block: code #[a(href="#") Promise]&lt;#[a(href="#") boolean]&gt;
+        p.text_block: code #[a( href="#" ) Promise]&lt;#[a( href="#" ) boolean]&gt;
         hr.line
 
       article.text
@@ -226,19 +234,19 @@ html( lang="en" )
       footer.footer
         section.footer_section
           h3.footer_title About
-          .footer_link: a(href="/guide/") Guide
-          .footer_link: a(href="/recipes/") Recipes
-          .footer_link: a(href="/node-api/") Node API
-          .footer_link: a(href="/web-api/") Web API
-          .footer_link: a(href="/protocols/") Protocols
-          .footer_link: a(href="/branding/") Branding
+          .footer_link: a( href="/guide/" ) Guide
+          .footer_link: a( href="/recipes/" ) Recipes
+          .footer_link: a( href="/node-api/" ) Node API
+          .footer_link: a( href="/web-api/" ) Web API
+          .footer_link: a( href="/protocols/" ) Protocols
+          .footer_link: a( href="/branding/" ) Branding
         section.footer_section
           h3.footer_title Community
-          .footer_link: a(href="https://github.com/logux") GitHub
-          .footer_link: a(href="https://twitter.com/logux_io") Twitter
-          .footer_link: a(href="https://gitter.im/logux/logux") Gitter
-          .footer_link: a(href="https://twitter.com/linguopunk") Linguopunk
+          .footer_link: a( href="https://github.com/logux" ) GitHub
+          .footer_link: a( href="https://twitter.com/logux_io" ) Twitter
+          .footer_link: a( href="https://gitter.im/logux/logux" ) Gitter
+          .footer_link: a( href="https://twitter.com/linguopunk" ) Linguopunk
         .footer_section.is-author
-          .footer_text Under the #[a(href="https://github.com/logux/logux.io/blob/master/LICENSE" rel="license") MIT] license
-          .footer_text Sponsored by #[a(href="https://evilmartians.com/") Evil Martians]
+          .footer_text Under the #[a( href="https://github.com/logux/logux.io/blob/master/LICENSE" rel="license" ) MIT] license
+          .footer_text Sponsored by #[a( href="https://evilmartians.com/" ) Evil Martians]
           a.footer_lurkers( href="https://evilmartians.com/" aria-hidden="true" tabindex="-1" )

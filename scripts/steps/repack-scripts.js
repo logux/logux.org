@@ -32,7 +32,6 @@ async function repackScripts (assets) {
              i !== '/favicon.ico' &&
              i !== '/robots.txt' &&
              !i.startsWith('/og.') &&
-             !i.startsWith('/branding/') &&
              !i.startsWith('/.well-known/')
     })
   let cacheBuster = hash(

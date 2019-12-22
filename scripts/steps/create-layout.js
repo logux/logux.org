@@ -296,6 +296,7 @@ async function createLayout (uikit, chatUsers) {
     if (!html.includes(' class="source"')) ignore.push('/github.')
     if (!html.includes(' class="next"')) ignore.push('/right.')
     if (!html.includes(' class="switcher"')) ignore.push('/switcher.')
+    if (!html.includes(' class="asset"')) ignore.push('/branding.')
     if (!html.includes(' class="title_link"')) ignore.push('/link.')
     let layout = await cleanPage(uikit, chatUsers, ignore)
     return layout
