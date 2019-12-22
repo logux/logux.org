@@ -1,5 +1,6 @@
 include switcher/switcher.pug
 include edit/edit.pug
+include title/title.pug
 
 doctype html
 html( lang="en" )
@@ -129,9 +130,8 @@ html( lang="en" )
     main.layout_main#main
       article.text
         +edit('https://github.com/logux/logux.io')
-          h1#home.title
-            a.title_link( href="#home" title="Direct link to section" )
-              | Logux.io UI Kit
+          +title1('home')
+            | Logux.io UI Kit
         p.text_block Logux #[strong actions] are very similar to #[strong #[a(href="#") Redux actions]]. JSON objects describe what was changed in #[a(href="#") the application state]. Logux Core provides #[code.code BaseNode] class, which will synchronize actions between two nodes. #[code.code ClientNode] and #[code.code ServerNode] classes extend this class with small behaviour changes.
         +switcher('Node.js', 'Ruby on Rails')
           +switcher_section
@@ -156,9 +156,8 @@ html( lang="en" )
             a.button( href="#" )
               | Next chapter
               span.next_icon
-        h2#subtitle.title
-          a.title_link( href="#subtitle" title="Direct link to section" )
-            | Subtitle
+        +title2('subtitle')
+          | Subtitle
         p.text_block By default, the server state is opposite to client state. Because server-side cache could be very big, the database is the single source of truth. You can use any database with Logux.
         p.text_block Logux Server removes action after processing and always look to a database for the latest value. As a result, you can’t undo actions on the server.
         +switcher('Node.js', 'Ruby on Rails', 'Any other HTTP server')
@@ -185,13 +184,11 @@ html( lang="en" )
             p.text_block Use Logux Rails gem
           +switcher_section
             p.text_block Write your own library
-        h2#add.title
-          a.source( href="#" title="Source code" )
-          a.title_link( href="#add" title="Direct link to section" )
-            code
-              | #[span.title_extra Class#]add#[span.title_extra (action, meta)]
-        h3#parameters.title
-          a.title_link( href="#parameters" title="Direct link to section" ) Parameters
+        +title2('add')
+          code
+            | #[span.title_extra Class#]add#[span.title_extra (action, meta)]
+        +title3('parameters')
+          | Parameters
         table.table
           tr
             th Name
@@ -209,23 +206,20 @@ html( lang="en" )
             td: code.code opts.allowDangerousProtocol
             td: code boolean?
             td Do not show warning when using #[code.code ws://] in production
-        h3#returns.title
-          a.title_link( href="#returns" title="Direct link to section" ) Returns
+        +title3('returns')
+          | Returns
         p.text_block: code #[a(href="#") Promise]&lt;#[a(href="#") boolean]&gt;
         hr.line
 
       article.text
-        h1#h1.title
-          a.title_link( href="#h1" title="Direct link to section" )
-            | Title 1
+        +title1('h1')
+          | Title 1
         p.text_block Logux architecture was designed to be peer-to-peer and flexible. You can build different architecture on top of core concepts depends on your needs.
-        h2#h2.title
-          a.title_link( href="#h2" title="Direct link to section" )
-            | Title 2
+        +title2('h2')
+          | Title 2
         p.text_block Logux architecture was designed to be peer-to-peer and flexible. You can build different architecture on top of core concepts depends on your needs.
-        h3#h3.title
-          a.title_link( href="#h3" title="Direct link to section" )
-            | Title 3
+        +title3('h3')
+          | Title 3
         p.text_block Logux architecture was designed to be peer-to-peer and flexible. You can build different architecture on top of core concepts depends on your needs.
         hr.line
 

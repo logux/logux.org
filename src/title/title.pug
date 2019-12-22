@@ -1,0 +1,32 @@
+mixin title1(slug, sourceUrl)
+  if slug
+    h1.title( id=slug )
+      if sourceUrl
+        a.source( href=sourceUrl title="Source code" )
+      a.title_link( href='#' + slug title="Direct link to section" )
+        block
+  else
+    h1.title
+      block
+
+mixin title2(slug, sourceUrl)
+  if slug
+    h2.title( id=slug )
+      if sourceUrl
+        a.source( href=sourceUrl title="Source code" )
+      a.title_link( href='#' + slug title="Direct link to section" )
+        block
+  else
+    h2.title
+      block
+
+mixin title3(slug, sourceUrl)
+  if slug
+    h3.title( id=slug )
+      if sourceUrl
+        a.source( href=sourceUrl title="Source code" )
+      a.title_link( href='#' + slug title="Direct link to section" )
+        block
+  else
+    h3.title
+      block
