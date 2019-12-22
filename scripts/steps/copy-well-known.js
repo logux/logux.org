@@ -1,25 +1,35 @@
 import { promises as fs } from 'fs'
 import { join } from 'path'
+import copyDir from 'recursive-copy'
 import makeDir from 'make-dir'
 
 import { SRC, DIST } from '../lib/dirs.js'
 import wrap from '../lib/spinner.js'
 
 let FILES = [
-  'logo.svg', 'logotype.svg', 'favicon.ico', 'robots.txt', 'security.txt'
+  'branding/', 'favicon.ico', 'robots.txt', 'security.txt'
 ]
 
 async function copyWellKnown (assets) {
   await makeDir(join(DIST, '.well-known'))
-  await Promise.all(FILES.map(i => {
-    let from = join(SRC, 'well-known', i)
-    let to = join(DIST, i)
-    if (i === 'security.txt') {
-      from += '.asc'
-      to = join(DIST, '.well-known', i)
+  await Promise.all(FILES.map(async i => {
+    if (i.endsWith('/')) {
+      let from = join(SRC, 'well-known', i.slice(0, -1))
+      let to = join(DIST, i.slice(0, -1))
+      let files = await copyDir(from, to)
+      for (let file of files) {
+        assets.add(file.dest)
+      }
+    } else {
+      let from = join(SRC, 'well-known', i)
+      let to = join(DIST, i)
+      if (i === 'security.txt') {
+        from += '.asc'
+        to = join(DIST, '.well-known', i)
+      }
+      assets.add(to)
+      await fs.copyFile(from, to)
     }
-    assets.add(to)
-    return fs.copyFile(from, to)
   }))
 }
 

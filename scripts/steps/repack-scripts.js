@@ -29,11 +29,10 @@ async function repackScripts (assets) {
     .filter(i => {
       return i !== '/service.js' &&
              i !== '/uikit/' &&
-             i !== '/logo.svg' &&
-             i !== '/logotype.svg' &&
              i !== '/favicon.ico' &&
              i !== '/robots.txt' &&
              !i.startsWith('/og.') &&
+             !i.startsWith('/branding/') &&
              !i.startsWith('/.well-known/')
     })
   let cacheBuster = hash(
