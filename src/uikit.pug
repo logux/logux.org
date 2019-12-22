@@ -163,9 +163,9 @@ html( lang="en" )
           | Subtitle
         p.text_block By default, the server state is opposite to client state. Because server-side cache could be very big, the database is the single source of truth. You can use any database with Logux.
         .asset
-          a( href="https://logux.io/branding/logo.svg" download )
+          a.asset_file( href="https://logux.io/branding/logo.svg" download )
             img( src="https://logux.io/branding/logo.svg" height="150" width="150" )
-          a( href="https://logux.io/branding/logo-dark.svg" download )
+          a.asset_file( href="https://logux.io/branding/logo-dark.svg" download )
             img.is-dark( src="https://logux.io/branding/logo-dark.svg" height="150" width="150" )
         p.text_block Logux Server removes action after processing and always look to a database for the latest value. As a result, you can’t undo actions on the server.
         +switcher('Node.js', 'Ruby on Rails', 'Any other HTTP server')
