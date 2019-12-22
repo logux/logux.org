@@ -1,4 +1,5 @@
 include switcher/switcher.pug
+include edit/edit.pug
 
 doctype html
 html( lang="en" )
@@ -127,11 +128,10 @@ html( lang="en" )
 
     main.layout_main#main
       article.text
-        .edit
+        +edit('https://github.com/logux/logux.io')
           h1#home.title
             a.title_link( href="#home" title="Direct link to section" )
               | Logux.io UI Kit
-          a.edit_link( href="https://github.com/logux/logux.io" title="Edit the page on GitHub" )
         p.text_block Logux #[strong actions] are very similar to #[strong #[a(href="#") Redux actions]]. JSON objects describe what was changed in #[a(href="#") the application state]. Logux Core provides #[code.code BaseNode] class, which will synchronize actions between two nodes. #[code.code ClientNode] and #[code.code ServerNode] classes extend this class with small behaviour changes.
         +switcher('Node.js', 'Ruby on Rails')
           +switcher_section
@@ -237,6 +237,7 @@ html( lang="en" )
           .footer_link: a(href="/node-api/") Node API
           .footer_link: a(href="/web-api/") Web API
           .footer_link: a(href="/protocols/") Protocols
+          .footer_link: a(href="/branding/") Branding
         section.footer_section
           h3.footer_title Community
           .footer_link: a(href="https://github.com/logux") GitHub
