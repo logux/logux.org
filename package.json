@@ -54,6 +54,7 @@
   "devDependencies": {
     "@logux/eslint-config": "^35.0.1",
     "@logux/sharec-config": "^0.5.6",
+    "@logux/stylelint-config": "^0.1.0",
     "@size-limit/file": "^2.2.3",
     "del-cli": "^3.0.0",
     "eslint": "^6.8.0",
@@ -129,25 +130,7 @@
     ".cache"
   ],
   "stylelint": {
-    "extends": [
-      "stylelint-config-standard",
-      "stylelint-config-recess-order"
-    ],
-    "rules": {
-      "declaration-block-trailing-semicolon": null,
-      "block-closing-brace-newline-before": null,
-      "block-opening-brace-space-before": null,
-      "at-rule-no-unknown": [
-        true,
-        {
-          "ignoreAtRules": [
-            "define-mixin",
-            "mixin"
-          ]
-        }
-      ],
-      "color-named": "never"
-    }
+    "extends": "@logux/stylelint-config"
   },
   "husky": {
     "hooks": {
