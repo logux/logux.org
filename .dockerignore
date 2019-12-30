@@ -1,6 +1,7 @@
 node_modules/
 .github/
 scripts/
+!scripts/deploy/
 src/
 lib/
 mixins/
