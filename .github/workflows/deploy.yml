@@ -37,7 +37,7 @@ jobs:
           GITTER_ROOM_ID: ${{ secrets.GITTER_ROOM_ID }}
           GITTER_TOKEN: ${{ secrets.GITTER_TOKEN }}
       - name: Build image
-        run: docker build -t gcr.io/${{ secrets.GCLOUD_PROJECT }}/${{ secrets.GCLOUD_APP }} .
+        run: docker build -f ./scripts/deploy/Dockerfile -t gcr.io/${{ secrets.GCLOUD_PROJECT }}/${{ secrets.GCLOUD_APP }} .
       - name: Setup Google Cloud
         run: |
           curl https://sdk.cloud.google.com | bash && exec -l $SHELL
