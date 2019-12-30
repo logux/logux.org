@@ -4,10 +4,10 @@
   "scripts": {
     "securitytxt:sign": "gpg --digest-algo SHA512 --clearsign src/well-known/security.txt",
     "start": "parcel serve src/uikit.pug --open",
-    "lint": "eslint . scripts/build scripts/clean-cdn && stylelint src/**/*.sss",
+    "lint": "eslint . && stylelint src/**/*.sss",
     "test": "yarn lint && yarn build && size-limit",
     "clean": "del-cli dist/ .cache",
-    "build": "NODE_ENV=production ./scripts/build",
+    "build": "NODE_ENV=production ./scripts/build.js",
     "nginx": "podman build -t loguxio . && podman run -v ./dist/:/var/www/ --privileged --rm -p 8000:80 -e PORT=80 -it loguxio"
   },
   "dependencies": {
