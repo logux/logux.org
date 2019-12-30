@@ -1,5 +1,12 @@
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA512
+
 Contact: andrey@sitnik.ru
-
 Encryption: https://keybase.io/iskin/pgp_keys.asc
-
 Preferred-Languages: en, ru
+-----BEGIN PGP SIGNATURE-----
+
+iF0EAREKAB0WIQS/C/NvDCM2x6GX+UGp4JuUH3EOTQUCXgpaTwAKCRCp4JuUH3EO
+Ta72AJ9Jo45wTEXzfkBwODaVAhcg51JrjQCbB4CVfIVa4YeacItAOiCKRNtaXB8=
+=vRcQ
+-----END PGP SIGNATURE-----
