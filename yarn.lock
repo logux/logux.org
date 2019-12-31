@@ -8580,18 +8580,6 @@ snapdragon@^0.8.1:
     source-map-resolve "^0.5.0"
     use "^3.1.0"
 
-solid-state-deploy@^0.1.0:
-  version "0.1.0"
-  resolved "https://registry.yarnpkg.com/solid-state-deploy/-/solid-state-deploy-0.1.0.tgz#9cfe74009ad9dfec14fd6305ecf41b9b73b2cf8b"
-  integrity sha512-y7biEWTRvGgw4P8gv2K5h4uk6wDEXD9wAUCRJ9fgihHC0cwV1VrtzXSf28KqnbsvBlZaZ8Q/Hk9lLsRa4yR9jQ==
-  dependencies:
-    chalk "^3.0.0"
-    dotenv "^8.2.0"
-    make-dir "^3.0.0"
-    open "^7.0.0"
-    ora "^4.0.3"
-    pkg-up "^3.1.0"
-
 source-map-resolve@^0.5.0:
   version "0.5.3"
   resolved "https://registry.yarnpkg.com/source-map-resolve/-/source-map-resolve-0.5.3.tgz#190866bece7553e1f8f267a2ee82c606b5509a1a"
@@ -8687,6 +8675,18 @@ sprintf-js@~1.0.2:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/sprintf-js/-/sprintf-js-1.0.3.tgz#04e6926f662895354f3dd015203633b857297e2c"
   integrity sha1-BOaSb2YolTVPPdAVIDYzuFcpfiw=
+
+ssdeploy@^0.2.0:
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/ssdeploy/-/ssdeploy-0.2.0.tgz#f050303433c14893a319ac8bce85b5d93a8e49ba"
+  integrity sha512-uc7vZTuIw6egxSF02H+MofDSFV5NcVVPLYMxoTaEGPA0OfrHPhICrbXfEwqV3vwZ4reqGRTfQlqaPnYGp/NIfg==
+  dependencies:
+    chalk "^3.0.0"
+    dotenv "^8.2.0"
+    make-dir "^3.0.0"
+    open "^7.0.0"
+    ora "^4.0.3"
+    pkg-up "^3.1.0"
 
 sshpk@^1.7.0:
   version "1.16.1"

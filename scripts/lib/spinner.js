@@ -4,8 +4,6 @@ import chalk from 'chalk'
 let spinner = new Spinnies({ succeedColor: 'white' })
 let lastId = 0
 
-console.log('isTTY', process.stdout.isTTY)
-
 export let step
 if (process.env.CI || process.env.GITHUB_ACTIONS) {
   step = text => {
