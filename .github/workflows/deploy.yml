@@ -34,13 +34,19 @@ jobs:
         run: yarn build
         env:
           CI: 1
-          GITTER_ROOM_ID: ${{ secrets.GITTER_ROOM_ID }}
+          FORCE_COLOR: 2
           GITTER_TOKEN: ${{ secrets.GITTER_TOKEN }}
+          GITTER_ROOM_ID: ${{ secrets.GITTER_ROOM_ID }}
+      - name: Install Google Cloud
+        uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
+        with:
+          version: '270.0.0'
+          service_account_key: ${{ secrets.GCLOUD_AUTH }}
       - name: Deploy files
         run: yarn run ssdeploy deploy
         env:
+          FORCE_COLOR: 2
           GCLOUD_APP: loguxio
-          GCLOUD_AUTH: ${{ secrets.GCLOUD_AUTH }}
           GCLOUD_PROJECT: logux-255417
           CLOUDFLARE_ZONE: ${{ secrets.CLOUDFLARE_ZONE }}
           CLOUDFLARE_TOKEN: ${{ secrets.CLOUDFLARE_TOKEN }}
