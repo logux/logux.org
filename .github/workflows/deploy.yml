@@ -43,7 +43,7 @@ jobs:
           version: '274.0.1'
           service_account_key: ${{ secrets.GCLOUD_AUTH }}
       - name: Deploy files
-        run: yarn run ssdeploy deploy --verbose
+        run: yarn run ssdeploy deploy
         env:
           FORCE_COLOR: 2
           GCLOUD_APP: loguxio

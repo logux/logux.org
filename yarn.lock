@@ -8759,7 +8759,7 @@ snapdragon@^0.8.1:
 
 solid-state-deploy@ai/solid-state-deploy:
   version "0.0.0"
-  resolved "https://codeload.github.com/ai/solid-state-deploy/tar.gz/b9b18d5be028569084af52cffb8f258e91612763"
+  resolved "https://codeload.github.com/ai/solid-state-deploy/tar.gz/abc09db29f13f50abb0041413c017f8f41bf43ce"
   dependencies:
     chalk "^3.0.0"
     dotenv "^8.2.0"
