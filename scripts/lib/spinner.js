@@ -12,7 +12,7 @@ if (process.env.CI) {
     return () => {
       let time = (Date.now() - start + ' ms')
       process.stdout.write(
-        chalk.green(`✓ ${ text }`) + ' ' + chalk.gray(time) + '\n'
+        chalk.green('✓ ') + text + ' ' + chalk.gray(time) + '\n'
       )
     }
   }
