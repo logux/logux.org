@@ -33,7 +33,6 @@ jobs:
       - name: Build static files
         run: yarn build
         env:
-          CI: 1
           FORCE_COLOR: 2
           GITTER_TOKEN: ${{ secrets.GITTER_TOKEN }}
           GITTER_ROOM_ID: ${{ secrets.GITTER_ROOM_ID }}
@@ -46,8 +45,8 @@ jobs:
         run: yarn run ssdeploy deploy
         env:
           FORCE_COLOR: 2
-          GCLOUD_APP: loguxio
-          GCLOUD_PROJECT: logux-255417
+          GCLOUD_APP: ${{ secrets.GCLOUD_APP }}
+          GCLOUD_PROJECT: ${{ secrets.GCLOUD_PROJECT }}
           CLOUDFLARE_ZONE: ${{ secrets.CLOUDFLARE_ZONE }}
           CLOUDFLARE_TOKEN: ${{ secrets.CLOUDFLARE_TOKEN }}
 
