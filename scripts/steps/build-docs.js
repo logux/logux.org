@@ -61,7 +61,7 @@ async function buildDocs (assets, layout, guides) {
     let dirs = join(page.file.replace(/\.md$/, ''))
     if (page.file === 'README.md') {
       dirs = ''
-      categoryUrl = '/guide/architecture/core/'
+      categoryUrl = false
       submenu = submenus.guide
     } else if (dirname(page.file) === 'recipes') {
       categoryUrl = '/recipes/authentication/'
