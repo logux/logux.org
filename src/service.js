@@ -34,12 +34,8 @@ self.addEventListener('install', e => {
 })
 
 self.addEventListener('fetch', e => {
-  let { hostname, pathname } = new URL(e.request.url)
+  let { hostname } = new URL(e.request.url)
   if (self.location.hostname === hostname) {
-    if (pathname === '/') {
-      e.respondWith(Response.redirect('/guide/architecture/core/'))
-    } else {
-      e.respondWith(fromCache(e.request))
-    }
+    e.respondWith(fromCache(e.request))
   }
 })

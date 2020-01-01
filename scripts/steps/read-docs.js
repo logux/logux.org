@@ -111,47 +111,59 @@ function npmToYarn (value) {
     .replace(/--save-dev/, '--dev')
     .replace(/^npm /, 'yarn ')
 }
+function convertor ({ file, onTitle }) {
+  return tree => {
+    if (file === 'README.md') {
+      unistFlatmap(tree, node => {
+        if (node.type === 'html' && node.value.includes('<img')) {
+          return []
+        } else {
+          return [node]
+        }
+      })
+    }
+    unistFlatmap(tree, node => {
+      if (node.lang === 'sh' && node.value.startsWith('npm ')) {
+        return [
+          html('<details><summary>npm</summary>'),
+          node,
+          html('</details>'),
+          html('<details><summary>Yarn</summary>'),
+          { type: 'code', lang: 'sh', value: npmToYarn(node.value) },
+          html('</details>')
+        ]
+      } else {
+        return [node]
+      }
+    })
+    unistVisit(tree, node => {
+      if (node.type === 'heading') {
+        if (node.depth === 1) {
+          onTitle(node.children[0].value)
+        }
+      } else if (node.type === 'link' || node.type === 'definition') {
+        node.url = node.url
+          .replace(/^..\//, '../../')
+          .replace(/^.\//, '../')
+          .replace(/\.md(#.+)?$/, '/$1')
+      }
+    })
+  }
+}
 
 async function readDocs () {
-  let files = await globby('**/*.md', {
-    cwd: ROOT, ignore: ['node_modules', 'README.md']
-  })
+  let files = await globby('**/*.md', { cwd: ROOT, ignore: ['node_modules'] })
   let guides = await Promise.all(files.map(async file => {
     let title = ''
-    function convertor () {
-      return tree => {
-        unistFlatmap(tree, node => {
-          if (node.lang === 'sh' && node.value.startsWith('npm ')) {
-            return [
-              html('<details><summary>npm</summary>'),
-              node,
-              html('</details>'),
-              html('<details><summary>Yarn</summary>'),
-              { type: 'code', lang: 'sh', value: npmToYarn(node.value) },
-              html('</details>')
-            ]
-          } else {
-            return [node]
-          }
-        })
-        unistVisit(tree, node => {
-          if (node.type === 'heading') {
-            if (node.depth === 1) {
-              title = node.children[0].value
-            }
-          } else if (node.type === 'link' || node.type === 'definition') {
-            node.url = node.url
-              .replace(/^..\//, '../../')
-              .replace(/^.\//, '../')
-              .replace(/\.md(#.+)?$/, '/$1')
-          }
-        })
-      }
-    }
     let md = await fs.readFile(join(ROOT, file))
     let tree = await unified().use(remarkParse).parse(md)
     tree = await unified()
-      .use(convertor)
+      .use(convertor, {
+        file,
+        onTitle (value) {
+          title = value
+        }
+      })
       .use(iniandBashHighlight)
       .use(remarkHighlight, {
         exclude: ['bash', 'sh', 'ini', 'diff'],

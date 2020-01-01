@@ -59,7 +59,11 @@ async function buildDocs (assets, layout, guides) {
   await Promise.all(guides.map(async page => {
     let title, categoryUrl, submenu
     let dirs = join(page.file.replace(/\.md$/, ''))
-    if (dirname(page.file) === 'recipes') {
+    if (page.file === 'README.md') {
+      dirs = ''
+      categoryUrl = '/guide/architecture/core/'
+      submenu = submenus.guide
+    } else if (dirname(page.file) === 'recipes') {
       categoryUrl = '/recipes/authentication/'
       submenu = submenus.recipes.map(findCurrent(dirs))
     } else if (dirname(dirname(page.file)) === 'protocols') {
