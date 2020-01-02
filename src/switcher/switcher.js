@@ -92,9 +92,10 @@ for (let switcher of switchers) {
 
   for (let li of tabs.children) {
     let tab = li.children[0]
+    let name = tab.dataset.name || tab.innerText
     let section = findByAttr(sections, 'aria-labelledby', tab.id)
-    values.push(tab.innerText)
-    addTo(byValue, tab.innerText, tab)
+    values.push(name)
+    addTo(byValue, name, tab)
     open.set(tab, () => {
       currentTab = changeTab(currentTab, tab)
       currentSection = changeSection(currentSection, section)
@@ -103,7 +104,7 @@ for (let switcher of switchers) {
 
   tabs.addEventListener('click', e => {
     if (e.target.tagName === 'BUTTON' && e.target !== currentTab) {
-      let value = e.target.innerText
+      let value = e.target.dataset.name || e.target.innerText
       keepScroll(e.target, () => {
         open.get(e.target)()
         for (let similar of byValue[value]) {

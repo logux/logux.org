@@ -106,6 +106,7 @@ function switcherToHTML (id, switchers) {
           'id': `sw${ id }tab${ i }`,
           'role': 'tab',
           'tabindex': i !== 0 && '-1',
+          'data-name': s[0] === 'React/Redux client' && 'React client',
           'aria-controls': `sw${ id }tab${ i }body`,
           'aria-selected': i === 0 && 'true'
         }, [
