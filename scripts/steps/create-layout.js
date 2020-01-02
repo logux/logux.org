@@ -7,6 +7,9 @@ import unified from 'unified'
 
 import wrap from '../lib/spinner.js'
 
+const SMALL_WORDS =
+  /(^|\s)(the|a|for|in|an|to|if|so|when|with|by|and|or|is|this|any|from) /gi
+
 function cleaner ({ chatUsers, removeAssets }) {
   return tree => {
     unistVisit(tree, 'element', node => {
@@ -134,10 +137,7 @@ function converter () {
 
   return tree => {
     unistVisit(tree, 'text', node => {
-      node.value = node.value.replace(
-        /(^|\s)(the|a|for|in|an|to|if|so|when|with|by|and|or|is|this) /gi,
-        '$1$2 '
-      )
+      node.value = node.value.replace(SMALL_WORDS, '$1$2 ')
     })
     unistVisit(tree, 'element', (node, index, parent) => {
       if (node.tagName === 'article') {
