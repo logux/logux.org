@@ -78,6 +78,7 @@ async function buildDocs (assets, layout, guides) {
       })
     }
     title = dirs.split(sep).reverse().map(i => toTitle(i)).join(' / ')
+    if (title !== '') title += ' / '
     let html = await layout(categoryUrl, submenu, title, page.tree)
     let path = join(DIST, dirs, 'index.html')
     await makeDir(dirname(path))

@@ -305,7 +305,7 @@ async function createLayout (uikit, chatUsers) {
         'class="menu_link is-current"'
       )
       .replace('<ul class="submenu">', '$&' + submenu)
-      .replace(/<title>[^<]+/, `<title>${ title } / Logux`)
+      .replace(/<title>[^<]+/, `<title>${ title }Logux`)
       .replace(/<\/article>/, '')
       .replace(/<article([^>]+)>/, `${ html }`)
   }
