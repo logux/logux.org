@@ -129,7 +129,7 @@ function videoInserter () {
           tag('picture', { }, [
             tag('source', {
               srcset: `https://i.ytimg.com/vi_webp/${ id }/maxresdefault.webp`,
-              media: 'image/webp'
+              type: 'image/webp'
             }),
             tag('img', {
               src: `https://i.ytimg.com/vi/${ id }/maxresdefault.jpg`,
