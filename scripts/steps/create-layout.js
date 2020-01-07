@@ -38,6 +38,8 @@ function cleaner ({ chatUsers, removeAssets }) {
         return !removeAssets.some(i => props.href.includes(i))
       } else if (node.tagName === 'link' && props.rel[0] === 'preload') {
         return !removeAssets.some(i => props.href.includes(i))
+      } else if (node.tagName === 'link' && props.rel[0] === 'preconnect') {
+        return !removeAssets.some(i => props.href.includes(i))
       } else {
         return true
       }
@@ -303,6 +305,9 @@ async function createLayout (uikit, chatUsers) {
     if (!html.includes(' class="source"')) ignore.push('/github.')
     if (!html.includes(' class="next"')) ignore.push('/right.')
     if (!html.includes(' class="video"')) ignore.push('/video.')
+    if (!html.includes(' class="video"')) ignore.push('yt3.ggpht.com')
+    if (!html.includes(' class="video"')) ignore.push('i.ytimg.com')
+    if (!html.includes(' class="video"')) ignore.push('fonts.gstatic.com')
     if (!html.includes(' class="switcher"')) ignore.push('/switcher.')
     if (!html.includes(' class="asset"')) ignore.push('/branding.')
     if (!html.includes(' class="title_link"')) ignore.push('/link.')
