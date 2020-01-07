@@ -227,6 +227,12 @@ function converter () {
           node.properties.className = ['button']
           node.children.push(tag('span', 'next_icon'))
         }
+      } else if (node.tagName === 'iframe') {
+        if (parent.properties.className[0] !== 'video') {
+          node.children = [{ ...node }]
+          node.tagName = 'div'
+          node.properties = { className: ['video'] }
+        }
       }
     })
   }
@@ -296,6 +302,7 @@ async function createLayout (uikit, chatUsers) {
     let ignore = []
     if (!html.includes(' class="source"')) ignore.push('/github.')
     if (!html.includes(' class="next"')) ignore.push('/right.')
+    if (!html.includes(' class="video"')) ignore.push('/video.')
     if (!html.includes(' class="switcher"')) ignore.push('/switcher.')
     if (!html.includes(' class="asset"')) ignore.push('/branding.')
     if (!html.includes(' class="title_link"')) ignore.push('/link.')
