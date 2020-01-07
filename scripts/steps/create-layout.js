@@ -229,12 +229,6 @@ function converter () {
           node.properties.className = ['button']
           node.children.push(tag('span', 'next_icon'))
         }
-      } else if (node.tagName === 'iframe') {
-        if (parent.properties.className[0] !== 'video') {
-          node.children = [{ ...node }]
-          node.tagName = 'div'
-          node.properties = { className: ['video'] }
-        }
       }
     })
   }

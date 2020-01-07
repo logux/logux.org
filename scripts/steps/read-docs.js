@@ -82,7 +82,7 @@ function iniandBashHighlight () {
   }
 }
 
-function htmlFixer (file) {
+function articler (file) {
   return tree => {
     tree.children = [
       {
@@ -101,6 +101,49 @@ function htmlFixer (file) {
   }
 }
 
+function tag (tagName, properties, children) {
+  return { type: 'element', tagName, properties, children }
+}
+
+function textContent (node) {
+  if (node.type === 'text') {
+    return node.value
+  } else if (node.children) {
+    return node.children.map(i => textContent(i)).join('')
+  } else {
+    return ''
+  }
+}
+
+function videoInserter () {
+  return tree => {
+    unistFlatmap(tree, node => {
+      if (node.tagName === 'p' && textContent(node).startsWith('Youtube:')) {
+        let match = textContent(node).match(/Youtube:(\S+) (.*)$/)
+        let id = match[1]
+        let alt = match[2]
+        return [tag('a', {
+          className: ['video'],
+          href: `https://www.youtube.com/watch?v=${ id }`
+        }, [
+          tag('picture', { }, [
+            tag('source', {
+              srcset: `https://i.ytimg.com/vi_webp/${ id }/maxresdefault.webp`,
+              media: 'image/webp'
+            }),
+            tag('img', {
+              src: `https://i.ytimg.com/vi/${ id }/maxresdefault.jpg`,
+              alt
+            })
+          ])
+        ])]
+      } else {
+        return [node]
+      }
+    })
+  }
+}
+
 function html (value) {
   return { type: 'html', value }
 }
@@ -111,6 +154,7 @@ function npmToYarn (value) {
     .replace(/--save-dev/, '--dev')
     .replace(/^npm /, 'yarn ')
 }
+
 function convertor ({ file, onTitle }) {
   return tree => {
     if (file === 'README.md') {
@@ -171,7 +215,8 @@ async function readDocs () {
       })
       .use(remarkRehype, { allowDangerousHTML: true })
       .use(rehypeRaw)
-      .use(htmlFixer, file)
+      .use(articler, file)
+      .use(videoInserter)
       .run(tree)
     return { tree, title, file }
   }))

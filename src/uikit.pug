@@ -24,9 +24,6 @@ html( lang="en" )
     link( rel="stylesheet" href="/video.sss" )
     meta( property="og:image" content="/base/og.png" )
     link( rel="preconnect" href="https://sidecar.gitter.im/" media="(min-width:941px)" )
-    link( rel="preconnect" href="https://yt3.ggpht.com" )
-    link( rel="preconnect" href="https://i.ytimg.com" )
-    link( rel="preconnect" href="https://fonts.gstatic.com" )
   body.layout
     nav.layout_aside
       .layout_menu
@@ -221,6 +218,10 @@ html( lang="en" )
         +title3('returns')
           | Returns
         p.text_block: code #[a( href="#" ) Promise]&lt;#[a( href="#" ) boolean]&gt;
+        a.video( href="https://www.youtube.com/watch?v=c7t_YBNHkeo" )
+          picture
+            source( srcset="https://i.ytimg.com/vi_webp/c7t_YBNHkeo/maxresdefault.webp" type="image/webp" )
+            img( src="https://i.ytimg.com/vi/c7t_YBNHkeo/maxresdefault.jpg" alt="Talk test" )
         hr.line
 
       article.text

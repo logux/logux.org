@@ -1,11 +1,16 @@
 .video
   position: relative
+  display: block
   height: 0
-  padding-top: 30px
   padding-bottom: 56.25%
   overflow: hidden
+  line-height: 0
+  border-radius: 0.5px
 
-.video iframe
+  &:hover
+    box-shadow: 0 0 0 4px var(--link-background)
+
+.video img
   position: absolute
   top: 0
   left: 0
