@@ -6,8 +6,10 @@ function download (url, body) {
   get(url, res => {
     if (res.statusCode >= 300 && res.statusCode <= 399) {
       download(res.headers.location, body)
-    } else {
+    } else if (res.statusCode >= 200 && res.statusCode <= 299) {
       body(res)
+    } else {
+      throw new Error(`${ res.statusCode } responce at ${ url }`)
     }
   })
 }
