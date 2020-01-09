@@ -24,7 +24,7 @@ async function repackScripts (assets) {
     .map(i => {
       return '/' + relative(DIST, i)
         .replace(/\\/g, '/')
-        .replace(/\/index\.html$/, '/')
+        .replace(/(^|\/)index\.html$/, '$1')
     })
     .filter(i => {
       return i !== '/service.js' &&
@@ -34,6 +34,7 @@ async function repackScripts (assets) {
              !i.startsWith('/og.') &&
              !i.startsWith('/.well-known/')
     })
+  console.log(toCache)
   let cacheBuster = hash(
     toCache
       .filter(i => i.endsWith('/'))
