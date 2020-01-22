@@ -142,10 +142,7 @@
       "svgo",
       "git add"
     ],
-    "*.sss": [
-      "stylelint --fix",
-      "git add"
-    ]
+    "*.sss": "stylelint --fix"
   },
   "size-limit": [
     {
