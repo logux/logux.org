@@ -42,7 +42,7 @@
     "rollup-plugin-terser": "^5.2.0",
     "slugify": "^1.3.6",
     "spinnies": "^0.5.1",
-    "ssdeploy": "^0.5.1",
+    "ssdeploy": "^0.6.10",
     "sugarss": "^2.0.0",
     "unified": "^8.4.2",
     "unist-util-filter": "^2.0.1",
