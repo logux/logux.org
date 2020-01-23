@@ -139,10 +139,7 @@
   },
   "lint-staged": {
     "*.js": "eslint",
-    "*.svg": [
-      "svgo",
-      "git add"
-    ],
+    "*.svg": "svgo",
     "*.sss": "stylelint --fix"
   },
   "size-limit": [
