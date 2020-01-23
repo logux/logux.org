@@ -34,6 +34,7 @@ async function repackScripts (assets) {
              !i.startsWith('/og.') &&
              !i.startsWith('/.well-known/')
     })
+    .sort()
   let cacheBuster = hash(
     toCache
       .filter(i => i.endsWith('/'))
