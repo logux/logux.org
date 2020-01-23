@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 
+import dotenv from 'dotenv'
 import chalk from 'chalk'
 
 import generateWebManifest from './steps/generate-web-manifest.js'
@@ -18,6 +19,8 @@ import buildDocs from './steps/build-docs.js'
 import readJsdoc from './steps/read-jsdoc.js'
 import readDocs from './steps/read-docs.js'
 import buildApi from './steps/build-api.js'
+
+dotenv.config()
 
 async function prepareHtml () {
   await cleanBuildDir()

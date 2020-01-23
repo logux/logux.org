@@ -14,6 +14,7 @@
     "chalk": "^3.0.0",
     "del": "^5.1.0",
     "documentation": "^12.1.4",
+    "dotenv": "^8.2.0",
     "globby": "^11.0.0",
     "jstransformer-lowlight": "^0.1.0",
     "lowlight": "^1.13.0",
