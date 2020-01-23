@@ -56,25 +56,18 @@ jobs:
           GCLOUD_PROJECT: ${{ secrets.GCLOUD_PROJECT }}
           CLOUDFLARE_ZONE: ${{ secrets.CLOUDFLARE_ZONE }}
           CLOUDFLARE_TOKEN: ${{ secrets.CLOUDFLARE_TOKEN }}
-
-  audit:
-    runs-on: ubuntu-latest
-    needs: deploy
-    if: "!steps.hash.outputs.noChanges"
-    steps:
-      - name: Checkout the repository
-        uses: actions/checkout@v2
-        with:
-          fetch-depth: 1
       - name: Warm CDN
+        if: "!steps.hash.outputs.noChanges"
         run: wget --page-requisites https://logux.io
       - name: Audit website
+        if: "!steps.hash.outputs.noChanges"
         uses: treosh/lighthouse-ci-action@v2
         with:
           runs: 3
           temporaryPublicStorage: true
           configPath: ./lighthouserc.json
       - name: Save results
+        if: "!steps.hash.outputs.noChanges"
         uses: actions/upload-artifact@v1
         with:
           name: lighthouse-results
