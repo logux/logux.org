@@ -60,6 +60,7 @@ jobs:
   audit:
     runs-on: ubuntu-latest
     needs: deploy
+    if: "!steps.hash.outputs.noChanges"
     steps:
       - name: Checkout the repository
         uses: actions/checkout@v2
