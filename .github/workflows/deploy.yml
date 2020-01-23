@@ -66,7 +66,7 @@ jobs:
           runs: 3
           temporaryPublicStorage: true
           configPath: ./lighthouserc.json
-      - name: Save results
+      - name: Save audit results
         if: "!steps.hash.outputs.noChanges"
         uses: actions/upload-artifact@v1
         with:
