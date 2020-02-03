@@ -1,12 +1,13 @@
 const CACHE_VERSION = '1'
 
-async function fromCache (request) {
+async function fromCache (e) {
   let cache = await caches.open(CACHE_VERSION)
-  let match = await cache.match(request, { ignoreSearch: true })
+  let match = await cache.match(e.request, { ignoreSearch: true })
   if (match) {
+    event.waitUntil(fetch(new Request(e.request, { method: 'HEAD' })))
     return match
   } else {
-    return fetch(request)
+    return fetch(e.request)
   }
 }
 
@@ -26,7 +27,7 @@ async function precache () {
   let requests = files.map(url => {
     return new Request(url, {
       headers: {
-        From: 'service-worker@logux.io'
+        From: 'sw@logux.io'
       }
     })
   })
@@ -43,6 +44,6 @@ self.addEventListener('install', e => {
 self.addEventListener('fetch', e => {
   let { hostname } = new URL(e.request.url)
   if (self.location.hostname === hostname) {
-    e.respondWith(fromCache(e.request))
+    e.respondWith(fromCache(e))
   }
 })
