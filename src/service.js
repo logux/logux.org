@@ -23,9 +23,16 @@ async function cleanCache (cache, files) {
 async function precache () {
   let cache = await caches.open(CACHE_VERSION)
   let files = FILES
+  let requests = files.map(url => {
+    return new Request(url, {
+      headers: {
+        From: 'service-worker@logux.io'
+      }
+    })
+  })
   await Promise.all([
     cleanCache(cache, files),
-    cache.addAll(files)
+    cache.addAll(requests)
   ])
 }
 
