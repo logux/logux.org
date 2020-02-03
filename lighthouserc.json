@@ -2,7 +2,7 @@
   "ci": {
     "collect": {
       "url": [
-        "https://logux.io/guide/architecture/core/?offline"
+        "https://logux.io/?offline"
       ]
     },
     "assert": {
