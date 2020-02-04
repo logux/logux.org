@@ -25,7 +25,7 @@
     "postcss-hexrgba": "^2.0.0",
     "postcss-media-minmax": "^4.0.0",
     "postcss-mixins": "^6.2.3",
-    "postcss-momentum-scrolling": "^2.3.10",
+    "postcss-momentum-scrolling": "^2.3.12",
     "postcss-nested": "^4.2.1",
     "postcss-url": "^8.0.0",
     "pug": "^2.0.4",
