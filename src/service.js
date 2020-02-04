@@ -5,7 +5,14 @@ async function fromCache (e) {
   let match = await cache.match(e.request, { ignoreSearch: true })
   if (match) {
     if (e.request.url.endsWith('/')) {
-      e.waitUntil(fetch(new Request(e.request, { method: 'HEAD' })))
+      e.waitUntil(
+        fetch(
+          new Request(e.request, {
+            referrer: e.request.referrer,
+            method: 'HEAD'
+          })
+        )
+      )
     }
     return match
   } else {
