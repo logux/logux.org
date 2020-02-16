@@ -393,7 +393,7 @@ export default async function buildApi (assets, layout, title, jsdoc) {
   await makeDir(dirname(path))
   let tree = toTree(jsdoc)
   let submenu = toSubmenu(jsdoc)
-  let html = await layout(`/${ file }/`, submenu, title, tree)
+  let html = await layout(`/${ file }/`, submenu, title + ' / ', tree)
   await fs.writeFile(path, html)
   assets.add(path, html)
 
