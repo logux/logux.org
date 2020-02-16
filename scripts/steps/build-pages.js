@@ -27,7 +27,7 @@ async function buildPages (assets, layout) {
   await PAGES.map(async i => {
     let filename = join(SRC, `${ i }.pug`)
     let template = await fs.readFile(filename)
-    let title = capitalize(i)
+    let title = capitalize(i) + ' / '
     let inner = pug.render(template.toString(), { filename })
     let tree = await unified().use(rehypeParse).parse(inner)
     let submenu = findHeaders(tree)
