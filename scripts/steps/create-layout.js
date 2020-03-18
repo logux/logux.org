@@ -311,7 +311,7 @@ async function createLayout (uikit, chatUsers) {
       .replace('<ul class="submenu">', '$&' + submenu)
       .replace(/<title>[^<]+/, `<title>${ title }Logux`)
       .replace(/<\/article>/, '')
-      .replace(/<article([^>]+)>/, `${ html }`)
+      .replace(/<article[^>]+>/, `${ html }`)
   }
 }
 
