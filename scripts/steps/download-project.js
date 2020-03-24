@@ -1,6 +1,6 @@
-import { existsSync, promises as fs } from 'fs'
-import { join } from 'path'
+import { existsSync } from 'fs'
 import { Worker } from 'worker_threads'
+import { join } from 'path'
 
 import { WORKERS, PROJECTS } from '../lib/dirs.js'
 import { step } from '../lib/spinner.js'
@@ -16,11 +16,15 @@ export default async function downloadProject (name) {
   let url = `https://github.com/logux/${ repo }/archive/master.zip`
   let end = step(`Downloading ${ url }`)
 
-  await new Promise((resolve, reject) => {
-    let worker = new Worker(DOWNLOADER, { workerData: [url, to] })
-    worker.on('message', resolve)
-    worker.on('error', reject)
-  })
-  await fs.rename(to, dir)
+  try {
+    await new Promise((resolve, reject) => {
+      let worker = new Worker(DOWNLOADER, { workerData: [url, to, dir] })
+      worker.on('message', resolve)
+      worker.on('error', reject)
+    })
+  } catch (e) {
+    end(e)
+    throw e
+  }
   end()
 }

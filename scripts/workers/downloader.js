@@ -1,4 +1,5 @@
 import { parentPort, workerData } from 'worker_threads'
+import { promises as fs } from 'fs'
 import { promisify } from 'util'
 import { dirname } from 'path'
 import unzipper from 'unzipper'
@@ -19,7 +20,7 @@ function download (url, body) {
   })
 }
 
-let [url, dir] = workerData
+let [url, to, dir] = workerData
 
 download(url, res => {
   let extract = unzipper.Extract({ path: dirname(dir) })
@@ -31,6 +32,7 @@ download(url, res => {
     throw e
   })
   extract.on('close', async () => {
+    await fs.rename(to, dir)
     await exec('yarn install --production', { cwd: dir })
     parentPort.postMessage(true)
   })
