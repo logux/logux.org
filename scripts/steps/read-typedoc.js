@@ -18,7 +18,10 @@ export default async function readTypedoc (...projects) {
     }))
   })
 
-  files.push(join(NODE_MODULES, 'nanoevents', 'index.d.ts'))
+  files.push(
+    join(NODE_MODULES, 'nanoevents', 'package.json'),
+    join(NODE_MODULES, 'nanoevents', 'index.d.ts')
+  )
 
   let ignore
   if (type === 'server') {
