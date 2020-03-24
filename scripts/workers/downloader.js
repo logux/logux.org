@@ -1,6 +1,11 @@
 import { parentPort, workerData } from 'worker_threads'
+import { promisify } from 'util'
+import { dirname } from 'path'
 import unzipper from 'unzipper'
 import { get } from 'https'
+import child from 'child_process'
+
+let exec = promisify(child.exec)
 
 function download (url, body) {
   get(url, res => {
@@ -14,10 +19,10 @@ function download (url, body) {
   })
 }
 
-let [url, path] = workerData
+let [url, dir] = workerData
 
 download(url, res => {
-  let extract = unzipper.Extract({ path })
+  let extract = unzipper.Extract({ path: dirname(dir) })
   res.pipe(extract)
   res.on('error', e => {
     throw e
@@ -25,7 +30,8 @@ download(url, res => {
   extract.on('error', e => {
     throw e
   })
-  extract.on('close', () => {
+  extract.on('close', async () => {
+    await exec('yarn install --production', { cwd: dir })
     parentPort.postMessage(true)
   })
 })

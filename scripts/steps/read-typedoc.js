@@ -2,7 +2,7 @@ import { join } from 'path'
 import TypeDoc from 'typedoc'
 import globby from 'globby'
 
-import { PROJECTS, NODE_MODULES } from '../lib/dirs.js'
+import { PROJECTS } from '../lib/dirs.js'
 import { run } from '../lib/spinner.js'
 
 export default async function readTypedoc (...projects) {
@@ -17,11 +17,6 @@ export default async function readTypedoc (...projects) {
       })
     }))
   })
-
-  files.push(
-    join(NODE_MODULES, 'nanoevents', 'package.json'),
-    join(NODE_MODULES, 'nanoevents', 'index.d.ts')
-  )
 
   let ignore
   if (type === 'server') {
