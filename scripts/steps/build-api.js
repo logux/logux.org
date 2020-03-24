@@ -18,6 +18,11 @@ const KINDS = [
 ]
 
 const EXTERNAL_TYPES = {
+  Partial: 'https://www.typescriptlang.org/docs/handbook/' +
+           'utility-types.html#partialt',
+  Promise: 'https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/' +
+           'Using_promises',
+  Observable: 'https://github.com/tc39/proposal-observable',
   ReduxContext: 'https://react-redux.js.org/using-react-redux/accessing-store',
   Process: 'https://nodejs.org/api/process.html#process_process',
   BunyanLogger: 'https://github.com/trentm/node-bunyan',
@@ -26,10 +31,7 @@ const EXTERNAL_TYPES = {
 }
 
 const SIMPLE_TYPES = new Set([
-  'Observable',
   'WebSocket',
-  'Promise',
-  'Partial',
   'RegExp',
   'Error',
   'Array',
