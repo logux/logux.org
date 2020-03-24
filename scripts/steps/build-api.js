@@ -159,7 +159,9 @@ function declHtml (decl) {
 }
 
 function typeHtml (type) {
-  if (type.type === 'reference') {
+  if (!type) {
+    return []
+  } else if (type.type === 'reference') {
     let result
     if (SIMPLE_TYPES.has(type.name)) {
       result = [{ type: 'text', value: type.name }]
@@ -220,6 +222,11 @@ function typeHtml (type) {
       ...typeHtml(type.trueType),
       { type: 'text', value: ' : ' },
       ...typeHtml(type.falseType)
+    ]
+  } else if (type.type === 'typeOperator') {
+    return [
+      { type: 'text', value: ` ${ type.operator } ` },
+      ...typeHtml(type.target)
     ]
   } else {
     console.error(type)
@@ -289,23 +296,25 @@ function returnsHtml (node) {
 }
 
 function tableHtml (name, list) {
-  return tag('table', [
-    tag('tr', [
-      tag('th', name),
-      tag('th', 'Type'),
-      tag('th', 'Description')
-    ]),
-    ...Array.from(list)
-      .map(i => tag('tr', [
-        tag('td', [
-          tag('code', i.name)
-        ]),
-        tag('td', [
-          tag('code', typeHtml(i.type), { noClass: true })
-        ]),
-        tag('td', extractChildren(commentHtml(i.comment)))
-      ]))
-  ])
+  return [
+    tag('table', [
+      tag('tr', [
+        tag('th', name),
+        tag('th', 'Type'),
+        tag('th', 'Description')
+      ]),
+      ...Array.from(list)
+        .map(i => tag('tr', [
+          tag('td', [
+            tag('code', i.name)
+          ]),
+          tag('td', [
+            tag('code', typeHtml(i.type), { noClass: true })
+          ]),
+          tag('td', extractChildren(commentHtml(i.comment)))
+        ]))
+    ])
+  ]
 }
 
 function methodArgs (node) {
@@ -314,6 +323,19 @@ function methodArgs (node) {
     .map(i => i.name + (i.flags.isOptional ? '?' : ''))
     .join(', ')
   return `(${ args })`
+}
+
+function paramsHtml (node) {
+  if (!node.signatures) return []
+  return node.signatures
+    .filter(i => i.parameters)
+    .flatMap(i => tableHtml('Parameter', i.parameters))
+}
+
+function templatesHtml (node) {
+  if (!node.signatures) return []
+  if (!node.signatures[0].typeParameters) return []
+  return tableHtml('Templates', node.signatures[0].typeParameters)
 }
 
 function membersHtml (className, members, separator) {
@@ -342,16 +364,10 @@ function membersHtml (className, members, separator) {
         ...commentHtml(member.comment || member.signatures[0].comment),
         ...propTypeHtml(member.type),
         ...paramsHtml(member),
+        ...templatesHtml(member),
         ...returnsHtml(member)
       ])
     })
-}
-
-function paramsHtml (node) {
-  if (!node.signatures) return []
-  return node.signatures
-    .filter(i => i.parameters)
-    .flatMap(i => tableHtml('Parameter', i.parameters))
 }
 
 function classHtml (tree, cls) {
