@@ -18,6 +18,8 @@ export default async function readTypedoc (...projects) {
     }))
   })
 
+  files.push(join(__dirname, 'node_modules', 'nanoevents', 'index.d.ts'))
+
   let ignore
   if (type === 'server') {
     ignore = ['Reconnect', 'ClientNode', 'WsConnection', 'BaseServer']
