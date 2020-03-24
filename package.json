@@ -18,6 +18,7 @@
     "jstransformer-lowlight": "^0.1.0",
     "lowlight": "^1.13.1",
     "make-dir": "^3.0.2",
+    "nanoevents": "^5.1.5",
     "parcel-bundler": "^1.12.4",
     "postcss": "^7.0.27",
     "postcss-combine-media-query": "^1.0.1",
