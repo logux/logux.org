@@ -13,6 +13,7 @@ import repackScripts from './steps/repack-scripts.js'
 import getChatUsers from './steps/get-chat-users.js'
 import repackStyles from './steps/repack-styles.js'
 import createLayout from './steps/create-layout.js'
+import installTypes from './steps/install-types.js'
 import readTypedoc from './steps/read-typedoc.js'
 import updateHtml from './steps/update-html.js'
 import buildPages from './steps/build-pages.js'
@@ -35,7 +36,7 @@ async function prepareHtml () {
 }
 
 async function prepareContent () {
-  await Promise.all([
+  await installTypes(() => [
     downloadProject('logux-docs'),
     downloadProject('logux-core'),
     downloadProject('logux-server'),

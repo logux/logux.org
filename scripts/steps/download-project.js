@@ -9,7 +9,7 @@ import { run } from '../lib/spinner.js'
 let exec = promisify(child.exec)
 
 export default async function downloadProject (name) {
-  let dir = join(PROJECTS, name)
+  let dir = join(PROJECTS, '..', name)
   if (existsSync(dir)) return
 
   let repo = 'logux/' + name.replace(/^logux-/, '')
@@ -17,8 +17,5 @@ export default async function downloadProject (name) {
 
   await run(`Downloading ${ repo }`, async () => {
     await exec(`git clone --depth 1 ${ url } "${ dir }"`)
-    await exec('yarn install --production --network-concurrency 1', {
-      cwd: dir
-    })
   })
 }
