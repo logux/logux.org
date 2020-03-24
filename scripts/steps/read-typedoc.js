@@ -36,6 +36,9 @@ export default async function readTypedoc (...projects) {
     if (errors.length > 0) {
       throw new Error(errors[0].messageText)
     }
+    if (!project.children) {
+      throw new Error(JSON.stringify(project))
+    }
     let nodes = []
     for (let file of project.children) {
       nodes.push(...file.children.filter(i => {

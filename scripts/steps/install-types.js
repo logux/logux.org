@@ -11,7 +11,7 @@ let exec = promisify(child.exec)
 let NAMES = ['logux-core', 'logux-server', 'logux-client', 'logux-redux']
 
 export default async function installTypes (nextSteps) {
-  let dirs = NAMES.map(i => join(PROJECTS, '..', i))
+  let dirs = NAMES.map(i => join(PROJECTS, i))
   if (dirs.every(i => existsSync(i))) {
     await Promise.all(nextSteps())
   } else {
