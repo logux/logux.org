@@ -17,6 +17,8 @@ export default async function downloadProject (name) {
 
   await run(`Downloading ${ repo }`, async () => {
     await exec(`git clone --depth 1 ${ url } "${ dir }"`)
-    await exec('yarn install --production', { cwd: dir })
+    await exec('yarn install --production --network-concurrency 1', {
+      cwd: dir
+    })
   })
 }
