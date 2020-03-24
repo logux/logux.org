@@ -13,10 +13,10 @@ import repackScripts from './steps/repack-scripts.js'
 import getChatUsers from './steps/get-chat-users.js'
 import repackStyles from './steps/repack-styles.js'
 import createLayout from './steps/create-layout.js'
+import readTypedoc from './steps/read-typedoc.js'
 import updateHtml from './steps/update-html.js'
 import buildPages from './steps/build-pages.js'
 import buildDocs from './steps/build-docs.js'
-import readJsdoc from './steps/read-jsdoc.js'
 import readDocs from './steps/read-docs.js'
 import buildApi from './steps/build-api.js'
 
@@ -42,12 +42,12 @@ async function prepareContent () {
     downloadProject('logux-client'),
     downloadProject('logux-redux')
   ])
-  let [guides, nodeJsdoc, webJsdoc] = await Promise.all([
+  let [guides, nodeApi, webApi] = await Promise.all([
     readDocs(),
-    readJsdoc('logux-server', 'logux-core'),
-    readJsdoc('logux-client', 'logux-redux', 'logux-core')
+    readTypedoc('logux-server', 'logux-core'),
+    readTypedoc('logux-client', 'logux-redux', 'logux-core')
   ])
-  return [guides, nodeJsdoc, webJsdoc]
+  return [guides, nodeApi, webApi]
 }
 
 async function build () {

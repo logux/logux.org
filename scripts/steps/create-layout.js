@@ -61,7 +61,7 @@ function checker (title) {
       let href = node.properties.href
       if (href && href.startsWith('#')) {
         if (!ids.has(href.slice(1))) {
-          throw new Error(`${ title } has no ${ href } ID`)
+          throw new Error(`${ title.slice(0, -3) } has no ${ href } ID`)
         }
       }
     })
@@ -204,13 +204,6 @@ function converter () {
             }, node.children)
           ]
         }
-        if (node.sourceUrl) {
-          node.children = [
-            tag('a', 'source', {
-              href: node.sourceUrl, title: 'Source code'
-            })
-          ].concat(node.children)
-        }
         if (node.editUrl) {
           node.tagName = 'div'
           node.children = [
@@ -296,7 +289,6 @@ async function createLayout (uikit, chatUsers) {
       .use(rehypeStringify)
       .stringify(fixed)
     let ignore = []
-    if (!html.includes(' class="source"')) ignore.push('/github.')
     if (!html.includes(' class="next"')) ignore.push('/right.')
     if (!html.includes(' class="video"')) ignore.push('/video.')
     if (!html.includes(' class="switcher"')) ignore.push('/switcher.')

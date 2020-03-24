@@ -1,9 +1,7 @@
 import { join, dirname, sep } from 'path'
-import documentation from 'documentation'
 import { promises as fs } from 'fs'
+import remarkHighlight from 'remark-highlight.js'
 import remarkRehype from 'remark-rehype'
-import unistVisit from 'unist-util-visit'
-import lowlight from 'lowlight'
 import makeDir from 'make-dir'
 import slugify from 'slugify'
 import remark from 'remark'
@@ -12,14 +10,26 @@ import { step } from '../lib/spinner.js'
 import { DIST } from '../lib/dirs.js'
 
 const CAPITALIZED = /^[A-Z]/
+
+const KINDS = [
+  ['Functions', i => i.kindString === 'Function'],
+  ['Variables', i => i.kindString === 'Variable'],
+  ['Types', i => i.kindString === 'Type alias' || i.kindString === 'Interface']
+]
+
 const EXTERNAL_TYPES = {
-  'BunyanLogger': 'https://github.com/trentm/node-bunyan',
-  'http.Server': 'https://nodejs.org/api/http.html#http_class_http_server'
+  ReduxContext: 'https://react-redux.js.org/using-react-redux/accessing-store',
+  Process: 'https://nodejs.org/api/process.html#process_process',
+  BunyanLogger: 'https://github.com/trentm/node-bunyan',
+  HTTPServer: 'https://nodejs.org/api/http.html#http_class_http_server',
+  Unsubscribe: 'https://github.com/ai/nanoevents/#remove-listener'
 }
+
 const SIMPLE_TYPES = new Set([
   'Observable',
   'WebSocket',
   'Promise',
+  'Partial',
   'RegExp',
   'Error',
   'Array',
@@ -30,14 +40,17 @@ const SIMPLE_TYPES = new Set([
   'number',
   'any'
 ])
-const KINDS = [
-  ['Functions', i => i.kind === 'function'],
-  ['Callbacks', i => i.kind === 'typedef' && isCallback(i)],
-  ['Types', i => i.kind === 'typedef' && !isCallback(i)],
-  ['Constants', i => i.kind === 'constant']
-]
 
-let formatters = documentation.util.createFormatters()
+const REPLACE_TYPES = {
+  BaseServer: 'Server'
+}
+
+const HIDE_CONSTRUCTOR = new Set([
+  'ChannelContext',
+  'Context',
+  'ServerClient',
+  'TestLog'
+])
 
 function toSlug (type) {
   let slug = type
@@ -45,11 +58,14 @@ function toSlug (type) {
   return slugify(slug).toLowerCase()
 }
 
-function toSourceUrl ({ file, loc }) {
-  return file.replace(
-    /^.*\/logux-([^/]+)\/(.*)$/,
-    'https://github.com/logux/$1/blob/master/$2'
-  ) + `#L${ loc.start.line }L${ loc.end.line }`
+function byTypeAndName (a, b) {
+  if (a.kindString === 'Method' && b.kindString !== 'Method') {
+    return 1
+  } else if (a.kindString !== 'Method' && b.kindString === 'Method') {
+    return -1
+  } else {
+    return byName(a, b)
+  }
 }
 
 function byName (a, b) {
@@ -62,116 +78,224 @@ function byName (a, b) {
   }
 }
 
-function byTypeAndName (a, b) {
-  if (a.kind === 'function' && b.kind !== 'function') {
-    return 1
-  } else if (a.kind !== 'function' && b.kind === 'function') {
-    return -1
-  } else {
-    return byName(a, b)
-  }
-}
-
 function tag (tagName, children, opts) {
-  if (typeof children === 'string') {
-    children = [{ type: 'text', value: children }]
+  if (!Array.isArray(children)) {
+    children = [children]
   }
+  children = children.map(i => {
+    return typeof i === 'string' ? { type: 'text', value: i } : i
+  })
   return { type: 'element', tagName, properties: { }, children, ...opts }
 }
 
-function tableDesc (parent, desc) {
-  if (!desc) {
-    return []
-  } else if (desc.type === 'root') {
-    return toHtml(parent, desc)[0].children
-  } else {
-    let md = desc.replace(/{@link (\w+)}/, '[$1]($1)')
-    return toHtml(parent, remark().parse(md))[0].children
-  }
-}
-
-function toHtml (parent, tree) {
-  if (!tree) return []
-  unistVisit(tree, 'link', node => {
-    if (/^[\w#.]+$/.test(node.url)) {
-      let ref = node.children[0].value
-      if (ref.startsWith('#')) {
-        if (!parent) throw new Error(`Unknown parent for ${ ref }`)
-        ref = parent + ref
-      }
-      node.url = '#' + toSlug(ref.replace(/#/g, '-'))
-    }
+function toHtml (content) {
+  if (!content) return []
+  content = content.replace(/{@link [\w#.]+}/g, str => {
+    let name = str.slice(7, -1)
+    let link = name.toLowerCase().replace('#', '-')
+    if (!CAPITALIZED.test(name)) link = 'globals-' + link
+    return `[\`${ name }\`](#${ link })`
   })
+  let tree = remark().parse(content)
+  remarkHighlight({ prefix: 'code-block_' })(tree)
   return remarkRehype()(tree).children
 }
 
-function getEditUrl (file) {
-  if (sep !== '\\') file = file.replace(/\\/g, '/')
-  let [, name, path] = file.match(/^.*\/logux-([^/]+)\/(.*)/)
-  return `https://github.com/logux/${ name }/edit/master/${ path }`
+function joinTags (separator, tags) {
+  return tags.flatMap((el, index) => {
+    if (index === tags.length - 1) {
+      return el
+    } else {
+      return [...el, { type: 'text', value: separator }]
+    }
+  })
+}
+
+function declHtml (decl) {
+  let type = []
+  if (decl.type) {
+    type = typeHtml(decl.type)
+  } else if (decl.children) {
+    type = joinTags(', ', decl.children.map(declHtml))
+  } else if (decl.indexSignature) {
+    let index = decl.indexSignature
+    type = [
+      { type: 'text', value: `[${ index.parameters[0].name }: ` },
+      ...typeHtml(index.parameters[0].type),
+      { type: 'text', value: ']: ' },
+      ...typeHtml(index.type)
+    ]
+  } else if (decl.signatures) {
+    if (decl.signatures[0].parameters) {
+      let signature = decl.signatures[0]
+      type = [
+        { type: 'text', value: '(' },
+        ...joinTags(', ', signature.parameters.map(declHtml)),
+        { type: 'text', value: ') => ' },
+        ...typeHtml(signature.type)
+      ]
+    } else {
+      type = [
+        { type: 'text', value: '() => ' },
+        ...typeHtml(decl.signatures[0].type)
+      ]
+    }
+  }
+  if (decl.name === '__type' && decl.signatures) {
+    return type
+  } else if (decl.name === '__type' && type.length === 0) {
+    return [{ type: 'text', value: '{ }' }]
+  } else if (decl.name === '__type') {
+    return [
+      { type: 'text', value: '{ ' },
+      ...type,
+      { type: 'text', value: ' }' }
+    ]
+  } else {
+    let name = decl.name
+    if (decl.flags.isOptional) name += '?'
+    return [{ type: 'text', value: name + ': ' }, ...type]
+  }
 }
 
 function typeHtml (type) {
-  if (type.type === 'UnionType') {
-    return type.elements.flatMap((el, i) => {
-      if (i === type.elements.length - 1) {
-        return typeHtml(el)
-      } else {
-        return [...typeHtml(el), { type: 'text', value: ' | ' }]
-      }
-    })
-  } else if (type.type === 'OptionalType') {
-    if (type.expression.type === 'UnionType') {
-      return [
-        { type: 'text', value: '(' },
-        ...typeHtml(type.expression),
-        { type: 'text', value: ')?' }
+  if (type.type === 'reference') {
+    let result
+    if (SIMPLE_TYPES.has(type.name)) {
+      result = [{ type: 'text', value: type.name }]
+    } else if (EXTERNAL_TYPES[type.name]) {
+      result = [
+        tag('a', type.name, {
+          properties: { href: EXTERNAL_TYPES[type.name] }
+        })
       ]
     } else {
-      return [...typeHtml(type.expression), { type: 'text', value: '?' }]
+      let name = REPLACE_TYPES[type.name] || type.name
+      result = [
+        tag('a', name, {
+          properties: { href: '#' + name.toLowerCase() }
+        })
+      ]
     }
-  } else if (type.type === 'StringLiteralType') {
-    return [{ type: 'text', value: `"${ type.value }"` }]
-  } else if (type.type === 'UndefinedLiteral') {
-    return [{ type: 'text', value: 'undefined' }]
-  } else if (type.type === 'NullLiteral') {
-    return [{ type: 'text', value: 'null' }]
-  } else if (type.type === 'TypeApplication') {
-    if (type.expression.name === 'Array') {
-      return [
-        ...typeHtml(type.applications[0]),
-        { type: 'text', value: '[]' }
-      ]
-    } else {
-      return [
-        { type: 'text', value: type.expression.name + '<' },
-        ...typeHtml(type.applications[0]),
+    if (type.typeArguments) {
+      result.push(
+        { type: 'text', value: '<' },
+        ...joinTags(', ', type.typeArguments.map(typeHtml)),
         { type: 'text', value: '>' }
-      ]
+      )
     }
-  } else if (type.type === 'BooleanLiteralType') {
-    return [{ type: 'text', value: type.value.toString() }]
-  } else if (SIMPLE_TYPES.has(type.name)) {
+    return result
+  } else if (type.type === 'stringLiteral') {
+    return [{ type: 'text', value: `'${ type.value }'` }]
+  } else if (type.type === 'intrinsic' || type.type === 'typeParameter') {
     return [{ type: 'text', value: type.name }]
-  } else if (type.type === 'NameExpression') {
-    let href = EXTERNAL_TYPES[type.name] || '#' + toSlug(type.name)
-    return [tag('a', type.name, { properties: { href } })]
+  } else if (type.type === 'indexedAccess') {
+    return [
+      ...typeHtml(type.objectType),
+      { type: 'text', value: '[' },
+      ...typeHtml(type.indexType),
+      { type: 'text', value: ']' }
+    ]
+  } else if (type.type === 'union') {
+    return joinTags(' | ', type.types.map(typeHtml))
+  } else if (type.type === 'array') {
+    return [
+      ...typeHtml(type.elementType),
+      { type: 'text', value: '[]' }
+    ]
+  } else if (type.type === 'reflection' && type.declaration) {
+    return declHtml(type.declaration)
+  } else if (type.type === 'tuple') {
+    return [
+      { type: 'text', value: '[' },
+      ...joinTags(', ', type.elements.map(typeHtml)),
+      { type: 'text', value: ']' }
+    ]
+  } else if (type.type === 'intersection') {
+    return joinTags(' & ', type.types.map(typeHtml))
+  } else if (type.type === 'conditional') {
+    return [
+      ...typeHtml(type.checkType),
+      { type: 'text', value: ' ? ' },
+      ...typeHtml(type.trueType),
+      { type: 'text', value: ' : ' },
+      ...typeHtml(type.falseType)
+    ]
   } else {
     console.error(type)
     throw new Error(`Unknown type ${ type.type }`)
   }
 }
 
-function tableHtml (parent, name, list) {
-  if (list.length === 0) return []
-  let table = tag('table', [
+function getEditUrl (file) {
+  if (sep !== '\\') file = file.replace(/\\/g, '/')
+  let [, name, path] = file.match(/logux-([^/]+)\/(.*)$/)
+  return `https://github.com/logux/${ name }/edit/master/${ path }`
+}
+
+function extendsHtml (parentClasses) {
+  if (parentClasses) {
+    let name = parentClasses[0].name
+    if (name === 'BaseServer') return []
+    let link
+    if (SIMPLE_TYPES.has(name)) {
+      link = tag('code', name)
+    } else {
+      link = tag('a', name, { properties: { href: '#' + name.toLowerCase() } })
+    }
+    return [tag('p', ['Extends ', link, '.'])]
+  } else {
+    return []
+  }
+}
+
+function extractChildren (nodes) {
+  if (nodes.length === 0) {
+    return []
+  } else {
+    return nodes[0].children
+  }
+}
+
+function commentHtml (comment) {
+  if (!comment) return []
+  return toHtml(comment.shortText + '\n\n' + comment.text)
+}
+
+function propTypeHtml (type) {
+  if (!type) return []
+  return [
+    tag('p', [
+      { type: 'text', value: 'Type: ' },
+      tag('code', typeHtml(type), { noClass: true }),
+      { type: 'text', value: '. ' }
+    ])
+  ]
+}
+
+function returnsHtml (node) {
+  if (!node.signatures) return []
+  let type = node.signatures[0].type
+  if (type.name === 'void') return []
+  let comment = node.comment || node.signatures[0].comment
+  return [
+    tag('p', [
+      { type: 'text', value: 'Returns ' },
+      tag('code', typeHtml(type), { noClass: true }),
+      { type: 'text', value: '. ' },
+      ...extractChildren(toHtml(comment.returns || ''))
+    ])
+  ]
+}
+
+function tableHtml (name, list) {
+  return tag('table', [
     tag('tr', [
-      tag('th', 'Property'),
+      tag('th', name),
       tag('th', 'Type'),
       tag('th', 'Description')
     ]),
-    ...list
-      .sort(byName)
+    ...Array.from(list)
       .map(i => tag('tr', [
         tag('td', [
           tag('code', i.name)
@@ -179,56 +303,23 @@ function tableHtml (parent, name, list) {
         tag('td', [
           tag('code', typeHtml(i.type), { noClass: true })
         ]),
-        tag('td', tableDesc(parent, i.description))
+        tag('td', extractChildren(commentHtml(i.comment)))
       ]))
   ])
-  return [table]
 }
 
-function propertiesHtml (parent, props) {
-  return tableHtml(parent, 'Properties', props)
-}
-
-function paramsHtml (parent, params) {
-  return tableHtml(parent, 'Parameter', params)
-}
-
-function returnsHtml (parent, returns) {
-  if (!returns) return []
-  if (returns.type.type === 'UndefinedLiteral') return []
-  let p = tag('p', [
-    { type: 'text', value: 'Returns ' },
-    tag('code', typeHtml(returns.type), { noClass: true }),
-    { type: 'text', value: '. ' },
-    ...toHtml(parent, returns.description)[0].children
-  ])
-  return [p]
-}
-
-function exampleHtml (example) {
-  if (!example) return []
-  let highlighted = lowlight.highlight('js', example.description, {
-    prefix: 'code-block_'
-  })
-  let pre = tag('pre', [
-    tag('code', highlighted.value)
-  ])
-  return [pre]
-}
-
-function propTypeHtml (type) {
-  if (!type) return []
-  let p = tag('p', [
-    { type: 'text', value: 'Type: ' },
-    tag('code', typeHtml(type), { noClass: true }),
-    { type: 'text', value: '. ' }
-  ])
-  return [p]
+function methodArgs (node) {
+  if (!node.signatures[0].parameters) return '()'
+  let args = node.signatures[0].parameters
+    .map(i => i.name + (i.flags.isOptional ? '?' : ''))
+    .join(', ')
+  return `(${ args })`
 }
 
 function membersHtml (className, members, separator) {
   let slugSep = separator === '#' ? '-' : separator
   return members
+    .filter(i => i.name !== 'constructor' && i.name !== 'Error')
     .sort(byTypeAndName)
     .map(member => {
       let name = [
@@ -237,8 +328,8 @@ function membersHtml (className, members, separator) {
         }),
         { type: 'text', value: member.name }
       ]
-      if (member.kind === 'function') {
-        name.push(tag('span', formatters.parameters(member, true), {
+      if (member.kindString === 'Method') {
+        name.push(tag('span', methodArgs(member), {
           properties: { className: ['title_extra'] }
         }))
       }
@@ -246,71 +337,68 @@ function membersHtml (className, members, separator) {
         tag('h2', [
           tag('code', name, { noClass: true })
         ], {
-          sourceUrl: toSourceUrl(member.context),
           slug: (className + slugSep + member.name).toLowerCase()
         }),
+        ...commentHtml(member.comment || member.signatures[0].comment),
         ...propTypeHtml(member.type),
-        ...toHtml(className, member.description),
-        ...paramsHtml(className, member.params),
-        ...returnsHtml(className, member.returns[0]),
-        ...propertiesHtml(className, member.properties),
-        ...exampleHtml(member.examples[0])
+        ...paramsHtml(member),
+        ...returnsHtml(member)
       ])
     })
 }
 
-function extendsHtml (tree, augment) {
-  if (!augment) return []
-  if (!tree.some(j => j.name === augment.name)) return []
-  let p = tag('p', [
-    { type: 'text', value: 'Extends ' },
-    tag('code', [
-      tag('a', augment.name, {
-        properties: { href: '#' + toSlug(augment.name) }
-      })
-    ], { noClass: true }),
-    { type: 'text', value: '. ' }
-  ])
-  return [p]
+function paramsHtml (node) {
+  if (!node.signatures) return []
+  return node.signatures
+    .filter(i => i.parameters)
+    .flatMap(i => tableHtml('Parameter', i.parameters))
 }
 
 function classHtml (tree, cls) {
+  let hideConstructore = HIDE_CONSTRUCTOR.has(cls.name)
+  let statics = cls.children.filter(i => i.flags.isStatic)
+  let instance = cls.children.filter(i => !statics.includes(i))
   return tag('article', [
     tag('h1', cls.name, {
-      editUrl: getEditUrl(cls.context.file)
+      editUrl: getEditUrl(cls.sources[0].fileName)
     }),
-    ...toHtml(cls.name, cls.description),
-    ...extendsHtml(tree, cls.augments[0]),
-    ...paramsHtml(cls.name, cls.tags.filter(i => i.title === 'param')),
-    ...exampleHtml(cls.examples[0]),
-    ...membersHtml(cls.name, cls.members.static, '.'),
-    ...membersHtml(cls.name, cls.members.instance, '#')
+    ...extendsHtml(cls.extendedTypes),
+    ...commentHtml(cls.comment),
+    ...(hideConstructore ? [] : paramsHtml(cls.groups[0].children[0])),
+    ...membersHtml(cls.name, statics, '.'),
+    ...membersHtml(cls.name, instance, '#')
   ])
 }
 
-function standaloneHtml (type, node) {
-  let name = [{ type: 'text', value: node.name }]
-  if (node.kind === 'function') {
-    name.push(
-      tag('span', formatters.parameters(node, true), {
-        properties: { className: ['title_extra'] }
-      })
-    )
-  }
-  let ownType = type !== 'Callbacks' ? propTypeHtml(node.type) : []
+function functionHtml (node) {
   return tag('section', [
     tag('h2', [
-      tag('code', name, { noClass: true })
+      tag('code', [
+        { type: 'text', value: node.name },
+        tag('span', methodArgs(node), {
+          properties: { className: ['title_extra'] }
+        })
+      ], { noClass: true })
     ], {
-      sourceUrl: toSourceUrl(node.context),
       slug: toSlug(node.name)
     }),
-    ...ownType,
-    ...toHtml(undefined, node.description),
-    ...propertiesHtml(undefined, node.properties),
-    ...paramsHtml(undefined, node.params),
-    ...returnsHtml(undefined, node.returns[0]),
-    ...exampleHtml(node.examples[0])
+    ...commentHtml(node.signatures[0].comment),
+    ...paramsHtml(node),
+    ...returnsHtml(node)
+  ])
+}
+
+function variableHtml (node) {
+  return tag('section', [
+    tag('h2', [
+      tag('code', [
+        { type: 'text', value: node.name }
+      ], { noClass: true })
+    ], {
+      slug: toSlug(node.name)
+    }),
+    ...propTypeHtml(node.type),
+    ...commentHtml(node.comment)
   ])
 }
 
@@ -318,25 +406,27 @@ function listHtml (title, list) {
   if (list.length === 0) return []
   let article = tag('article', [
     tag('h1', title, { noSlug: true }),
-    ...list.sort(byName).map(i => standaloneHtml(title, i))
+    ...list.sort(byName).map(i => {
+      if (i.kindString === 'Function') {
+        return functionHtml(i)
+      } else {
+        return variableHtml(i)
+      }
+    })
   ])
   return [article]
 }
 
-function isCallback (node) {
-  return node.tags.some(i => i.title === 'callback')
-}
-
-function toTree (jsdoc) {
+function toTree (nodes) {
   let tree = {
     type: 'root',
-    children: jsdoc
-      .filter(i => i.kind === 'class')
+    children: nodes
+      .filter(i => i.kindString === 'Class')
       .sort(byName)
-      .map(i => classHtml(jsdoc, i))
+      .map(i => classHtml(nodes, i))
   }
   for (let [title, filter] of KINDS) {
-    let items = jsdoc.filter(filter)
+    let items = nodes.filter(filter)
     if (items.length > 0) {
       tree.children.push(...listHtml(title, items))
     }
@@ -348,51 +438,39 @@ function submenuName (node) {
   return node.name + (node.kind === 'function' ? '()' : '')
 }
 
-function toSubmenu (jsdoc) {
-  let submenu = jsdoc
-    .filter(i => i.kind === 'class')
+function toSubmenu (nodes) {
+  let submenu = nodes
+    .filter(i => i.kindString === 'Class')
     .sort(byName)
     .map(cls => ({
       code: cls.name,
-      link: '#' + cls.name.toLowerCase(),
-      ul: [
-        ...cls.members.static.sort(byTypeAndName).map(i => {
-          return {
-            code: '.' + submenuName(i),
-            link: '#' + (cls.name + '.' + i.name).toLowerCase()
-          }
-        }),
-        ...cls.members.instance.sort(byTypeAndName).map(i => {
-          return {
-            code: '#' + submenuName(i),
-            link: '#' + (cls.name + '-' + i.name).toLowerCase()
-          }
-        })
-      ]
+      link: '#' + cls.name.toLowerCase()
     }))
   for (let [title, filter] of KINDS) {
-    let items = jsdoc.filter(filter)
-    if (items.length > 0) {
-      submenu.push({
-        text: title,
-        ul: items.map(i => {
-          return { code: submenuName(i), link: '#' + toSlug(i.name) }
+    if (title !== 'Types') {
+      let items = nodes.filter(filter).sort(byName)
+      if (items.length > 0) {
+        submenu.push({
+          text: title,
+          ul: items.map(i => {
+            return { code: submenuName(i), link: '#' + toSlug(i.name) }
+          })
         })
-      })
+      }
     }
   }
   return submenu
 }
 
-export default async function buildApi (assets, layout, title, jsdoc) {
+export default async function buildApi (assets, layout, title, nodes) {
   let file = title.replace(/\s/g, '-').toLowerCase()
   let path = join(DIST, file, 'index.html')
 
   let end = step(`Building ${ title } HTML`)
 
   await makeDir(dirname(path))
-  let tree = toTree(jsdoc)
-  let submenu = toSubmenu(jsdoc)
+  let tree = toTree(nodes)
+  let submenu = toSubmenu(nodes)
   let html = await layout(`/${ file }/`, submenu, title + ' / ', tree)
   await fs.writeFile(path, html)
   assets.add(path, html)

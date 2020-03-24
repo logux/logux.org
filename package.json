@@ -13,7 +13,6 @@
     "capitalize": "^2.0.3",
     "chalk": "^3.0.0",
     "del": "^5.1.0",
-    "documentation": "^12.1.4",
     "dotenv": "^8.2.0",
     "globby": "^11.0.0",
     "jstransformer-lowlight": "^0.1.0",
@@ -45,6 +44,7 @@
     "spinnies": "^0.5.1",
     "ssdeploy": "^0.6.10",
     "sugarss": "^2.0.0",
+    "typedoc": "^0.17.1",
     "unified": "^8.4.2",
     "unist-util-filter": "^2.0.2",
     "unist-util-flatmap": "^1.0.0",
@@ -75,7 +75,8 @@
     "stylelint-config-recess-order": "^2.0.4",
     "stylelint-config-standard": "^20.0.0",
     "stylelint-order": "^4.0.0",
-    "svgo": "^1.3.2"
+    "svgo": "^1.3.2",
+    "typescript": "^3.8.3"
   },
   "repository": "logux/logux.io",
   "homepage": "https://logux.io/",
