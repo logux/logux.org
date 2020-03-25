@@ -196,7 +196,11 @@ function typeHtml (type) {
     }
     return result
   } else if (type.type === 'stringLiteral') {
-    return [{ type: 'text', value: `'${ type.value }'` }]
+    return [
+      tag('span', `'${ type.value }'`, {
+        properties: { className: ['code-block_string'] }
+      })
+    ]
   } else if (type.type === 'intrinsic' || type.type === 'typeParameter') {
     return [{ type: 'text', value: type.name }]
   } else if (type.type === 'indexedAccess') {
@@ -233,7 +237,9 @@ function typeHtml (type) {
     ]
   } else if (type.type === 'typeOperator') {
     return [
-      { type: 'text', value: ` ${ type.operator } ` },
+      tag('span', ` ${ type.operator } `, {
+        properties: { className: ['code-block_keyword'] }
+      }),
       ...typeHtml(type.target)
     ]
   } else {
