@@ -18,6 +18,11 @@ const KINDS = [
 ]
 
 const EXTERNAL_TYPES = {
+  Reducer: 'https://redux.js.org/basics/reducers/',
+  StoreEnhancer: 'https://redux.js.org/advanced/middleware',
+  PreloadedState: 'https://redux.js.org/recipes/' +
+                  'structuring-reducers/initializing-state/',
+  ReduxStore: 'https://redux.js.org/basics/store',
   Partial: 'https://www.typescriptlang.org/docs/handbook/' +
            'utility-types.html#partialt',
   Promise: 'https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/' +
@@ -27,7 +32,8 @@ const EXTERNAL_TYPES = {
   Process: 'https://nodejs.org/api/process.html#process_process',
   BunyanLogger: 'https://github.com/trentm/node-bunyan',
   HTTPServer: 'https://nodejs.org/api/http.html#http_class_http_server',
-  Unsubscribe: 'https://github.com/ai/nanoevents/#remove-listener'
+  Unsubscribe: 'https://github.com/ai/nanoevents/#remove-listener',
+  Component: 'https://reactjs.org/docs/react-component.html'
 }
 
 const SIMPLE_TYPES = new Set([
@@ -286,7 +292,7 @@ function returnsHtml (node) {
   if (!node.signatures) return []
   let type = node.signatures[0].type
   if (type.name === 'void') return []
-  let comment = node.comment || node.signatures[0].comment
+  let comment = node.comment || node.signatures[0].comment || { }
   return [
     tag('p', [
       { type: 'text', value: 'Returns ' },
@@ -428,17 +434,18 @@ function variableHtml (node) {
 
 function listHtml (title, list) {
   if (list.length === 0) return []
-  let article = tag('article', [
-    tag('h1', title, { noSlug: true }),
-    ...list.sort(byName).map(i => {
-      if (i.kindString === 'Function') {
-        return functionHtml(i)
-      } else {
-        return variableHtml(i)
-      }
-    })
-  ])
-  return [article]
+  return [
+    tag('article', [
+      tag('h1', title, { noSlug: true }),
+      ...list.sort(byName).map(i => {
+        if (i.signatures) {
+          return functionHtml(i)
+        } else {
+          return variableHtml(i)
+        }
+      })
+    ])
+  ]
 }
 
 function toTree (nodes) {
