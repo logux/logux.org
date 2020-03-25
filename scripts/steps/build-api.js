@@ -330,18 +330,20 @@ function methodArgs (node) {
 
 function paramsHtml (node) {
   if (!node.signatures) return []
-  return [
-    { type: 'text', value: 'Type templates for TypeScript:' },
-    ...node.signatures
-      .filter(i => i.parameters)
-      .flatMap(i => tableHtml('Parameter', i.parameters))
-  ]
+  return node.signatures
+    .filter(i => i.parameters)
+    .flatMap(i => tableHtml('Parameter', i.parameters))
 }
 
 function templatesHtml (node) {
   if (!node.signatures) return []
-  if (!node.signatures[0].typeParameters) return []
-  return tableHtml('Templates', node.signatures[0].typeParameters)
+  let signature = node.signatures[0]
+  if (!signature.typeParameters) return []
+  if (signature.typeParameters.every(i => !i.comment)) return []
+  return [
+    tag('p', 'Type templates for TypeScript:'),
+    ...tableHtml('Templates', signature.typeParameters)
+  ]
 }
 
 function membersHtml (className, members, separator) {
