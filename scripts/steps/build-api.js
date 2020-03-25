@@ -330,9 +330,12 @@ function methodArgs (node) {
 
 function paramsHtml (node) {
   if (!node.signatures) return []
-  return node.signatures
-    .filter(i => i.parameters)
-    .flatMap(i => tableHtml('Parameter', i.parameters))
+  return [
+    { type: 'text', value: 'Type templates for TypeScript:' },
+    ...node.signatures
+      .filter(i => i.parameters)
+      .flatMap(i => tableHtml('Parameter', i.parameters))
+  ]
 }
 
 function templatesHtml (node) {
