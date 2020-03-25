@@ -60,6 +60,10 @@ const HIDE_CONSTRUCTOR = new Set([
   'TestLog'
 ])
 
+const TEMPLATELESS = new Set(['ActionIterator', 'ActionListener', 'Log'])
+
+const EMPTY = { type: 'text', value: '' }
+
 function toSlug (type) {
   let slug = type
   if (!CAPITALIZED.test(slug)) slug = 'globals-' + slug
@@ -187,7 +191,7 @@ function typeHtml (type) {
         })
       ]
     }
-    if (type.typeArguments && type.name !== 'Log') {
+    if (type.typeArguments && !TEMPLATELESS.has(type.name)) {
       result.push(
         { type: 'text', value: '<' },
         ...joinTags(', ', type.typeArguments.map(typeHtml)),
@@ -310,12 +314,13 @@ function returnsHtml (node) {
 }
 
 function tableHtml (name, list) {
+  let hasDesc = Array.from(list).some(i => i.comment)
   return [
     tag('table', [
       tag('tr', [
         tag('th', name),
         tag('th', 'Type'),
-        tag('th', 'Description')
+        hasDesc ? tag('th', 'Description') : EMPTY
       ]),
       ...Array.from(list)
         .map(i => tag('tr', [
@@ -326,7 +331,7 @@ function tableHtml (name, list) {
           tag('td', [
             tag('code', typeHtml(i.type), { noClass: true })
           ]),
-          tag('td', extractChildren(commentHtml(i.comment)))
+          hasDesc ? tag('td', extractChildren(commentHtml(i.comment))) : EMPTY
         ]))
     ])
   ]
