@@ -21,12 +21,12 @@ jobs:
       - name: Get Yarn cache path
         id: yarn-cache
         run: echo "::set-output name=dir::$(yarn cache dir)"
-      - name: Cache Yarn
-        uses: actions/cache@v1
-        with:
-          path: ${{ steps.yarn-cache.outputs.dir }}
-          key: yarn-production-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: yarn-production-
+      # - name: Cache Yarn
+      #   uses: actions/cache@v1
+      #   with:
+      #     path: ${{ steps.yarn-cache.outputs.dir }}
+      #     key: yarn-production-${{ hashFiles('**/yarn.lock') }}
+      #     restore-keys: yarn-production-
       - name: Install build dependencies
         run: yarn install --production
       - name: Build static files
