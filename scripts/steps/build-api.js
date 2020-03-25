@@ -181,7 +181,7 @@ function typeHtml (type) {
         })
       ]
     }
-    if (type.typeArguments) {
+    if (type.typeArguments && type.name !== 'Log') {
       result.push(
         { type: 'text', value: '<' },
         ...joinTags(', ', type.typeArguments.map(typeHtml)),
