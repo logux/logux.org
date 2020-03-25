@@ -308,7 +308,8 @@ function tableHtml (name, list) {
       ...Array.from(list)
         .map(i => tag('tr', [
           tag('td', [
-            tag('code', i.name)
+            tag('code', i.name),
+            { type: 'text', value: i.flags.isOptional ? ' optional' : '' }
           ]),
           tag('td', [
             tag('code', typeHtml(i.type), { noClass: true })
