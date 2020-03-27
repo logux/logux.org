@@ -65,6 +65,15 @@ const TEMPLATELESS = new Set(['ActionIterator', 'ActionListener', 'Log'])
 const INLINE_TYPES = new Set(['NodeState', 'BaseServerOptions'])
 
 const EMPTY = { type: 'text', value: '' }
+const OPTIONAL = [
+  { type: 'text', value: ' ' },
+  {
+    type: 'element',
+    tagName: 'span',
+    properties: { 'aria-title': 'Optional' },
+    children: [{ type: 'text', value: '?' }]
+  }
+]
 
 function toSlug (type) {
   let slug = type
@@ -352,7 +361,7 @@ function tableHtml (ctx, name, list) {
           return tag('tr', [
             tag('td', [
               tag('code', i.name),
-              { type: 'text', value: i.flags.isOptional ? ' optional' : '' }
+              ...(i.flags.isOptional ? OPTIONAL : [EMPTY])
             ]),
             tag('td', [
               tag('code', type, { noClass: true })
