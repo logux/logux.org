@@ -123,33 +123,33 @@ function joinTags (separator, tags) {
   })
 }
 
-function declHtml (decl) {
+function declHtml (ctx, decl) {
   let type = []
   if (decl.type) {
-    type = typeHtml(decl.type)
+    type = typeHtml(ctx, decl.type)
   } else if (decl.children) {
-    type = joinTags(', ', decl.children.map(declHtml))
+    type = joinTags(', ', decl.children.map(i => declHtml(ctx, i)))
   } else if (decl.indexSignature) {
     let index = decl.indexSignature
     type = [
       { type: 'text', value: `[${ index.parameters[0].name }: ` },
-      ...typeHtml(index.parameters[0].type),
+      ...typeHtml(ctx, index.parameters[0].type),
       { type: 'text', value: ']: ' },
-      ...typeHtml(index.type)
+      ...typeHtml(ctx, index.type)
     ]
   } else if (decl.signatures) {
     if (decl.signatures[0].parameters) {
       let signature = decl.signatures[0]
       type = [
         { type: 'text', value: '(' },
-        ...joinTags(', ', signature.parameters.map(declHtml)),
+        ...joinTags(', ', signature.parameters.map(i => declHtml(ctx, i))),
         { type: 'text', value: ') => ' },
-        ...typeHtml(signature.type)
+        ...typeHtml(ctx, signature.type)
       ]
     } else {
       type = [
         { type: 'text', value: '() => ' },
-        ...typeHtml(decl.signatures[0].type)
+        ...typeHtml(ctx, decl.signatures[0].type)
       ]
     }
   }
@@ -170,7 +170,7 @@ function declHtml (decl) {
   }
 }
 
-function typeHtml (type) {
+function typeHtml (ctx, type) {
   if (!type) {
     return []
   } else if (type.type === 'reference') {
@@ -194,7 +194,7 @@ function typeHtml (type) {
     if (type.typeArguments && !TEMPLATELESS.has(type.name)) {
       result.push(
         { type: 'text', value: '<' },
-        ...joinTags(', ', type.typeArguments.map(typeHtml)),
+        ...joinTags(', ', type.typeArguments.map(i => typeHtml(ctx, i))),
         { type: 'text', value: '>' }
       )
     }
@@ -206,45 +206,52 @@ function typeHtml (type) {
       })
     ]
   } else if (type.type === 'intrinsic' || type.type === 'typeParameter') {
+    if (type.name === 'M') {
+      if (ctx.file === 'node-api') {
+        return typeHtml(ctx, { type: 'reference', name: 'ServerMeta' })
+      } else {
+        return typeHtml(ctx, { type: 'reference', name: 'ClientMeta' })
+      }
+    }
     return [{ type: 'text', value: type.name }]
   } else if (type.type === 'indexedAccess') {
     return [
-      ...typeHtml(type.objectType),
+      ...typeHtml(ctx, type.objectType),
       { type: 'text', value: '[' },
-      ...typeHtml(type.indexType),
+      ...typeHtml(ctx, type.indexType),
       { type: 'text', value: ']' }
     ]
   } else if (type.type === 'union') {
-    return joinTags(' | ', type.types.map(typeHtml))
+    return joinTags(' | ', type.types.map(i => typeHtml(ctx, i)))
   } else if (type.type === 'array') {
     return [
-      ...typeHtml(type.elementType),
+      ...typeHtml(ctx, type.elementType),
       { type: 'text', value: '[]' }
     ]
   } else if (type.type === 'reflection' && type.declaration) {
-    return declHtml(type.declaration)
+    return declHtml(ctx, type.declaration)
   } else if (type.type === 'tuple') {
     return [
       { type: 'text', value: '[' },
-      ...joinTags(', ', type.elements.map(typeHtml)),
+      ...joinTags(', ', type.elements.map(i => typeHtml(ctx, i))),
       { type: 'text', value: ']' }
     ]
   } else if (type.type === 'intersection') {
-    return joinTags(' & ', type.types.map(typeHtml))
+    return joinTags(' & ', type.types.map(i => typeHtml(ctx, i)))
   } else if (type.type === 'conditional') {
     return [
-      ...typeHtml(type.checkType),
+      ...typeHtml(ctx, type.checkType),
       { type: 'text', value: ' ? ' },
-      ...typeHtml(type.trueType),
+      ...typeHtml(ctx, type.trueType),
       { type: 'text', value: ' : ' },
-      ...typeHtml(type.falseType)
+      ...typeHtml(ctx, type.falseType)
     ]
   } else if (type.type === 'typeOperator') {
     return [
       tag('span', ` ${ type.operator } `, {
         properties: { className: ['code-block_keyword'] }
       }),
-      ...typeHtml(type.target)
+      ...typeHtml(ctx, type.target)
     ]
   } else {
     console.error(type)
@@ -287,18 +294,18 @@ function commentHtml (comment) {
   return toHtml(comment.shortText + '\n\n' + comment.text)
 }
 
-function propTypeHtml (type) {
+function propTypeHtml (ctx, type) {
   if (!type) return []
   return [
     tag('p', [
       { type: 'text', value: 'Type: ' },
-      tag('code', typeHtml(type), { noClass: true }),
+      tag('code', typeHtml(ctx, type), { noClass: true }),
       { type: 'text', value: '. ' }
     ])
   ]
 }
 
-function returnsHtml (node) {
+function returnsHtml (ctx, node) {
   if (!node.signatures) return []
   let type = node.signatures[0].type
   if (type.name === 'void') return []
@@ -306,14 +313,14 @@ function returnsHtml (node) {
   return [
     tag('p', [
       { type: 'text', value: 'Returns ' },
-      tag('code', typeHtml(type), { noClass: true }),
+      tag('code', typeHtml(ctx, type), { noClass: true }),
       { type: 'text', value: '. ' },
       ...extractChildren(toHtml(comment.returns || ''))
     ])
   ]
 }
 
-function tableHtml (name, list) {
+function tableHtml (ctx, name, list) {
   let hasDesc = Array.from(list).some(i => i.comment)
   return [
     tag('table', [
@@ -329,7 +336,7 @@ function tableHtml (name, list) {
             { type: 'text', value: i.flags.isOptional ? ' optional' : '' }
           ]),
           tag('td', [
-            tag('code', typeHtml(i.type), { noClass: true })
+            tag('code', typeHtml(ctx, i.type), { noClass: true })
           ]),
           hasDesc ? tag('td', extractChildren(commentHtml(i.comment))) : EMPTY
         ]))
@@ -345,25 +352,25 @@ function methodArgs (node) {
   return `(${ args })`
 }
 
-function paramsHtml (node) {
+function paramsHtml (ctx, node) {
   if (!node.signatures) return []
   return node.signatures
     .filter(i => i.parameters)
-    .flatMap(i => tableHtml('Parameter', i.parameters))
+    .flatMap(i => tableHtml(ctx, 'Parameter', i.parameters))
 }
 
-function templatesHtml (node) {
+function templatesHtml (ctx, node) {
   if (!node.signatures) return []
   let signature = node.signatures[0]
   if (!signature.typeParameters) return []
   if (signature.typeParameters.every(i => !i.comment)) return []
   return [
     tag('p', 'Type templates for TypeScript:'),
-    ...tableHtml('Templates', signature.typeParameters)
+    ...tableHtml(ctx, 'Templates', signature.typeParameters)
   ]
 }
 
-function membersHtml (className, members, separator) {
+function membersHtml (ctx, className, members, separator) {
   let slugSep = separator === '#' ? '-' : separator
   return members
     .filter(i => i.name !== 'constructor' && i.name !== 'Error')
@@ -387,15 +394,15 @@ function membersHtml (className, members, separator) {
           slug: (className + slugSep + member.name).toLowerCase()
         }),
         ...commentHtml(member.comment || member.signatures[0].comment),
-        ...propTypeHtml(member.type),
-        ...paramsHtml(member),
-        ...templatesHtml(member),
-        ...returnsHtml(member)
+        ...propTypeHtml(ctx, member.type),
+        ...paramsHtml(ctx, member),
+        ...templatesHtml(ctx, member),
+        ...returnsHtml(ctx, member)
       ])
     })
 }
 
-function classHtml (tree, cls) {
+function classHtml (ctx, cls) {
   let hideConstructore = HIDE_CONSTRUCTOR.has(cls.name)
   let statics = cls.children.filter(i => i.flags.isStatic)
   let instance = cls.children.filter(i => !statics.includes(i))
@@ -405,13 +412,13 @@ function classHtml (tree, cls) {
     }),
     ...extendsHtml(cls.extendedTypes),
     ...commentHtml(cls.comment),
-    ...(hideConstructore ? [] : paramsHtml(cls.groups[0].children[0])),
-    ...membersHtml(cls.name, statics, '.'),
-    ...membersHtml(cls.name, instance, '#')
+    ...(hideConstructore ? [] : paramsHtml(ctx, cls.groups[0].children[0])),
+    ...membersHtml(ctx, cls.name, statics, '.'),
+    ...membersHtml(ctx, cls.name, instance, '#')
   ])
 }
 
-function functionHtml (node) {
+function functionHtml (ctx, node) {
   return tag('section', [
     tag('h2', [
       tag('code', [
@@ -424,12 +431,12 @@ function functionHtml (node) {
       slug: toSlug(node.name)
     }),
     ...commentHtml(node.signatures[0].comment),
-    ...paramsHtml(node),
-    ...returnsHtml(node)
+    ...paramsHtml(ctx, node),
+    ...returnsHtml(ctx, node)
   ])
 }
 
-function variableHtml (node) {
+function variableHtml (ctx, node) {
   return tag('section', [
     tag('h2', [
       tag('code', [
@@ -438,39 +445,32 @@ function variableHtml (node) {
     ], {
       slug: toSlug(node.name)
     }),
-    ...propTypeHtml(node.type),
+    ...propTypeHtml(ctx, node.type),
     ...commentHtml(node.comment)
   ])
 }
 
-function listHtml (title, list) {
-  if (list.length === 0) return []
-  return [
-    tag('article', [
-      tag('h1', title, { noSlug: true }),
-      ...list.sort(byName).map(i => {
-        if (i.signatures) {
-          return functionHtml(i)
-        } else {
-          return variableHtml(i)
-        }
-      })
-    ])
-  ]
-}
-
-function toTree (nodes) {
+function toTree (ctx, nodes) {
   let tree = {
     type: 'root',
     children: nodes
       .filter(i => i.kindString === 'Class')
       .sort(byName)
-      .map(i => classHtml(nodes, i))
+      .map(i => classHtml(ctx, i))
   }
   for (let [title, filter] of KINDS) {
     let items = nodes.filter(filter)
     if (items.length > 0) {
-      tree.children.push(...listHtml(title, items))
+      tree.children.push(tag('article', [
+        tag('h1', title, { noSlug: true }),
+        ...items.sort(byName).map(i => {
+          if (i.signatures) {
+            return functionHtml(ctx, i)
+          } else {
+            return variableHtml(ctx, i)
+          }
+        })
+      ]))
     }
   }
   return tree
@@ -509,9 +509,10 @@ export default async function buildApi (assets, layout, title, nodes) {
   let path = join(DIST, file, 'index.html')
 
   let end = step(`Building ${ title } HTML`)
+  let ctx = { file }
 
   await makeDir(dirname(path))
-  let tree = toTree(nodes)
+  let tree = toTree(ctx, nodes)
   let submenu = toSubmenu(nodes)
   let html = await layout(`/${ file }/`, submenu, title + ' / ', tree)
   await fs.writeFile(path, html)
