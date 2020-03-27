@@ -335,16 +335,31 @@ function tableHtml (ctx, name, list) {
         hasDesc ? tag('th', 'Description') : EMPTY
       ]),
       ...Array.from(list)
-        .map(i => tag('tr', [
-          tag('td', [
-            tag('code', i.name),
-            { type: 'text', value: i.flags.isOptional ? ' optional' : '' }
-          ]),
-          tag('td', [
-            tag('code', typeHtml(ctx, i.type), { noClass: true })
-          ]),
-          hasDesc ? tag('td', extractChildren(commentHtml(i.comment))) : EMPTY
-        ]))
+        .map(i => {
+          let type
+          if (i.signatures) {
+            let signature = i.signatures[0]
+            let params = signature.parameters || []
+            type = [
+              { type: 'text', value: '(' },
+              ...joinTags(', ', params.map(param => declHtml(ctx, param))),
+              { type: 'text', value: ') => ' },
+              ...typeHtml(ctx, signature.type)
+            ]
+          } else {
+            type = typeHtml(ctx, i.type)
+          }
+          return tag('tr', [
+            tag('td', [
+              tag('code', i.name),
+              { type: 'text', value: i.flags.isOptional ? ' optional' : '' }
+            ]),
+            tag('td', [
+              tag('code', type, { noClass: true })
+            ]),
+            hasDesc ? tag('td', extractChildren(commentHtml(i.comment))) : EMPTY
+          ])
+        })
     ])
   ]
 }
@@ -442,6 +457,39 @@ function functionHtml (ctx, node) {
 }
 
 function variableHtml (ctx, node) {
+  let body = []
+  if (node.type) {
+    let type = node.type
+    if (
+      type.declaration &&
+      type.declaration.children &&
+      type.declaration.children[0].comment
+    ) {
+      body = tableHtml(ctx, 'Property', type.declaration.children)
+    } else if (
+      type.types &&
+      type.types[1].declaration &&
+      type.types[1].declaration.children &&
+      type.types[1].declaration.children[0].comment
+    ) {
+      body = tableHtml(ctx, 'Property', [
+        ...type.types[0].reflection.type.declaration.children,
+        ...type.types[1].declaration.children
+      ])
+      if (!INLINE_TYPES.has(type.types[0].reflection.type.name)) {
+        body = [
+          tag('p', [
+            { type: 'text', value: 'Extends ' },
+            ...typeHtml(ctx, type.types[0]),
+            { type: 'text', value: '.' }
+          ]),
+          ...body
+        ]
+      }
+    } else {
+      body = propTypeHtml(ctx, type)
+    }
+  }
   return tag('section', [
     tag('h2', [
       tag('code', [
@@ -451,7 +499,7 @@ function variableHtml (ctx, node) {
       slug: toSlug(node.name)
     }),
     ...commentHtml(node.comment),
-    ...propTypeHtml(ctx, node.type)
+    ...body
   ])
 }
 
