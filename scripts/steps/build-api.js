@@ -62,6 +62,8 @@ const HIDE_CONSTRUCTOR = new Set([
 
 const TEMPLATELESS = new Set(['ActionIterator', 'ActionListener', 'Log'])
 
+const INLINE_TYPES = new Set(['NodeState', 'BaseServerOptions'])
+
 const EMPTY = { type: 'text', value: '' }
 
 function toSlug (type) {
@@ -174,6 +176,9 @@ function typeHtml (ctx, type) {
   if (!type) {
     return []
   } else if (type.type === 'reference') {
+    if (INLINE_TYPES.has(type.name)) {
+      return typeHtml(ctx, type.reflection.type)
+    }
     let result
     if (SIMPLE_TYPES.has(type.name)) {
       result = [{ type: 'text', value: type.name }]
@@ -445,12 +450,13 @@ function variableHtml (ctx, node) {
     ], {
       slug: toSlug(node.name)
     }),
-    ...propTypeHtml(ctx, node.type),
-    ...commentHtml(node.comment)
+    ...commentHtml(node.comment),
+    ...propTypeHtml(ctx, node.type)
   ])
 }
 
 function toTree (ctx, nodes) {
+  nodes = nodes.filter(i => !INLINE_TYPES.has(i.name))
   let tree = {
     type: 'root',
     children: nodes
