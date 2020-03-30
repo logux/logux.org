@@ -11,11 +11,11 @@ function toTitle (file) {
   if (file === 'spec') file = 'specification'
   if (file === 'node-server') file = 'node.js-server'
   return capitalize(file)
-    .replace(/-\w/, i => ' ' + i.slice(1).toUpperCase())
-    .replace('Ws', 'Web Socket')
-    .replace('typescript', 'TypeScript')
-    .replace('Cross Tab', 'Cross-Tab')
-    .replace('Backend', 'Back-end')
+    .replace(/-\w/g, i => ' ' + i.slice(1).toUpperCase())
+    .replace(/Ws/g, 'Web Socket')
+    .replace(/Typescript/g, 'TypeScript')
+    .replace(/Cross Tab/g, 'Cross-Tab')
+    .replace(/Backend/g, 'Back-end')
 }
 
 async function buildDocs (assets, layout, guides) {
