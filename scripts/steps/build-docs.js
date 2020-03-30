@@ -13,6 +13,7 @@ function toTitle (file) {
   return capitalize(file)
     .replace(/-\w/, i => ' ' + i.slice(1).toUpperCase())
     .replace('Ws', 'Web Socket')
+    .replace('typescript', 'TypeScript')
     .replace('Cross Tab', 'Cross-Tab')
     .replace('Backend', 'Back-end')
 }
