@@ -19,6 +19,9 @@ export default async function installTypes (nextSteps) {
     await run('Installing types dependecies', async () => {
       for (let i of dirs) {
         await exec('yarn install --production', { cwd: i })
+        if (i.endsWith('logux-redux')) {
+          await exec('yarn add redux', { cwd: i })
+        }
       }
     })
   }
