@@ -49,10 +49,6 @@ const SIMPLE_TYPES = new Set([
   'any'
 ])
 
-const REPLACE_TYPES = {
-  BaseServer: 'Server'
-}
-
 const HIDE_CONSTRUCTOR = new Set([
   'ChannelContext',
   'Context',
@@ -62,7 +58,7 @@ const HIDE_CONSTRUCTOR = new Set([
 
 const TEMPLATELESS = new Set(['ActionIterator', 'ActionListener', 'Log'])
 
-const INLINE_TYPES = new Set(['NodeState', 'BaseServerOptions'])
+const INLINE_TYPES = new Set(['NodeState'])
 
 const EMPTY = { type: 'text', value: '' }
 const OPTIONAL = [
@@ -198,10 +194,9 @@ function typeHtml (ctx, type) {
         })
       ]
     } else {
-      let name = REPLACE_TYPES[type.name] || type.name
       result = [
-        tag('a', name, {
-          properties: { href: '#' + name.toLowerCase() }
+        tag('a', type.name, {
+          properties: { href: '#' + type.name.toLowerCase() }
         })
       ]
     }
@@ -282,7 +277,6 @@ function getEditUrl (file) {
 function extendsHtml (parentClasses) {
   if (parentClasses) {
     let name = parentClasses[0].name
-    if (name === 'BaseServer') return []
     let link
     if (SIMPLE_TYPES.has(name)) {
       link = tag('code', name)

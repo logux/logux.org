@@ -20,9 +20,7 @@ export default async function readTypedoc (...projects) {
 
   let ignore
   if (type === 'server') {
-    ignore = [
-      'Reconnect', 'ClientNode', 'WsConnection', 'BaseServer', 'BunyanLogger'
-    ]
+    ignore = ['Reconnect', 'ClientNode', 'WsConnection']
   } else if (type === 'client') {
     ignore = ['ServerNode', 'ServerConnection']
   }
