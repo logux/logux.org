@@ -213,7 +213,7 @@ async function readDocs () {
         exclude: ['bash', 'sh', 'ini', 'diff'],
         prefix: 'code-block_'
       })
-      .use(remarkRehype, { allowDangerousHTML: true })
+      .use(remarkRehype, { allowDangerousHtml: true })
       .use(rehypeRaw)
       .use(articler, file)
       .use(videoInserter)
