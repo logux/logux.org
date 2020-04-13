@@ -30,7 +30,6 @@ const EXTERNAL_TYPES = {
   Observable: 'https://github.com/tc39/proposal-observable',
   ReduxContext: 'https://react-redux.js.org/using-react-redux/accessing-store',
   Process: 'https://nodejs.org/api/process.html#process_process',
-  BunyanLogger: 'https://github.com/trentm/node-bunyan',
   HTTPServer: 'https://nodejs.org/api/http.html#http_class_http_server',
   Unsubscribe: 'https://github.com/ai/nanoevents/#remove-listener',
   Component: 'https://reactjs.org/docs/react-component.html'
