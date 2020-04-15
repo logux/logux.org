@@ -215,6 +215,19 @@ html( lang="en" )
             td: code.code opts.allowDangerousProtocol
             td: code boolean?
             td Do not show warning when using #[code.code ws://] in production
+          table.table
+            tr
+              th Name
+              th Type
+            tr
+              td: code.code log
+              td: code: a( href="#" ) Log
+            tr
+              td: code.code reason
+              td: code string = 'error'
+            tr
+              td: code.code opts.allowDangerousProtocol
+              td: code boolean?
         +title3('returns')
           | Returns
         p.text_block: code #[a( href="#" ) Promise]&lt;#[a( href="#" ) boolean]&gt;

@@ -35,15 +35,20 @@
       display: grid
       grid-template-rows: auto auto
       grid-template-columns: auto auto
+      border-bottom: var(--text-table-border)
+
+      &:first-child
+        border-bottom: none
 
     th
       display: none
 
     td
+      border-bottom: none
+
       &:first-child,
       &:nth-child(2)
         padding: 12px var(--text-side)
-        border-bottom: none
 
       &:first-child
         padding-right: 0
