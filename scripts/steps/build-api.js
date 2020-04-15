@@ -413,6 +413,7 @@ function templatesHtml (ctx, node) {
 }
 
 function membersHtml (ctx, className, members, separator) {
+  if (!members) return []
   let slugSep = separator === '#' ? '-' : separator
   return members
     .filter(i => i.name !== 'constructor' && i.name !== 'Error')
@@ -478,7 +479,8 @@ function functionHtml (ctx, node) {
     }),
     ...commentHtml(node.signatures[0].comment),
     ...paramsHtml(ctx, node),
-    ...returnsHtml(ctx, node)
+    ...returnsHtml(ctx, node),
+    ...membersHtml(ctx, node.name, node.children, '#')
   ])
 }
 
