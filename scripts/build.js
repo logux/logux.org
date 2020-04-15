@@ -41,12 +41,13 @@ async function prepareContent () {
     downloadProject('logux-core'),
     downloadProject('logux-server'),
     downloadProject('logux-client'),
-    downloadProject('logux-redux')
+    downloadProject('logux-redux'),
+    downloadProject('logux-vuex')
   ])
   let [guides, nodeApi, webApi] = await Promise.all([
     readDocs(),
     readTypedoc('logux-server', 'logux-core'),
-    readTypedoc('logux-client', 'logux-redux', 'logux-core')
+    readTypedoc('logux-client', 'logux-redux', 'logux-vuex', 'logux-core')
   ])
   return [guides, nodeApi, webApi]
 }
