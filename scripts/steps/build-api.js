@@ -276,6 +276,11 @@ function typeHtml (ctx, type) {
       }),
       ...typeHtml(ctx, type.target)
     ]
+  } else if (type.type === 'query') {
+    return [
+      { type: 'text', value: 'typeof ' },
+      ...typeHtml(type.queryType)
+    ]
   } else {
     console.error(type)
     throw new Error(`Unknown type ${ type.type }`)
@@ -424,13 +429,17 @@ function membersHtml (ctx, className, members, separator) {
           properties: { className: ['title_extra'] }
         }))
       }
+      let comment = member.comment
+      if (!comment && member.signatures) {
+        comment = member.signatures[0].comment
+      }
       return tag('section', [
         tag('h2', [
           tag('code', name, { noClass: true })
         ], {
           slug: (className + slugSep + member.name).toLowerCase()
         }),
-        ...commentHtml(member.comment || member.signatures[0].comment),
+        ...commentHtml(comment),
         ...propTypeHtml(ctx, member.type),
         ...paramsHtml(ctx, member),
         ...templatesHtml(ctx, member),

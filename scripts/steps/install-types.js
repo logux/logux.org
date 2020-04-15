@@ -23,8 +23,7 @@ export default async function installTypes (nextSteps) {
         await exec('yarn install --production', { cwd: i })
         if (i.endsWith('logux-redux')) {
           await exec('yarn add redux', { cwd: i })
-        }
-        if (i.endsWith('logux-vuex')) {
+        } else if (i.endsWith('logux-vuex')) {
           await exec('yarn add vuex', { cwd: i })
         }
       }
