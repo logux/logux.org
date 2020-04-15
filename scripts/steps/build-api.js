@@ -119,6 +119,18 @@ function toHtml (content) {
   return remarkRehype()(tree).children
 }
 
+function toText (nodes) {
+  return nodes.map(node => {
+    if (node.type === 'text') {
+      return node.value
+    } else if (node.children) {
+      return toText(node.children)
+    } else {
+      return ''
+    }
+  }).join('')
+}
+
 function joinTags (separator, tags) {
   return tags.flatMap((el, index) => {
     if (index === tags.length - 1) {
@@ -200,9 +212,12 @@ function typeHtml (ctx, type) {
       ]
     }
     if (type.typeArguments && !TEMPLATELESS.has(type.name)) {
+      let body = joinTags(', ', type.typeArguments.map(i => typeHtml(ctx, i)))
+      let open = '<'
+      if (toText(body).length > 25) open = ' <'
       result.push(
-        { type: 'text', value: '<' },
-        ...joinTags(', ', type.typeArguments.map(i => typeHtml(ctx, i))),
+        { type: 'text', value: open },
+        ...body,
         { type: 'text', value: '>' }
       )
     }
