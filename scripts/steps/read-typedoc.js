@@ -9,7 +9,7 @@ import { run } from '../lib/spinner.js'
 export default async function readTypedoc (...projects) {
   let type = capitalize(projects[0].replace(/^logux-/, ''))
 
-  let files = await run(`Looking for ${ type } TypeDoc`, async () => {
+  let files = await run(`Reading ${ type } TypeDoc`, async () => {
     return Promise.all(projects.map(i => {
       return globby('**/*.d.ts', {
         absolute: true,
