@@ -44,12 +44,13 @@ async function prepareContent () {
     downloadProject('logux-redux'),
     downloadProject('logux-vuex')
   ])
-  let [guides, nodeApi, webApi] = await Promise.all([
+  let [guides, nodeApi, reduxApi, vuexApi] = await Promise.all([
     readDocs(),
     readTypedoc('logux-server', 'logux-core'),
-    readTypedoc('logux-client', 'logux-redux', 'logux-vuex', 'logux-core')
+    readTypedoc('logux-redux', 'logux-client', 'logux-core'),
+    readTypedoc('logux-vuex', 'logux-client', 'logux-core')
   ])
-  return [guides, nodeApi, webApi]
+  return [guides, nodeApi, reduxApi, vuexApi]
 }
 
 async function build () {
@@ -57,7 +58,11 @@ async function build () {
     await prepareHtml()
     return
   }
-  let [users, [assets, uikit], [guides, nodeApi, webApi]] = await Promise.all([
+  let [
+    users,
+    [assets, uikit],
+    [guides, nodeApi, reduxApi, vuexApi]
+  ] = await Promise.all([
     getChatUsers(),
     prepareHtml(),
     prepareContent()
@@ -67,7 +72,8 @@ async function build () {
     buildDocs(assets, layout, guides),
     buildPages(assets, layout),
     buildApi(assets, layout, 'Node API', nodeApi),
-    buildApi(assets, layout, 'Web API', webApi)
+    buildApi(assets, layout, 'Redux API', reduxApi),
+    buildApi(assets, layout, 'Vuex API', vuexApi)
   ])
   await repackScripts(assets)
   await compressFiles(assets)

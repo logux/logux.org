@@ -1,3 +1,4 @@
+import capitalize from 'capitalize'
 import { join } from 'path'
 import TypeDoc from 'typedoc'
 import globby from 'globby'
@@ -6,9 +7,9 @@ import { PROJECTS } from '../lib/dirs.js'
 import { run } from '../lib/spinner.js'
 
 export default async function readTypedoc (...projects) {
-  let type = projects[0].replace(/^logux-/, '')
+  let type = capitalize(projects[0].replace(/^logux-/, ''))
 
-  let files = await run(`Looking for ${ type } JSDoc`, async () => {
+  let files = await run(`Looking for ${ type } TypeDoc`, async () => {
     return Promise.all(projects.map(i => {
       return globby('**/*.d.ts', {
         absolute: true,
@@ -19,13 +20,13 @@ export default async function readTypedoc (...projects) {
   })
 
   let ignore
-  if (type === 'server') {
+  if (type === 'Server') {
     ignore = ['Reconnect', 'ClientNode', 'WsConnection']
-  } else if (type === 'client') {
+  } else {
     ignore = ['ServerNode', 'ServerConnection']
   }
 
-  let docs = await run(`Generating ${ type } JSDoc`, async () => {
+  let docs = await run(`Generating ${ type } TypeDoc`, async () => {
     let app = new TypeDoc.Application()
     app.bootstrap({
       includeDeclarations: true,
