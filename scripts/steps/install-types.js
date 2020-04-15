@@ -8,7 +8,9 @@ import { run } from '../lib/spinner.js'
 
 let exec = promisify(child.exec)
 
-let NAMES = ['logux-core', 'logux-server', 'logux-client', 'logux-redux']
+let NAMES = [
+  'logux-core', 'logux-server', 'logux-client', 'logux-redux', 'logux-vuex'
+]
 
 export default async function installTypes (nextSteps) {
   let dirs = NAMES.map(i => join(PROJECTS, i))
@@ -21,6 +23,9 @@ export default async function installTypes (nextSteps) {
         await exec('yarn install --production', { cwd: i })
         if (i.endsWith('logux-redux')) {
           await exec('yarn add redux', { cwd: i })
+        }
+        if (i.endsWith('logux-vuex')) {
+          await exec('yarn add vuex', { cwd: i })
         }
       }
     })
