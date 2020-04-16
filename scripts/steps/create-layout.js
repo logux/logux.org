@@ -131,6 +131,34 @@ function switcherToHTML (id, switchers) {
 }
 
 function converter () {
+  let lastSwitcher = 0
+
+  function convertDetails (children) {
+    let converted = []
+    let switchers = []
+    for (let child of children) {
+      if (child.tagName === 'details') {
+        let body = child.children.slice(1)
+        if (body.some(i => i.tagName === 'details')) {
+          body = convertDetails(body)
+        }
+        switchers.push([toText(child.children[0].children), body])
+      } else if (switchers.length > 0) {
+        if (child.type !== 'text' || child.value !== '\n') {
+          converted.push(switcherToHTML(lastSwitcher++, switchers))
+          switchers = []
+          converted.push(child)
+        }
+      } else {
+        converted.push(child)
+      }
+    }
+    if (switchers.length > 0) {
+      converted.push(switcherToHTML(lastSwitcher++, switchers))
+    }
+    return converted
+  }
+
   function toSlug (nodes) {
     return slugify(toText(nodes), { lower: true })
       .replace(/":/g, '')
@@ -168,27 +196,7 @@ function converter () {
           node.properties.className = ['code']
         }
       } else if (node.tagName === 'details') {
-        let converted = []
-        let switchers = []
-        let onPage = 0
-        for (let child of parent.children) {
-          if (child.tagName === 'details') {
-            switchers.push([
-              toText(child.children[0].children),
-              child.children.slice(1)
-            ])
-          } else if (switchers.length > 0) {
-            converted.push(switcherToHTML(onPage++, switchers))
-            switchers = []
-            converted.push(child)
-          } else {
-            converted.push(child)
-          }
-        }
-        if (switchers.length > 0) {
-          converted.push(switcherToHTML(onPage++, switchers))
-        }
-        parent.children = converted
+        parent.children = convertDetails(parent.children)
       } else if (/^h[1-3]$/.test(node.tagName) && !node.properties.className) {
         unistVisit(node, 'element', i => {
           if (i.tagName === 'code') i.noClass = true
