@@ -32,7 +32,22 @@ const EXTERNAL_TYPES = {
   Process: 'https://nodejs.org/api/process.html#process_process',
   HTTPServer: 'https://nodejs.org/api/http.html#http_class_http_server',
   Unsubscribe: 'https://github.com/ai/nanoevents/#remove-listener',
-  Component: 'https://reactjs.org/docs/react-component.html'
+  Component: 'https://reactjs.org/docs/react-component.html',
+  ActionTree: 'https://vuex.vuejs.org/guide/hot-reload.html',
+  GetterTree: 'https://vuex.vuejs.org/guide/hot-reload.html',
+  ModuleTree: 'https://vuex.vuejs.org/guide/hot-reload.html',
+  MutationTree: 'https://vuex.vuejs.org/guide/hot-reload.html',
+  VuexDispatch: 'https://vuex.vuejs.org/api/#dispatch',
+  Module: 'https://vuex.vuejs.org/guide/modules.html',
+  ModuleOptions: 'https://vuex.vuejs.org/guide/modules.html' +
+                 '#dynamic-module-registration',
+  VuexStoreOptions: 'https://vuex.vuejs.org/api/' +
+                    '#vuex-store-constructor-options',
+  SubscribeActionOptions: 'https://vuex.vuejs.org/guide/plugins.html',
+  WatchOptions: 'https://vuex.vuejs.org/api/#watch',
+  Vue: 'https://vuejs.org/v2/api/#Global-API',
+  CommitOptions: 'https://vuex.vuejs.org/api/#commit',
+  VuexPayload: 'https://vuex.vuejs.org/guide/mutations.html#commit-with-payload'
 }
 
 const SIMPLE_TYPES = new Set([
@@ -45,7 +60,8 @@ const SIMPLE_TYPES = new Set([
   'string',
   'object',
   'number',
-  'any'
+  'any',
+  'ExtendedVue'
 ])
 
 const HIDE_CONSTRUCTOR = new Set([
