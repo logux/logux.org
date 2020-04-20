@@ -2,9 +2,7 @@ function keepScroll (el, cb) {
   let prevTop = el.getBoundingClientRect().top
   cb()
   let newTop = el.getBoundingClientRect().top
-  document.documentElement.style.scrollBehavior = ''
   window.scrollTo(window.scrollX, window.scrollY + newTop - prevTop)
-  document.documentElement.style.scrollBehavior = 'smooth'
 }
 
 function changeTab (from, to) {
