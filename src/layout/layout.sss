@@ -45,13 +45,14 @@
 .layout_submenu
   position: relative
   height: 100%
+  overflow-x: hidden
   overflow-y: auto
   overscroll-behavior: contain
 
 @mixin no-mobile
   .layout_menu:not(:hover),
   .layout_hover:not(:hover) .layout_submenu
-    overflow: hidden
+    overflow-y: hidden
 
 .layout_hover
   flex-grow: 1
