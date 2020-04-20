@@ -3916,7 +3916,7 @@ hash.js@^1.0.0, hash.js@^1.0.3:
     inherits "^2.0.3"
     minimalistic-assert "^1.0.1"
 
-hasha@^5.1.0:
+hasha@^5.2.0:
   version "5.2.0"
   resolved "https://registry.yarnpkg.com/hasha/-/hasha-5.2.0.tgz#33094d1f69c40a4a6ac7be53d5fe3ff95a269e0c"
   integrity sha512-2W+jKdQbAdSIrggA8Q35Br8qKadTrqCTC8+XZvBWepKDK6m9XkX6Iz1a2yh2KP01kzAR/dpuMeUnocoLYDcskw==
@@ -5177,7 +5177,7 @@ magic-string@^0.25.5, magic-string@^0.25.7:
   dependencies:
     sourcemap-codec "^1.4.4"
 
-make-dir@^3.0.0, make-dir@^3.0.2:
+make-dir@^3.0.2:
   version "3.0.2"
   resolved "https://registry.yarnpkg.com/make-dir/-/make-dir-3.0.2.tgz#04a1acbf22221e1d6ef43559f43e05a90dbb4392"
   integrity sha512-rYKABKutXa6vXTXhoV18cBE7PaewPXHe/Bdq4v+ZLMhxbWApkFFplT0LcbMW+6BbjnQXzZ/sAvSE/JdguApG5w==
@@ -5835,7 +5835,7 @@ onetime@^5.1.0:
   dependencies:
     mimic-fn "^2.1.0"
 
-open@^7.0.0:
+open@^7.0.3:
   version "7.0.3"
   resolved "https://registry.yarnpkg.com/open/-/open-7.0.3.tgz#db551a1af9c7ab4c7af664139930826138531c48"
   integrity sha512-sP2ru2v0P290WFfv49Ap8MF6PkzGNnGlAwHweB4WR4mr5d2d0woiCluUeJ218w7/+PmoBy9JmYgD5A4mLcWOFA==
@@ -7995,18 +7995,18 @@ sprintf-js@~1.0.2:
   resolved "https://registry.yarnpkg.com/sprintf-js/-/sprintf-js-1.0.3.tgz#04e6926f662895354f3dd015203633b857297e2c"
   integrity sha1-BOaSb2YolTVPPdAVIDYzuFcpfiw=
 
-ssdeploy@^0.6.10:
-  version "0.6.10"
-  resolved "https://registry.yarnpkg.com/ssdeploy/-/ssdeploy-0.6.10.tgz#6d5a12ba1214208f7039f4b925c500195b1341b9"
-  integrity sha512-y6+7qp94iqeEr8lRaQGe3nvLB+lXBgRBOm71aWcIjDqhia4PEWINs1h2+HF047RHNky/6H1Sgez5A1XIgw90nA==
+ssdeploy@^0.6.11:
+  version "0.6.11"
+  resolved "https://registry.yarnpkg.com/ssdeploy/-/ssdeploy-0.6.11.tgz#c2caf7bab745a814df51f9fc2abcd52212a17eff"
+  integrity sha512-0/GHDPgRANJ5oIfAcyG8Y5/5s5RyEgPMTF1J/ExlDR0Pb+YBX+wuuJNQebGauC5RBw7hzpKcWeRW0GeaYaXTBA==
   dependencies:
     bytes "^3.1.0"
-    chalk "^3.0.0"
+    chalk "^4.0.0"
     dotenv "^8.2.0"
     folder-hash "^3.3.0"
-    hasha "^5.1.0"
-    make-dir "^3.0.0"
-    open "^7.0.0"
+    hasha "^5.2.0"
+    make-dir "^3.0.2"
+    open "^7.0.3"
     ora "^4.0.3"
     pkg-up "^3.1.0"
 
