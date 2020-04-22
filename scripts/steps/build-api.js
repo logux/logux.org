@@ -25,6 +25,8 @@ const EXTERNAL_TYPES = {
   ReduxStore: 'https://redux.js.org/basics/store',
   Partial: 'https://www.typescriptlang.org/docs/handbook/' +
            'utility-types.html#partialt',
+  ReturnType: 'https://www.typescriptlang.org/docs/handbook/' +
+              'utility-types.html#returntypet',
   Promise: 'https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/' +
            'Using_promises',
   Observable: 'https://github.com/tc39/proposal-observable',
