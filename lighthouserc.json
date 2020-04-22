@@ -17,7 +17,8 @@
         "uses-long-cache-ttl": ["error", { "minScore": 0.70 }],
         "time-to-first-byte": ["error", { "minScore": 0 }],
         "max-potential-fid": ["error", { "minScore": 0.35 }],
-        "speed-index": ["error", { "minScore": 0.95 }]
+        "speed-index": ["error", { "minScore": 0.95 }],
+        "dom-size": ["error", { "minScore": 0.95 }]
       }
     }
   }
