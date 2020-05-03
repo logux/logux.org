@@ -49,6 +49,7 @@ const EXTERNAL_TYPES = {
   WatchOptions: 'https://vuex.vuejs.org/api/#watch',
   Vue: 'https://vuejs.org/v2/api/#Global-API',
   CommitOptions: 'https://vuex.vuejs.org/api/#commit',
+  SubscribeOptions: 'https://vuex.vuejs.org/api/#subscribe',
   VuexPayload: 'https://vuex.vuejs.org/guide/mutations.html#commit-with-payload'
 }
 
