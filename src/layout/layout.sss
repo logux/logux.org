@@ -49,7 +49,7 @@
   overflow-y: auto
   overscroll-behavior: contain
 
-@mixin no-mobile
+@media (width > 1024px)
   .layout_menu:not(:hover),
   .layout_hover:not(:hover) .layout_submenu
     overflow-y: hidden
