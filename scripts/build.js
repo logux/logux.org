@@ -62,11 +62,7 @@ async function build () {
     users,
     [assets, uikit],
     [guides, nodeApi, reduxApi, vuexApi]
-  ] = await Promise.all([
-    getChatUsers(),
-    prepareHtml(),
-    prepareContent()
-  ])
+  ] = await Promise.all([getChatUsers(), prepareHtml(), prepareContent()])
   let layout = await createLayout(uikit, users)
   await Promise.all([
     buildDocs(assets, layout, guides),

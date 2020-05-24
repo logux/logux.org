@@ -7,8 +7,7 @@ import unified from 'unified'
 
 import wrap from '../lib/spinner.js'
 
-const SMALL_WORDS =
-  /(^|\s)(the|a|for|in|an|to|if|so|when|with|by|and|or|is|this|any|from) /gi
+const SMALL_WORDS = /(^|\s)(the|a|for|in|an|to|if|so|when|with|by|and|or|is|this|any|from) /gi
 
 function cleaner ({ chatUsers, removeAssets }) {
   return tree => {
@@ -23,16 +22,17 @@ function cleaner ({ chatUsers, removeAssets }) {
       } else if (cls[0] === 'submenu') {
         node.children = []
       } else if (cls[0] === 'menu_extra') {
-        node.children = [{ type: 'text', value: `(${ chatUsers } people)` }]
+        node.children = [{ type: 'text', value: `(${chatUsers} people)` }]
       }
     })
     let articles = 0
     return unistFilter(tree, 'element', node => {
-      let props = node.properties || { }
+      let props = node.properties || {}
       if (node.tagName === 'article') {
         articles += 1
         return articles === 1
-      } if (node.tagName === 'script') {
+      }
+      if (node.tagName === 'script') {
         return !removeAssets.some(i => props.src.includes(i))
       } else if (node.tagName === 'link' && props.rel[0] === 'stylesheet') {
         return !removeAssets.some(i => props.href.includes(i))
@@ -53,7 +53,7 @@ function checker (title) {
     unistVisit(tree, 'element', node => {
       let id = node.properties.id
       if (id) {
-        if (ids.has(id)) throw new Error(`Dublicate ID #${ id } in ${ title }`)
+        if (ids.has(id)) throw new Error(`Dublicate ID #${id} in ${title}`)
         ids.add(id)
       }
     })
@@ -61,7 +61,7 @@ function checker (title) {
       let href = node.properties.href
       if (href && href.startsWith('#')) {
         if (!ids.has(href.slice(1))) {
-          throw new Error(`${ title.slice(0, -3) } has no ${ href } ID`)
+          throw new Error(`${title.slice(0, -3)} has no ${href} ID`)
         }
       }
     })
@@ -77,10 +77,10 @@ async function cleanPage (html, chatUsers, removeAssets) {
   return cleaned.contents
 }
 
-function tag (tagName, cls, properties = { }, children = []) {
+function tag (tagName, cls, properties = {}, children = []) {
   if (Array.isArray(properties)) {
     children = properties
-    properties = { }
+    properties = {}
   }
   if (typeof cls === 'object') {
     properties = cls
@@ -91,41 +91,58 @@ function tag (tagName, cls, properties = { }, children = []) {
 }
 
 function toText (nodes) {
-  return nodes.map(i => {
-    if (i.type === 'text') {
-      return i.value
-    } else {
-      return toText(i.children)
-    }
-  }).join('')
+  return nodes
+    .map(i => {
+      if (i.type === 'text') {
+        return i.value
+      } else {
+        return toText(i.children)
+      }
+    })
+    .join('')
 }
 
 function switcherToHTML (id, switchers) {
   return tag('div', 'switcher', [
-    tag('div', 'switcher_tabs', { role: 'tablist' }, switchers.map((s, i) => {
-      return tag('li', {
-        className: i === 0 ? ['is-open'] : [],
-        role: 'presentation'
-      }, [
-        tag('button', {
-          'id': `sw${ id }tab${ i }`,
-          'role': 'tab',
-          'tabindex': i !== 0 && '-1',
-          'data-name': s[0] === 'React/Redux client' && 'React client',
-          'aria-controls': `sw${ id }tab${ i }body`,
-          'aria-selected': i === 0 && 'true'
-        }, [
-          { type: 'text', value: s[0] }
-        ])
-      ])
-    })),
+    tag(
+      'div',
+      'switcher_tabs',
+      { role: 'tablist' },
+      switchers.map((s, i) => {
+        return tag(
+          'li',
+          {
+            className: i === 0 ? ['is-open'] : [],
+            role: 'presentation'
+          },
+          [
+            tag(
+              'button',
+              {
+                'id': `sw${id}tab${i}`,
+                'role': 'tab',
+                'tabindex': i !== 0 && '-1',
+                'data-name': s[0] === 'React/Redux client' && 'React client',
+                'aria-controls': `sw${id}tab${i}body`,
+                'aria-selected': i === 0 && 'true'
+              },
+              [{ type: 'text', value: s[0] }]
+            )
+          ]
+        )
+      })
+    ),
     ...switchers.map((s, i) => {
-      return tag('section', {
-        'id': `sw${ id }tab${ i }body`,
-        'role': 'tabpanel',
-        'hidden': i !== 0,
-        'aria-labelledby': `sw${ id }tab${ i }`
-      }, s[1])
+      return tag(
+        'section',
+        {
+          'id': `sw${id}tab${i}body`,
+          'role': 'tabpanel',
+          'hidden': i !== 0,
+          'aria-labelledby': `sw${id}tab${i}`
+        },
+        s[1]
+      )
     })
   ])
 }
@@ -206,10 +223,15 @@ function converter () {
           let slug = node.slug ? node.slug : toSlug(node.children)
           node.properties.id = slug
           node.children = [
-            tag('a', 'title_link', {
-              title: 'Direct link to section',
-              href: `#${ slug }`
-            }, node.children)
+            tag(
+              'a',
+              'title_link',
+              {
+                title: 'Direct link to section',
+                href: `#${slug}`
+              },
+              node.children
+            )
           ]
         }
         if (node.editUrl) {
@@ -240,9 +262,11 @@ function submenuItem (node) {
   if (node.code) {
     let code = node.code
     if (code.startsWith('.') || code.startsWith('#')) {
-      text.push(tag('span', 'submenu_extra', [
-        { type: 'text', value: code.slice(0, 1) }
-      ]))
+      text.push(
+        tag('span', 'submenu_extra', [
+          { type: 'text', value: code.slice(0, 1) }
+        ])
+      )
       code = code.slice(1)
     }
     if (code.endsWith('()')) {
@@ -253,7 +277,7 @@ function submenuItem (node) {
     } else {
       text.push({ type: 'text', value: code })
     }
-    text = [tag('code', { }, text)]
+    text = [tag('code', {}, text)]
   } else {
     text = [{ type: 'text', value: node.text }]
   }
@@ -274,12 +298,16 @@ function generateSubmenu (links) {
       list.push(submenuItem(i))
       if (i.ul || i.ol) {
         list.push(
-          tag(i.ul ? 'ul' : 'ol', { }, (i.ul || i.ol).map(j => {
-            return tag('li', { }, [submenuItem(j)])
-          }))
+          tag(
+            i.ul ? 'ul' : 'ol',
+            {},
+            (i.ul || i.ol).map(j => {
+              return tag('li', {}, [submenuItem(j)])
+            })
+          )
         )
       }
-      return tag('li', { className: (i.ul || i.ol) ? [] : ['is-flat'] }, list)
+      return tag('li', { className: i.ul || i.ol ? [] : ['is-flat'] }, list)
     })
   }
 }
@@ -305,13 +333,13 @@ async function createLayout (uikit, chatUsers) {
     let layout = await cleanPage(uikit, chatUsers, ignore)
     return layout
       .replace(
-        `class="menu_link" href="${ categoryUrl }"`,
+        `class="menu_link" href="${categoryUrl}"`,
         'class="menu_link is-current"'
       )
       .replace('<ul class="submenu">', '$&' + submenu)
-      .replace(/<title>[^<]+/, `<title>${ title }Logux`)
+      .replace(/<title>[^<]+/, `<title>${title}Logux`)
       .replace(/<\/article>/, '')
-      .replace(/<article[^>]+>/, `${ html.replace(/\$/g, '$$$$') }`)
+      .replace(/<article[^>]+>/, `${html.replace(/\$/g, '$$$$')}`)
   }
 }
 

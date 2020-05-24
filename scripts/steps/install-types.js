@@ -9,7 +9,11 @@ import { run } from '../lib/spinner.js'
 let exec = promisify(child.exec)
 
 let NAMES = [
-  'logux-core', 'logux-server', 'logux-client', 'logux-redux', 'logux-vuex'
+  'logux-core',
+  'logux-server',
+  'logux-client',
+  'logux-redux',
+  'logux-vuex'
 ]
 
 export default async function installTypes (nextSteps) {

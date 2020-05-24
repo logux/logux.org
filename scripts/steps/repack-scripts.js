@@ -22,17 +22,22 @@ async function repackScripts (assets) {
 
   let toCache = assets
     .map(i => {
-      return '/' + relative(DIST, i)
-        .replace(/\\/g, '/')
-        .replace(/(^|\/)index\.html$/, '$1')
+      return (
+        '/' +
+        relative(DIST, i)
+          .replace(/\\/g, '/')
+          .replace(/(^|\/)index\.html$/, '$1')
+      )
     })
     .filter(i => {
-      return i !== '/service.js' &&
-             i !== '/uikit/' &&
-             i !== '/favicon.ico' &&
-             i !== '/robots.txt' &&
-             !i.startsWith('/og.') &&
-             !i.startsWith('/.well-known/')
+      return (
+        i !== '/service.js' &&
+        i !== '/uikit/' &&
+        i !== '/favicon.ico' &&
+        i !== '/robots.txt' &&
+        !i.startsWith('/og.') &&
+        !i.startsWith('/.well-known/')
+      )
     })
     .sort()
   let cacheBuster = hash(
@@ -42,25 +47,24 @@ async function repackScripts (assets) {
       .join()
   )
 
-  await Promise.all(scripts.map(async ([input, output]) => {
-    let plugins = [
-      injectProcessEnv({ NODE_ENV: 'production' }),
-      terser.terser()
-    ]
-    if (output.endsWith('service.js')) {
-      plugins = [
-        replace({ FILES: JSON.stringify(toCache) }),
-        ...plugins
+  await Promise.all(
+    scripts.map(async ([input, output]) => {
+      let plugins = [
+        injectProcessEnv({ NODE_ENV: 'production' }),
+        terser.terser()
       ]
-    }
-    let bundle = await rollup({ input, plugins })
-    let results = await bundle.generate({ format: 'iife', strict: false })
-    let code = results.output[0].code
-    if (output.endsWith('service.js')) {
-      code = `'${ cacheBuster }';${ code }`
-    }
-    await fs.writeFile(output, code)
-  }))
+      if (output.endsWith('service.js')) {
+        plugins = [replace({ FILES: JSON.stringify(toCache) }), ...plugins]
+      }
+      let bundle = await rollup({ input, plugins })
+      let results = await bundle.generate({ format: 'iife', strict: false })
+      let code = results.output[0].code
+      if (output.endsWith('service.js')) {
+        code = `'${cacheBuster}';${code}`
+      }
+      await fs.writeFile(output, code)
+    })
+  )
 }
 
 export default wrap(repackScripts, 'Optimizing JS')

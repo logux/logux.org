@@ -28,34 +28,35 @@ function span (cls, value) {
 }
 
 function highlightLines (node, cb) {
-  if (!node.data) node.data = { }
+  if (!node.data) node.data = {}
   node.data.hChildren = node.value
     .split('\n')
     .map(cb)
-    .flatMap((line, i) => i === 0 ? line : [text('\n'), ...line])
+    .flatMap((line, i) => (i === 0 ? line : [text('\n'), ...line]))
 }
 
 function iniandBashHighlight () {
   return tree => {
     unistVisit(tree, 'code', node => {
       if (node.lang === 'sh' || node.lang === 'bash') {
-        highlightLines(node, line => line
-          .split(' ')
-          .map((word, i, all) => {
-            if (i === 0 && (word === 'npx' || word === 'sudo')) {
-              return span('code-block_keyword', word)
-            } else if (
-              i === 0 ||
-              (i === 1 && all[0] === 'npx') ||
-              (i === 1 && all[0] === 'npm' && word === 'i') ||
-              (i === 1 && all[0] === 'yarn' && word === 'add')
-            ) {
-              return span('code-block_literal', word)
-            } else {
-              return text(word)
-            }
-          })
-          .flatMap((word, i) => i === 0 ? word : [text(' '), word])
+        highlightLines(node, line =>
+          line
+            .split(' ')
+            .map((word, i, all) => {
+              if (i === 0 && (word === 'npx' || word === 'sudo')) {
+                return span('code-block_keyword', word)
+              } else if (
+                i === 0 ||
+                (i === 1 && all[0] === 'npx') ||
+                (i === 1 && all[0] === 'npm' && word === 'i') ||
+                (i === 1 && all[0] === 'yarn' && word === 'add')
+              ) {
+                return span('code-block_literal', word)
+              } else {
+                return text(word)
+              }
+            })
+            .flatMap((word, i) => (i === 0 ? word : [text(' '), word]))
         )
       } else if (node.lang === 'ini') {
         highlightLines(node, line => {
@@ -88,10 +89,10 @@ function articler (file) {
       {
         type: 'element',
         tagName: 'article',
-        properties: { },
+        properties: {},
         children: tree.children.filter(i => {
           if (i.tagName === 'h1') {
-            i.editUrl = `https://github.com/logux/docs/edit/master/${ file }`
+            i.editUrl = `https://github.com/logux/docs/edit/master/${file}`
             i.noSlug = true
           }
           return i.type !== 'text' || i.value !== '\n'
@@ -122,21 +123,27 @@ function videoInserter () {
         let match = textContent(node).match(/Youtube:(\S+) (.*)$/)
         let id = match[1]
         let alt = match[2]
-        return [tag('a', {
-          className: ['video'],
-          href: `https://www.youtube.com/watch?v=${ id }`
-        }, [
-          tag('picture', { }, [
-            tag('source', {
-              srcset: `https://i.ytimg.com/vi_webp/${ id }/maxresdefault.webp`,
-              type: 'image/webp'
-            }),
-            tag('img', {
-              src: `https://i.ytimg.com/vi/${ id }/maxresdefault.jpg`,
-              alt
-            })
-          ])
-        ])]
+        return [
+          tag(
+            'a',
+            {
+              className: ['video'],
+              href: `https://www.youtube.com/watch?v=${id}`
+            },
+            [
+              tag('picture', {}, [
+                tag('source', {
+                  srcset: `https://i.ytimg.com/vi_webp/${id}/maxresdefault.webp`,
+                  type: 'image/webp'
+                }),
+                tag('img', {
+                  src: `https://i.ytimg.com/vi/${id}/maxresdefault.jpg`,
+                  alt
+                })
+              ])
+            ]
+          )
+        ]
       } else {
         return [node]
       }
@@ -197,29 +204,33 @@ function convertor ({ file, onTitle }) {
 
 async function readDocs () {
   let files = await globby('**/*.md', { cwd: ROOT, ignore: ['node_modules'] })
-  let guides = await Promise.all(files.map(async file => {
-    let title = ''
-    let md = await fs.readFile(join(ROOT, file))
-    let tree = await unified().use(remarkParse).parse(md)
-    tree = await unified()
-      .use(convertor, {
-        file,
-        onTitle (value) {
-          title = value
-        }
-      })
-      .use(iniandBashHighlight)
-      .use(remarkHighlight, {
-        exclude: ['bash', 'sh', 'ini', 'diff'],
-        prefix: 'code-block_'
-      })
-      .use(remarkRehype, { allowDangerousHtml: true })
-      .use(rehypeRaw)
-      .use(articler, file)
-      .use(videoInserter)
-      .run(tree)
-    return { tree, title, file }
-  }))
+  let guides = await Promise.all(
+    files.map(async file => {
+      let title = ''
+      let md = await fs.readFile(join(ROOT, file))
+      let tree = await unified()
+        .use(remarkParse)
+        .parse(md)
+      tree = await unified()
+        .use(convertor, {
+          file,
+          onTitle (value) {
+            title = value
+          }
+        })
+        .use(iniandBashHighlight)
+        .use(remarkHighlight, {
+          exclude: ['bash', 'sh', 'ini', 'diff'],
+          prefix: 'code-block_'
+        })
+        .use(remarkRehype, { allowDangerousHtml: true })
+        .use(rehypeRaw)
+        .use(articler, file)
+        .use(videoInserter)
+        .run(tree)
+      return { tree, title, file }
+    })
+  )
   return guides
 }
 

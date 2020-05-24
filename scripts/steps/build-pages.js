@@ -25,13 +25,15 @@ function findHeaders (tree) {
 
 async function buildPages (assets, layout) {
   await PAGES.map(async i => {
-    let filename = join(SRC, `${ i }.pug`)
+    let filename = join(SRC, `${i}.pug`)
     let template = await fs.readFile(filename)
     let title = capitalize(i) + ' / '
     let inner = pug.render(template.toString(), { filename })
-    let tree = await unified().use(rehypeParse).parse(inner)
+    let tree = await unified()
+      .use(rehypeParse)
+      .parse(inner)
     let submenu = findHeaders(tree)
-    let html = await layout(`/${ i }/`, submenu, title, tree)
+    let html = await layout(`/${i}/`, submenu, title, tree)
     let dest = join(DIST, i, 'index.html')
     await fs.writeFile(dest, html)
     assets.add(dest)

@@ -12,7 +12,7 @@ async function generateWebManifest (assets) {
   json.icons[0].src = '/' + basename(assets.find(/196\..*\.png$/))
   json.icons[1].src = '/' + basename(assets.find(/512\..*\.png$/))
   let text = JSON.stringify(json)
-  let name = `manifest.${ hash(text) }.webmanifest`
+  let name = `manifest.${hash(text)}.webmanifest`
   await fs.writeFile(join(DIST, name), text)
   assets.add(join(DIST, name))
   return { url: '/' + name, theme: json.theme_color }

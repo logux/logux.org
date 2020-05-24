@@ -58,7 +58,7 @@ function readOpenned () {
   try {
     let json = localStorage.switcherOpenned
     return json ? JSON.parse(json) : []
-  } catch (e) {
+  } catch {
     return []
   }
 }
@@ -70,11 +70,11 @@ function writeOpenned (add, remove) {
     for (let i of remove) openned.delete(i)
     try {
       localStorage.switcherOpenned = JSON.stringify(Array.from(openned))
-    } catch (e) { }
+    } catch {}
   }, 0)
 }
 
-let byValue = { }
+let byValue = {}
 let open = new Map()
 let switchers = document.querySelectorAll('.switcher')
 
@@ -111,7 +111,10 @@ for (let switcher of switchers) {
           }
         }
       })
-      writeOpenned(value, values.filter(i => i !== value))
+      writeOpenned(
+        value,
+        values.filter(i => i !== value)
+      )
     }
   })
 

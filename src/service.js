@@ -22,12 +22,14 @@ async function fromCache (e) {
 
 async function cleanCache (cache, files) {
   let keys = await cache.keys()
-  await Promise.all(keys.map(async key => {
-    let { pathname } = new URL(key.url)
-    if (!files.includes(pathname)) {
-      await cache.delete(key)
-    }
-  }))
+  await Promise.all(
+    keys.map(async key => {
+      let { pathname } = new URL(key.url)
+      if (!files.includes(pathname)) {
+        await cache.delete(key)
+      }
+    })
+  )
 }
 
 async function precache () {
@@ -40,10 +42,7 @@ async function precache () {
       }
     })
   })
-  await Promise.all([
-    cleanCache(cache, files),
-    cache.addAll(requests)
-  ])
+  await Promise.all([cleanCache(cache, files), cache.addAll(requests)])
 }
 
 self.addEventListener('install', e => {

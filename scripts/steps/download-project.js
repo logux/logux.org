@@ -13,9 +13,9 @@ export default async function downloadProject (name) {
   if (existsSync(dir)) return
 
   let repo = 'logux/' + name.replace(/^logux-/, '')
-  let url = `https://github.com/${ repo }.git`
+  let url = `https://github.com/${repo}.git`
 
-  await run(`Downloading ${ repo }`, async () => {
-    await exec(`git clone --depth 1 ${ url } "${ dir }"`)
+  await run(`Downloading ${repo}`, async () => {
+    await exec(`git clone --depth 1 ${url} "${dir}"`)
   })
 }

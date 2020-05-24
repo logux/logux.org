@@ -20,15 +20,19 @@ const KINDS = [
 const EXTERNAL_TYPES = {
   Reducer: 'https://redux.js.org/basics/reducers/',
   StoreEnhancer: 'https://redux.js.org/advanced/middleware',
-  PreloadedState: 'https://redux.js.org/recipes/' +
-                  'structuring-reducers/initializing-state/',
+  PreloadedState:
+    'https://redux.js.org/recipes/' +
+    'structuring-reducers/initializing-state/',
   ReduxStore: 'https://redux.js.org/basics/store',
-  Partial: 'https://www.typescriptlang.org/docs/handbook/' +
-           'utility-types.html#partialt',
-  ReturnType: 'https://www.typescriptlang.org/docs/handbook/' +
-              'utility-types.html#returntypet',
-  Promise: 'https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/' +
-           'Using_promises',
+  Partial:
+    'https://www.typescriptlang.org/docs/handbook/' +
+    'utility-types.html#partialt',
+  ReturnType:
+    'https://www.typescriptlang.org/docs/handbook/' +
+    'utility-types.html#returntypet',
+  Promise:
+    'https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/' +
+    'Using_promises',
   Observable: 'https://github.com/tc39/proposal-observable',
   ReduxContext: 'https://react-redux.js.org/using-react-redux/accessing-store',
   Process: 'https://nodejs.org/api/process.html#process_process',
@@ -41,10 +45,11 @@ const EXTERNAL_TYPES = {
   MutationTree: 'https://vuex.vuejs.org/guide/hot-reload.html',
   VuexDispatch: 'https://vuex.vuejs.org/api/#dispatch',
   Module: 'https://vuex.vuejs.org/guide/modules.html',
-  ModuleOptions: 'https://vuex.vuejs.org/guide/modules.html' +
-                 '#dynamic-module-registration',
-  VuexStoreOptions: 'https://vuex.vuejs.org/api/' +
-                    '#vuex-store-constructor-options',
+  ModuleOptions:
+    'https://vuex.vuejs.org/guide/modules.html' +
+    '#dynamic-module-registration',
+  VuexStoreOptions:
+    'https://vuex.vuejs.org/api/' + '#vuex-store-constructor-options',
   SubscribeActionOptions: 'https://vuex.vuejs.org/guide/plugins.html',
   WatchOptions: 'https://vuex.vuejs.org/api/#watch',
   Vue: 'https://vuejs.org/v2/api/#Global-API',
@@ -122,7 +127,7 @@ function tag (tagName, children, opts) {
   children = children.map(i => {
     return typeof i === 'string' ? { type: 'text', value: i } : i
   })
-  return { type: 'element', tagName, properties: { }, children, ...opts }
+  return { type: 'element', tagName, properties: {}, children, ...opts }
 }
 
 function toHtml (content) {
@@ -131,7 +136,7 @@ function toHtml (content) {
     let name = str.slice(7, -1)
     let link = name.toLowerCase().replace('#', '-')
     if (!CAPITALIZED.test(name)) link = 'globals-' + link
-    return `[\`${ name }\`](#${ link })`
+    return `[\`${name}\`](#${link})`
   })
   let tree = remark().parse(content)
   remarkHighlight({ prefix: 'code-block_' })(tree)
@@ -139,15 +144,17 @@ function toHtml (content) {
 }
 
 function toText (nodes) {
-  return nodes.map(node => {
-    if (node.type === 'text') {
-      return node.value
-    } else if (node.children) {
-      return toText(node.children)
-    } else {
-      return ''
-    }
-  }).join('')
+  return nodes
+    .map(node => {
+      if (node.type === 'text') {
+        return node.value
+      } else if (node.children) {
+        return toText(node.children)
+      } else {
+        return ''
+      }
+    })
+    .join('')
 }
 
 function joinTags (separator, tags) {
@@ -165,11 +172,14 @@ function declHtml (ctx, decl) {
   if (decl.type) {
     type = typeHtml(ctx, decl.type)
   } else if (decl.children) {
-    type = joinTags(', ', decl.children.map(i => declHtml(ctx, i)))
+    type = joinTags(
+      ', ',
+      decl.children.map(i => declHtml(ctx, i))
+    )
   } else if (decl.indexSignature) {
     let index = decl.indexSignature
     type = [
-      { type: 'text', value: `[${ index.parameters[0].name }: ` },
+      { type: 'text', value: `[${index.parameters[0].name}: ` },
       ...typeHtml(ctx, index.parameters[0].type),
       { type: 'text', value: ']: ' },
       ...typeHtml(ctx, index.type)
@@ -179,7 +189,10 @@ function declHtml (ctx, decl) {
       let signature = decl.signatures[0]
       type = [
         { type: 'text', value: '(' },
-        ...joinTags(', ', signature.parameters.map(i => declHtml(ctx, i))),
+        ...joinTags(
+          ', ',
+          signature.parameters.map(i => declHtml(ctx, i))
+        ),
         { type: 'text', value: ') => ' },
         ...typeHtml(ctx, signature.type)
       ]
@@ -231,19 +244,21 @@ function typeHtml (ctx, type) {
       ]
     }
     if (type.typeArguments && !TEMPLATELESS.has(type.name)) {
-      let body = joinTags(', ', type.typeArguments.map(i => typeHtml(ctx, i)))
+      let body = joinTags(
+        ', ',
+        type.typeArguments.map(i => typeHtml(ctx, i))
+      )
       let open = '<'
       if (toText(body).length > 25) open = ' <'
-      result.push(
-        { type: 'text', value: open },
-        ...body,
-        { type: 'text', value: '>' }
-      )
+      result.push({ type: 'text', value: open }, ...body, {
+        type: 'text',
+        value: '>'
+      })
     }
     return result
   } else if (type.type === 'stringLiteral') {
     return [
-      tag('span', `'${ type.value }'`, {
+      tag('span', `'${type.value}'`, {
         properties: { className: ['code-block_string'] }
       })
     ]
@@ -264,22 +279,28 @@ function typeHtml (ctx, type) {
       { type: 'text', value: ']' }
     ]
   } else if (type.type === 'union') {
-    return joinTags(' | ', type.types.map(i => typeHtml(ctx, i)))
+    return joinTags(
+      ' | ',
+      type.types.map(i => typeHtml(ctx, i))
+    )
   } else if (type.type === 'array') {
-    return [
-      ...typeHtml(ctx, type.elementType),
-      { type: 'text', value: '[]' }
-    ]
+    return [...typeHtml(ctx, type.elementType), { type: 'text', value: '[]' }]
   } else if (type.type === 'reflection' && type.declaration) {
     return declHtml(ctx, type.declaration)
   } else if (type.type === 'tuple') {
     return [
       { type: 'text', value: '[' },
-      ...joinTags(', ', type.elements.map(i => typeHtml(ctx, i))),
+      ...joinTags(
+        ', ',
+        type.elements.map(i => typeHtml(ctx, i))
+      ),
       { type: 'text', value: ']' }
     ]
   } else if (type.type === 'intersection') {
-    return joinTags(' & ', type.types.map(i => typeHtml(ctx, i)))
+    return joinTags(
+      ' & ',
+      type.types.map(i => typeHtml(ctx, i))
+    )
   } else if (type.type === 'conditional') {
     return [
       ...typeHtml(ctx, type.checkType),
@@ -290,26 +311,23 @@ function typeHtml (ctx, type) {
     ]
   } else if (type.type === 'typeOperator') {
     return [
-      tag('span', ` ${ type.operator } `, {
+      tag('span', ` ${type.operator} `, {
         properties: { className: ['code-block_keyword'] }
       }),
       ...typeHtml(ctx, type.target)
     ]
   } else if (type.type === 'query') {
-    return [
-      { type: 'text', value: 'typeof ' },
-      ...typeHtml(type.queryType)
-    ]
+    return [{ type: 'text', value: 'typeof ' }, ...typeHtml(type.queryType)]
   } else {
     console.error(type)
-    throw new Error(`Unknown type ${ type.type }`)
+    throw new Error(`Unknown type ${type.type}`)
   }
 }
 
 function getEditUrl (file) {
   if (sep !== '\\') file = file.replace(/\\/g, '/')
   let [, name, path] = file.match(/logux-([^/]+)\/(.*)$/)
-  return `https://github.com/logux/${ name }/edit/master/${ path }`
+  return `https://github.com/logux/${name}/edit/master/${path}`
 }
 
 function extendsHtml (parentClasses) {
@@ -355,7 +373,7 @@ function returnsHtml (ctx, node) {
   if (!node.signatures) return []
   let type = node.signatures[0].type
   if (type.name === 'void') return []
-  let comment = node.comment || node.signatures[0].comment || { }
+  let comment = node.comment || node.signatures[0].comment || {}
   return [
     tag('p', [
       { type: 'text', value: 'Returns ' },
@@ -375,32 +393,32 @@ function tableHtml (ctx, name, list) {
         tag('th', 'Type'),
         hasDesc ? tag('th', 'Description') : EMPTY
       ]),
-      ...Array.from(list)
-        .map(i => {
-          let type
-          if (i.signatures) {
-            let signature = i.signatures[0]
-            let params = signature.parameters || []
-            type = [
-              { type: 'text', value: '(' },
-              ...joinTags(', ', params.map(param => declHtml(ctx, param))),
-              { type: 'text', value: ') => ' },
-              ...typeHtml(ctx, signature.type)
-            ]
-          } else {
-            type = typeHtml(ctx, i.type)
-          }
-          return tag('tr', [
-            tag('td', [
-              tag('code', i.name),
-              ...(i.flags.isOptional ? OPTIONAL : [EMPTY])
-            ]),
-            tag('td', [
-              tag('code', type, { noClass: true })
-            ]),
-            hasDesc ? tag('td', extractChildren(commentHtml(i.comment))) : EMPTY
-          ])
-        })
+      ...Array.from(list).map(i => {
+        let type
+        if (i.signatures) {
+          let signature = i.signatures[0]
+          let params = signature.parameters || []
+          type = [
+            { type: 'text', value: '(' },
+            ...joinTags(
+              ', ',
+              params.map(param => declHtml(ctx, param))
+            ),
+            { type: 'text', value: ') => ' },
+            ...typeHtml(ctx, signature.type)
+          ]
+        } else {
+          type = typeHtml(ctx, i.type)
+        }
+        return tag('tr', [
+          tag('td', [
+            tag('code', i.name),
+            ...(i.flags.isOptional ? OPTIONAL : [EMPTY])
+          ]),
+          tag('td', [tag('code', type, { noClass: true })]),
+          hasDesc ? tag('td', extractChildren(commentHtml(i.comment))) : EMPTY
+        ])
+      })
     ])
   ]
 }
@@ -410,7 +428,7 @@ function methodArgs (node) {
   let args = node.signatures[0].parameters
     .map(i => i.name + (i.flags.isOptional ? '?' : ''))
     .join(', ')
-  return `(${ args })`
+  return `(${args})`
 }
 
 function paramsHtml (ctx, node) {
@@ -445,18 +463,18 @@ function membersHtml (ctx, className, members, separator) {
         { type: 'text', value: member.name }
       ]
       if (member.kindString === 'Method') {
-        name.push(tag('span', methodArgs(member), {
-          properties: { className: ['title_extra'] }
-        }))
+        name.push(
+          tag('span', methodArgs(member), {
+            properties: { className: ['title_extra'] }
+          })
+        )
       }
       let comment = member.comment
       if (!comment && member.signatures) {
         comment = member.signatures[0].comment
       }
       return tag('section', [
-        tag('h2', [
-          tag('code', name, { noClass: true })
-        ], {
+        tag('h2', [tag('code', name, { noClass: true })], {
           slug: (className + slugSep + member.name).toLowerCase()
         }),
         ...commentHtml(comment),
@@ -486,16 +504,24 @@ function classHtml (ctx, cls) {
 
 function functionHtml (ctx, node) {
   return tag('section', [
-    tag('h2', [
-      tag('code', [
-        { type: 'text', value: node.name },
-        tag('span', methodArgs(node), {
-          properties: { className: ['title_extra'] }
-        })
-      ], { noClass: true })
-    ], {
-      slug: toSlug(node.name)
-    }),
+    tag(
+      'h2',
+      [
+        tag(
+          'code',
+          [
+            { type: 'text', value: node.name },
+            tag('span', methodArgs(node), {
+              properties: { className: ['title_extra'] }
+            })
+          ],
+          { noClass: true }
+        )
+      ],
+      {
+        slug: toSlug(node.name)
+      }
+    ),
     ...commentHtml(node.signatures[0].comment),
     ...paramsHtml(ctx, node),
     ...returnsHtml(ctx, node),
@@ -538,13 +564,13 @@ function variableHtml (ctx, node) {
     }
   }
   return tag('section', [
-    tag('h2', [
-      tag('code', [
-        { type: 'text', value: node.name }
-      ], { noClass: true })
-    ], {
-      slug: toSlug(node.name)
-    }),
+    tag(
+      'h2',
+      [tag('code', [{ type: 'text', value: node.name }], { noClass: true })],
+      {
+        slug: toSlug(node.name)
+      }
+    ),
     ...commentHtml(node.comment),
     ...body
   ])
@@ -562,16 +588,18 @@ function toTree (ctx, nodes) {
   for (let [title, filter] of KINDS) {
     let items = nodes.filter(filter)
     if (items.length > 0) {
-      tree.children.push(tag('article', [
-        tag('h1', title, { noSlug: true }),
-        ...items.sort(byName).map(i => {
-          if (i.signatures) {
-            return functionHtml(ctx, i)
-          } else {
-            return variableHtml(ctx, i)
-          }
-        })
-      ]))
+      tree.children.push(
+        tag('article', [
+          tag('h1', title, { noSlug: true }),
+          ...items.sort(byName).map(i => {
+            if (i.signatures) {
+              return functionHtml(ctx, i)
+            } else {
+              return variableHtml(ctx, i)
+            }
+          })
+        ])
+      )
     }
   }
   return tree
@@ -609,13 +637,13 @@ export default async function buildApi (assets, layout, title, nodes) {
   let file = title.replace(/\s/g, '-').toLowerCase()
   let path = join(DIST, file, 'index.html')
 
-  let end = step(`Building ${ title } HTML`)
+  let end = step(`Building ${title} HTML`)
   let ctx = { file }
 
   await makeDir(dirname(path))
   let tree = toTree(ctx, nodes)
   let submenu = toSubmenu(nodes)
-  let html = await layout(`/${ file }/`, submenu, title + ' / ', tree)
+  let html = await layout(`/${file}/`, submenu, title + ' / ', tree)
   await fs.writeFile(path, html)
   assets.add(path, html)
 

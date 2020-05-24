@@ -22,11 +22,13 @@ async function repackStyles (assets) {
     }
   })
   let processor = postcss([fileCollector, combineMedia])
-  await Promise.all(assets.get(/\.css$/).map(async file => {
-    let css = await fs.readFile(file)
-    let result = await processor.process(css, { from: file })
-    await fs.writeFile(file, result.css)
-  }))
+  await Promise.all(
+    assets.get(/\.css$/).map(async file => {
+      let css = await fs.readFile(file)
+      let result = await processor.process(css, { from: file })
+      await fs.writeFile(file, result.css)
+    })
+  )
   return collected
 }
 

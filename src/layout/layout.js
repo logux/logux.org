@@ -13,7 +13,7 @@ if (open && close && aside) {
     closed = false
 
     prevScroll = window.scrollY
-    document.body.style.top = `-${ prevScroll }px`
+    document.body.style.top = `-${prevScroll}px`
     document.body.classList.add('is-locked')
 
     aside.classList.add('is-open')

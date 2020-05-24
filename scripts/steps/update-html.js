@@ -24,23 +24,30 @@ async function updateHtml (assets, manifest, preloadFiles) {
     makeDir(join(DIST, 'uikit'))
   ])
   function optimizer () {
-    return tree => unistFlatmap(tree, node => {
-      let props = node.properties || { }
-      if (props.rel && props.rel[0] === 'icon' && props.sizes === '512x512') {
-        return [
-          tag('link', { rel: 'manifest', href: manifest.url }),
-          tag('meta', { name: 'theme-color', content: manifest.theme })
-        ].concat(preloadFiles.map(([media, url]) => {
-          let as = PRELOAD_TYPES[extname(url)]
-          if (!as) throw new Error('Unknown type ' + extname(url))
-          return tag('link', {
-            rel: 'preload', href: url, as, media, crossorigin: as === 'font'
-          })
-        }))
-      } else {
-        return [node]
-      }
-    })
+    return tree =>
+      unistFlatmap(tree, node => {
+        let props = node.properties || {}
+        if (props.rel && props.rel[0] === 'icon' && props.sizes === '512x512') {
+          return [
+            tag('link', { rel: 'manifest', href: manifest.url }),
+            tag('meta', { name: 'theme-color', content: manifest.theme })
+          ].concat(
+            preloadFiles.map(([media, url]) => {
+              let as = PRELOAD_TYPES[extname(url)]
+              if (!as) throw new Error('Unknown type ' + extname(url))
+              return tag('link', {
+                rel: 'preload',
+                href: url,
+                as,
+                media,
+                crossorigin: as === 'font'
+              })
+            })
+          )
+        } else {
+          return [node]
+        }
+      })
   }
   let fixed = await unified()
     .use(rehypeParse)
@@ -49,10 +56,7 @@ async function updateHtml (assets, manifest, preloadFiles) {
     .process(html)
   let oldFile = join(DIST, 'uikit.html')
   let newFile = join(DIST, 'uikit', 'index.html')
-  await Promise.all([
-    fs.writeFile(newFile, fixed.contents),
-    fs.unlink(oldFile)
-  ])
+  await Promise.all([fs.writeFile(newFile, fixed.contents), fs.unlink(oldFile)])
   assets.remove(oldFile)
   assets.add(newFile)
   return fixed.contents

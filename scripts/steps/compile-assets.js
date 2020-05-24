@@ -6,9 +6,12 @@ import wrap from '../lib/spinner.js'
 import hash from '../lib/hash.js'
 
 function findAssets (step) {
-  return Array.from(step.childBundles).reduce((all, i) => {
-    return all.concat(findAssets(i))
-  }, [step.name])
+  return Array.from(step.childBundles).reduce(
+    (all, i) => {
+      return all.concat(findAssets(i))
+    },
+    [step.name]
+  )
 }
 
 async function compileAssets () {
@@ -19,7 +22,7 @@ async function compileAssets () {
   })
   let bundle = await uikitBundler.bundle()
   let assets = findAssets(bundle)
-  let hashes = { }
+  let hashes = {}
   return {
     map (fn) {
       return assets.map(fn)

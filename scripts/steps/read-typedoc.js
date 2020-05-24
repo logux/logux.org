@@ -9,14 +9,16 @@ import { run } from '../lib/spinner.js'
 export default async function readTypedoc (...projects) {
   let type = capitalize(projects[0].replace(/^logux-/, ''))
 
-  let files = await run(`Reading ${ type } TypeDoc`, async () => {
-    return Promise.all(projects.map(i => {
-      return globby('**/*.d.ts', {
-        absolute: true,
-        ignore: ['node_modules', 'test', 'coverage'],
-        cwd: join(PROJECTS, i)
+  let files = await run(`Reading ${type} TypeDoc`, async () => {
+    return Promise.all(
+      projects.map(i => {
+        return globby('**/*.d.ts', {
+          absolute: true,
+          ignore: ['node_modules', 'test', 'coverage'],
+          cwd: join(PROJECTS, i)
+        })
       })
-    }))
+    )
   })
 
   let ignore
@@ -26,7 +28,7 @@ export default async function readTypedoc (...projects) {
     ignore = ['ServerNode', 'ServerConnection']
   }
 
-  let docs = await run(`Generating ${ type } TypeDoc`, async () => {
+  let docs = await run(`Generating ${type} TypeDoc`, async () => {
     let app = new TypeDoc.Application()
     app.bootstrap({
       includeDeclarations: true,
@@ -42,9 +44,11 @@ export default async function readTypedoc (...projects) {
     }
     let nodes = []
     for (let file of project.children) {
-      nodes.push(...file.children.filter(i => {
-        return !ignore.includes(i.name) && i.kindString !== 'Reference'
-      }))
+      nodes.push(
+        ...file.children.filter(i => {
+          return !ignore.includes(i.name) && i.kindString !== 'Reference'
+        })
+      )
     }
     return nodes
   })

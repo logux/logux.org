@@ -7,13 +7,13 @@ let lastId = 0
 export let step
 if (process.env.CI || process.env.GITHUB_ACTIONS) {
   step = text => {
-    process.stdout.write(`- ${ text }\n`)
+    process.stdout.write(`- ${text}\n`)
     let start = Date.now()
     return e => {
       if (e) {
         process.stdout.write(chalk.red('✖ ') + text + '\n')
       } else {
-        let time = (Date.now() - start + ' ms')
+        let time = Date.now() - start + ' ms'
         process.stdout.write(
           chalk.green('✓ ') + text + ' ' + chalk.gray(time) + '\n'
         )
@@ -31,7 +31,7 @@ if (process.env.CI || process.env.GITHUB_ACTIONS) {
         spinner.fail(id)
       } else {
         let time = Date.now() - start
-        spinner.succeed(id, { text: text + chalk.gray(` ${ time } ms`) })
+        spinner.succeed(id, { text: text + chalk.gray(` ${time} ms`) })
       }
     }
   }
