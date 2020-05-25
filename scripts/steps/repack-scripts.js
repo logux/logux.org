@@ -49,10 +49,7 @@ async function repackScripts (assets) {
 
   await Promise.all(
     scripts.map(async ([input, output]) => {
-      let plugins = [
-        injectProcessEnv({ NODE_ENV: 'production' }),
-        terser.terser()
-      ]
+      let plugins = [injectProcessEnv({ NODE_ENV: 'production' }), terser()]
       if (output.endsWith('service.js')) {
         plugins = [replace({ FILES: JSON.stringify(toCache) }), ...plugins]
       }
