@@ -2,10 +2,10 @@
 
 Website generator to wrap [docs] and JSDoc into HTML template.
 
-Design by [Aljona Kirdina](https://twitter.com/egodyston).
+* Online: **[logux.io](https://logux.io/)**
+* UI Kit: **[logux.io/uikit](https://logux.io/uikit/)**
 
-Online: [logux.io](https://logux.io/)<br>
-UI Kit: [logux.io/uikit](https://logux.io/uikit/)
+Design by [Aljona Kirdina](https://twitter.com/egodyston).
 
 [docs]: https://github.com/logux/docs
 
