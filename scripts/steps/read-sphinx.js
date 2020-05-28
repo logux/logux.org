@@ -10,7 +10,7 @@ let exec = promisify(child.exec)
 export default async function readSphinx () {
   let django = join(PROJECTS, 'logux-django')
   await run('Reading Django documentation', async () => {
-    await exec('make venv && cd docs/ && make json', {
+    await exec('make venv && make docs', {
       cwd: django
     })
   })
