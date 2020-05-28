@@ -13,10 +13,11 @@ import repackScripts from './steps/repack-scripts.js'
 import getChatUsers from './steps/get-chat-users.js'
 import repackStyles from './steps/repack-styles.js'
 import createLayout from './steps/create-layout.js'
-import installTypes from './steps/install-types.js'
 import readTypedoc from './steps/read-typedoc.js'
+import installDeps from './steps/install-deps.js'
 import updateHtml from './steps/update-html.js'
 import buildPages from './steps/build-pages.js'
+import readSphinx from './steps/read-sphinx.js'
 import buildDocs from './steps/build-docs.js'
 import readDocs from './steps/read-docs.js'
 import buildApi from './steps/build-api.js'
@@ -36,21 +37,23 @@ async function prepareHtml () {
 }
 
 async function prepareContent () {
-  await installTypes(() => [
+  await installDeps(() => [
     downloadProject('logux-docs'),
     downloadProject('logux-core'),
     downloadProject('logux-server'),
     downloadProject('logux-client'),
     downloadProject('logux-redux'),
-    downloadProject('logux-vuex')
+    downloadProject('logux-vuex'),
+    downloadProject('logux-django')
   ])
-  let [guides, nodeApi, reduxApi, vuexApi] = await Promise.all([
+  let [guides, nodeApi, reduxApi, vuexApi, djangoApi] = await Promise.all([
     readDocs(),
     readTypedoc('logux-server', 'logux-core'),
     readTypedoc('logux-redux', 'logux-client', 'logux-core'),
-    readTypedoc('logux-vuex', 'logux-client', 'logux-core')
+    readTypedoc('logux-vuex', 'logux-client', 'logux-core'),
+    readSphinx()
   ])
-  return [guides, nodeApi, reduxApi, vuexApi]
+  return [guides, nodeApi, reduxApi, vuexApi, djangoApi]
 }
 
 async function build () {

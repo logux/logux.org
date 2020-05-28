@@ -22,10 +22,17 @@ export default async function installTypes (nextSteps) {
     await Promise.all(nextSteps())
   } else {
     await Promise.all(nextSteps())
-    await run('Installing types dependecies', async () => {
-      for (let dir of dirs) {
-        await exec('yarn install --production=false', { cwd: dir })
-      }
-    })
+    await Promise.all([
+      run('Installing Python dependecies', async () => {
+        await exec('make venv && make install', {
+          cwd: join(PROJECTS, 'logux-django')
+        })
+      }),
+      run('Installing types dependecies', async () => {
+        for (let dir of dirs) {
+          await exec('yarn install --production=false', { cwd: dir })
+        }
+      })
+    ])
   }
 }
