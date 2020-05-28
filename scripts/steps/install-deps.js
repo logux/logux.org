@@ -24,7 +24,7 @@ export default async function installTypes (nextSteps) {
     await Promise.all(nextSteps())
     await Promise.all([
       run('Installing Python dependencies', async () => {
-        await exec('make venv && make install', {
+        await exec('make venv && make install && pip install -U sphinx', {
           cwd: join(PROJECTS, 'logux-django')
         })
       }),
