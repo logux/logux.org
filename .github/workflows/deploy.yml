@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - master
+      - django # TODO: remove
   repository_dispatch:
 
 jobs:
