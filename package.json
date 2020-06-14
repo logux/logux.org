@@ -11,6 +11,7 @@
   "dependencies": {
     "@babel/core": "^7.10.2",
     "@rollup/plugin-replace": "^2.3.3",
+    "autoprefixer": "^9.8.0",
     "capitalize": "^2.0.3",
     "chalk": "^4.1.0",
     "del": "^5.1.0",
