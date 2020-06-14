@@ -60,6 +60,8 @@ const EXTERNAL_TYPES = {
   Vue: 'https://vuejs.org/v2/api/#Global-API',
   CommitOptions: 'https://vuex.vuejs.org/api/#commit',
   SubscribeOptions: 'https://vuex.vuejs.org/api/#subscribe',
+  ActionPayload: 'https://vuex.vuejs.org/guide/actions.html',
+  MutationPayload: 'https://vuex.vuejs.org/guide/mutations.html',
   ComponentType:
     'https://github.com/DefinitelyTyped/DefinitelyTyped/blob/' +
     'master/types/react/index.d.ts#L81',
@@ -454,13 +456,19 @@ function paramsHtml (ctx, node) {
 
 function templatesHtml (ctx, node) {
   if (!node.signatures) return []
-  let signature = node.signatures[0]
-  if (!signature.typeParameters) return []
-  if (signature.typeParameters.every(i => !i.comment)) return []
-  return [
-    tag('p', 'Type templates for TypeScript:'),
-    ...tableHtml(ctx, 'Templates', signature.typeParameters)
-  ]
+  let templates = node.signatures.filter(
+    i => i.typeParameters && i.typeParameters.some(j => !j.comment)
+  )
+  if (templates.length > 0) {
+    return [
+      tag('p', 'Type templates for TypeScript:'),
+      ...templates.map(i => {
+        return tableHtml(ctx, 'Templates', i.typeParameters)[0]
+      })
+    ]
+  } else {
+    return []
+  }
 }
 
 function membersHtml (ctx, className, members, separator) {
