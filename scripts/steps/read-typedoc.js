@@ -37,6 +37,7 @@ export default async function readTypedoc (...projects) {
     })
     let { errors, project } = app.converter.convert(files.flat())
     if (errors.length > 0) {
+      console.error(`Error during ${type} types generation`)
       throw new Error(errors[0].messageText)
     }
     if (!project.children) {
