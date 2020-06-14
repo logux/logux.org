@@ -457,7 +457,9 @@ function paramsHtml (ctx, node) {
 function templatesHtml (ctx, node) {
   if (!node.signatures) return []
   let templates = node.signatures.filter(
-    i => i.typeParameters && i.typeParameters.some(j => !j.comment)
+    signature =>
+      signature.typeParameters &&
+      signature.typeParameters.some(type => type.comment)
   )
   if (templates.length > 0) {
     return [
