@@ -43,18 +43,26 @@ const EXTERNAL_TYPES = {
   GetterTree: 'https://vuex.vuejs.org/guide/hot-reload.html',
   ModuleTree: 'https://vuex.vuejs.org/guide/hot-reload.html',
   MutationTree: 'https://vuex.vuejs.org/guide/hot-reload.html',
+  WebSocket: 'https://developer.mozilla.org/en-US/docs/Web/API/WebSocket',
+  Map:
+    'https://developer.mozilla.org/en-US/docs/Web/JavaScript/' +
+    'Reference/Global_Objects/Map',
   VuexDispatch: 'https://vuex.vuejs.org/api/#dispatch',
   Module: 'https://vuex.vuejs.org/guide/modules.html',
   ModuleOptions:
     'https://vuex.vuejs.org/guide/modules.html' +
     '#dynamic-module-registration',
   VuexStoreOptions:
-    'https://vuex.vuejs.org/api/' + '#vuex-store-constructor-options',
+    'https://vuex.vuejs.org/api/#vuex-store-constructor-options',
+  VuexStore: 'https://vuex.vuejs.org/api/#vuex-store',
   SubscribeActionOptions: 'https://vuex.vuejs.org/guide/plugins.html',
   WatchOptions: 'https://vuex.vuejs.org/api/#watch',
   Vue: 'https://vuejs.org/v2/api/#Global-API',
   CommitOptions: 'https://vuex.vuejs.org/api/#commit',
   SubscribeOptions: 'https://vuex.vuejs.org/api/#subscribe',
+  ComponentType:
+    'https://github.com/DefinitelyTyped/DefinitelyTyped/blob/' +
+    'master/types/react/index.d.ts#L81',
   VuexPayload: 'https://vuex.vuejs.org/guide/mutations.html#commit-with-payload'
 }
 
@@ -333,9 +341,15 @@ function getEditUrl (file) {
 function extendsHtml (parentClasses) {
   if (parentClasses) {
     let name = parentClasses[0].name
+    let symbol = parentClasses[0].symbolFullyQualifiedName
     let link
+    if (symbol.endsWith('/vuex/types/index".Store')) {
+      name = 'VuexStore'
+    }
     if (SIMPLE_TYPES.has(name)) {
       link = tag('code', name)
+    } else if (EXTERNAL_TYPES[name]) {
+      link = tag('a', name, { properties: { href: EXTERNAL_TYPES[name] } })
     } else {
       link = tag('a', name, { properties: { href: '#' + name.toLowerCase() } })
     }
@@ -529,6 +543,16 @@ function functionHtml (ctx, node) {
   ])
 }
 
+function getChildren (type) {
+  if (type.name === 'Omit') {
+    return getChildren(type.typeArguments[0]).filter(i => {
+      return type.typeArguments[1].types.every(j => j.value !== i.name)
+    })
+  } else {
+    return type.reflection.type.declaration.children
+  }
+}
+
 function variableHtml (ctx, node) {
   let body = []
   if (node.type) {
@@ -546,10 +570,13 @@ function variableHtml (ctx, node) {
       type.types[1].declaration.children[0].comment
     ) {
       body = tableHtml(ctx, 'Property', [
-        ...type.types[0].reflection.type.declaration.children,
+        ...getChildren(type.types[0]),
         ...type.types[1].declaration.children
       ])
-      if (!INLINE_TYPES.has(type.types[0].reflection.type.name)) {
+      if (
+        type.types[0].reflection &&
+        !INLINE_TYPES.has(type.types[0].reflection.type.name)
+      ) {
         body = [
           tag('p', [
             { type: 'text', value: 'Extends ' },
@@ -591,13 +618,16 @@ function toTree (ctx, nodes) {
       tree.children.push(
         tag('article', [
           tag('h1', title, { noSlug: true }),
-          ...items.sort(byName).map(i => {
-            if (i.signatures) {
-              return functionHtml(ctx, i)
-            } else {
-              return variableHtml(ctx, i)
-            }
-          })
+          ...items
+            .sort(byName)
+            .filter(i => !SIMPLE_TYPES.has(i.name))
+            .map(i => {
+              if (i.signatures) {
+                return functionHtml(ctx, i)
+              } else {
+                return variableHtml(ctx, i)
+              }
+            })
         ])
       )
     }
