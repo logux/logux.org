@@ -23,15 +23,8 @@ export default async function installTypes (nextSteps) {
   } else {
     await Promise.all(nextSteps())
     await run('Installing types dependecies', async () => {
-      for (let i of dirs) {
-        await exec('yarn install --production', { cwd: i })
-        if (i.endsWith('logux-core')) {
-          await exec('yarn add ws', { cwd: i })
-        } else if (i.endsWith('logux-redux')) {
-          await exec('yarn add redux', { cwd: i })
-        } else if (i.endsWith('logux-vuex')) {
-          await exec('yarn add vuex', { cwd: i })
-        }
+      for (let dir of dirs) {
+        await exec('yarn install --production=false', { cwd: dir })
       }
     })
   }
