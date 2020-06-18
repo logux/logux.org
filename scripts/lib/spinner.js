@@ -1,5 +1,5 @@
 import Spinnies from 'spinnies'
-import chalk from 'chalk'
+import kleur from 'kleur'
 
 let spinner = new Spinnies({ succeedColor: 'white' })
 let lastId = 0
@@ -11,11 +11,11 @@ if (process.env.CI || process.env.GITHUB_ACTIONS) {
     let start = Date.now()
     return e => {
       if (e) {
-        process.stdout.write(chalk.red('✖ ') + text + '\n')
+        process.stdout.write(kleur.red('✖ ') + text + '\n')
       } else {
         let time = Date.now() - start + ' ms'
         process.stdout.write(
-          chalk.green('✓ ') + text + ' ' + chalk.gray(time) + '\n'
+          kleur.green('✓ ') + text + ' ' + kleur.gray(time) + '\n'
         )
       }
     }
@@ -31,7 +31,7 @@ if (process.env.CI || process.env.GITHUB_ACTIONS) {
         spinner.fail(id)
       } else {
         let time = Date.now() - start
-        spinner.succeed(id, { text: text + chalk.gray(` ${time} ms`) })
+        spinner.succeed(id, { text: text + kleur.gray(` ${time} ms`) })
       }
     }
   }
