@@ -13,7 +13,7 @@ const CAPITALIZED = /^[A-Z]/
 
 const KINDS = [
   ['Functions', i => i.kindString === 'Function'],
-  ['Variables', i => i.kindString === 'Variable'],
+  ['Variables', i => i.kindString === 'Variable' && i.name !== 'WebSocket'],
   ['Types', i => i.kindString === 'Type alias' || i.kindString === 'Interface']
 ]
 
