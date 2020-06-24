@@ -97,7 +97,7 @@
   ],
   "type": "module",
   "engines": {
-    "node": ">=13.2.0"
+    "node": ">=14.0.0"
   },
   "postcss": {
     "plugins": {
