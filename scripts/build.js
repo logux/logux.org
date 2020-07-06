@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
+import { red } from 'colorette'
 import dotenv from 'dotenv'
-import colorette from 'colorette'
 
 import generateWebManifest from './steps/generate-web-manifest.js'
 import downloadProject from './steps/download-project.js'
@@ -76,6 +76,6 @@ async function build () {
 }
 
 build().catch(e => {
-  process.stderr.write(colorette.red(e.stack) + '\n')
+  process.stderr.write(red(e.stack) + '\n')
   process.exit(1)
 })

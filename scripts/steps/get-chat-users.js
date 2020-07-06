@@ -1,5 +1,5 @@
 import { request } from 'https'
-import colorette from 'colorette'
+import { yellow } from 'colorette'
 
 import wrap from '../lib/spinner.js'
 
@@ -44,7 +44,7 @@ function callGitter (command) {
 async function getChatUsers () {
   if (!process.env.GITTER_ROOM_ID) {
     process.stderr.write(
-      colorette.yellow(
+      yellow(
         'Using non-real chat users number because of the lack of Gitter token\n'
       )
     )

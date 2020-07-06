@@ -1,4 +1,4 @@
-import colorette from 'colorette'
+import { red, green, gray } from 'colorette'
 import Spinnies from 'spinnies'
 
 let spinner = new Spinnies({ succeedColor: 'white' })
@@ -11,12 +11,10 @@ if (process.env.CI || process.env.GITHUB_ACTIONS) {
     let start = Date.now()
     return e => {
       if (e) {
-        process.stdout.write(colorette.red('✖ ') + text + '\n')
+        process.stdout.write(red('✖ ') + text + '\n')
       } else {
         let time = Date.now() - start + ' ms'
-        process.stdout.write(
-          colorette.green('✓ ') + text + ' ' + colorette.gray(time) + '\n'
-        )
+        process.stdout.write(green('✓ ') + text + ' ' + gray(time) + '\n')
       }
     }
   }
@@ -31,7 +29,7 @@ if (process.env.CI || process.env.GITHUB_ACTIONS) {
         spinner.fail(id)
       } else {
         let time = Date.now() - start
-        spinner.succeed(id, { text: text + colorette.gray(` ${time} ms`) })
+        spinner.succeed(id, { text: text + gray(` ${time} ms`) })
       }
     }
   }
