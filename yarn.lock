@@ -8096,13 +8096,13 @@ sprintf-js@~1.0.2:
   resolved "https://registry.yarnpkg.com/sprintf-js/-/sprintf-js-1.0.3.tgz#04e6926f662895354f3dd015203633b857297e2c"
   integrity sha1-BOaSb2YolTVPPdAVIDYzuFcpfiw=
 
-ssdeploy@^0.6.14:
-  version "0.6.14"
-  resolved "https://registry.yarnpkg.com/ssdeploy/-/ssdeploy-0.6.14.tgz#d4454c2594f761c02f183468f7e8ad1aa30bb506"
-  integrity sha512-GxzANOwDjsLB0Jnm2sn5CkkAT5xXCguSP17tlzqMUdJXQCyWHiVr2Waisfqsr/09+Z2mb21HEyUvMrYFDvaxog==
+ssdeploy@^0.6.15:
+  version "0.6.15"
+  resolved "https://registry.yarnpkg.com/ssdeploy/-/ssdeploy-0.6.15.tgz#cb410726c4946c870a6fd5bbc7cd7920cf438516"
+  integrity sha512-8Rmu4RoBvst7lwyysMX9k86Xda1JmwFedgHjOLOFj35YqcMIra3F4NVNGU0CCzI5iiqDONeGHp39RxOUUNU0Bg==
   dependencies:
     bytes "^3.1.0"
-    colorette "^1.2.0"
+    colorette "^1.2.1"
     dotenv "^8.2.0"
     folder-hash "^3.3.2"
     hasha "^5.2.0"
