@@ -31,6 +31,7 @@ export default async function readTypedoc (...projects) {
   let docs = await run(`Generating ${type} TypeDoc`, async () => {
     let app = new TypeDoc.Application()
     app.bootstrap({
+      ignoreCompilerErrors: true,
       includeDeclarations: true,
       excludeExternals: true,
       esModuleInterop: true

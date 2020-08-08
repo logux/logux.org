@@ -65,6 +65,12 @@ const EXTERNAL_TYPES = {
   ComponentType:
     'https://github.com/DefinitelyTyped/DefinitelyTyped/blob/' +
     'master/types/react/index.d.ts#L81',
+  App: 'https://vuejs.org/',
+  InjectionKey:
+    'https://composition-api.vuejs.org/api.html#dependency-injection',
+  Ref: 'https://composition-api.vuejs.org/api.html#ref',
+  ComputedGetter: 'https://vuejs.org/v2/guide/computed.html',
+  ComputedRef: 'https://vuejs.org/v2/guide/computed.html',
   VuexPayload: 'https://vuex.vuejs.org/guide/mutations.html#commit-with-payload'
 }
 
@@ -79,7 +85,8 @@ const SIMPLE_TYPES = new Set([
   'object',
   'number',
   'any',
-  'ExtendedVue'
+  'ExtendedVue',
+  'Store'
 ])
 
 const HIDE_CONSTRUCTOR = new Set([
@@ -249,7 +256,7 @@ function typeHtml (ctx, type) {
     } else {
       result = [
         tag('a', type.name, {
-          properties: { href: '#' + type.name.toLowerCase() }
+          properties: { href: '#' + toSlug(type.name) }
         })
       ]
     }
