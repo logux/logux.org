@@ -314,16 +314,11 @@ function generateSubmenu (links) {
 
 async function createLayout (uikit, chatUsers) {
   return async function (categoryUrl, links, title, tree) {
-    let fixed = await unified()
-      .use(converter)
-      .use(checker, title)
-      .run(tree)
+    let fixed = await unified().use(converter).use(checker, title).run(tree)
     let submenu = await unified()
       .use(rehypeStringify)
       .stringify(generateSubmenu(links))
-    let html = await unified()
-      .use(rehypeStringify)
-      .stringify(fixed)
+    let html = await unified().use(rehypeStringify).stringify(fixed)
     let ignore = []
     if (!html.includes(' class="next"')) ignore.push('/right.')
     if (!html.includes(' class="video"')) ignore.push('/video.')

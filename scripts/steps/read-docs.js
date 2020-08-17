@@ -208,9 +208,7 @@ async function readDocs () {
     files.map(async file => {
       let title = ''
       let md = await fs.readFile(join(ROOT, file))
-      let tree = await unified()
-        .use(remarkParse)
-        .parse(md)
+      let tree = await unified().use(remarkParse).parse(md)
       tree = await unified()
         .use(convertor, {
           file,
