@@ -49,28 +49,22 @@ const EXTERNAL_TYPES = {
     'Reference/Global_Objects/Map',
   VuexDispatch: 'https://vuex.vuejs.org/api/#dispatch',
   Module: 'https://vuex.vuejs.org/guide/modules.html',
-  ModuleOptions:
-    'https://vuex.vuejs.org/guide/modules.html' +
-    '#dynamic-module-registration',
+  ModuleOptions: 'https://vuex.vuejs.org/guide/modules.html#preserving-state',
   VuexStoreOptions:
     'https://vuex.vuejs.org/api/#vuex-store-constructor-options',
   VuexStore: 'https://vuex.vuejs.org/api/#vuex-store',
-  SubscribeActionOptions: 'https://vuex.vuejs.org/guide/plugins.html',
+  SubscribeActionOptions: 'https://vuex.vuejs.org/api/#subscribeaction',
   WatchOptions: 'https://vuex.vuejs.org/api/#watch',
-  Vue: 'https://vuejs.org/v2/api/#Global-API',
   CommitOptions: 'https://vuex.vuejs.org/api/#commit',
   SubscribeOptions: 'https://vuex.vuejs.org/api/#subscribe',
-  ActionPayload: 'https://vuex.vuejs.org/guide/actions.html',
-  MutationPayload: 'https://vuex.vuejs.org/guide/mutations.html',
   ComponentType:
     'https://github.com/DefinitelyTyped/DefinitelyTyped/blob/' +
     'master/types/react/index.d.ts#L81',
-  App: 'https://vuejs.org/',
-  InjectionKey:
-    'https://composition-api.vuejs.org/api.html#dependency-injection',
-  Ref: 'https://composition-api.vuejs.org/api.html#ref',
-  ComputedGetter: 'https://vuejs.org/v2/guide/computed.html',
-  ComputedRef: 'https://vuejs.org/v2/guide/computed.html',
+  App: 'https://v3.vuejs.org/api/global-api.html#createapp',
+  InjectionKey: 'https://v3.vuejs.org/api/composition-api.html#provide-inject',
+  Ref: 'https://v3.vuejs.org/api/refs-api.html#ref',
+  ComputedGetter: 'https://v3.vuejs.org/api/computed-watch-api.html#computed',
+  ComputedRef: 'https://v3.vuejs.org/api/computed-watch-api.html#computed',
   VuexPayload: 'https://vuex.vuejs.org/guide/mutations.html#commit-with-payload'
 }
 
