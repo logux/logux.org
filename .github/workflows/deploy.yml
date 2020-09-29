@@ -9,6 +9,8 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    env:
+      FORCE_COLOR: 2
     steps:
       - name: Checkout the repository
         uses: actions/checkout@v2
@@ -32,14 +34,12 @@ jobs:
       - name: Build static files
         run: yarn build
         env:
-          FORCE_COLOR: 2
           GITTER_TOKEN: ${{ secrets.GITTER_TOKEN }}
           GITTER_ROOM_ID: ${{ secrets.GITTER_ROOM_ID }}
       - name: Check files changes
         id: hash
         run: npx ssdeploy changed
         env:
-          FORCE_COLOR: 2
           WEBSITE_URL: ${{ secrets.WEBSITE_URL }}
       - name: Install Google Cloud
         if: "!steps.hash.outputs.noChanges"
@@ -51,7 +51,6 @@ jobs:
         if: "!steps.hash.outputs.noChanges"
         run: npx ssdeploy deploy --verbose
         env:
-          FORCE_COLOR: 2
           GCLOUD_APP: ${{ secrets.GCLOUD_APP }}
           GCLOUD_PROJECT: ${{ secrets.GCLOUD_PROJECT }}
           CLOUDFLARE_ZONE: ${{ secrets.CLOUDFLARE_ZONE }}
