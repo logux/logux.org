@@ -187,6 +187,11 @@ function converter () {
       node.value = node.value.replace(SMALL_WORDS, '$1$2 ')
     })
     unistVisit(tree, 'element', (node, index, parent) => {
+      if (node.tagName === 'details') {
+        parent.children = convertDetails(parent.children)
+      }
+    })
+    unistVisit(tree, 'element', (node, index, parent) => {
       if (node.tagName === 'article') {
         node.properties.className = ['text']
         node.children.push({
@@ -212,8 +217,6 @@ function converter () {
         } else {
           node.properties.className = ['code']
         }
-      } else if (node.tagName === 'details') {
-        parent.children = convertDetails(parent.children)
       } else if (/^h[1-3]$/.test(node.tagName) && !node.properties.className) {
         unistVisit(node, 'element', i => {
           if (i.tagName === 'code') i.noClass = true
