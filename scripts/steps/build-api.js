@@ -346,7 +346,7 @@ function extendsHtml (parentClasses) {
     let name = parentClasses[0].name
     let symbol = parentClasses[0].symbolFullyQualifiedName
     let link
-    if (symbol.endsWith('/vuex/types/index".Store')) {
+    if (symbol && symbol.endsWith('/vuex/types/index".Store')) {
       name = 'VuexStore'
     }
     if (SIMPLE_TYPES.has(name)) {
