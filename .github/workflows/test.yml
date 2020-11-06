@@ -1,8 +1,11 @@
 name: Test
 
 on:
-  - push
-  - pull_request
+  push:
+  pull_request:
+
+env:
+  FORCE_COLOR: 2
 
 jobs:
   build:
@@ -13,8 +16,6 @@ jobs:
     steps:
       - name: Checkout the repository
         uses: actions/checkout@v2
-        with:
-          fetch-depth: 1
       - name: Install Node.js
         uses: actions/setup-node@v1
         with:
