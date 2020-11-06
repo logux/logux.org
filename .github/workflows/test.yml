@@ -20,16 +20,6 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: '14'
-      - name: Get Yarn cache
-        id: yarn-cache
-        run: echo "::set-output name=dir::$(yarn cache dir)"
-      - name: Cache Yarn
-        uses: actions/cache@v1
-        with:
-          path: ${{ steps.yarn-cache.outputs.dir }}
-          key: yarn-all-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            yarn-all-
       - name: Install all dependencies
         run: yarn install
       - name: Build and test
