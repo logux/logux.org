@@ -9,7 +9,7 @@ async function generateWebManifest (assets) {
   let json = JSON.parse(
     await fs.readFile(join(SRC, 'base', 'manifest.webmanifest'))
   )
-  json.icons[0].src = '/' + basename(assets.find(/196\..*\.png$/))
+  json.icons[0].src = '/' + basename(assets.find(/192\..*\.png$/))
   json.icons[1].src = '/' + basename(assets.find(/512\..*\.png$/))
   let text = JSON.stringify(json)
   let name = `manifest.${hash(text)}.webmanifest`
