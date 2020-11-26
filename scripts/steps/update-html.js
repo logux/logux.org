@@ -27,7 +27,7 @@ async function updateHtml (assets, manifest, preloadFiles) {
     return tree =>
       unistFlatmap(tree, node => {
         let props = node.properties || {}
-        if (props.rel && props.rel[0] === 'icon' && props.sizes === '512x512') {
+        if (props.name === 'apple-mobile-web-app-title') {
           return [
             tag('link', { rel: 'manifest', href: manifest.url }),
             tag('meta', { name: 'theme-color', content: manifest.theme })
