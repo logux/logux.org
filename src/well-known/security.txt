@@ -1,22 +1,23 @@
 -----BEGIN PGP SIGNED MESSAGE-----
-Hash: SHA512
+Hash: SHA256
 
 Contact: andrey@sitnik.ru
 Encryption: https://keybase.io/iskin/pgp_keys.asc
 Preferred-Languages: en, ru
+Canonical: https://logux.io/.well-known/security.txt
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAEBCgAdFiEExG2lfbgJdcOF4YvFY7wk2Yx394YFAl9tNn0ACgkQY7wk2Yx3
-94Zs+g//Rv/nLmp97tZmzIhgVyBzC3gbqANUix4QxOBFV448g/DV8ZwYC6iwL6fO
-r8Ni+O5/VxrTlop6OkmozasZEszRX+EB/eqFoxvgyR9neob8SGm+gzuMocP7MZdf
-PEVGNd1vZuYEEK1O3scIXFAuvN8MqIZrRfH8tmEnUriV40pAY7eeujO07x+yYZXt
-PcVdOelw2lgRi7vaTnUR/XkPyTxjtLPge7ccefA6GpDTz72uInMkj72vlEvGyvBK
-tsIoRKw93DR7vW2PBDaRVU7zspbakyxMA9qt8R8OHTWSS6wwFYB1kh7aOmzMNAQ1
-aguL5c40JeCHteSkiQtE8irmAYlFESgTbgV3UuYUL1SCVBhRoLdiOUauBO3EFeDd
-E6ShScyXj1v9dxcaKcZmEVhZplAtNCrn2F/NSC+nGtRe+omxbpk4uU0qYr2mekIy
-TlXPU1eCaWlNE1sMsBxfuwZEQeYgwvrXrGHg8yvHn2nfS63ljEnkyEeWxJM7jPG/
-QRSVwmBP0eQ79KJLUspEXAQ0+7hKgK1ZiSHTzaQ2NHKaiPCY9tDl6vG1OfBYOMMg
-cAf/a+SdAQ1Hw+syrIeEVhuaxgoiiWZLTQW2vg8r6y8yjrjirQwGz4fiRKyReTai
-nohWy8uVpd0kJ85ynk5IY4C5d6vZmCp8maR3hkzyAtwN/ckm8lE=
-=9XAI
+iQIzBAEBCAAdFiEExG2lfbgJdcOF4YvFY7wk2Yx394YFAl/BhqcACgkQY7wk2Yx3
+94bd4A//QVBalY4MGTR6AZFn9sEG9Kj7si0ayphZEnXgeFIQaV0yU3rbsVbnov5T
+9natux/veVPuWOwjn1Fj336CRqioQ8fJ12V3g//N76By/fF2WlIpMA3tcHUxPK+J
+Jp9sfHMbRpuHwSC4muFK1xp8KZCg2aoqb656Ep15I6LebX3K2AlQDMtCNSD0wxHV
+BLRCqbIXxFWofWUFG12XweskNr6GUmC4kvZXFNVUtW4fBfyN43hGThoY8wjHDbh+
+qjS0AZETusMAF0V0zYWQmFzOE8G8Q+QMG9VJe8tSfI3IULFUlasNyBeXYx/SycU9
+6Mv/7tBCQWPtkXwvlazrkbslB/FDs2k7SY0+qGCv7BuQbJ4xjVOasZ7wIOUmGizf
+53p4CTnne1YYebVgaw8+AlO5z9CeI5/hqTxbbyFIAMk2SWz5H9ERCwTEl8jaLf7v
+QjUbvUL7zrz9IGaFwbkYZXDkFqojXE56vcvTR3bjs8oJA+rXjn4aY6dB9jm1VR00
+6zsdbIWgVB4iocWbnea+hL0A0T3vfSv+RzqgFtJ/iaZ/Sn3aXDdSMNBKxYmNy/s3
+wiUXfvP63iViN/h6p8vGM5EYn5vJ4BPmPsOBhvazsY1tLcDUCFMbiH/GgAM+qa0T
+xZopIGBAontH/xj5TfnjUXkunl5jQZWziATOsLHqaQh9CHpT40Q=
+=RuOP
 -----END PGP SIGNATURE-----
