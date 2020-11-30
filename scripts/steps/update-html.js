@@ -32,8 +32,7 @@ async function updateHtml (assets, manifest, preloadFiles) {
         } else if (props.name === 'apple-mobile-web-app-title') {
           return [
             node,
-            tag('link', { rel: 'manifest', href: manifest.url }),
-            tag('meta', { name: 'theme-color', content: manifest.theme })
+            tag('link', { rel: 'manifest', href: manifest.url })
           ].concat(
             preloadFiles.map(([media, url]) => {
               let as = PRELOAD_TYPES[extname(url)]
