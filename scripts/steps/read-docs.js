@@ -92,7 +92,7 @@ function articler (file) {
         properties: {},
         children: tree.children.filter(i => {
           if (i.tagName === 'h1') {
-            i.editUrl = `https://github.com/logux/docs/edit/master/${file}`
+            i.editUrl = `https://github.com/logux/docs/edit/main/${file}`
             i.noSlug = true
           }
           return i.type !== 'text' || i.value !== '\n'

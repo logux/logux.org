@@ -338,7 +338,7 @@ function typeHtml (ctx, type) {
 function getEditUrl (file) {
   if (sep !== '\\') file = file.replace(/\\/g, '/')
   let [, name, path] = file.match(/logux-([^/]+)\/(.*)$/)
-  return `https://github.com/logux/${name}/edit/master/${path}`
+  return `https://github.com/logux/${name}/edit/main/${path}`
 }
 
 function extendsHtml (parentClasses) {
