@@ -32,7 +32,6 @@ jobs:
         if: "!steps.hash.outputs.noChanges"
         uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
         with:
-          version: '274.0.1'
           service_account_key: ${{ secrets.GCLOUD_AUTH }}
       - name: Deploy files
         if: "!steps.hash.outputs.noChanges"
