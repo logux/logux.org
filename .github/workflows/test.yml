@@ -5,11 +5,9 @@ on:
 env:
   FORCE_COLOR: 2
 jobs:
-  build:
+  test:
     name: Test
     runs-on: ubuntu-latest
-    env:
-      FORCE_COLOR: 2
     steps:
       - name: Checkout the repository
         uses: actions/checkout@v2
@@ -19,8 +17,5 @@ jobs:
           node-version: '14'
       - name: Install all dependencies
         uses: bahmutov/npm-install@v1
-      - name: Build and test
+      - name: Run tests
         run: yarn test
-        env:
-          CI: 1
-          NO_CONTENT: 1
