@@ -56,7 +56,7 @@
     "unzipper": "^0.10.11"
   },
   "devDependencies": {
-    "@logux/eslint-config": "^43.1.0",
+    "@logux/eslint-config": "^43.1.1",
     "@logux/sharec-config": "^0.8.5",
     "@logux/stylelint-config": "^0.2.0",
     "@size-limit/file": "^4.9.1",
@@ -71,7 +71,7 @@
     "eslint-plugin-prettierx": "^0.14.0",
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-security": "^1.4.0",
-    "eslint-plugin-unicorn": "^24.0.0",
+    "eslint-plugin-unicorn": "^25.0.0",
     "husky": "^4.3.6",
     "lint-staged": "^10.5.3",
     "size-limit": "^4.9.1",
