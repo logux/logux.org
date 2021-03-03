@@ -30,7 +30,7 @@
     "postcss-momentum-scrolling": "^2.8.20",
     "postcss-nested": "^4.2.3",
     "postcss-url": "^8.0.0",
-    "pug": "^3.0.0",
+    "pug": "^3.0.1",
     "recursive-copy": "^2.0.11",
     "rehype-parse": "^7.0.1",
     "rehype-raw": "^5.0.0",
