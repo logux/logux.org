@@ -23,7 +23,7 @@ import buildApi from './steps/build-api.js'
 
 dotenv.config()
 
-async function prepareHtml () {
+async function prepareHtml() {
   await cleanBuildDir()
   let assets = await compileAssets()
   let [webmanifest, filesFromCSS] = await Promise.all([
@@ -35,7 +35,7 @@ async function prepareHtml () {
   return [assets, uikit]
 }
 
-async function prepareContent () {
+async function prepareContent() {
   await installTypes(() => [
     downloadProject('logux-docs'),
     downloadProject('logux-core'),
@@ -53,7 +53,7 @@ async function prepareContent () {
   return [guides, nodeApi, reduxApi, vuexApi]
 }
 
-async function build () {
+async function build() {
   if (process.env.NO_CONTENT) {
     await prepareHtml()
     return

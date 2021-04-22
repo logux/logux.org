@@ -6,7 +6,7 @@ import globby from 'globby'
 import { PROJECTS } from '../lib/dirs.js'
 import { run } from '../lib/spinner.js'
 
-export default async function readTypedoc (...projects) {
+export default async function readTypedoc(...projects) {
   let type = capitalize(projects[0].replace(/^logux-/, ''))
 
   let files = await run(`Reading ${type} TypeDoc`, async () => {

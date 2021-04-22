@@ -105,13 +105,13 @@ const OPTIONAL = [
   }
 ]
 
-function toSlug (type) {
+function toSlug(type) {
   let slug = type
   if (!CAPITALIZED.test(slug)) slug = 'globals-' + slug
   return slugify(slug).toLowerCase()
 }
 
-function byTypeAndName (a, b) {
+function byTypeAndName(a, b) {
   if (a.kindString === 'Method' && b.kindString !== 'Method') {
     return 1
   } else if (a.kindString !== 'Method' && b.kindString === 'Method') {
@@ -121,7 +121,7 @@ function byTypeAndName (a, b) {
   }
 }
 
-function byName (a, b) {
+function byName(a, b) {
   if (CAPITALIZED.test(a.name) && !CAPITALIZED.test(b.name)) {
     return -1
   } else if (!CAPITALIZED.test(a.name) && CAPITALIZED.test(b.name)) {
@@ -131,7 +131,7 @@ function byName (a, b) {
   }
 }
 
-function tag (tagName, children, opts) {
+function tag(tagName, children, opts) {
   if (!Array.isArray(children)) {
     children = [children]
   }
@@ -141,7 +141,7 @@ function tag (tagName, children, opts) {
   return { type: 'element', tagName, properties: {}, children, ...opts }
 }
 
-function toHtml (content) {
+function toHtml(content) {
   if (!content) return []
   content = content.replace(/{@link [\w#.]+}/g, str => {
     let name = str.slice(7, -1)
@@ -154,7 +154,7 @@ function toHtml (content) {
   return remarkRehype()(tree).children
 }
 
-function toText (nodes) {
+function toText(nodes) {
   return nodes
     .map(node => {
       if (node.type === 'text') {
@@ -168,7 +168,7 @@ function toText (nodes) {
     .join('')
 }
 
-function joinTags (separator, tags) {
+function joinTags(separator, tags) {
   return tags.flatMap((el, index) => {
     if (index === tags.length - 1) {
       return el
@@ -178,7 +178,7 @@ function joinTags (separator, tags) {
   })
 }
 
-function declHtml (ctx, decl) {
+function declHtml(ctx, decl) {
   let type = []
   if (decl.type) {
     type = typeHtml(ctx, decl.type)
@@ -231,7 +231,7 @@ function declHtml (ctx, decl) {
   }
 }
 
-function typeHtml (ctx, type) {
+function typeHtml(ctx, type) {
   if (!type) {
     return []
   } else if (type.type === 'reference') {
@@ -335,13 +335,13 @@ function typeHtml (ctx, type) {
   }
 }
 
-function getEditUrl (file) {
+function getEditUrl(file) {
   if (sep !== '\\') file = file.replace(/\\/g, '/')
   let [, name, path] = file.match(/logux-([^/]+)\/(.*)$/)
   return `https://github.com/logux/${name}/edit/main/${path}`
 }
 
-function extendsHtml (parentClasses) {
+function extendsHtml(parentClasses) {
   if (parentClasses) {
     let name = parentClasses[0].name
     let symbol = parentClasses[0].symbolFullyQualifiedName
@@ -362,7 +362,7 @@ function extendsHtml (parentClasses) {
   }
 }
 
-function extractChildren (nodes) {
+function extractChildren(nodes) {
   if (nodes.length === 0) {
     return []
   } else {
@@ -370,12 +370,12 @@ function extractChildren (nodes) {
   }
 }
 
-function commentHtml (comment) {
+function commentHtml(comment) {
   if (!comment) return []
   return toHtml(comment.shortText + '\n\n' + comment.text)
 }
 
-function propTypeHtml (ctx, type) {
+function propTypeHtml(ctx, type) {
   if (!type) return []
   return [
     tag('p', [
@@ -386,7 +386,7 @@ function propTypeHtml (ctx, type) {
   ]
 }
 
-function returnsHtml (ctx, node) {
+function returnsHtml(ctx, node) {
   if (!node.signatures) return []
   let type = node.signatures[0].type
   if (type.name === 'void') return []
@@ -401,7 +401,7 @@ function returnsHtml (ctx, node) {
   ]
 }
 
-function tableHtml (ctx, name, list) {
+function tableHtml(ctx, name, list) {
   let hasDesc = Array.from(list).some(i => i.comment)
   return [
     tag('table', [
@@ -440,7 +440,7 @@ function tableHtml (ctx, name, list) {
   ]
 }
 
-function methodArgs (node) {
+function methodArgs(node) {
   if (!node.signatures[0].parameters) return '()'
   let args = node.signatures[0].parameters
     .map(i => i.name + (i.flags.isOptional ? '?' : ''))
@@ -448,14 +448,14 @@ function methodArgs (node) {
   return `(${args})`
 }
 
-function paramsHtml (ctx, node) {
+function paramsHtml(ctx, node) {
   if (!node.signatures) return []
   return node.signatures
     .filter(i => i.parameters)
     .flatMap(i => tableHtml(ctx, 'Parameter', i.parameters))
 }
 
-function templatesHtml (ctx, node) {
+function templatesHtml(ctx, node) {
   if (!node.signatures) return []
   let templates = node.signatures.filter(
     signature =>
@@ -474,7 +474,7 @@ function templatesHtml (ctx, node) {
   }
 }
 
-function membersHtml (ctx, className, members, separator) {
+function membersHtml(ctx, className, members, separator) {
   if (!members) return []
   let slugSep = separator === '#' ? '-' : separator
   return members
@@ -511,7 +511,7 @@ function membersHtml (ctx, className, members, separator) {
     })
 }
 
-function classHtml (ctx, cls) {
+function classHtml(ctx, cls) {
   let hideConstructore = HIDE_CONSTRUCTOR.has(cls.name)
   let statics = cls.children.filter(i => i.flags.isStatic)
   let instance = cls.children.filter(i => !statics.includes(i))
@@ -527,7 +527,7 @@ function classHtml (ctx, cls) {
   ])
 }
 
-function functionHtml (ctx, node) {
+function functionHtml(ctx, node) {
   return tag('section', [
     tag(
       'h2',
@@ -554,7 +554,7 @@ function functionHtml (ctx, node) {
   ])
 }
 
-function getChildren (type) {
+function getChildren(type) {
   if (type.name === 'Omit') {
     return getChildren(type.typeArguments[0]).filter(i => {
       return type.typeArguments[1].types.every(j => j.value !== i.name)
@@ -564,7 +564,7 @@ function getChildren (type) {
   }
 }
 
-function variableHtml (ctx, node) {
+function variableHtml(ctx, node) {
   let body = []
   if (node.type) {
     let type = node.type
@@ -614,7 +614,7 @@ function variableHtml (ctx, node) {
   ])
 }
 
-function toTree (ctx, nodes) {
+function toTree(ctx, nodes) {
   nodes = nodes.filter(i => !INLINE_TYPES.has(i.name))
   let tree = {
     type: 'root',
@@ -646,11 +646,11 @@ function toTree (ctx, nodes) {
   return tree
 }
 
-function submenuName (node) {
+function submenuName(node) {
   return node.name + (node.kind === 'function' ? '()' : '')
 }
 
-function toSubmenu (nodes) {
+function toSubmenu(nodes) {
   let submenu = nodes
     .filter(i => i.kindString === 'Class')
     .sort(byName)
@@ -674,7 +674,7 @@ function toSubmenu (nodes) {
   return submenu
 }
 
-export default async function buildApi (assets, layout, title, nodes) {
+export default async function buildApi(assets, layout, title, nodes) {
   let file = title.replace(/\s/g, '-').toLowerCase()
   let path = join(DIST, file, 'index.html')
 

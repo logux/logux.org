@@ -5,10 +5,10 @@ import postcss from 'postcss'
 
 import wrap from '../lib/spinner.js'
 
-async function repackStyles (assets) {
+async function repackStyles(assets) {
   let collected = []
   let fileCollector = postcssUrl({
-    url ({ url }, dir, ops, decl) {
+    url({ url }, dir, ops, decl) {
       let media = decl.parent.parent
       let rule = decl.parent
       if (media && media.name === 'media') {

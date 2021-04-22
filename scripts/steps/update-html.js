@@ -14,16 +14,16 @@ const PRELOAD_TYPES = {
   '.svg': 'image'
 }
 
-function tag (tagName, properties) {
+function tag(tagName, properties) {
   return { type: 'element', tagName, properties, children: [] }
 }
 
-async function updateHtml (assets, manifest, preloadFiles) {
+async function updateHtml(assets, manifest, preloadFiles) {
   let [html] = await Promise.all([
     fs.readFile(join(DIST, 'uikit.html')),
     makeDir(join(DIST, 'uikit'))
   ])
-  function optimizer () {
+  function optimizer() {
     return tree =>
       unistFlatmap(tree, node => {
         let props = node.properties || {}

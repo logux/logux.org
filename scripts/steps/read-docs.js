@@ -14,11 +14,11 @@ import wrap from '../lib/spinner.js'
 
 const ROOT = join(PROJECTS, 'logux-docs')
 
-function text (value) {
+function text(value) {
   return { type: 'text', value }
 }
 
-function span (cls, value) {
+function span(cls, value) {
   return {
     type: 'element',
     tagName: 'span',
@@ -27,7 +27,7 @@ function span (cls, value) {
   }
 }
 
-function highlightLines (node, cb) {
+function highlightLines(node, cb) {
   if (!node.data) node.data = {}
   node.data.hChildren = node.value
     .split('\n')
@@ -35,7 +35,7 @@ function highlightLines (node, cb) {
     .flatMap((line, i) => (i === 0 ? line : [text('\n'), ...line]))
 }
 
-function iniandBashHighlight () {
+function iniandBashHighlight() {
   return tree => {
     unistVisit(tree, 'code', node => {
       if (node.lang === 'sh' || node.lang === 'bash') {
@@ -83,7 +83,7 @@ function iniandBashHighlight () {
   }
 }
 
-function articler (file) {
+function articler(file) {
   return tree => {
     tree.children = [
       {
@@ -102,11 +102,11 @@ function articler (file) {
   }
 }
 
-function tag (tagName, properties, children) {
+function tag(tagName, properties, children) {
   return { type: 'element', tagName, properties, children }
 }
 
-function textContent (node) {
+function textContent(node) {
   if (node.type === 'text') {
     return node.value
   } else if (node.children) {
@@ -116,7 +116,7 @@ function textContent (node) {
   }
 }
 
-function videoInserter () {
+function videoInserter() {
   return tree => {
     unistFlatmap(tree, node => {
       if (node.tagName === 'p' && textContent(node).startsWith('Youtube:')) {
@@ -151,18 +151,18 @@ function videoInserter () {
   }
 }
 
-function html (value) {
+function html(value) {
   return { type: 'html', value }
 }
 
-function npmToYarn (value) {
+function npmToYarn(value) {
   return value
     .replace(/^npm i(nstall)? /, 'yarn add ')
     .replace(/--save-dev/, '--dev')
     .replace(/^npm /, 'yarn ')
 }
 
-function convertor ({ file, onTitle }) {
+function convertor({ file, onTitle }) {
   return tree => {
     if (file === 'README.md') {
       unistFlatmap(tree, node => {
@@ -202,7 +202,7 @@ function convertor ({ file, onTitle }) {
   }
 }
 
-async function readDocs () {
+async function readDocs() {
   let files = await globby('**/*.md', { cwd: ROOT, ignore: ['node_modules'] })
   let guides = await Promise.all(
     files.map(async file => {
@@ -212,7 +212,7 @@ async function readDocs () {
       tree = await unified()
         .use(convertor, {
           file,
-          onTitle (value) {
+          onTitle(value) {
             title = value
           }
         })

@@ -1,6 +1,6 @@
 import isSaveDate from '../../lib/is-save-data.js'
 
-function init () {
+function init() {
   navigator.serviceWorker.register('/service.js')
 }
 

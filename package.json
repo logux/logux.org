@@ -9,19 +9,19 @@
     "build": "NODE_ENV=production ./scripts/build.js"
   },
   "dependencies": {
-    "@babel/core": "^7.12.10",
-    "@rollup/plugin-replace": "^2.3.4",
+    "@babel/core": "^7.13.16",
+    "@rollup/plugin-replace": "^2.4.2",
     "autoprefixer": "^9.8.6",
     "capitalize": "^2.0.3",
-    "colorette": "^1.2.1",
+    "colorette": "^1.2.2",
     "del": "^6.0.0",
     "dotenv": "^8.2.0",
-    "globby": "^11.0.1",
+    "globby": "^11.0.3",
     "jstransformer-lowlight": "^0.1.0",
-    "lowlight": "^1.17.0",
+    "lowlight": "^1.20.0",
     "make-dir": "^3.1.0",
-    "nanoevents": "^5.1.10",
-    "parcel-bundler": "^1.12.4",
+    "nanoevents": "^5.1.13",
+    "parcel-bundler": "^1.12.5",
     "postcss": "^7.0.32",
     "postcss-combine-media-query": "^1.0.1",
     "postcss-hexrgba": "^2.0.1",
@@ -30,56 +30,52 @@
     "postcss-momentum-scrolling": "^2.8.20",
     "postcss-nested": "^4.2.3",
     "postcss-url": "^8.0.0",
-    "pug": "^3.0.1",
+    "pug": "^3.0.2",
     "recursive-copy": "^2.0.11",
     "rehype-parse": "^7.0.1",
-    "rehype-raw": "^5.0.0",
+    "rehype-raw": "^5.1.0",
     "rehype-stringify": "^8.0.0",
     "remark": "^13.0.0",
     "remark-highlight.js": "^6.0.0",
     "remark-html": "^13.0.1",
     "remark-parse": "^9.0.0",
-    "remark-rehype": "^8.0.0",
-    "rollup": "^2.35.1",
+    "remark-rehype": "^8.1.0",
+    "rollup": "^2.45.2",
     "rollup-plugin-inject-process-env": "^1.3.1",
     "rollup-plugin-terser": "^7.0.2",
-    "slugify": "^1.4.6",
+    "slugify": "^1.5.0",
     "spinnies": "^0.5.1",
     "ssdeploy": "^0.6.19",
     "sugarss": "^2.0.0",
     "typedoc": "^0.19.2",
-    "typescript": "^4.1.3",
-    "unified": "^9.2.0",
+    "typescript": "^4.2.4",
+    "unified": "^9.2.1",
     "unist-util-filter": "^2.0.3",
     "unist-util-flatmap": "^1.0.0",
     "unist-util-visit": "^2.0.3",
     "unzipper": "^0.10.11"
   },
   "devDependencies": {
-    "@logux/eslint-config": "^43.1.1",
-    "@logux/sharec-config": "^0.8.5",
-    "@logux/stylelint-config": "^0.2.0",
-    "@size-limit/file": "^4.9.1",
+    "@logux/eslint-config": "^45.2.3",
+    "@logux/sharec-config": "^0.10.1",
+    "@logux/stylelint-config": "^0.3.1",
+    "@size-limit/file": "^4.10.2",
     "del-cli": "^3.0.1",
-    "eslint": "^7.16.0",
+    "eslint": "^7.24.0",
     "eslint-config-standard": "^16.0.2",
-    "eslint-plugin-es5": "^1.5.0",
     "eslint-plugin-import": "^2.22.1",
-    "eslint-plugin-jest": "^24.1.3",
+    "eslint-plugin-jest": "^24.3.5",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-prefer-let": "^1.1.0",
-    "eslint-plugin-prettierx": "^0.14.0",
-    "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-promise": "^5.1.0",
     "eslint-plugin-security": "^1.4.0",
-    "eslint-plugin-unicorn": "^25.0.0",
-    "husky": "^4.3.6",
-    "lint-staged": "^10.5.3",
-    "size-limit": "^4.9.1",
-    "stylelint": "^13.8.0",
-    "stylelint-config-recess-order": "^2.3.0",
-    "stylelint-config-standard": "^20.0.0",
-    "stylelint-order": "^4.1.0",
-    "svgo": "^1.3.2"
+    "eslint-plugin-unicorn": "^30.0.0",
+    "lint-staged": "^10.5.4",
+    "prettier": "^2.2.1",
+    "simple-git-hooks": "^2.3.1",
+    "size-limit": "^4.10.2",
+    "stylelint": "^13.12.0",
+    "svgo": "^2.3.0"
   },
   "repository": "logux/logux.io",
   "homepage": "https://logux.io/",
@@ -126,6 +122,12 @@
         "globals": {
           "FILES": false
         }
+      },
+      {
+        "files": "scripts/**/*.js",
+        "rules": {
+          "no-console": "off"
+        }
       }
     ]
   },
@@ -137,13 +139,22 @@
   "stylelint": {
     "extends": "@logux/stylelint-config"
   },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
+  "simple-git-hooks": {
+    "pre-commit": "npx lint-staged"
+  },
+  "prettier": {
+    "arrowParens": "avoid",
+    "jsxSingleQuote": false,
+    "quoteProps": "consistent",
+    "semi": false,
+    "singleQuote": true,
+    "trailingComma": "none"
   },
   "lint-staged": {
-    "*.js": "eslint --fix",
+    "*.js": [
+      "prettier --write",
+      "eslint --fix"
+    ],
     "*.svg": "svgo",
     "*.sss": "stylelint --fix"
   },
@@ -170,6 +181,6 @@
   ],
   "sharec": {
     "config": "@logux/sharec-config",
-    "version": "0.8.5"
+    "version": "0.10.1"
   }
 }

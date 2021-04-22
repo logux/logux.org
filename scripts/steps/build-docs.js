@@ -6,7 +6,7 @@ import makeDir from 'make-dir'
 import { DIST, PROJECTS } from '../lib/dirs.js'
 import wrap from '../lib/spinner.js'
 
-function toTitle (file) {
+function toTitle(file) {
   if (file === 'starting') file = 'starting-project'
   if (file === 'spec') file = 'specification'
   if (file === 'node-server') file = 'node.js-server'
@@ -18,7 +18,7 @@ function toTitle (file) {
     .replace(/Backend/g, 'Back-end')
 }
 
-async function buildDocs (assets, layout, guides) {
+async function buildDocs(assets, layout, guides) {
   let json = await fs.readFile(join(PROJECTS, 'logux-docs', 'order.json'))
   let order = JSON.parse(json)
 
@@ -51,7 +51,7 @@ async function buildDocs (assets, layout, guides) {
     }
   }
 
-  function findCurrent (dirs) {
+  function findCurrent(dirs) {
     let url = '/' + dirs.split(sep).join('/') + '/'
     return i => {
       return { ...i, isCurrent: url === i.link }

@@ -1,6 +1,6 @@
 let lastDown, lastDownAt
 
-function clickableParent (element) {
+function clickableParent(element) {
   if (
     element.tagName === 'A' ||
     element.tagName === 'BUTTON' ||

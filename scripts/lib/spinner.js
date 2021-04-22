@@ -35,7 +35,7 @@ if (process.env.CI || process.env.GITHUB_ACTIONS) {
   }
 }
 
-export async function run (text, fn) {
+export async function run(text, fn) {
   let end = step(text)
   try {
     let result = await fn()
@@ -47,7 +47,7 @@ export async function run (text, fn) {
   }
 }
 
-export default function wrap (fn, text) {
+export default function wrap(fn, text) {
   return async (...args) => {
     let end = step(text)
     try {

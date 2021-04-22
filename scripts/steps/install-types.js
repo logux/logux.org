@@ -16,7 +16,7 @@ let NAMES = [
   'logux-vuex'
 ]
 
-export default async function installTypes (nextSteps) {
+export default async function installTypes(nextSteps) {
   let dirs = NAMES.map(i => join(PROJECTS, i))
   if (dirs.every(i => existsSync(i))) {
     await Promise.all(nextSteps())

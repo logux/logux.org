@@ -8,7 +8,7 @@ import { run } from '../lib/spinner.js'
 
 let exec = promisify(child.exec)
 
-export default async function downloadProject (name) {
+export default async function downloadProject(name) {
   let dir = join(PROJECTS, name)
   if (existsSync(dir)) return
 

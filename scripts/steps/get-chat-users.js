@@ -3,7 +3,7 @@ import { yellow } from 'colorette'
 
 import wrap from '../lib/spinner.js'
 
-function callGitter (command) {
+function callGitter(command) {
   return new Promise((resolve, reject) => {
     let req = request(
       {
@@ -41,7 +41,7 @@ function callGitter (command) {
   })
 }
 
-async function getChatUsers () {
+async function getChatUsers() {
   if (!process.env.GITTER_ROOM_ID) {
     process.stderr.write(
       yellow(

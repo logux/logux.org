@@ -12,7 +12,7 @@ import { SRC, DIST } from '../lib/dirs.js'
 
 const PAGES = ['branding']
 
-function findHeaders (tree) {
+function findHeaders(tree) {
   let list = []
   unistVisit(tree, 'element', node => {
     if (node.tagName === 'h2') {
@@ -23,7 +23,7 @@ function findHeaders (tree) {
   return list
 }
 
-async function buildPages (assets, layout) {
+async function buildPages(assets, layout) {
   await PAGES.map(async i => {
     let filename = join(SRC, `${i}.pug`)
     let template = await fs.readFile(filename)

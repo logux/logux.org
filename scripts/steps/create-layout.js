@@ -9,14 +9,14 @@ import wrap from '../lib/spinner.js'
 
 const SMALL_WORDS = /(^|\s)(the|a|for|in|an|to|if|so|when|with|by|and|or|is|this|any|from) /gi
 
-function cleaner ({ chatUsers, removeAssets }) {
+function cleaner({ chatUsers, removeAssets }) {
   return tree => {
     unistVisit(tree, 'element', node => {
       let cls = node.properties.className || []
       if (node.tagName === 'article') {
         node.children = []
       } else if (node.tagName === 'a') {
-        if (cls.some(i => i === 'menu_link')) {
+        if (cls.includes('menu_link')) {
           node.properties.className = cls.filter(i => i !== 'is-current')
         }
       } else if (cls[0] === 'submenu') {
@@ -47,7 +47,7 @@ function cleaner ({ chatUsers, removeAssets }) {
   }
 }
 
-function checker (title) {
+function checker(title) {
   return tree => {
     let ids = new Set()
     unistVisit(tree, 'element', node => {
@@ -68,7 +68,7 @@ function checker (title) {
   }
 }
 
-async function cleanPage (html, chatUsers, removeAssets) {
+async function cleanPage(html, chatUsers, removeAssets) {
   let cleaned = await unified()
     .use(rehypeParse)
     .use(cleaner, { chatUsers, removeAssets })
@@ -77,7 +77,7 @@ async function cleanPage (html, chatUsers, removeAssets) {
   return cleaned.contents
 }
 
-function tag (tagName, cls, properties = {}, children = []) {
+function tag(tagName, cls, properties = {}, children = []) {
   if (Array.isArray(properties)) {
     children = properties
     properties = {}
@@ -90,7 +90,7 @@ function tag (tagName, cls, properties = {}, children = []) {
   return { type: 'element', tagName, properties, children }
 }
 
-function toText (nodes) {
+function toText(nodes) {
   return nodes
     .map(i => {
       if (i.type === 'text') {
@@ -102,7 +102,7 @@ function toText (nodes) {
     .join('')
 }
 
-function switcherToHTML (id, switchers) {
+function switcherToHTML(id, switchers) {
   return tag('div', 'switcher', [
     tag(
       'div',
@@ -147,10 +147,10 @@ function switcherToHTML (id, switchers) {
   ])
 }
 
-function converter () {
+function converter() {
   let lastSwitcher = 0
 
-  function convertDetails (children) {
+  function convertDetails(children) {
     let converted = []
     let switchers = []
     for (let child of children) {
@@ -176,7 +176,7 @@ function converter () {
     return converted
   }
 
-  function toSlug (nodes) {
+  function toSlug(nodes) {
     return slugify(toText(nodes), { lower: true })
       .replace(/":/g, '')
       .replace(/node\.js/g, 'nodejs')
@@ -260,7 +260,7 @@ function converter () {
   }
 }
 
-function submenuItem (node) {
+function submenuItem(node) {
   let text = []
   if (node.code) {
     let code = node.code
@@ -293,7 +293,7 @@ function submenuItem (node) {
   }
 }
 
-function generateSubmenu (links) {
+function generateSubmenu(links) {
   return {
     type: 'root',
     children: links.map(i => {
@@ -315,7 +315,7 @@ function generateSubmenu (links) {
   }
 }
 
-async function createLayout (uikit, chatUsers) {
+async function createLayout(uikit, chatUsers) {
   return async function (categoryUrl, links, title, tree) {
     let fixed = await unified().use(converter).use(checker, title).run(tree)
     let submenu = await unified()

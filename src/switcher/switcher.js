@@ -1,11 +1,11 @@
-function keepScroll (el, cb) {
+function keepScroll(el, cb) {
   let prevTop = el.getBoundingClientRect().top
   cb()
   let newTop = el.getBoundingClientRect().top
   window.scrollTo(window.scrollX, window.scrollY + newTop - prevTop)
 }
 
-function changeTab (from, to) {
+function changeTab(from, to) {
   from.removeAttribute('aria-selected')
   from.parentNode.classList.remove('is-open')
   to.setAttribute('aria-selected', 'true')
@@ -15,15 +15,15 @@ function changeTab (from, to) {
   return to
 }
 
-function changeSection (from, to) {
+function changeSection(from, to) {
   from.setAttribute('hidden', true)
   to.removeAttribute('hidden')
   return to
 }
 
-function focusOnce (el) {
+function focusOnce(el) {
   el.setAttribute('tabindex', '-1')
-  function listener () {
+  function listener() {
     el.removeAttribute('tabindex')
     el.removeEventListener('blur', listener)
   }
@@ -31,12 +31,12 @@ function focusOnce (el) {
   el.focus()
 }
 
-function clickOnTab (tab) {
+function clickOnTab(tab) {
   tab.focus()
   tab.click()
 }
 
-function onKey (el, keys) {
+function onKey(el, keys) {
   el.addEventListener('keydown', e => {
     if (keys[e.code]) {
       e.preventDefault()
@@ -45,16 +45,16 @@ function onKey (el, keys) {
   })
 }
 
-function addTo (group, key, el) {
+function addTo(group, key, el) {
   if (!group[key]) group[key] = []
   group[key].push(el)
 }
 
-function findByAttr (array, attr, value) {
+function findByAttr(array, attr, value) {
   return array.find(i => i.getAttribute(attr) === value)
 }
 
-function readOpenned () {
+function readOpenned() {
   try {
     let json = localStorage.switcherOpenned
     return json ? JSON.parse(json) : []
@@ -63,7 +63,7 @@ function readOpenned () {
   }
 }
 
-function writeOpenned (add, remove) {
+function writeOpenned(add, remove) {
   setTimeout(() => {
     let openned = new Set(readOpenned())
     openned.add(add)
@@ -119,27 +119,27 @@ for (let switcher of switchers) {
   })
 
   onKey(tabs, {
-    ArrowDown () {
+    ArrowDown() {
       focusOnce(currentSection)
     },
-    ArrowRight () {
+    ArrowRight() {
       if (currentTab === lastTab) {
         clickOnTab(firstTab)
       } else {
         clickOnTab(currentTab.parentNode.nextSibling.children[0])
       }
     },
-    ArrowLeft () {
+    ArrowLeft() {
       if (currentTab === firstTab) {
         clickOnTab(lastTab)
       } else {
         clickOnTab(currentTab.parentNode.previousSibling.children[0])
       }
     },
-    Home () {
+    Home() {
       clickOnTab(firstTab)
     },
-    End () {
+    End() {
       clickOnTab(lastTab)
     }
   })

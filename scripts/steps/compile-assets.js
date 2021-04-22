@@ -5,7 +5,7 @@ import { SRC } from '../lib/dirs.js'
 import wrap from '../lib/spinner.js'
 import hash from '../lib/hash.js'
 
-function findAssets (step) {
+function findAssets(step) {
   return Array.from(step.childBundles).reduce(
     (all, i) => {
       return all.concat(findAssets(i))
@@ -14,7 +14,7 @@ function findAssets (step) {
   )
 }
 
-async function compileAssets () {
+async function compileAssets() {
   let pugTemplate = join(SRC, 'uikit.pug')
   let uikitBundler = new Bundler(pugTemplate, {
     sourceMaps: false,
@@ -24,25 +24,25 @@ async function compileAssets () {
   let assets = findAssets(bundle)
   let hashes = {}
   return {
-    map (fn) {
+    map(fn) {
       return assets.map(fn)
     },
-    get (regexp) {
+    get(regexp) {
       return assets.filter(i => regexp.test(i))
     },
-    find (regexp) {
+    find(regexp) {
       return assets.find(i => regexp.test(i))
     },
-    remove (path) {
+    remove(path) {
       assets = assets.filter(i => i !== path)
     },
-    add (path, content) {
+    add(path, content) {
       if (content) {
         hashes[path] = hash(content)
       }
       assets = assets.concat([path])
     },
-    hash (path) {
+    hash(path) {
       return hashes[path]
     }
   }

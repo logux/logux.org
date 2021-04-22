@@ -1,6 +1,6 @@
 const CACHE_VERSION = '1'
 
-async function fromCache (e) {
+async function fromCache(e) {
   let cache = await caches.open(CACHE_VERSION)
   let match = await cache.match(e.request, { ignoreSearch: true })
   if (match) {
@@ -20,7 +20,7 @@ async function fromCache (e) {
   }
 }
 
-async function cleanCache (cache, files) {
+async function cleanCache(cache, files) {
   let keys = await cache.keys()
   await Promise.all(
     keys.map(async key => {
@@ -32,7 +32,7 @@ async function cleanCache (cache, files) {
   )
 }
 
-async function precache () {
+async function precache() {
   let cache = await caches.open(CACHE_VERSION)
   let files = FILES
   let requests = files.map(url => {

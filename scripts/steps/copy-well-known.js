@@ -8,7 +8,7 @@ import wrap from '../lib/spinner.js'
 
 let FILES = ['branding/', 'favicon.ico', 'robots.txt', 'security.txt']
 
-async function copyWellKnown (assets) {
+async function copyWellKnown(assets) {
   await makeDir(join(DIST, '.well-known'))
   await Promise.all(
     FILES.map(async i => {

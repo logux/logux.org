@@ -9,7 +9,7 @@ import { SRC, DIST } from '../lib/dirs.js'
 import wrap from '../lib/spinner.js'
 import hash from '../lib/hash.js'
 
-async function repackScripts (assets) {
+async function repackScripts(assets) {
   let scripts = assets.get(/\.js$/).map(compiled => {
     let name
     if (compiled.endsWith('service.js')) {

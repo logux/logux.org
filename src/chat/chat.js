@@ -3,7 +3,7 @@ import isSaveDate from '../../lib/is-save-data.js'
 
 let button = document.querySelector('.chat')
 
-function initChat () {
+function initChat() {
   window.gitter = {
     chat: {
       options: {

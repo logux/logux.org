@@ -5,7 +5,7 @@ import { SRC, DIST } from '../lib/dirs.js'
 import wrap from '../lib/spinner.js'
 import hash from '../lib/hash.js'
 
-async function generateWebManifest (assets) {
+async function generateWebManifest(assets) {
   let json = JSON.parse(
     await fs.readFile(join(SRC, 'base', 'manifest.webmanifest'))
   )
