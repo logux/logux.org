@@ -29,6 +29,15 @@ const EXTERNAL_TYPES = {
   ReturnType:
     'https://www.typescriptlang.org/docs/handbook/' +
     'utility-types.html#returntypet',
+  Omit:
+    'https://www.typescriptlang.org/docs/handbook/' +
+    'utility-types.html#omittype-keys',
+  Pick:
+    'https://www.typescriptlang.org/docs/handbook/' +
+    'utility-types.html#picktype-keys',
+  Readonly:
+    'https://www.typescriptlang.org/docs/handbook/' +
+    'utility-types.html#readonlytype',
   Promise:
     'https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/' +
     'Using_promises',
@@ -70,12 +79,7 @@ const SIMPLE_TYPES = new Set([
   'string',
   'object',
   'number',
-  'any',
-  'ExtendedVue',
-  'Store',
-  'Omit',
-  'Pick',
-  'Readonly'
+  'any'
 ])
 
 const HIDE_CONSTRUCTOR = new Set([
