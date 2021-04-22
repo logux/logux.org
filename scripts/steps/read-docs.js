@@ -3,7 +3,7 @@ import remarkHighlight from 'remark-highlight.js'
 import remarkRehype from 'remark-rehype'
 import unistFlatmap from 'unist-util-flatmap'
 import remarkParse from 'remark-parse'
-import unistVisit from 'unist-util-visit'
+import { visit } from 'unist-util-visit'
 import rehypeRaw from 'rehype-raw'
 import { join } from 'path'
 import unified from 'unified'
@@ -37,7 +37,7 @@ function highlightLines(node, cb) {
 
 function iniandBashHighlight() {
   return tree => {
-    unistVisit(tree, 'code', node => {
+    visit(tree, 'code', node => {
       if (node.lang === 'sh' || node.lang === 'bash') {
         highlightLines(node, line =>
           line
@@ -187,7 +187,7 @@ function convertor({ file, onTitle }) {
         return [node]
       }
     })
-    unistVisit(tree, node => {
+    visit(tree, node => {
       if (node.type === 'heading') {
         if (node.depth === 1) {
           onTitle(node.children[0].value)

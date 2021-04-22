@@ -1,7 +1,7 @@
 import rehypeStringify from 'rehype-stringify'
-import unistFilter from 'unist-util-filter'
 import rehypeParse from 'rehype-parse'
-import unistVisit from 'unist-util-visit'
+import { filter } from 'unist-util-filter'
+import { visit } from 'unist-util-visit'
 import slugify from 'slugify'
 import unified from 'unified'
 
@@ -12,7 +12,7 @@ const SMALL_WORDS = /(^|\s)(the|a|for|in|an|to|if|so|when|with|by|and|or|is|this
 
 function cleaner({ chatUsers, removeAssets }) {
   return tree => {
-    unistVisit(tree, 'element', node => {
+    visit(tree, 'element', node => {
       let cls = node.properties.className || []
       if (node.tagName === 'article') {
         node.children = []
@@ -27,7 +27,7 @@ function cleaner({ chatUsers, removeAssets }) {
       }
     })
     let articles = 0
-    return unistFilter(tree, 'element', node => {
+    return filter(tree, 'element', node => {
       let props = node.properties || {}
       if (node.tagName === 'article') {
         articles += 1
@@ -51,14 +51,14 @@ function cleaner({ chatUsers, removeAssets }) {
 function checker(title) {
   return tree => {
     let ids = new Set()
-    unistVisit(tree, 'element', node => {
+    visit(tree, 'element', node => {
       let id = node.properties.id
       if (id) {
         if (ids.has(id)) addError(`Dublicate ID #${id} in ${title}`)
         ids.add(id)
       }
     })
-    unistVisit(tree, 'element', node => {
+    visit(tree, 'element', node => {
       let href = node.properties.href
       if (href && href.startsWith('#')) {
         if (!ids.has(href.slice(1))) {
@@ -184,15 +184,15 @@ function converter() {
   }
 
   return tree => {
-    unistVisit(tree, 'text', node => {
+    visit(tree, 'text', node => {
       node.value = node.value.replace(SMALL_WORDS, '$1$2 ')
     })
-    unistVisit(tree, 'element', (node, index, parent) => {
+    visit(tree, 'element', (node, index, parent) => {
       if (node.tagName === 'details') {
         parent.children = convertDetails(parent.children)
       }
     })
-    unistVisit(tree, 'element', (node, index, parent) => {
+    visit(tree, 'element', (node, index, parent) => {
       if (node.tagName === 'article') {
         node.properties.className = ['text']
         node.children.push({
@@ -219,7 +219,7 @@ function converter() {
           node.properties.className = ['code']
         }
       } else if (/^h[1-3]$/.test(node.tagName) && !node.properties.className) {
-        unistVisit(node, 'element', i => {
+        visit(node, 'element', i => {
           if (i.tagName === 'code') i.noClass = true
         })
         node.properties.className = ['title']
