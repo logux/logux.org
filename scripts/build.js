@@ -40,17 +40,14 @@ async function prepareContent() {
     downloadProject('logux-docs'),
     downloadProject('logux-core'),
     downloadProject('logux-server'),
-    downloadProject('logux-client'),
-    downloadProject('logux-redux'),
-    downloadProject('logux-vuex')
+    downloadProject('logux-client')
   ])
-  let [guides, nodeApi, reduxApi, vuexApi] = await Promise.all([
+  let [guides, nodeApi, webApi] = await Promise.all([
     readDocs(),
     readTypedoc('logux-server', 'logux-core'),
-    readTypedoc('logux-redux', 'logux-client', 'logux-core'),
-    readTypedoc('logux-vuex', 'logux-client', 'logux-core')
+    readTypedoc('logux-client', 'logux-core')
   ])
-  return [guides, nodeApi, reduxApi, vuexApi]
+  return [guides, nodeApi, webApi]
 }
 
 async function build() {
@@ -58,18 +55,17 @@ async function build() {
     await prepareHtml()
     return
   }
-  let [
-    users,
-    [assets, uikit],
-    [guides, nodeApi, reduxApi, vuexApi]
-  ] = await Promise.all([getChatUsers(), prepareHtml(), prepareContent()])
+  let [users, [assets, uikit], [guides, nodeApi, webApi]] = await Promise.all([
+    getChatUsers(),
+    prepareHtml(),
+    prepareContent()
+  ])
   let layout = await createLayout(uikit, users)
   await Promise.all([
     buildDocs(assets, layout, guides),
     buildPages(assets, layout),
     buildApi(assets, layout, 'Node API', nodeApi),
-    buildApi(assets, layout, 'Redux API', reduxApi),
-    buildApi(assets, layout, 'Vuex API', vuexApi)
+    buildApi(assets, layout, 'Web API', webApi)
   ])
   await repackScripts(assets)
   await compressFiles(assets)

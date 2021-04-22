@@ -51,7 +51,10 @@ async function repackScripts(assets) {
     scripts.map(async ([input, output]) => {
       let plugins = [injectProcessEnv({ NODE_ENV: 'production' }), terser()]
       if (output.endsWith('service.js')) {
-        plugins = [replace({ FILES: JSON.stringify(toCache) }), ...plugins]
+        plugins = [
+          replace({ FILES: JSON.stringify(toCache), preventAssignment: true }),
+          ...plugins
+        ]
       }
       let bundle = await rollup({ input, plugins })
       let results = await bundle.generate({ format: 'iife', strict: false })

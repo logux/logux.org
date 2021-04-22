@@ -23,7 +23,6 @@ const EXTERNAL_TYPES = {
   PreloadedState:
     'https://redux.js.org/recipes/' +
     'structuring-reducers/initializing-state/',
-  ReduxStore: 'https://redux.js.org/basics/store',
   Partial:
     'https://www.typescriptlang.org/docs/handbook/' +
     'utility-types.html#partialt',
@@ -34,29 +33,14 @@ const EXTERNAL_TYPES = {
     'https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/' +
     'Using_promises',
   Observable: 'https://github.com/tc39/proposal-observable',
-  ReduxContext: 'https://react-redux.js.org/using-react-redux/accessing-store',
   Process: 'https://nodejs.org/api/process.html#process_process',
   HTTPServer: 'https://nodejs.org/api/http.html#http_class_http_server',
   Unsubscribe: 'https://github.com/ai/nanoevents/#remove-listener',
   Component: 'https://reactjs.org/docs/react-component.html',
-  ActionTree: 'https://vuex.vuejs.org/guide/hot-reload.html',
-  GetterTree: 'https://vuex.vuejs.org/guide/hot-reload.html',
-  ModuleTree: 'https://vuex.vuejs.org/guide/hot-reload.html',
-  MutationTree: 'https://vuex.vuejs.org/guide/hot-reload.html',
   WebSocket: 'https://developer.mozilla.org/en-US/docs/Web/API/WebSocket',
   Map:
     'https://developer.mozilla.org/en-US/docs/Web/JavaScript/' +
     'Reference/Global_Objects/Map',
-  VuexDispatch: 'https://vuex.vuejs.org/api/#dispatch',
-  Module: 'https://vuex.vuejs.org/guide/modules.html',
-  ModuleOptions: 'https://vuex.vuejs.org/guide/modules.html#preserving-state',
-  VuexStoreOptions:
-    'https://vuex.vuejs.org/api/#vuex-store-constructor-options',
-  VuexStore: 'https://vuex.vuejs.org/api/#vuex-store',
-  SubscribeActionOptions: 'https://vuex.vuejs.org/api/#subscribeaction',
-  WatchOptions: 'https://vuex.vuejs.org/api/#watch',
-  CommitOptions: 'https://vuex.vuejs.org/api/#commit',
-  SubscribeOptions: 'https://vuex.vuejs.org/api/#subscribe',
   ComponentType:
     'https://github.com/DefinitelyTyped/DefinitelyTyped/blob/' +
     'master/types/react/index.d.ts#L81',
@@ -64,8 +48,7 @@ const EXTERNAL_TYPES = {
   InjectionKey: 'https://v3.vuejs.org/api/composition-api.html#provide-inject',
   Ref: 'https://v3.vuejs.org/api/refs-api.html#ref',
   ComputedGetter: 'https://v3.vuejs.org/api/computed-watch-api.html#computed',
-  ComputedRef: 'https://v3.vuejs.org/api/computed-watch-api.html#computed',
-  VuexPayload: 'https://vuex.vuejs.org/guide/mutations.html#commit-with-payload'
+  ComputedRef: 'https://v3.vuejs.org/api/computed-watch-api.html#computed'
 }
 
 const SIMPLE_TYPES = new Set([
@@ -344,11 +327,7 @@ function getEditUrl(file) {
 function extendsHtml(parentClasses) {
   if (parentClasses) {
     let name = parentClasses[0].name
-    let symbol = parentClasses[0].symbolFullyQualifiedName
     let link
-    if (symbol && symbol.endsWith('/vuex/types/index".Store')) {
-      name = 'VuexStore'
-    }
     if (SIMPLE_TYPES.has(name)) {
       link = tag('code', name)
     } else if (EXTERNAL_TYPES[name]) {
