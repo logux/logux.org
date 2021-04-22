@@ -48,7 +48,16 @@ const EXTERNAL_TYPES = {
   InjectionKey: 'https://v3.vuejs.org/api/composition-api.html#provide-inject',
   Ref: 'https://v3.vuejs.org/api/refs-api.html#ref',
   ComputedGetter: 'https://v3.vuejs.org/api/computed-watch-api.html#computed',
-  ComputedRef: 'https://v3.vuejs.org/api/computed-watch-api.html#computed'
+  ComputedRef: 'https://v3.vuejs.org/api/computed-watch-api.html#computed',
+  LogFn: 'https://getpino.io/#/docs/api?id=logging-method-parameters',
+  IncomingMessage:
+    'https://nodejs.org/api/http.html#http_class_http_incomingmessage',
+  ServerResponse:
+    'https://nodejs.org/api/http.html#http_class_http_serverresponse',
+  RequestInit:
+    'https://developer.mozilla.org/en-US/docs/Web/API/' +
+    'WindowOrWorkerGlobalScope/fetch',
+  Emitter: 'https://github.com/ai/nanoevents'
 }
 
 const SIMPLE_TYPES = new Set([
@@ -63,7 +72,8 @@ const SIMPLE_TYPES = new Set([
   'number',
   'any',
   'ExtendedVue',
-  'Store'
+  'Store',
+  'Omit'
 ])
 
 const HIDE_CONSTRUCTOR = new Set([
@@ -312,6 +322,11 @@ function typeHtml(ctx, type) {
     ]
   } else if (type.type === 'query') {
     return [{ type: 'text', value: 'typeof ' }, ...typeHtml(type.queryType)]
+  } else if (type.type === 'predicate') {
+    return [
+      { type: 'text', value: type.name + ' is ' },
+      ...typeHtml(type.targetType)
+    ]
   } else {
     console.error(type)
     throw new Error(`Unknown type ${type.type}`)
