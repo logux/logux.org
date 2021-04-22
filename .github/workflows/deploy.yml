@@ -15,7 +15,7 @@ jobs:
       - name: Install Node.js
         uses: actions/setup-node@v1
         with:
-          node-version: '14'
+          node-version: 16
       - name: Install build dependencies
         run: yarn install --production
       - name: Build static files
