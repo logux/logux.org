@@ -20,6 +20,7 @@ import buildPages from './steps/build-pages.js'
 import buildDocs from './steps/build-docs.js'
 import readDocs from './steps/read-docs.js'
 import buildApi from './steps/build-api.js'
+import { exitOnErrors } from './lib/errors.js'
 
 dotenv.config()
 
@@ -68,6 +69,7 @@ async function build() {
     buildApi(assets, layout, 'Node API', nodeApi),
     buildApi(assets, layout, 'Web API', webApi)
   ])
+  exitOnErrors()
   await repackScripts(assets)
   await compressFiles(assets)
 }

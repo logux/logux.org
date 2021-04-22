@@ -74,6 +74,7 @@ const SIMPLE_TYPES = new Set([
   'ExtendedVue',
   'Store',
   'Omit',
+  'Pick',
   'Readonly'
 ])
 

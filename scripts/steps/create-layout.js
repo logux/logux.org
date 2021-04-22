@@ -5,6 +5,7 @@ import unistVisit from 'unist-util-visit'
 import slugify from 'slugify'
 import unified from 'unified'
 
+import { addError } from '../lib/errors.js'
 import wrap from '../lib/spinner.js'
 
 const SMALL_WORDS = /(^|\s)(the|a|for|in|an|to|if|so|when|with|by|and|or|is|this|any|from) /gi
@@ -53,7 +54,7 @@ function checker(title) {
     unistVisit(tree, 'element', node => {
       let id = node.properties.id
       if (id) {
-        if (ids.has(id)) throw new Error(`Dublicate ID #${id} in ${title}`)
+        if (ids.has(id)) addError(`Dublicate ID #${id} in ${title}`)
         ids.add(id)
       }
     })
@@ -61,7 +62,7 @@ function checker(title) {
       let href = node.properties.href
       if (href && href.startsWith('#')) {
         if (!ids.has(href.slice(1))) {
-          throw new Error(`${title.slice(0, -3)} has no ${href} ID`)
+          addError(`${title.slice(0, -3)} has no ${href} ID`)
         }
       }
     })
