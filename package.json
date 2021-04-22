@@ -5,8 +5,9 @@
     "start": "parcel serve src/uikit.pug --open",
     "lint": "eslint . && stylelint src/**/*.sss",
     "test": "yarn lint && yarn build && size-limit",
-    "clean": "del-cli dist/ .cache",
-    "build": "NODE_ENV=production ./scripts/build.js"
+    "clean": "del-cli dist/ .cache/",
+    "build": "NODE_ENV=production ./scripts/build.js",
+    "start:build": "serve dist/"
   },
   "dependencies": {
     "@babel/core": "^7.13.16",
@@ -72,6 +73,7 @@
     "eslint-plugin-unicorn": "^30.0.0",
     "lint-staged": "^10.5.4",
     "prettier": "^2.2.1",
+    "serve": "^11.3.2",
     "simple-git-hooks": "^2.3.1",
     "size-limit": "^4.10.2",
     "stylelint": "^13.12.0",
