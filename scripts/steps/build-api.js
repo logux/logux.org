@@ -73,7 +73,8 @@ const SIMPLE_TYPES = new Set([
   'any',
   'ExtendedVue',
   'Store',
-  'Omit'
+  'Omit',
+  'Readonly'
 ])
 
 const HIDE_CONSTRUCTOR = new Set([
