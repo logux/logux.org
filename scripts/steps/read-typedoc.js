@@ -31,18 +31,19 @@ export default async function readTypedoc(...projects) {
   let docs = await run(`Generating ${type} TypeDoc`, async () => {
     let app = new TypeDoc.Application()
     app.bootstrap({
-      ignoreCompilerErrors: true,
-      includeDeclarations: true,
-      excludeExternals: true,
+      entryPoints: files.flat(),
+      tsconfig: join(PROJECTS, 'logux-core', 'tsconfig.json'),
+      excludeExternals: true
+    })
+    app.options.setCompilerOptions(files.flat(), {
       esModuleInterop: true
     })
-    let { errors, project } = app.converter.convert(files.flat())
-    if (errors.length > 0) {
-      console.error(`Error during ${type} types generation`)
-      throw new Error(errors[0].messageText)
+    let project = app.convert()
+    if (!project || app.logger.hasErrors()) {
+      throw new Error(`Error during ${type} types generation`)
     }
     if (!project.children) {
-      throw new Error(JSON.stringify(project))
+      throw new Error(`${type} types are empty`)
     }
     let nodes = []
     for (let file of project.children) {

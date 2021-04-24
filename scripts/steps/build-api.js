@@ -5,6 +5,7 @@ import remarkRehype from 'remark-rehype'
 import makeDir from 'make-dir'
 import slugify from 'slugify'
 import remark from 'remark'
+import ts from 'typescript'
 
 import { step } from '../lib/spinner.js'
 import { DIST } from '../lib/dirs.js'
@@ -74,7 +75,7 @@ const SIMPLE_TYPES = new Set([
   'RegExp',
   'Error',
   'Array',
-  'function',
+  'Function',
   'boolean',
   'string',
   'object',
@@ -89,10 +90,6 @@ const HIDE_CONSTRUCTOR = new Set([
   'TestLog'
 ])
 
-const TEMPLATELESS = new Set(['ActionIterator', 'ActionListener', 'Log'])
-
-const INLINE_TYPES = new Set(['NodeState'])
-
 const EMPTY = { type: 'text', value: '' }
 const OPTIONAL = [
   { type: 'text', value: ' ' },
@@ -103,6 +100,8 @@ const OPTIONAL = [
     children: [{ type: 'text', value: '?' }]
   }
 ]
+
+const IGNORE_TYPES = new Set(['DefineAction'])
 
 function toSlug(type) {
   let slug = type
@@ -153,20 +152,6 @@ function toHtml(content) {
   return remarkRehype()(tree).children
 }
 
-function toText(nodes) {
-  return nodes
-    .map(node => {
-      if (node.type === 'text') {
-        return node.value
-      } else if (node.children) {
-        return toText(node.children)
-      } else {
-        return ''
-      }
-    })
-    .join('')
-}
-
 function joinTags(separator, tags) {
   return tags.flatMap((el, index) => {
     if (index === tags.length - 1) {
@@ -191,7 +176,7 @@ function declHtml(ctx, decl) {
     type = [
       { type: 'text', value: `[${index.parameters[0].name}: ` },
       ...typeHtml(ctx, index.parameters[0].type),
-      { type: 'text', value: ']: ' },
+      { type: 'text', value: ']: ' },
       ...typeHtml(ctx, index.type)
     ]
   } else if (decl.signatures) {
@@ -230,42 +215,97 @@ function declHtml(ctx, decl) {
   }
 }
 
+function findTypeTemplate(type, name) {
+  if (!type) {
+    return null
+  } else if (type.valueDeclaration && type.valueDeclaration.typeParameters) {
+    let param = type.valueDeclaration.typeParameters.find(i => {
+      return i.name.escapedText === name
+    })
+    if (param) return param
+  }
+  return findTypeTemplate(type.parent, name)
+}
+
+function typeLink(ctx, name) {
+  if (name === 'Meta') {
+    if (ctx.file === 'node-api') {
+      return typeHtml(ctx, { type: 'reference', name: 'ServerMeta' })
+    } else {
+      return typeHtml(ctx, { type: 'reference', name: 'ClientMeta' })
+    }
+  } else if (SIMPLE_TYPES.has(name)) {
+    return [{ type: 'text', value: name }]
+  } else if (EXTERNAL_TYPES[name]) {
+    return [
+      tag('a', name, {
+        properties: { href: EXTERNAL_TYPES[name] }
+      })
+    ]
+  } else {
+    return [
+      tag('a', name, {
+        properties: { href: '#' + toSlug(name) }
+      })
+    ]
+  }
+}
+
+function tsKindHtml(ctx, tsType) {
+  if (tsType.kind === ts.SyntaxKind.TypeReference) {
+    return typeLink(ctx, tsType.typeName.escapedText)
+  } else if (tsType.kind === ts.SyntaxKind.ObjectKeyword) {
+    return [{ type: 'text', value: 'object' }]
+  } else if (tsType.kind === ts.SyntaxKind.StringKeyword) {
+    return [{ type: 'text', value: 'string' }]
+  } else if (tsType.kind === ts.SyntaxKind.AnyKeyword) {
+    return [{ type: 'text', value: 'any' }]
+  } else if (tsType.kind === ts.SyntaxKind.UnionType) {
+    return joinTags(
+      ' | ',
+      tsType.types.map(i => tsKindHtml(ctx, i))
+    )
+  } else if (tsType.operator === ts.SyntaxKind.KeyOfKeyword) {
+    return [{ type: 'text', value: 'keyof ' }, ...tsKindHtml(ctx, tsType.type)]
+  } else if (tsType.kind === ts.SyntaxKind.ArrayType) {
+    return [
+      ...tsKindHtml(ctx, tsType.elementType),
+      { type: 'text', value: '[]' }
+    ]
+  } else {
+    console.log(tsType)
+    throw new Error('Unknown TS kind ' + ts.SyntaxKind[tsType.kind])
+  }
+}
+
 function typeHtml(ctx, type) {
   if (!type) {
     return []
   } else if (type.type === 'reference') {
-    if (INLINE_TYPES.has(type.name)) {
-      return typeHtml(ctx, type.reflection.type)
+    let target = type._target
+    if (target) {
+      let template = findTypeTemplate(target, type.name)
+      if (!template && target.declarations && target.declarations.length > 0) {
+        template = target.declarations[0]
+      }
+      if (template) {
+        if (template.constraint) {
+          return tsKindHtml(ctx, template.constraint)
+        } else if (template.default) {
+          return tsKindHtml(ctx, template.default)
+        }
+      }
     }
-    let result
-    if (SIMPLE_TYPES.has(type.name)) {
-      result = [{ type: 'text', value: type.name }]
-    } else if (EXTERNAL_TYPES[type.name]) {
-      result = [
-        tag('a', type.name, {
-          properties: { href: EXTERNAL_TYPES[type.name] }
-        })
+    if (type.name === 'Record') {
+      return [
+        { type: 'text', value: '{ [key: ' },
+        ...typeHtml(ctx, type.typeArguments[0]),
+        { type: 'text', value: ']: ' },
+        ...typeHtml(ctx, type.typeArguments[1]),
+        { type: 'text', value: ' }' }
       ]
-    } else {
-      result = [
-        tag('a', type.name, {
-          properties: { href: '#' + toSlug(type.name) }
-        })
-      ]
     }
-    if (type.typeArguments && !TEMPLATELESS.has(type.name)) {
-      let body = joinTags(
-        ', ',
-        type.typeArguments.map(i => typeHtml(ctx, i))
-      )
-      let open = '<'
-      if (toText(body).length > 25) open = ' <'
-      result.push({ type: 'text', value: open }, ...body, {
-        type: 'text',
-        value: '>'
-      })
-    }
-    return result
+    return typeLink(ctx, type.name)
   } else if (type.type === 'stringLiteral') {
     return [
       tag('span', `'${type.value}'`, {
@@ -273,13 +313,6 @@ function typeHtml(ctx, type) {
       })
     ]
   } else if (type.type === 'intrinsic' || type.type === 'typeParameter') {
-    if (type.name === 'M') {
-      if (ctx.file === 'node-api') {
-        return typeHtml(ctx, { type: 'reference', name: 'ServerMeta' })
-      } else {
-        return typeHtml(ctx, { type: 'reference', name: 'ClientMeta' })
-      }
-    }
     return [{ type: 'text', value: type.name }]
   } else if (type.type === 'indexedAccess') {
     return [
@@ -333,6 +366,12 @@ function typeHtml(ctx, type) {
       { type: 'text', value: type.name + ' is ' },
       ...typeHtml(type.targetType)
     ]
+  } else if (type.type === 'literal') {
+    return [{ type: 'text', value: JSON.stringify(type.value) }]
+  } else if (type.type === 'optional') {
+    return [...typeHtml(type.elementType), { type: 'text', value: '?' }]
+  } else if (type.type === 'rest') {
+    return [{ type: 'text', value: '...' }, ...typeHtml(type.elementType)]
   } else {
     console.error(type)
     throw new Error(`Unknown type ${type.type}`)
@@ -427,9 +466,17 @@ function tableHtml(ctx, name, list) {
         } else {
           type = typeHtml(ctx, i.type)
         }
+        let itemName = i.name
+        if (i.kindString === 'Index signature') {
+          itemName = [
+            { type: 'text', value: '[' },
+            ...declHtml(ctx, i.parameters[0]),
+            { type: 'text', value: ']' }
+          ]
+        }
         return tag('tr', [
           tag('td', [
-            tag('code', i.name),
+            tag('code', itemName),
             ...(i.flags.isOptional ? OPTIONAL : [EMPTY])
           ]),
           tag('td', [tag('code', type, { noClass: true })]),
@@ -448,30 +495,11 @@ function methodArgs(node) {
   return `(${args})`
 }
 
-function paramsHtml(ctx, node) {
+function paramsHtml(ctx, node, name = 'Parameter') {
   if (!node.signatures) return []
   return node.signatures
-    .filter(i => i.parameters)
-    .flatMap(i => tableHtml(ctx, 'Parameter', i.parameters))
-}
-
-function templatesHtml(ctx, node) {
-  if (!node.signatures) return []
-  let templates = node.signatures.filter(
-    signature =>
-      signature.typeParameters &&
-      signature.typeParameters.some(type => type.comment)
-  )
-  if (templates.length > 0) {
-    return [
-      tag('p', 'Type templates for TypeScript:'),
-      ...templates.map(i => {
-        return tableHtml(ctx, 'Templates', i.typeParameters)[0]
-      })
-    ]
-  } else {
-    return []
-  }
+    .filter(i => i.parameters && i.parameters.length > 0)
+    .flatMap(i => tableHtml(ctx, name, i.parameters))
 }
 
 function membersHtml(ctx, className, members, separator) {
@@ -504,8 +532,7 @@ function membersHtml(ctx, className, members, separator) {
         }),
         ...commentHtml(comment),
         ...propTypeHtml(ctx, member.type),
-        ...paramsHtml(ctx, member),
-        ...templatesHtml(ctx, member),
+        ...paramsHtml(ctx, member, 'Argument'),
         ...returnsHtml(ctx, member)
       ])
     })
@@ -548,7 +575,7 @@ function functionHtml(ctx, node) {
       }
     ),
     ...commentHtml(node.signatures[0].comment),
-    ...paramsHtml(ctx, node),
+    ...paramsHtml(ctx, node, 'Argument'),
     ...returnsHtml(ctx, node),
     ...membersHtml(ctx, node.name, node.children, '#')
   ])
@@ -566,7 +593,15 @@ function getChildren(type) {
 
 function variableHtml(ctx, node) {
   let body = []
-  if (node.type) {
+  if (node.indexSignature) {
+    body = tableHtml(
+      ctx,
+      'Property',
+      (node.children || []).concat([node.indexSignature])
+    )
+  } else if (node.children) {
+    body = tableHtml(ctx, 'Property', node.children)
+  } else if (node.type) {
     let type = node.type
     if (
       type.declaration &&
@@ -584,10 +619,7 @@ function variableHtml(ctx, node) {
         ...getChildren(type.types[0]),
         ...type.types[1].declaration.children
       ])
-      if (
-        type.types[0].reflection &&
-        !INLINE_TYPES.has(type.types[0].reflection.type.name)
-      ) {
+      if (type.types[0].reflection) {
         body = [
           tag('p', [
             { type: 'text', value: 'Extends ' },
@@ -615,7 +647,6 @@ function variableHtml(ctx, node) {
 }
 
 function toTree(ctx, nodes) {
-  nodes = nodes.filter(i => !INLINE_TYPES.has(i.name))
   let tree = {
     type: 'root',
     children: nodes
@@ -632,6 +663,7 @@ function toTree(ctx, nodes) {
           ...items
             .sort(byName)
             .filter(i => !SIMPLE_TYPES.has(i.name))
+            .filter(i => !IGNORE_TYPES.has(i.name))
             .map(i => {
               if (i.signatures) {
                 return functionHtml(ctx, i)
