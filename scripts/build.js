@@ -40,6 +40,7 @@ async function prepareContent() {
   await installTypes(() => [
     downloadProject('logux-docs'),
     downloadProject('logux-core'),
+    downloadProject('logux-state'),
     downloadProject('logux-server'),
     downloadProject('logux-client'),
     downloadProject('logux-actions')
@@ -47,7 +48,7 @@ async function prepareContent() {
   let [guides, nodeApi, webApi] = await Promise.all([
     readDocs(),
     readTypedoc('logux-server', 'logux-actions', 'logux-core'),
-    readTypedoc('logux-client', 'logux-actions', 'logux-core')
+    readTypedoc('logux-state', 'logux-client', 'logux-actions', 'logux-core')
   ])
   return [guides, nodeApi, webApi]
 }

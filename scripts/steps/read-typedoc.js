@@ -36,7 +36,8 @@ export default async function readTypedoc(...projects) {
       excludeExternals: true
     })
     app.options.setCompilerOptions(files.flat(), {
-      esModuleInterop: true
+      esModuleInterop: true,
+      skipLibCheck: true
     })
     let project = app.convert()
     if (!project || app.logger.hasErrors()) {

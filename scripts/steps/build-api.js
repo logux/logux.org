@@ -19,38 +19,12 @@ const KINDS = [
 ]
 
 const EXTERNAL_TYPES = {
-  Reducer: 'https://redux.js.org/basics/reducers/',
-  StoreEnhancer: 'https://redux.js.org/advanced/middleware',
-  PreloadedState:
-    'https://redux.js.org/recipes/' +
-    'structuring-reducers/initializing-state/',
-  Partial:
-    'https://www.typescriptlang.org/docs/handbook/' +
-    'utility-types.html#partialt',
-  ReturnType:
-    'https://www.typescriptlang.org/docs/handbook/' +
-    'utility-types.html#returntypet',
-  Omit:
-    'https://www.typescriptlang.org/docs/handbook/' +
-    'utility-types.html#omittype-keys',
-  Pick:
-    'https://www.typescriptlang.org/docs/handbook/' +
-    'utility-types.html#picktype-keys',
-  Readonly:
-    'https://www.typescriptlang.org/docs/handbook/' +
-    'utility-types.html#readonlytype',
-  Promise:
-    'https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/' +
-    'Using_promises',
   Observable: 'https://github.com/tc39/proposal-observable',
   Process: 'https://nodejs.org/api/process.html#process_process',
   HTTPServer: 'https://nodejs.org/api/http.html#http_class_http_server',
   Unsubscribe: 'https://github.com/ai/nanoevents/#remove-listener',
   Component: 'https://reactjs.org/docs/react-component.html',
   WebSocket: 'https://developer.mozilla.org/en-US/docs/Web/API/WebSocket',
-  Map:
-    'https://developer.mozilla.org/en-US/docs/Web/JavaScript/' +
-    'Reference/Global_Objects/Map',
   ComponentType:
     'https://github.com/DefinitelyTyped/DefinitelyTyped/blob/' +
     'master/types/react/index.d.ts#L81',
@@ -67,7 +41,14 @@ const EXTERNAL_TYPES = {
   RequestInit:
     'https://developer.mozilla.org/en-US/docs/Web/API/' +
     'WindowOrWorkerGlobalScope/fetch',
-  Emitter: 'https://github.com/ai/nanoevents'
+  fetch:
+    'https://developer.mozilla.org/en-US/docs/Web/API/' +
+    'WindowOrWorkerGlobalScope/fetch',
+  Emitter: 'https://github.com/ai/nanoevents',
+  FC:
+    'https://react-typescript-cheatsheet.netlify.app/docs/' +
+    'basic/getting-started/function_components',
+  ReactContext: 'https://reactjs.org/docs/context.html'
 }
 
 const SIMPLE_TYPES = new Set([
@@ -80,7 +61,21 @@ const SIMPLE_TYPES = new Set([
   'string',
   'object',
   'number',
-  'any'
+  'any',
+  'StoreValue',
+  'StoreValues'
+])
+
+const UTILITY_TYPES = new Set([
+  'Map',
+  'Readonly',
+  'Promise',
+  'Partial',
+  'Pick',
+  'Exclude',
+  'Omit',
+  'ReturnType',
+  'Ref'
 ])
 
 const HIDE_CONSTRUCTOR = new Set([
@@ -101,7 +96,17 @@ const OPTIONAL = [
   }
 ]
 
-const IGNORE_TYPES = new Set(['DefineAction'])
+const IGNORE_TYPES = new Set(['DefineAction', 'BuilderValue', 'Vue.Refable'])
+const IGNORE_TYPE_TEMPLATES = new Set(['StoreExt'])
+const REPLACE_TYPE_TEMPLATE = {
+  AppPages: 'Pages',
+  Value: 'SyncMapValues'
+}
+const UNWRAP_UTILITIES = new Set([
+  'ReadonlyIfObject',
+  'DeepReadonly',
+  'Readonly'
+])
 
 function toSlug(type) {
   let slug = type
@@ -253,7 +258,35 @@ function typeLink(ctx, name) {
 
 function tsKindHtml(ctx, tsType) {
   if (tsType.kind === ts.SyntaxKind.TypeReference) {
-    return typeLink(ctx, tsType.typeName.escapedText)
+    let name = tsType.typeName.escapedText
+    if (name === 'Record') {
+      return [
+        { type: 'text', value: '{ [key: ' },
+        ...tsKindHtml(ctx, tsType.typeArguments[0]),
+        { type: 'text', value: ']: ' },
+        ...tsKindHtml(ctx, tsType.typeArguments[1]),
+        { type: 'text', value: ' }' }
+      ]
+    }
+    if (UNWRAP_UTILITIES.has(tsType.name)) {
+      return tsKindHtml(ctx, tsType.typeArguments[0])
+    }
+    if (UTILITY_TYPES.has(name)) {
+      return [
+        { type: 'text', value: name + '<' },
+        ...joinTags(
+          ',',
+          tsType.typeArguments.map(i => tsKindHtml(ctx, i))
+        ),
+        { type: 'text', value: '>' }
+      ]
+    }
+    if (REPLACE_TYPE_TEMPLATE[name]) {
+      return typeLink(ctx, REPLACE_TYPE_TEMPLATE[name])
+    }
+    return typeLink(ctx, name)
+  } else if (tsType.kind === ts.SyntaxKind.UndefinedKeyword) {
+    return [{ type: 'text', value: 'undefined' }]
   } else if (tsType.kind === ts.SyntaxKind.ObjectKeyword) {
     return [{ type: 'text', value: 'object' }]
   } else if (tsType.kind === ts.SyntaxKind.StringKeyword) {
@@ -272,6 +305,8 @@ function tsKindHtml(ctx, tsType) {
       ...tsKindHtml(ctx, tsType.elementType),
       { type: 'text', value: '[]' }
     ]
+  } else if (tsType.kind === ts.SyntaxKind.LiteralType) {
+    return [{ type: 'text', value: JSON.stringify(tsType.literal.text) }]
   } else {
     console.log(tsType)
     throw new Error('Unknown TS kind ' + ts.SyntaxKind[tsType.kind])
@@ -283,6 +318,45 @@ function typeHtml(ctx, type) {
     return []
   } else if (type.type === 'reference') {
     let target = type._target
+
+    if (type.name === 'Record') {
+      return [
+        { type: 'text', value: '{ [key: ' },
+        ...typeHtml(ctx, type.typeArguments[0]),
+        { type: 'text', value: ']: ' },
+        ...typeHtml(ctx, type.typeArguments[1]),
+        { type: 'text', value: ' }' }
+      ]
+    }
+    if (type.name === 'Refable') {
+      return [
+        { type: 'text', value: 'Ref<' },
+        ...typeHtml(ctx, type.typeArguments[0]),
+        { type: 'text', value: '> | ' },
+        ...typeHtml(ctx, type.typeArguments[0])
+      ]
+    }
+    if (UNWRAP_UTILITIES.has(type.name)) {
+      return typeHtml(ctx, type.typeArguments[0])
+    }
+    if (
+      type.name === 'Promise' &&
+      type.typeArguments.length === 1 &&
+      type.typeArguments[0].name === 'void'
+    ) {
+      return [{ type: 'text', value: 'Promise' }]
+    }
+    if (UTILITY_TYPES.has(type.name)) {
+      return [
+        { type: 'text', value: type.name + '<' },
+        ...joinTags(
+          ',',
+          type.typeArguments.map(i => typeHtml(ctx, i))
+        ),
+        { type: 'text', value: '>' }
+      ]
+    }
+
     if (target) {
       let template = findTypeTemplate(target, type.name)
       if (!template && target.declarations && target.declarations.length > 0) {
@@ -295,15 +369,6 @@ function typeHtml(ctx, type) {
           return tsKindHtml(ctx, template.default)
         }
       }
-    }
-    if (type.name === 'Record') {
-      return [
-        { type: 'text', value: '{ [key: ' },
-        ...typeHtml(ctx, type.typeArguments[0]),
-        { type: 'text', value: ']: ' },
-        ...typeHtml(ctx, type.typeArguments[1]),
-        { type: 'text', value: ' }' }
-      ]
     }
     return typeLink(ctx, type.name)
   } else if (type.type === 'stringLiteral') {
@@ -342,7 +407,9 @@ function typeHtml(ctx, type) {
   } else if (type.type === 'intersection') {
     return joinTags(
       ' & ',
-      type.types.map(i => typeHtml(ctx, i))
+      type.types
+        .filter(i => !IGNORE_TYPE_TEMPLATES.has(i.name))
+        .map(i => typeHtml(ctx, i))
     )
   } else if (type.type === 'conditional') {
     return [
@@ -360,18 +427,29 @@ function typeHtml(ctx, type) {
       ...typeHtml(ctx, type.target)
     ]
   } else if (type.type === 'query') {
-    return [{ type: 'text', value: 'typeof ' }, ...typeHtml(type.queryType)]
+    return [
+      { type: 'text', value: 'typeof ' },
+      ...typeHtml(ctx, type.queryType)
+    ]
   } else if (type.type === 'predicate') {
     return [
       { type: 'text', value: type.name + ' is ' },
-      ...typeHtml(type.targetType)
+      ...typeHtml(ctx, type.targetType)
     ]
   } else if (type.type === 'literal') {
     return [{ type: 'text', value: JSON.stringify(type.value) }]
   } else if (type.type === 'optional') {
     return [...typeHtml(type.elementType), { type: 'text', value: '?' }]
   } else if (type.type === 'rest') {
-    return [{ type: 'text', value: '...' }, ...typeHtml(type.elementType)]
+    return [{ type: 'text', value: '...' }, ...typeHtml(ctx, type.elementType)]
+  } else if (type.type === 'mapped') {
+    return [
+      { type: 'text', value: `{ [${type.parameter}: ` },
+      ...typeHtml(ctx, type.parameterType),
+      { type: 'text', value: `]${type.optionalModifier ? '?' : ''}: ` },
+      ...typeHtml(ctx, type.templateType),
+      { type: 'text', value: ` }` }
+    ]
   } else {
     console.error(type)
     throw new Error(`Unknown type ${type.type}`)
@@ -591,6 +669,10 @@ function getChildren(type) {
   }
 }
 
+function isSource(node, project) {
+  return node.sources.some(i => i.fileName.includes(project))
+}
+
 function variableHtml(ctx, node) {
   let body = []
   if (node.indexSignature) {
@@ -664,6 +746,14 @@ function toTree(ctx, nodes) {
             .sort(byName)
             .filter(i => !SIMPLE_TYPES.has(i.name))
             .filter(i => !IGNORE_TYPES.has(i.name))
+            .filter(i => !UTILITY_TYPES.has(i.name))
+            .filter(i => !UNWRAP_UTILITIES.has(i.name))
+            .filter(i => {
+              return !(
+                (i.name === 'SyncMapValues' || i.name === 'SyncMapTypes') &&
+                isSource(i, 'logux-state')
+              )
+            })
             .map(i => {
               if (i.signatures) {
                 return functionHtml(ctx, i)
@@ -712,6 +802,16 @@ export default async function buildApi(assets, layout, title, nodes) {
 
   let end = step(`Building ${title} HTML`)
   let ctx = { file }
+
+  if (title === 'Web API') {
+    for (let node of nodes) {
+      if (isSource(node, join('logux-state', 'vue'))) {
+        node.name = 'Vue.' + node.name
+      } else if (isSource(node, join('logux-state', 'react'))) {
+        node.name = 'React.' + node.name
+      }
+    }
+  }
 
   await makeDir(dirname(path))
   let tree = toTree(ctx, nodes)
