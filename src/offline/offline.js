@@ -1,7 +1,7 @@
 import isSaveDate from '../../lib/is-save-data.js'
 
 function init() {
-  navigator.serviceWorker.register('/service.js')
+  navigator.serviceWorker.register('../service.js')
 }
 
 let forceOffline = location.search.includes('offline')

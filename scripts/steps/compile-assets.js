@@ -1,27 +1,26 @@
+import parcelCore from '@parcel/core'
 import { join } from 'path'
-import Bundler from 'parcel-bundler'
+import globby from 'globby'
 
-import { SRC } from '../lib/dirs.js'
+import { SRC, ROOT, DIST } from '../lib/dirs.js'
 import wrap from '../lib/spinner.js'
 import hash from '../lib/hash.js'
 
-function findAssets(step) {
-  return Array.from(step.childBundles).reduce(
-    (all, i) => {
-      return all.concat(findAssets(i))
-    },
-    [step.name]
-  )
-}
+let Parcel = parcelCore.default
 
 async function compileAssets() {
   let pugTemplate = join(SRC, 'uikit.pug')
-  let uikitBundler = new Bundler(pugTemplate, {
-    sourceMaps: false,
-    logLevel: 2
+  let bundler = new Parcel({
+    entries: pugTemplate,
+    shouldPatchConsole: false,
+    defaultConfig: join(ROOT, 'node_modules', '@parcel', 'config-default'),
+    mode: 'production',
+    defaultTargetOptions: {
+      sourceMaps: false
+    }
   })
-  let bundle = await uikitBundler.bundle()
-  let assets = findAssets(bundle)
+  await bundler.run()
+  let assets = await globby(join(DIST, '*'))
   let hashes = {}
   return {
     map(fn) {

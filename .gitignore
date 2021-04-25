@@ -1,6 +1,6 @@
 node_modules/
 yarn-error.log
 
-.cache/
+.parcel-cache/
 dist/
 .env

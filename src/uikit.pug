@@ -8,17 +8,17 @@ html( lang="en" )
     meta( charset="utf-8" )
     title Logux.io UI Kit
     meta( name="viewport" content="width=device-width" )
-    link( rel="icon" href="/base/favicon.svg" type="image/svg+xml" )
-    link( rel="apple-touch-icon" href="/base/apple.png" )
+    link( rel="icon" href="./base/favicon.svg" type="image/svg+xml" )
+    link( rel="apple-touch-icon" href="./base/apple.png" )
     meta( name="apple-mobile-web-app-title" content="Logux" )
     meta( name="description" content="Logux is a client-server communication tool for collaborative web applications with optimistics UI, offline first and live updates" )
-    script( defer src="/common.js" )
-    script( defer src="/switcher.js" )
-    link( rel="stylesheet" href="/common.sss" )
-    link( rel="stylesheet" href="/switcher.sss" )
-    link( rel="stylesheet" href="/branding.sss" )
-    link( rel="stylesheet" href="/video.sss" )
-    meta( property="og:image" content="/base/og.png" )
+    script( defer src="./common.js" )
+    script( defer src="./switcher.js" )
+    link( rel="stylesheet" href="./common.sss" )
+    link( rel="stylesheet" href="./switcher.sss" )
+    link( rel="stylesheet" href="./branding.sss" )
+    link( rel="stylesheet" href="./video.sss" )
+    meta( property="og:image" content="./base/og.png" )
     link( rel="preconnect" href="https://sidecar.gitter.im/" media="(min-width:941px)" )
   body.layout
     nav.layout_aside
@@ -29,8 +29,8 @@ html( lang="en" )
           li
             a.menu_home( rel="home" href="/" )
               picture.menu_logotype
-                source( srcset="/menu/logotype-dark.svg" media="(prefers-color-scheme: dark)" )
-                img( src="/menu/logotype-light.svg" alt="Logux logotype" height="117" width="78" )
+                source( srcset="./menu/logotype-dark.svg" media="(prefers-color-scheme: dark)" )
+                img( src="./menu/logotype-light.svg" alt="Logux logotype" height="117" width="78" )
             .menu_separator
           li
             a.menu_link.is-current( href="/guide/architecture/core/" ) Guide

@@ -4,12 +4,12 @@ import { red } from 'colorette'
 import dotenv from 'dotenv'
 
 import generateWebManifest from './steps/generate-web-manifest.js'
+import injectCacheBuster from './steps/inject-cache-buster.js'
 import downloadProject from './steps/download-project.js'
 import cleanBuildDir from './steps/clean-build-dir.js'
 import copyWellKnown from './steps/copy-well-known.js'
 import compressFiles from './steps/compress-files.js'
 import compileAssets from './steps/compile-assets.js'
-import repackScripts from './steps/repack-scripts.js'
 import getChatUsers from './steps/get-chat-users.js'
 import repackStyles from './steps/repack-styles.js'
 import createLayout from './steps/create-layout.js'
@@ -71,7 +71,7 @@ async function build() {
     buildApi(assets, layout, 'Web API', webApi)
   ])
   exitOnErrors()
-  await repackScripts(assets)
+  await injectCacheBuster(assets)
   await compressFiles(assets)
 }
 
