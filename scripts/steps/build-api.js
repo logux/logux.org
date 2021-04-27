@@ -748,12 +748,6 @@ function toTree(ctx, nodes) {
             .filter(i => !IGNORE_TYPES.has(i.name))
             .filter(i => !UTILITY_TYPES.has(i.name))
             .filter(i => !UNWRAP_UTILITIES.has(i.name))
-            .filter(i => {
-              return !(
-                (i.name === 'SyncMapValues' || i.name === 'SyncMapTypes') &&
-                isSource(i, 'logux-state')
-              )
-            })
             .map(i => {
               if (i.signatures) {
                 return functionHtml(ctx, i)
