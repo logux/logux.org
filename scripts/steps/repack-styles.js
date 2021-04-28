@@ -9,6 +9,7 @@ async function repackStyles(assets) {
   let collected = []
   let fileCollector = postcssUrl({
     url({ url }, dir, ops, decl) {
+      if (url[0] !== '/') url = '/' + url
       let media = decl.parent.parent
       let rule = decl.parent
       if (media && media.name === 'media') {
