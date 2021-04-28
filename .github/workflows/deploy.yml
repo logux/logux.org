@@ -46,7 +46,7 @@ jobs:
         run: wget --page-requisites https://logux.io
       - name: Audit website
         if: "!steps.hash.outputs.noChanges"
-        uses: treosh/lighthouse-ci-action@v2
+        uses: treosh/lighthouse-ci-action@v7
         with:
           runs: 3
           temporaryPublicStorage: true
