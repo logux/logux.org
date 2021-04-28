@@ -49,11 +49,6 @@ jobs:
         uses: treosh/lighthouse-ci-action@v7
         with:
           runs: 3
+          uploadArtifacts: true
           temporaryPublicStorage: true
           configPath: ./lighthouserc.json
-      - name: Save audit results
-        if: "!steps.hash.outputs.noChanges"
-        uses: actions/upload-artifact@v1
-        with:
-          name: lighthouse-results
-          path: '.lighthouseci'
