@@ -35,6 +35,7 @@ async function injectCacheBuster(assets) {
       .map(i => assets.hash(join(DIST, i)))
       .join()
   )
+  serviceCode = serviceCode.toString().replace('FILES', JSON.stringify(toCache))
 
   await fs.writeFile(servivePath, `'${cacheBuster}';${serviceCode}`)
 }
