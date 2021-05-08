@@ -9,7 +9,7 @@
     "start": "parcel serve src/uikit.pug --open",
     "lint": "eslint . && stylelint src/**/*.sss",
     "test": "yarn lint && yarn build && size-limit",
-    "clean": "del-cli dist/ .parcel-cache/",
+    "clean": "rm -R dist/ .parcel-cache/",
     "build": "NODE_ENV=production ./scripts/build.js",
     "start:build": "serve dist/"
   },
@@ -73,7 +73,6 @@
     "@size-limit/file": "^4.10.2",
     "@typescript-eslint/eslint-plugin": "^4.22.1",
     "@typescript-eslint/parser": "^4.22.1",
-    "del-cli": "^3.0.1",
     "eslint": "^7.26.0",
     "eslint-config-standard": "^16.0.2",
     "eslint-plugin-import": "^2.22.1",
