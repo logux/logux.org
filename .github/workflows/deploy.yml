@@ -13,11 +13,13 @@ jobs:
       - name: Checkout the repository
         uses: actions/checkout@v2
       - name: Install Node.js
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v2
         with:
           node-version: 16
       - name: Install build dependencies
-        run: yarn install --production
+        uses: bahmutov/npm-install@v1
+        env:
+          NODE_ENV: production
       - name: Build static files
         run: yarn build
         env:
