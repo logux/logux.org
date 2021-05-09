@@ -29,7 +29,7 @@
     "capitalize": "^2.0.3",
     "colorette": "^1.2.2",
     "del": "^6.0.0",
-    "dotenv": "^8.2.0",
+    "dotenv": "^9.0.0",
     "globby": "^11.0.3",
     "jstransformer-lowlight": "^0.1.0",
     "lowlight": "^1.20.0",
