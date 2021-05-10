@@ -8,14 +8,16 @@
     "assert": {
       "preset": "lighthouse:all",
       "assertions": {
-        "mainthread-work-breakdown": ["error", { "minScore": 0.90 }],
         "critical-request-chains": "off",
+        "time-to-first-byte": "off",
+        "maskable-icon": "off",
+        "content-width": "off",
+        "mainthread-work-breakdown": ["error", { "minScore": 0.90 }],
         "estimated-input-latency": ["error", { "minScore": 0.95 }],
         "first-contentful-paint": ["error", { "minScore": 0.95 }],
         "first-meaningful-paint": ["error", { "minScore": 0.95 }],
         "uses-responsive-images": ["error", { "minScore": 0.85 }],
         "uses-long-cache-ttl": ["error", { "minScore": 0.70 }],
-        "time-to-first-byte": ["error", { "minScore": 0 }],
         "max-potential-fid": ["error", { "minScore": 0.35 }],
         "speed-index": ["error", { "minScore": 0.95 }],
         "dom-size": ["error", { "minScore": 0.95 }]
