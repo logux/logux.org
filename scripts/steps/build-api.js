@@ -75,7 +75,9 @@ const UTILITY_TYPES = new Set([
   'Exclude',
   'Omit',
   'ReturnType',
-  'Ref'
+  'Ref',
+  'ReadonlyRef',
+  'UnwrapRef'
 ])
 
 const HIDE_CONSTRUCTOR = new Set([
@@ -799,9 +801,16 @@ export default async function buildApi(assets, layout, title, nodes) {
 
   if (title === 'Web API') {
     for (let node of nodes) {
-      if (isSource(node, join('logux-state', 'vue'))) {
+      if (node.name === 'ReadonlyRef') continue
+      if (
+        isSource(node, join('logux-state', 'vue')) ||
+        isSource(node, join('logux-client', 'vue'))
+      ) {
         node.name = 'Vue.' + node.name
-      } else if (isSource(node, join('logux-state', 'react'))) {
+      } else if (
+        isSource(node, join('logux-state', 'react')) ||
+        isSource(node, join('logux-client', 'react'))
+      ) {
         node.name = 'React.' + node.name
       }
     }
