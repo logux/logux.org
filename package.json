@@ -14,7 +14,7 @@
     "start:build": "serve dist/"
   },
   "dependencies": {
-    "@babel/core": "^7.14.0",
+    "@babel/core": "^7.14.2",
     "@parcel/optimizer-cssnano": "^2.0.0-nightly.643",
     "@parcel/optimizer-htmlnano": "^2.0.0-nightly.643",
     "@parcel/packager-css": "^2.0.0-nightly.643",
@@ -54,7 +54,7 @@
     "remark-html": "^13.0.1",
     "remark-parse": "^9.0.0",
     "remark-rehype": "^8.1.0",
-    "slugify": "^1.5.2",
+    "slugify": "^1.5.3",
     "spinnies": "^0.5.1",
     "ssdeploy": "^0.6.20",
     "sugarss": "^3.0.3",
