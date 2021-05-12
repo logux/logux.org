@@ -812,6 +812,11 @@ export default async function buildApi(assets, layout, title, nodes) {
         isSource(node, join('logux-client', 'react'))
       ) {
         node.name = 'React.' + node.name
+      } else if (
+        isSource(node, join('logux-state', 'preact')) ||
+        isSource(node, join('logux-client', 'preact'))
+      ) {
+        node.name = 'Preact.' + node.name
       }
     }
   }
