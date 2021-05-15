@@ -110,6 +110,47 @@ const UNWRAP_UTILITIES = new Set([
   'Readonly'
 ])
 
+const EXCLUDED_SUBMENU_KINDS = new Set(['Type alias', 'Interface', 'Namespace'])
+
+const GROUPS = {
+  Actions: 'Actions',
+  Client: 'Client',
+  Core: 'Core',
+  Other: 'Other',
+  React: 'React',
+  Server: 'Server',
+  State: 'State',
+  Tests: 'Tests',
+  Types: 'Types',
+  Vue: 'Vue'
+}
+
+const GROUPS_CONDITION = {
+  [GROUPS.Types]: node =>
+    node.kindString === 'Type alias' || node.kindString === 'Interface',
+  [GROUPS.React]: node => isSource(node, 'react'),
+  [GROUPS.Vue]: node => isSource(node, 'vue'),
+  [GROUPS.Tests]: node => isSource(node, 'test'),
+  [GROUPS.Actions]: node => isSource(node, 'logux-actions'),
+  [GROUPS.Client]: node => isSource(node, 'logux-client'),
+  [GROUPS.Core]: node => isSource(node, 'logux-core'),
+  [GROUPS.Server]: node => isSource(node, 'logux-server'),
+  [GROUPS.State]: node => isSource(node, 'logux-state')
+}
+
+const GROUPS_ORDER = [
+  GROUPS.Core,
+  GROUPS.Client,
+  GROUPS.Server,
+  GROUPS.Actions,
+  GROUPS.State,
+  GROUPS.Tests,
+  GROUPS.React,
+  GROUPS.Vue,
+  GROUPS.Other,
+  GROUPS.Types
+]
+
 function toSlug(type) {
   let slug = type
   if (!CAPITALIZED.test(slug)) slug = 'globals-' + slug
@@ -730,6 +771,24 @@ function variableHtml(ctx, node) {
   ])
 }
 
+function groupNodes(nodes) {
+  let groupsName = Object.keys(GROUPS_CONDITION)
+  let groupedNodes = nodes.reduce((groups, node) => {
+    let nodeGroup =
+      groupsName.find(group => GROUPS_CONDITION[group](node)) || GROUPS.Other
+
+    if (nodeGroup in groups) {
+      groups[nodeGroup].push(node)
+    } else {
+      groups[nodeGroup] = [node]
+    }
+
+    return groups
+  }, {})
+
+  return groupedNodes
+}
+
 function toTree(ctx, nodes) {
   let tree = {
     type: 'root',
@@ -769,26 +828,27 @@ function submenuName(node) {
 }
 
 function toSubmenu(nodes) {
-  let submenu = nodes
-    .filter(i => i.kindString === 'Class')
+  let submenuNodes = nodes
+    .filter(node => !EXCLUDED_SUBMENU_KINDS.has(node.kindString))
     .sort(byName)
-    .map(cls => ({
-      code: cls.name,
-      link: '#' + cls.name.toLowerCase()
-    }))
-  for (let [title, filter] of KINDS) {
-    if (title !== 'Types') {
-      let items = nodes.filter(filter).sort(byName)
-      if (items.length > 0) {
-        submenu.push({
-          text: title,
-          ul: items.map(i => {
-            return { code: submenuName(i), link: '#' + toSlug(i.name) }
-          })
-        })
-      }
+  let submenuGroups = groupNodes(submenuNodes)
+
+  let submenu = GROUPS_ORDER.map(groupName => {
+    let group = submenuGroups[groupName]
+
+    if (group === undefined) {
+      return null
     }
-  }
+
+    return {
+      text: groupName,
+      ul: group.map(node => ({
+        code: submenuName(node),
+        link: '#' + toSlug(node.name)
+      }))
+    }
+  }).filter(group => group !== null)
+
   return submenu
 }
 
