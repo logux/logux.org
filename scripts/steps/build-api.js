@@ -765,7 +765,7 @@ function toTree(ctx, nodes) {
 }
 
 function submenuName(node) {
-  return node.name + (node.kind === 'function' ? '()' : '')
+  return node.name + (node.kindString === 'Function' ? '()' : '')
 }
 
 function toSubmenu(nodes) {
