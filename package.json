@@ -6,12 +6,11 @@
     "node": ">=14.0.0"
   },
   "scripts": {
-    "start": "parcel serve src/uikit.pug --open",
-    "lint": "eslint . && stylelint src/**/*.sss",
-    "test": "yarn lint && yarn build && size-limit",
+    "start:uikit": "parcel serve src/uikit.pug --open",
+    "test": "eslint . && stylelint src/**/*.sss && yarn build && size-limit",
     "clean": "rm -Rf dist/ .parcel-cache/",
     "build": "NODE_ENV=production ./scripts/build.js",
-    "start:build": "serve dist/"
+    "start": "serve dist/"
   },
   "dependencies": {
     "@babel/core": "^7.14.2",
