@@ -21,7 +21,7 @@ You can build local version of website and open it in browser by:
 
 ```sh
 yarn build
-yarn start:build
+yarn start
 ```
 
 You need manually to re-build it on every changes.
