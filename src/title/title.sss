@@ -1,15 +1,23 @@
+.class_title,
 .title
   line-height: 1.2
   color: var(--base-title)
 
 h1.title
   @mixin no-mobile
-    margin-top: 42px
     margin-bottom: 24px
     font-size: 48px
 
   @mixin mobile
-    margin-top: 24px
+    margin-bottom: 24px
+    font-size: 24px
+
+h1.class_title
+  @mixin no-mobile
+    margin-bottom: 24px
+    font-size: 48px
+
+  @mixin mobile
     margin-bottom: 24px
     font-size: 24px
 
