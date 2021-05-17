@@ -12,12 +12,6 @@ import { DIST } from '../lib/dirs.js'
 
 const CAPITALIZED = /^[A-Z]/
 
-const KINDS = [
-  ['Functions', i => i.kindString === 'Function'],
-  ['Variables', i => i.kindString === 'Variable' && i.name !== 'WebSocket'],
-  ['Types', i => i.kindString === 'Type alias' || i.kindString === 'Interface']
-]
-
 const EXTERNAL_TYPES = {
   Observable: 'https://github.com/tc39/proposal-observable',
   Process: 'https://nodejs.org/api/process.html#process_process',
@@ -111,6 +105,7 @@ const UNWRAP_UTILITIES = new Set([
 ])
 
 const EXCLUDED_SUBMENU_KINDS = new Set(['Type alias', 'Interface', 'Namespace'])
+const EXCLUDED_TREE_KINDS = new Set(['Namespace'])
 
 const GROUPS = {
   Actions: 'Actions',
@@ -125,6 +120,7 @@ const GROUPS = {
   Vue: 'Vue'
 }
 
+// More specific group conditions should be placed higher
 const GROUPS_CONDITION = {
   [GROUPS.Types]: node =>
     node.kindString === 'Type alias' || node.kindString === 'Interface',
@@ -663,7 +659,7 @@ function classHtml(ctx, cls) {
   let hideConstructore = HIDE_CONSTRUCTOR.has(cls.name)
   let statics = cls.children.filter(i => i.flags.isStatic)
   let instance = cls.children.filter(i => !statics.includes(i))
-  return tag('article', [
+  return tag('section', [
     tag('h1', cls.name, {
       editUrl: getEditUrl(cls.sources[0].fileName)
     }),
@@ -790,36 +786,41 @@ function groupNodes(nodes) {
 }
 
 function toTree(ctx, nodes) {
+  let treeNodes = nodes
+    .filter(node => !SIMPLE_TYPES.has(node.name))
+    .filter(node => !IGNORE_TYPES.has(node.name))
+    .filter(node => !UTILITY_TYPES.has(node.name))
+    .filter(node => !UNWRAP_UTILITIES.has(node.name))
+    .filter(node => !EXCLUDED_TREE_KINDS.has(node.kindString))
+    .sort(byName)
+  let treeGroups = groupNodes(treeNodes)
+
+  let treeChildren = GROUPS_ORDER.map(groupName => {
+    let group = treeGroups[groupName]
+
+    if (group === undefined) {
+      return null
+    }
+
+    return tag('article', [
+      tag('h1', groupName, { noSlug: true }),
+      ...group.map(node => {
+        if (node.kindString === 'Class') {
+          return classHtml(ctx, node)
+        } else if (node.signatures) {
+          return functionHtml(ctx, node)
+        } else {
+          return variableHtml(ctx, node)
+        }
+      })
+    ])
+  }).filter(group => group !== null)
+
   let tree = {
     type: 'root',
-    children: nodes
-      .filter(i => i.kindString === 'Class')
-      .sort(byName)
-      .map(i => classHtml(ctx, i))
+    children: treeChildren
   }
-  for (let [title, filter] of KINDS) {
-    let items = nodes.filter(filter)
-    if (items.length > 0) {
-      tree.children.push(
-        tag('article', [
-          tag('h1', title, { noSlug: true }),
-          ...items
-            .sort(byName)
-            .filter(i => !SIMPLE_TYPES.has(i.name))
-            .filter(i => !IGNORE_TYPES.has(i.name))
-            .filter(i => !UTILITY_TYPES.has(i.name))
-            .filter(i => !UNWRAP_UTILITIES.has(i.name))
-            .map(i => {
-              if (i.signatures) {
-                return functionHtml(ctx, i)
-              } else {
-                return variableHtml(ctx, i)
-              }
-            })
-        ])
-      )
-    }
-  }
+
   return tree
 }
 
