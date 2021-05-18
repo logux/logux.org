@@ -106,45 +106,104 @@ const UNWRAP_UTILITIES = new Set([
 
 const EXCLUDED_SUBMENU_KINDS = new Set(['Type alias', 'Interface', 'Namespace'])
 const EXCLUDED_TREE_KINDS = new Set(['Namespace'])
+const CORE_ENTITIES = new Set([
+  'BaseNode',
+  'Connection',
+  'Log',
+  'MemoryStore',
+  'Reconnect',
+  'ServerConnection',
+  'defineAction',
+  'isFirstOlder',
+  'parseId'
+])
+const CLIENT_ENTITIES = new Set([
+  'Client',
+  'CrossTabClient',
+  'IndexedStore',
+  'attention',
+  'badge',
+  'buildNewSyncMap',
+  'changeSyncMap',
+  'changeSyncMapById',
+  'confirm',
+  'createFilter',
+  'createSyncMap',
+  'defineSyncMap',
+  'deleteSyncMap',
+  'deleteSyncMapById',
+  'encryptActions',
+  'favicon',
+  'log',
+  'request'
+])
+const SERVER_ENTITIES = new Set([
+  'ChannelContext',
+  'Context',
+  'ResponseError',
+  'Server',
+  'ServerClient',
+  'del',
+  'get',
+  'patch',
+  'post',
+  'put',
+  'request'
+])
+const STATE_ENTITIES = new Set([
+  'createDerived',
+  'createMap',
+  'createPersistent',
+  'createRouter',
+  'createStore',
+  'getPagePath',
+  'getValue',
+  'openPage'
+])
+const TEST_ENTITIES = new Set([
+  'TestClient',
+  'TestLog',
+  'TestPair',
+  'TestServer',
+  'TestTime',
+  'cleanStores',
+  'emptyInTest',
+  'prepareForTest'
+])
 
 const GROUPS = {
-  Actions: 'Actions',
   Client: 'Client',
   Core: 'Core',
   Other: 'Other',
   React: 'React',
   Server: 'Server',
-  State: 'State',
+  State: 'Logux State',
   Tests: 'Tests',
-  Types: 'Types',
   Vue: 'Vue'
 }
 
 // More specific group conditions should be placed higher
 const GROUPS_CONDITION = {
-  [GROUPS.Types]: node =>
-    node.kindString === 'Type alias' || node.kindString === 'Interface',
   [GROUPS.React]: node => isSource(node, 'react'),
   [GROUPS.Vue]: node => isSource(node, 'vue'),
-  [GROUPS.Tests]: node => isSource(node, 'test'),
-  [GROUPS.Actions]: node => isSource(node, 'logux-actions'),
-  [GROUPS.Client]: node => isSource(node, 'logux-client'),
-  [GROUPS.Core]: node => isSource(node, 'logux-core'),
-  [GROUPS.Server]: node => isSource(node, 'logux-server'),
-  [GROUPS.State]: node => isSource(node, 'logux-state')
+  [GROUPS.Tests]: node => TEST_ENTITIES.has(node.name),
+  [GROUPS.Client]: node =>
+    CLIENT_ENTITIES.has(node.name) && isSource(node, 'logux-client'),
+  [GROUPS.Core]: node => CORE_ENTITIES.has(node.name),
+  [GROUPS.Server]: node =>
+    SERVER_ENTITIES.has(node.name) && isSource(node, 'logux-server'),
+  [GROUPS.State]: node => STATE_ENTITIES.has(node.name)
 }
 
 const GROUPS_ORDER = [
-  GROUPS.Core,
-  GROUPS.Client,
-  GROUPS.Server,
-  GROUPS.Actions,
   GROUPS.State,
-  GROUPS.Tests,
   GROUPS.React,
   GROUPS.Vue,
-  GROUPS.Other,
-  GROUPS.Types
+  GROUPS.Client,
+  GROUPS.Server,
+  GROUPS.Tests,
+  GROUPS.Core,
+  GROUPS.Other
 ]
 
 function toSlug(type) {
