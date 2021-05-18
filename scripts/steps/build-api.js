@@ -883,7 +883,9 @@ function toTree(ctx, nodes) {
 }
 
 function submenuName(node) {
-  return node.name + (node.kindString === 'Function' ? '()' : '')
+  let nodeNameWithoutPrefix = node.name.replace(/^(react|vue)\./i, '')
+
+  return nodeNameWithoutPrefix + (node.kindString === 'Function' ? '()' : '')
 }
 
 function toSubmenu(nodes) {
