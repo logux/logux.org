@@ -242,7 +242,7 @@ function converter() {
         if (node.editUrl) {
           node.tagName = 'div'
           node.children = [
-            tag('h1', 'class_title', node.properties, node.children),
+            tag('h1', 'title', node.properties, node.children),
             tag('a', 'edit_link', {
               title: 'Edit the page on GitHub',
               href: node.editUrl

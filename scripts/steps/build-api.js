@@ -803,7 +803,6 @@ function toTree(ctx, nodes) {
     }
 
     return tag('article', [
-      tag('h1', groupName, { noSlug: true }),
       ...group.map(node => {
         if (node.kindString === 'Class') {
           return classHtml(ctx, node)
