@@ -175,6 +175,7 @@ const GROUPS = {
   Client: 'Client',
   Core: 'Core',
   Other: 'Other',
+  Preact: 'Preact',
   React: 'React',
   Server: 'Server',
   State: 'Logux State',
@@ -184,8 +185,9 @@ const GROUPS = {
 
 // More specific group conditions should be placed higher
 const GROUPS_CONDITION = {
-  [GROUPS.React]: node => isSource(node, 'react'),
-  [GROUPS.Vue]: node => isSource(node, 'vue'),
+  [GROUPS.React]: node => /^react\./i.test(node.name),
+  [GROUPS.Vue]: node => /^vue\./i.test(node.name),
+  [GROUPS.Preact]: node => /^preact\./i.test(node.name),
   [GROUPS.Tests]: node => TEST_ENTITIES.has(node.name),
   [GROUPS.Client]: node =>
     CLIENT_ENTITIES.has(node.name) && isSource(node, 'logux-client'),
@@ -199,6 +201,7 @@ const GROUPS_ORDER = [
   GROUPS.State,
   GROUPS.React,
   GROUPS.Vue,
+  GROUPS.Preact,
   GROUPS.Client,
   GROUPS.Server,
   GROUPS.Tests,
@@ -883,7 +886,7 @@ function toTree(ctx, nodes) {
 }
 
 function submenuName(node) {
-  let nodeNameWithoutPrefix = node.name.replace(/^(react|vue)\./i, '')
+  let nodeNameWithoutPrefix = node.name.replace(/^(preact|react|vue)\./i, '')
 
   return nodeNameWithoutPrefix + (node.kindString === 'Function' ? '()' : '')
 }
