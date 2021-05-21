@@ -12,12 +12,6 @@ import { DIST } from '../lib/dirs.js'
 
 const CAPITALIZED = /^[A-Z]/
 
-const KINDS = [
-  ['Functions', i => i.kindString === 'Function'],
-  ['Variables', i => i.kindString === 'Variable' && i.name !== 'WebSocket'],
-  ['Types', i => i.kindString === 'Type alias' || i.kindString === 'Interface']
-]
-
 const EXTERNAL_TYPES = {
   Observable: 'https://github.com/tc39/proposal-observable',
   Process: 'https://nodejs.org/api/process.html#process_process',
@@ -109,6 +103,111 @@ const UNWRAP_UTILITIES = new Set([
   'DeepReadonly',
   'Readonly'
 ])
+
+const EXCLUDED_SUBMENU_KINDS = new Set(['Type alias', 'Interface', 'Namespace'])
+const EXCLUDED_TREE_KINDS = new Set(['Namespace'])
+const CORE_ENTITIES = new Set([
+  'BaseNode',
+  'Connection',
+  'Log',
+  'MemoryStore',
+  'Reconnect',
+  'ServerConnection',
+  'defineAction',
+  'isFirstOlder',
+  'parseId'
+])
+const CLIENT_ENTITIES = new Set([
+  'Client',
+  'CrossTabClient',
+  'IndexedStore',
+  'attention',
+  'badge',
+  'buildNewSyncMap',
+  'changeSyncMap',
+  'changeSyncMapById',
+  'confirm',
+  'createFilter',
+  'createSyncMap',
+  'defineSyncMap',
+  'deleteSyncMap',
+  'deleteSyncMapById',
+  'encryptActions',
+  'favicon',
+  'log',
+  'request'
+])
+const SERVER_ENTITIES = new Set([
+  'ChannelContext',
+  'Context',
+  'ResponseError',
+  'Server',
+  'ServerClient',
+  'del',
+  'get',
+  'patch',
+  'post',
+  'put',
+  'request'
+])
+const STATE_ENTITIES = new Set([
+  'createDerived',
+  'createMap',
+  'createPersistent',
+  'createRouter',
+  'createStore',
+  'getPagePath',
+  'getValue',
+  'openPage'
+])
+const TEST_ENTITIES = new Set([
+  'TestClient',
+  'TestLog',
+  'TestPair',
+  'TestServer',
+  'TestTime',
+  'cleanStores',
+  'emptyInTest',
+  'prepareForTest'
+])
+
+const GROUPS = {
+  Client: 'Client',
+  Core: 'Core',
+  Other: 'Other',
+  Preact: 'Preact',
+  React: 'React',
+  Server: 'Server',
+  State: 'Logux State',
+  Tests: 'Tests',
+  Vue: 'Vue'
+}
+
+// More specific group conditions should be placed higher
+const GROUPS_CONDITION = {
+  [GROUPS.React]: node => /^react\./i.test(node.name),
+  [GROUPS.Vue]: node => /^vue\./i.test(node.name),
+  [GROUPS.Preact]: node => /^preact\./i.test(node.name),
+  [GROUPS.Tests]: node => TEST_ENTITIES.has(node.name),
+  [GROUPS.Client]: node =>
+    CLIENT_ENTITIES.has(node.name) && isSource(node, 'logux-client'),
+  [GROUPS.Core]: node => CORE_ENTITIES.has(node.name),
+  [GROUPS.Server]: node =>
+    SERVER_ENTITIES.has(node.name) && isSource(node, 'logux-server'),
+  [GROUPS.State]: node => STATE_ENTITIES.has(node.name)
+}
+
+const GROUPS_ORDER = [
+  GROUPS.State,
+  GROUPS.React,
+  GROUPS.Vue,
+  GROUPS.Preact,
+  GROUPS.Client,
+  GROUPS.Server,
+  GROUPS.Tests,
+  GROUPS.Core,
+  GROUPS.Other
+]
 
 function toSlug(type) {
   let slug = type
@@ -622,7 +721,7 @@ function classHtml(ctx, cls) {
   let hideConstructore = HIDE_CONSTRUCTOR.has(cls.name)
   let statics = cls.children.filter(i => i.flags.isStatic)
   let instance = cls.children.filter(i => !statics.includes(i))
-  return tag('article', [
+  return tag('section', [
     tag('h1', cls.name, {
       editUrl: getEditUrl(cls.sources[0].fileName)
     }),
@@ -730,65 +829,90 @@ function variableHtml(ctx, node) {
   ])
 }
 
+function groupNodes(nodes) {
+  let groupsName = Object.keys(GROUPS_CONDITION)
+  let groupedNodes = nodes.reduce((groups, node) => {
+    let nodeGroup =
+      groupsName.find(group => GROUPS_CONDITION[group](node)) || GROUPS.Other
+
+    if (nodeGroup in groups) {
+      groups[nodeGroup].push(node)
+    } else {
+      groups[nodeGroup] = [node]
+    }
+
+    return groups
+  }, {})
+
+  return groupedNodes
+}
+
 function toTree(ctx, nodes) {
+  let treeNodes = nodes
+    .filter(node => !SIMPLE_TYPES.has(node.name))
+    .filter(node => !IGNORE_TYPES.has(node.name))
+    .filter(node => !UTILITY_TYPES.has(node.name))
+    .filter(node => !UNWRAP_UTILITIES.has(node.name))
+    .filter(node => !EXCLUDED_TREE_KINDS.has(node.kindString))
+    .sort(byName)
+  let treeGroups = groupNodes(treeNodes)
+
+  let treeChildren = GROUPS_ORDER.map(groupName => {
+    let group = treeGroups[groupName]
+
+    if (group === undefined) {
+      return null
+    }
+
+    return tag('article', [
+      ...group.map(node => {
+        if (node.kindString === 'Class') {
+          return classHtml(ctx, node)
+        } else if (node.signatures) {
+          return functionHtml(ctx, node)
+        } else {
+          return variableHtml(ctx, node)
+        }
+      })
+    ])
+  }).filter(group => group !== null)
+
   let tree = {
     type: 'root',
-    children: nodes
-      .filter(i => i.kindString === 'Class')
-      .sort(byName)
-      .map(i => classHtml(ctx, i))
+    children: treeChildren
   }
-  for (let [title, filter] of KINDS) {
-    let items = nodes.filter(filter)
-    if (items.length > 0) {
-      tree.children.push(
-        tag('article', [
-          tag('h1', title, { noSlug: true }),
-          ...items
-            .sort(byName)
-            .filter(i => !SIMPLE_TYPES.has(i.name))
-            .filter(i => !IGNORE_TYPES.has(i.name))
-            .filter(i => !UTILITY_TYPES.has(i.name))
-            .filter(i => !UNWRAP_UTILITIES.has(i.name))
-            .map(i => {
-              if (i.signatures) {
-                return functionHtml(ctx, i)
-              } else {
-                return variableHtml(ctx, i)
-              }
-            })
-        ])
-      )
-    }
-  }
+
   return tree
 }
 
 function submenuName(node) {
-  return node.name + (node.kind === 'function' ? '()' : '')
+  let nodeNameWithoutPrefix = node.name.replace(/^(preact|react|vue)\./i, '')
+
+  return nodeNameWithoutPrefix + (node.kindString === 'Function' ? '()' : '')
 }
 
 function toSubmenu(nodes) {
-  let submenu = nodes
-    .filter(i => i.kindString === 'Class')
+  let submenuNodes = nodes
+    .filter(node => !EXCLUDED_SUBMENU_KINDS.has(node.kindString))
     .sort(byName)
-    .map(cls => ({
-      code: cls.name,
-      link: '#' + cls.name.toLowerCase()
-    }))
-  for (let [title, filter] of KINDS) {
-    if (title !== 'Types') {
-      let items = nodes.filter(filter).sort(byName)
-      if (items.length > 0) {
-        submenu.push({
-          text: title,
-          ul: items.map(i => {
-            return { code: submenuName(i), link: '#' + toSlug(i.name) }
-          })
-        })
-      }
+  let submenuGroups = groupNodes(submenuNodes)
+
+  let submenu = GROUPS_ORDER.map(groupName => {
+    let group = submenuGroups[groupName]
+
+    if (group === undefined) {
+      return null
     }
-  }
+
+    return {
+      text: groupName,
+      ul: group.map(node => ({
+        code: submenuName(node),
+        link: '#' + toSlug(node.name)
+      }))
+    }
+  }).filter(group => group !== null)
+
   return submenu
 }
 

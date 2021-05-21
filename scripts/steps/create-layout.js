@@ -8,7 +8,8 @@ import unified from 'unified'
 import { addError } from '../lib/errors.js'
 import wrap from '../lib/spinner.js'
 
-const SMALL_WORDS = /(^|\s)(the|a|for|in|an|to|if|so|when|with|by|and|or|is|this|any|from) /gi
+const SMALL_WORDS =
+  /(^|\s)(the|a|for|in|an|to|if|so|when|with|by|and|or|is|this|any|from) /gi
 
 function cleaner({ chatUsers, removeAssets }) {
   return tree => {
