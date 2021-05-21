@@ -737,7 +737,7 @@ function classHtml(ctx, cls) {
 function functionHtml(ctx, node) {
   return tag('section', [
     tag(
-      'h2',
+      'h1',
       [
         tag(
           'code',
@@ -751,7 +751,8 @@ function functionHtml(ctx, node) {
         )
       ],
       {
-        slug: toSlug(node.name)
+        slug: toSlug(node.name),
+        properties: { className: ['is-function'] }
       }
     ),
     ...commentHtml(node.signatures[0].comment),
