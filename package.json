@@ -35,7 +35,7 @@
     "make-dir": "^3.1.0",
     "nanoevents": "^6.0.0",
     "parcel": "^2.0.0-nightly.643",
-    "postcss": "^8.2.14",
+    "postcss": "^8.3.0",
     "postcss-combine-media-query": "^1.0.1",
     "postcss-hexrgba": "^2.0.1",
     "postcss-media-minmax": "^5.0.0",
