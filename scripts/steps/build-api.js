@@ -42,7 +42,8 @@ const EXTERNAL_TYPES = {
   FC:
     'https://react-typescript-cheatsheet.netlify.app/docs/' +
     'basic/getting-started/function_components',
-  ReactContext: 'https://reactjs.org/docs/context.html'
+  ReactContext: 'https://reactjs.org/docs/context.html',
+  PreactContext: 'https://preactjs.com/guide/v10/context/'
 }
 
 const SIMPLE_TYPES = new Set([
