@@ -76,6 +76,10 @@ async function build() {
 }
 
 build().catch(e => {
-  process.stderr.write(red(e.stack) + '\n')
+  if (e.stack) {
+    process.stderr.write(red(e.stack) + '\n')
+  } else {
+    process.stderr.write(red(e) + '\n')
+  }
   process.exit(1)
 })
