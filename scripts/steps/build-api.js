@@ -58,7 +58,8 @@ const SIMPLE_TYPES = new Set([
   'number',
   'any',
   'StoreValue',
-  'StoreValues'
+  'StoreValues',
+  'Builder'
 ])
 
 const UTILITY_TYPES = new Set([
