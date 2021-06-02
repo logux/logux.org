@@ -1,4 +1,4 @@
-import { promises as fs } from 'fs'
+import { copyFile } from 'fs/promises'
 import { join } from 'path'
 import copyDir from 'recursive-copy'
 import makeDir from 'make-dir'
@@ -26,7 +26,7 @@ async function copyWellKnown(assets) {
         let to = join(DIST, i)
         if (i === 'security.txt') to = join(DIST, '.well-known', i)
         assets.add(to)
-        await fs.copyFile(from, to)
+        await copyFile(from, to)
       }
     })
   )

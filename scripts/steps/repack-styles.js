@@ -1,4 +1,4 @@
-import { promises as fs } from 'fs'
+import { readFile, writeFile } from 'fs/promises'
 import combineMedia from 'postcss-combine-media-query'
 import postcssUrl from 'postcss-url'
 import postcss from 'postcss'
@@ -25,9 +25,9 @@ async function repackStyles(assets) {
   let processor = postcss([fileCollector, combineMedia])
   await Promise.all(
     assets.get(/\.css$/).map(async file => {
-      let css = await fs.readFile(file)
+      let css = await readFile(file)
       let result = await processor.process(css, { from: file })
-      await fs.writeFile(file, result.css)
+      await writeFile(file, result.css)
     })
   )
   return collected

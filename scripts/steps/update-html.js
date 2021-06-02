@@ -1,4 +1,4 @@
-import { promises as fs } from 'fs'
+import { readFile, writeFile, unlink } from 'fs/promises'
 import { extname, join } from 'path'
 import rehypeStringify from 'rehype-stringify'
 import unistFlatmap from 'unist-util-flatmap'
@@ -20,7 +20,7 @@ function tag(tagName, properties) {
 
 async function updateHtml(assets, manifest, preloadFiles) {
   let [html] = await Promise.all([
-    fs.readFile(join(DIST, 'uikit.html')),
+    readFile(join(DIST, 'uikit.html')),
     makeDir(join(DIST, 'uikit'))
   ])
   function optimizer() {
@@ -59,7 +59,7 @@ async function updateHtml(assets, manifest, preloadFiles) {
     .process(html)
   let oldFile = join(DIST, 'uikit.html')
   let newFile = join(DIST, 'uikit', 'index.html')
-  await Promise.all([fs.writeFile(newFile, fixed.contents), fs.unlink(oldFile)])
+  await Promise.all([writeFile(newFile, fixed.contents), unlink(oldFile)])
   assets.remove(oldFile)
   assets.add(newFile)
   return fixed.contents

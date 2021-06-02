@@ -1,5 +1,5 @@
+import { readFile, writeFile } from 'fs/promises'
 import { join, relative } from 'path'
-import { promises as fs } from 'fs'
 
 import { DIST } from '../lib/dirs.js'
 import wrap from '../lib/spinner.js'
@@ -7,7 +7,7 @@ import hash from '../lib/hash.js'
 
 async function injectCacheBuster(assets) {
   let servivePath = join(DIST, 'service.js')
-  let serviceCode = await fs.readFile(servivePath)
+  let serviceCode = await readFile(servivePath)
 
   let toCache = assets
     .map(i => {
@@ -37,7 +37,7 @@ async function injectCacheBuster(assets) {
   )
   serviceCode = serviceCode.toString().replace('FILES', JSON.stringify(toCache))
 
-  await fs.writeFile(servivePath, `'${cacheBuster}';${serviceCode}`)
+  await writeFile(servivePath, `'${cacheBuster}';${serviceCode}`)
 }
 
 export default wrap(injectCacheBuster, 'Injecting cache buster to worker')

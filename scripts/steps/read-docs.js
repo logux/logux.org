@@ -1,7 +1,7 @@
-import { promises as fs } from 'fs'
 import remarkHighlight from 'remark-highlight.js'
 import remarkRehype from 'remark-rehype'
 import unistFlatmap from 'unist-util-flatmap'
+import { readFile } from 'fs/promises'
 import remarkParse from 'remark-parse'
 import { visit } from 'unist-util-visit'
 import rehypeRaw from 'rehype-raw'
@@ -207,7 +207,7 @@ async function readDocs() {
   let guides = await Promise.all(
     files.map(async file => {
       let title = ''
-      let md = await fs.readFile(join(ROOT, file))
+      let md = await readFile(join(ROOT, file))
       let tree = await unified().use(remarkParse).parse(md)
       tree = await unified()
         .use(convertor, {

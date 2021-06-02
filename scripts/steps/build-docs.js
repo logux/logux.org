@@ -1,5 +1,5 @@
+import { readFile, writeFile } from 'fs/promises'
 import { join, dirname, sep } from 'path'
-import { promises as fs } from 'fs'
 import capitalize from 'capitalize'
 import makeDir from 'make-dir'
 
@@ -19,7 +19,7 @@ function toTitle(file) {
 }
 
 async function buildDocs(assets, layout, guides) {
-  let json = await fs.readFile(join(PROJECTS, 'logux-docs', 'order.json'))
+  let json = await readFile(join(PROJECTS, 'logux-docs', 'order.json'))
   let order = JSON.parse(json)
 
   let submenus = {}
@@ -89,7 +89,7 @@ async function buildDocs(assets, layout, guides) {
       let html = await layout(categoryUrl, submenu, title, page.tree)
       let path = join(DIST, dirs, 'index.html')
       await makeDir(dirname(path))
-      await fs.writeFile(path, html)
+      await writeFile(path, html)
       assets.add(path, html)
     })
   )

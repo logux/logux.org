@@ -1,6 +1,6 @@
 import { join, dirname, sep } from 'path'
-import { promises as fs } from 'fs'
 import remarkHighlight from 'remark-highlight.js'
+import { writeFile } from 'fs/promises'
 import remarkRehype from 'remark-rehype'
 import makeDir from 'make-dir'
 import slugify from 'slugify'
@@ -952,7 +952,7 @@ export default async function buildApi(assets, layout, title, nodes) {
   let tree = toTree(ctx, nodes)
   let submenu = toSubmenu(nodes)
   let html = await layout(`/${file}/`, submenu, title + ' / ', tree)
-  await fs.writeFile(path, html)
+  await writeFile(path, html)
   assets.add(path, html)
 
   end()
