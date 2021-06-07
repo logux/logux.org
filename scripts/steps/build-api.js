@@ -43,7 +43,9 @@ const EXTERNAL_TYPES = {
     'https://react-typescript-cheatsheet.netlify.app/docs/' +
     'basic/getting-started/function_components',
   ReactContext: 'https://reactjs.org/docs/context.html',
-  PreactContext: 'https://preactjs.com/guide/v10/context/'
+  PreactContext: 'https://preactjs.com/guide/v10/context/',
+  MapBuilder: 'https://github.com/ai/nanostores',
+  MapStore: 'https://github.com/ai/nanostores'
 }
 
 const SIMPLE_TYPES = new Set([
@@ -152,16 +154,6 @@ const SERVER_ENTITIES = new Set([
   'put',
   'request'
 ])
-const STATE_ENTITIES = new Set([
-  'createDerived',
-  'createMap',
-  'createPersistent',
-  'createRouter',
-  'createStore',
-  'getPagePath',
-  'getValue',
-  'openPage'
-])
 const TEST_ENTITIES = new Set([
   'TestClient',
   'TestLog',
@@ -180,7 +172,6 @@ const GROUPS = {
   Preact: 'Preact',
   React: 'React',
   Server: 'Server',
-  State: 'Logux State',
   Tests: 'Tests',
   Vue: 'Vue'
 }
@@ -195,12 +186,10 @@ const GROUPS_CONDITION = {
     CLIENT_ENTITIES.has(node.name) && isSource(node, 'logux-client'),
   [GROUPS.Core]: node => CORE_ENTITIES.has(node.name),
   [GROUPS.Server]: node =>
-    SERVER_ENTITIES.has(node.name) && isSource(node, 'logux-server'),
-  [GROUPS.State]: node => STATE_ENTITIES.has(node.name)
+    SERVER_ENTITIES.has(node.name) && isSource(node, 'logux-server')
 }
 
 const GROUPS_ORDER = [
-  GROUPS.State,
   GROUPS.React,
   GROUPS.Vue,
   GROUPS.Preact,
@@ -929,20 +918,11 @@ export default async function buildApi(assets, layout, title, nodes) {
   if (title === 'Web API') {
     for (let node of nodes) {
       if (node.name === 'ReadonlyRef') continue
-      if (
-        isSource(node, join('logux-state', 'vue')) ||
-        isSource(node, join('logux-client', 'vue'))
-      ) {
+      if (isSource(node, join('logux-client', 'vue'))) {
         node.name = 'Vue.' + node.name
-      } else if (
-        isSource(node, join('logux-state', 'react')) ||
-        isSource(node, join('logux-client', 'react'))
-      ) {
+      } else if (isSource(node, join('logux-client', 'react'))) {
         node.name = 'React.' + node.name
-      } else if (
-        isSource(node, join('logux-state', 'preact')) ||
-        isSource(node, join('logux-client', 'preact'))
-      ) {
+      } else if (isSource(node, join('logux-client', 'preact'))) {
         node.name = 'Preact.' + node.name
       }
     }
