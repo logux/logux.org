@@ -9138,6 +9138,11 @@ sugarss@^3.0.3:
   dependencies:
     postcss "^8.1.6"
 
+sugarss@^4.0.0:
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/sugarss/-/sugarss-4.0.0.tgz#f27cd3581a629f5945308bba2cff4c0ec3f48559"
+  integrity sha512-UGRXeXalq9AnzfA+1cacM3lt29TtBUw21CqGPUNpgkilW6K19uAKZ8s0elCfIskFl8HtS3af23vmx3R95s5WXw==
+
 supports-color@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/supports-color/-/supports-color-2.0.0.tgz#535d045ce6b6363fa40117084629995e9df324c7"
