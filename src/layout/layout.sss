@@ -84,7 +84,7 @@
 
   @media (width < 1024px)
     position: fixed
-    bottom: 30px
+    bottom: max(env(safe-area-inset-bottom), 30px)
     left: var(--text-side)
     z-index: 3
 
