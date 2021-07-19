@@ -3,7 +3,7 @@ import { extname, join } from 'path'
 import rehypeStringify from 'rehype-stringify'
 import unistFlatmap from 'unist-util-flatmap'
 import rehypeParse from 'rehype-parse'
-import unified from 'unified'
+import { unified } from 'unified'
 import makeDir from 'make-dir'
 
 import { DIST } from '../lib/dirs.js'
@@ -62,10 +62,10 @@ async function updateHtml(assets, manifest, preloadFiles) {
     .process(html)
   let oldFile = join(DIST, 'uikit.html')
   let newFile = join(DIST, 'uikit', 'index.html')
-  await Promise.all([writeFile(newFile, fixed.contents), unlink(oldFile)])
+  await Promise.all([writeFile(newFile, String(fixed)), unlink(oldFile)])
   assets.remove(oldFile)
   assets.add(newFile)
-  return fixed.contents
+  return String(fixed)
 }
 
 export default wrap(updateHtml, 'Updating HTML layout')

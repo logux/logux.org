@@ -1,9 +1,9 @@
 import rehypeStringify from 'rehype-stringify'
 import rehypeParse from 'rehype-parse'
+import { unified } from 'unified'
 import { filter } from 'unist-util-filter'
 import { visit } from 'unist-util-visit'
 import slugify from 'slugify'
-import unified from 'unified'
 
 import { addError } from '../lib/errors.js'
 import wrap from '../lib/spinner.js'
@@ -76,7 +76,7 @@ async function cleanPage(html, chatUsers, removeAssets) {
     .use(cleaner, { chatUsers, removeAssets })
     .use(rehypeStringify)
     .process(html)
-  return cleaned.contents
+  return String(cleaned)
 }
 
 function tag(tagName, cls, properties = {}, children = []) {

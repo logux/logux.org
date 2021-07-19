@@ -1,10 +1,10 @@
 import { readFile, writeFile } from 'fs/promises'
 import rehypeParse from 'rehype-parse'
+import { unified } from 'unified'
 import capitalize from 'capitalize'
 import { visit } from 'unist-util-visit'
 import { join } from 'path'
 import slugify from 'slugify'
-import unified from 'unified'
 import pug from 'pug'
 
 import wrap from '../lib/spinner.js'
