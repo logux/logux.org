@@ -34,7 +34,7 @@
     "lowlight": "^2.1.0",
     "make-dir": "^3.1.0",
     "nanoevents": "^6.0.0",
-    "parcel": "^2.0.0-beta.2",
+    "parcel": "2.0.0-beta.2",
     "postcss": "^8.3.5",
     "postcss-combine-media-query": "^1.0.1",
     "postcss-hexrgba": "^2.0.1",
