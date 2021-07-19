@@ -36,5 +36,9 @@
   a&:active
     box-shadow: none
 
+  a&:focus:not(:focus-visible)
+    background: transparent
+    box-shadow: none
+
   @mixin dark
     background: rgba(#fff, 0.1)

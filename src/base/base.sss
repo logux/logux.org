@@ -58,6 +58,9 @@ body
   box-shadow: var(--base-focus)
   transition: box-shadow 200ms
 
+*:focus:not(:focus-visible)
+  box-shadow: none
+
 button
   display: inline-block
   font: inherit
@@ -80,6 +83,9 @@ button
 
     @mixin dark
       --link-background: #3f331f
+
+  &:focus:not(:focus-visible)
+    background-color: inherit
 
   @mixin no-mobile
     &:active
