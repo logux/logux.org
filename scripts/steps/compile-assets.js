@@ -1,6 +1,6 @@
 import parcelCore from '@parcel/core'
+import { globby } from 'globby'
 import { join } from 'path'
-import globby from 'globby'
 
 import { SRC, ROOT, DIST } from '../lib/dirs.js'
 import wrap from '../lib/spinner.js'

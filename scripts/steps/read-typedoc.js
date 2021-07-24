@@ -1,7 +1,7 @@
 import capitalize from 'capitalize'
+import { globby } from 'globby'
 import { join } from 'path'
 import TypeDoc from 'typedoc'
-import globby from 'globby'
 
 import { PROJECTS } from '../lib/dirs.js'
 import { run } from '../lib/spinner.js'
