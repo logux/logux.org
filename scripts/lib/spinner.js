@@ -1,4 +1,4 @@
-import { red, green, gray } from 'colorette'
+import { red, green, gray } from 'nanocolors'
 import Spinnies from 'spinnies'
 
 let spinner = new Spinnies({ succeedColor: 'white' })

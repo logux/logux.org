@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import { red } from 'colorette'
+import { red } from 'nanocolors'
 import dotenv from 'dotenv'
 
 import generateWebManifest from './steps/generate-web-manifest.js'

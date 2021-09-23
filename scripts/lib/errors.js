@@ -1,4 +1,4 @@
-import { red } from 'colorette'
+import { red } from 'nanocolors'
 
 let errors = []
 

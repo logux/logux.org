@@ -1,5 +1,5 @@
 import { request } from 'https'
-import { yellow } from 'colorette'
+import { yellow } from 'nanocolors'
 
 import wrap from '../lib/spinner.js'
 
