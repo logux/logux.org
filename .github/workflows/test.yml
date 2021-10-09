@@ -2,8 +2,6 @@ name: Test
 on:
   push:
   pull_request:
-env:
-  FORCE_COLOR: 2
 jobs:
   test:
     name: Test
@@ -15,10 +13,12 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: 16
+          cache: yarn
       - name: Install all dependencies
-        uses: bahmutov/npm-install@v1
+        run: yarn install --frozen-lockfile
       - name: Build and test
         run: yarn test
         env:
           CI: 1
           NO_CONTENT: 1
+          FORCE_COLOR: 2

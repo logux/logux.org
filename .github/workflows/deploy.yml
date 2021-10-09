@@ -4,8 +4,6 @@ on:
     branches:
       - main
   repository_dispatch:
-env:
-  FORCE_COLOR: 2
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -15,20 +13,21 @@ jobs:
       - name: Install Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: 14
+          node-version: 16
+          cache: yarn
       - name: Install build dependencies
-        uses: bahmutov/npm-install@v1
-        env:
-          NODE_ENV: production
+        run: yarn install --frozen-lockfile --production
       - name: Build static files
         run: yarn build
         env:
+          FORCE_COLOR: 2
           GITTER_TOKEN: ${{ secrets.GITTER_TOKEN }}
           GITTER_ROOM_ID: ${{ secrets.GITTER_ROOM_ID }}
       - name: Check files changes
         id: hash
         run: npx ssdeploy changed
         env:
+          FORCE_COLOR: 2
           WEBSITE_URL: ${{ secrets.WEBSITE_URL }}
       - name: Install Google Cloud
         if: "!steps.hash.outputs.noChanges"
