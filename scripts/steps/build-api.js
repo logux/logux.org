@@ -541,6 +541,8 @@ function typeHtml(ctx, type) {
       ...typeHtml(ctx, type.templateType),
       { type: 'text', value: ` }` }
     ]
+  } else if (type.type === 'unknown') {
+    return [{ type: 'text', value: 'unknown' }]
   } else {
     console.error(type)
     throw new Error(`Unknown type ${type.type}`)
