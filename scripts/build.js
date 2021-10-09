@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
-import { red } from 'nanocolors'
 import dotenv from 'dotenv'
+import pico from 'picocolors'
 
 import generateWebManifest from './steps/generate-web-manifest.js'
 import injectCacheBuster from './steps/inject-cache-buster.js'
@@ -76,9 +76,9 @@ async function build() {
 
 build().catch(e => {
   if (e.stack) {
-    process.stderr.write(red(e.stack) + '\n')
+    process.stderr.write(pico.red(e.stack) + '\n')
   } else {
-    process.stderr.write(red(e) + '\n')
+    process.stderr.write(pico.red(e) + '\n')
   }
   process.exit(1)
 })

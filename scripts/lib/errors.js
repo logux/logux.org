@@ -1,4 +1,4 @@
-import { red } from 'nanocolors'
+import pico from 'picocolors'
 
 let errors = []
 
@@ -8,7 +8,7 @@ export function addError(text) {
 
 export function exitOnErrors() {
   if (errors.length > 0) {
-    process.stderr.write(red(errors.join('\n')) + '\n')
+    process.stderr.write(pico.red(errors.join('\n')) + '\n')
     process.exit(1)
   }
 }

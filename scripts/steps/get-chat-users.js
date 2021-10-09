@@ -1,5 +1,5 @@
 import { request } from 'https'
-import { yellow } from 'nanocolors'
+import pico from 'picocolors'
 
 import wrap from '../lib/spinner.js'
 
@@ -44,7 +44,7 @@ function callGitter(command) {
 async function getChatUsers() {
   if (!process.env.GITTER_ROOM_ID) {
     process.stderr.write(
-      yellow(
+      pico.yellow(
         'Using non-real chat users number because of the lack of Gitter token\n'
       )
     )

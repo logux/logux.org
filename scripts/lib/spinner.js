@@ -1,5 +1,5 @@
-import { red, green, gray } from 'nanocolors'
 import Spinnies from 'spinnies'
+import pico from 'picocolors'
 
 let spinner = new Spinnies({ succeedColor: 'white' })
 let lastId = 0
@@ -11,10 +11,12 @@ if (process.env.CI || process.env.GITHUB_ACTIONS) {
     let start = Date.now()
     return e => {
       if (e) {
-        process.stdout.write(red('✖ ') + text + '\n')
+        process.stdout.write(pico.red('✖ ') + text + '\n')
       } else {
         let time = Date.now() - start + ' ms'
-        process.stdout.write(green('✓ ') + text + ' ' + gray(time) + '\n')
+        process.stdout.write(
+          pico.green('✓ ') + text + ' ' + pico.gray(time) + '\n'
+        )
       }
     }
   }
@@ -29,7 +31,7 @@ if (process.env.CI || process.env.GITHUB_ACTIONS) {
         spinner.fail(id)
       } else {
         let time = Date.now() - start
-        spinner.succeed(id, { text: text + gray(` ${time} ms`) })
+        spinner.succeed(id, { text: text + pico.gray(` ${time} ms`) })
       }
     }
   }
