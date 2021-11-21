@@ -42,14 +42,3 @@ jobs:
           GCLOUD_PROJECT: ${{ secrets.GCLOUD_PROJECT }}
           CLOUDFLARE_ZONE: ${{ secrets.CLOUDFLARE_ZONE }}
           CLOUDFLARE_TOKEN: ${{ secrets.CLOUDFLARE_TOKEN }}
-      - name: Warm CDN
-        if: "!steps.hash.outputs.noChanges"
-        run: wget --page-requisites https://logux.io
-      - name: Audit website
-        if: "!steps.hash.outputs.noChanges"
-        uses: treosh/lighthouse-ci-action@v7
-        with:
-          runs: 3
-          uploadArtifacts: true
-          temporaryPublicStorage: true
-          configPath: ./lighthouserc.json
