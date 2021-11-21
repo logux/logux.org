@@ -58,7 +58,7 @@
     "ssdeploy": "^0.7.2",
     "sugarss": "^4.0.1",
     "typedoc": "^0.22.9",
-    "typescript": "~4.4.4",
+    "typescript": "~4.5.2",
     "unified": "^10.1.1",
     "unist-util-filter": "^4.0.0",
     "unist-util-flatmap": "^1.0.0",
