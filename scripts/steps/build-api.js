@@ -44,7 +44,7 @@ const EXTERNAL_TYPES = {
     'basic/getting-started/function_components',
   ReactContext: 'https://reactjs.org/docs/context.html',
   PreactContext: 'https://preactjs.com/guide/v10/context/',
-  MapBuilder: 'https://github.com/ai/nanostores',
+  MapTemplate: 'https://github.com/ai/nanostores',
   MapStore: 'https://github.com/ai/nanostores'
 }
 

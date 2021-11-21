@@ -13,29 +13,29 @@
     "start": "serve dist/"
   },
   "dependencies": {
-    "@babel/core": "^7.15.8",
-    "@parcel/optimizer-cssnano": "2.0.0",
-    "@parcel/optimizer-htmlnano": "2.0.0",
-    "@parcel/packager-css": "2.0.0",
-    "@parcel/packager-html": "2.0.0",
-    "@parcel/transformer-css": "2.0.0",
-    "@parcel/transformer-html": "2.0.0",
-    "@parcel/transformer-postcss": "2.0.0",
-    "@parcel/transformer-posthtml": "2.0.0",
-    "@parcel/transformer-pug": "2.0.0",
-    "@parcel/transformer-sugarss": "2.0.0",
-    "autoprefixer": "^10.3.7",
-    "capitalize": "^2.0.3",
+    "@babel/core": "^7.16.0",
+    "@parcel/optimizer-cssnano": "2.0.1",
+    "@parcel/optimizer-htmlnano": "2.0.1",
+    "@parcel/packager-css": "2.0.1",
+    "@parcel/packager-html": "2.0.1",
+    "@parcel/transformer-css": "2.0.1",
+    "@parcel/transformer-html": "2.0.1",
+    "@parcel/transformer-postcss": "2.0.1",
+    "@parcel/transformer-posthtml": "2.0.1",
+    "@parcel/transformer-pug": "2.0.1",
+    "@parcel/transformer-sugarss": "2.0.1",
+    "autoprefixer": "^10.4.0",
+    "capitalize": "^2.0.4",
     "del": "^6.0.0",
     "dotenv": "^10.0.0",
-    "globby": "^12.0.2",
+    "fast-glob": "^3.2.7",
     "jstransformer-lowlight": "^0.1.0",
-    "lowlight": "^2.3.0",
+    "lowlight": "^2.4.1",
     "make-dir": "^3.1.0",
-    "nanoevents": "^6.0.1",
-    "parcel": "2.0.0",
+    "nanoevents": "^6.0.2",
+    "parcel": "2.0.1",
     "picocolors": "^1.0.0",
-    "postcss": "^8.3.9",
+    "postcss": "^8.3.11",
     "postcss-combine-media-query": "^1.0.1",
     "postcss-hexrgba": "^2.0.1",
     "postcss-media-minmax": "^5.0.0",
@@ -48,46 +48,39 @@
     "rehype-parse": "^8.0.3",
     "rehype-raw": "^6.1.0",
     "rehype-stringify": "^9.0.2",
-    "remark": "^14.0.1",
+    "remark": "^14.0.2",
     "remark-highlight.js": "^7.0.1",
     "remark-html": "^15.0.0",
-    "remark-parse": "^10.0.0",
-    "remark-rehype": "^10.0.0",
-    "slugify": "^1.6.1",
+    "remark-parse": "^10.0.1",
+    "remark-rehype": "^10.0.1",
+    "slugify": "^1.6.2",
     "spinnies": "^0.5.1",
     "ssdeploy": "^0.7.2",
     "sugarss": "^4.0.1",
-    "typedoc": "^0.22.4",
-    "typescript": "^4.4.4",
-    "unified": "^10.1.0",
+    "typedoc": "^0.22.9",
+    "typescript": "~4.4.4",
+    "unified": "^10.1.1",
     "unist-util-filter": "^4.0.0",
     "unist-util-flatmap": "^1.0.0",
     "unist-util-visit": "^4.1.0",
     "unzipper": "^0.10.11"
   },
   "devDependencies": {
-    "@logux/eslint-config": "^46.0.0",
-    "@logux/sharec-config": "^0.12.2",
-    "@logux/stylelint-config": "^0.3.1",
-    "@size-limit/file": "^6.0.3",
-    "@typescript-eslint/eslint-plugin": "^5.0.0",
-    "@typescript-eslint/parser": "^5.0.0",
-    "eslint": "^8.0.1",
+    "@logux/eslint-config": "^46.1.0",
+    "@logux/stylelint-config": "^0.8.1",
+    "@size-limit/file": "^7.0.3",
+    "eslint": "^8.3.0",
     "eslint-config-standard": "^16.0.3",
-    "eslint-plugin-import": "^2.25.2",
-    "eslint-plugin-jest": "^25.0.6",
+    "eslint-plugin-import": "^2.24.2",
     "eslint-plugin-node": "^11.1.0",
-    "eslint-plugin-prefer-let": "^1.1.0",
+    "eslint-plugin-prefer-let": "^3.0.1",
     "eslint-plugin-promise": "^5.1.0",
-    "eslint-plugin-security": "^1.4.0",
-    "eslint-plugin-unicorn": "^37.0.1",
-    "lint-staged": "^11.2.3",
-    "prettier": "^2.4.1",
-    "serve": "^12.0.1",
+    "nano-staged": "^0.1.5",
+    "serve": "^13.0.2",
     "simple-git-hooks": "^2.6.1",
-    "size-limit": "^6.0.3",
-    "stylelint": "^13.13.1",
-    "svgo": "^2.7.0"
+    "size-limit": "^7.0.3",
+    "stylelint": "^14.1.0",
+    "svgo": "^2.8.0"
   },
   "repository": "logux/logux.io",
   "homepage": "https://logux.io/",
@@ -115,14 +108,10 @@
     }
   },
   "eslintConfig": {
-    "extends": "@logux/eslint-config/esm",
+    "extends": "@logux/eslint-config",
     "rules": {
-      "security/detect-unsafe-regex": "off",
       "node/no-unpublished-require": "off",
       "no-loop-func": "off"
-    },
-    "parserOptions": {
-      "sourceType": "module"
     },
     "overrides": [
       {
@@ -145,10 +134,16 @@
     ".parcel-cache"
   ],
   "stylelint": {
-    "extends": "@logux/stylelint-config"
+    "extends": "@logux/stylelint-config",
+    "customSyntax": "sugarss",
+    "rules": {
+      "function-disallowed-list": null,
+      "no-irregular-whitespace": null,
+      "color-no-hex": null
+    }
   },
   "simple-git-hooks": {
-    "pre-commit": "npx lint-staged"
+    "pre-commit": "./node_modules/.bin/nano-staged"
   },
   "prettier": {
     "arrowParens": "avoid",
@@ -158,11 +153,7 @@
     "singleQuote": true,
     "trailingComma": "none"
   },
-  "lint-staged": {
-    "*.js": [
-      "prettier --write",
-      "eslint --fix"
-    ],
+  "nano-staged": {
     "*.svg": "svgo",
     "*.sss": "stylelint --fix"
   },
@@ -195,9 +186,5 @@
       ],
       "limit": "5 KB"
     }
-  ],
-  "sharec": {
-    "config": "@logux/sharec-config",
-    "version": "0.12.2"
-  }
+  ]
 }

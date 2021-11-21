@@ -4,10 +4,10 @@ import unistFlatmap from 'unist-util-flatmap'
 import { readFile } from 'fs/promises'
 import remarkParse from 'remark-parse'
 import { unified } from 'unified'
-import { globby } from 'globby'
 import { visit } from 'unist-util-visit'
 import rehypeRaw from 'rehype-raw'
 import { join } from 'path'
+import glob from 'fast-glob'
 
 import { PROJECTS } from '../lib/dirs.js'
 import wrap from '../lib/spinner.js'
@@ -203,7 +203,7 @@ function convertor({ file, onTitle }) {
 }
 
 async function readDocs() {
-  let files = await globby('**/*.md', { cwd: ROOT, ignore: ['node_modules'] })
+  let files = await glob('**/*.md', { cwd: ROOT, ignore: ['node_modules'] })
   let guides = await Promise.all(
     files.map(async file => {
       let title = ''

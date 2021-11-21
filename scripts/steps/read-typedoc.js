@@ -1,7 +1,7 @@
 import capitalize from 'capitalize'
-import { globby } from 'globby'
 import { join } from 'path'
 import TypeDoc from 'typedoc'
+import glob from 'fast-glob'
 
 import { PROJECTS } from '../lib/dirs.js'
 import { run } from '../lib/spinner.js'
@@ -12,7 +12,7 @@ export default async function readTypedoc(...projects) {
   let files = await run(`Reading ${type} TypeDoc`, async () => {
     return Promise.all(
       projects.map(i => {
-        return globby('**/*.d.ts', {
+        return glob('**/*.d.ts', {
           absolute: true,
           ignore: ['node_modules', 'test', 'coverage'],
           cwd: join(PROJECTS, i)

@@ -1,6 +1,6 @@
 import parcelCore from '@parcel/core'
-import { globby } from 'globby'
 import { join } from 'path'
+import glob from 'fast-glob'
 
 import { SRC, ROOT, DIST } from '../lib/dirs.js'
 import wrap from '../lib/spinner.js'
@@ -20,7 +20,7 @@ async function compileAssets() {
     }
   })
   await bundler.run()
-  let assets = await globby(join(DIST, '*'))
+  let assets = await glob(join(DIST, '*'))
   let hashes = {}
   return {
     map(fn) {
