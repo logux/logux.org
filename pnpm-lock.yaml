@@ -23,7 +23,7 @@ specifiers:
   dotenv: ^10.0.0
   eslint: ^8.5.0
   eslint-config-standard: ^16.0.3
-  eslint-plugin-import: ^2.24.2
+  eslint-plugin-import: ^2.25.3
   eslint-plugin-node: ^11.1.0
   eslint-plugin-prefer-let: ^3.0.1
   eslint-plugin-promise: ^6.0.0
@@ -54,7 +54,7 @@ specifiers:
   remark-parse: ^10.0.1
   remark-rehype: ^10.1.0
   serve: ^13.0.2
-  simple-git-hooks: ^2.6.1
+  simple-git-hooks: ^2.7.0
   size-limit: ^7.0.4
   slugify: ^1.6.4
   spinnies: ^0.5.1
