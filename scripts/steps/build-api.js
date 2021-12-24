@@ -61,7 +61,8 @@ const SIMPLE_TYPES = new Set([
   'any',
   'StoreValue',
   'StoreValues',
-  'Builder'
+  'Builder',
+  'Type'
 ])
 
 const UTILITY_TYPES = new Set([
@@ -74,8 +75,7 @@ const UTILITY_TYPES = new Set([
   'Omit',
   'ReturnType',
   'Ref',
-  'ReadonlyRef',
-  'Type'
+  'ReadonlyRef'
 ])
 
 const HIDE_CONSTRUCTOR = new Set([
