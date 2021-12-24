@@ -25,7 +25,7 @@ jobs:
           GITTER_ROOM_ID: ${{ secrets.GITTER_ROOM_ID }}
       - name: Check files changes
         id: hash
-        run: pnpx ssdeploy changed
+        run: ./node_modules/.bin/ssdeploy changed
         env:
           FORCE_COLOR: 2
           WEBSITE_URL: ${{ secrets.WEBSITE_URL }}
@@ -36,7 +36,7 @@ jobs:
           service_account_key: ${{ secrets.GCLOUD_AUTH }}
       - name: Deploy files
         if: "!steps.hash.outputs.noChanges"
-        run: npx ssdeploy deploy --verbose
+        run: ./node_modules/.bin/ssdeploy deploy --verbose
         env:
           GCLOUD_APP: ${{ secrets.GCLOUD_APP }}
           GCLOUD_PROJECT: ${{ secrets.GCLOUD_PROJECT }}

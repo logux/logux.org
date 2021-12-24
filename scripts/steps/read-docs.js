@@ -49,7 +49,8 @@ function iniandBashHighlight() {
                 i === 0 ||
                 (i === 1 && all[0] === 'npx') ||
                 (i === 1 && all[0] === 'npm' && word === 'i') ||
-                (i === 1 && all[0] === 'yarn' && word === 'add')
+                (i === 1 && all[0] === 'yarn' && word === 'add') ||
+                (i === 1 && all[0] === 'pnpm' && word === 'add')
               ) {
                 return span('code-block_literal', word)
               } else {
@@ -162,6 +163,12 @@ function npmToYarn(value) {
     .replace(/^npm /, 'yarn ')
 }
 
+function npmToPnpm(value) {
+  return value
+    .replace(/^npm i(nstall)? /, 'pnpm add ')
+    .replace(/^npm /, 'pnpm ')
+}
+
 function convertor({ file, onTitle }) {
   return tree => {
     if (file === 'README.md') {
@@ -178,6 +185,9 @@ function convertor({ file, onTitle }) {
         return [
           html('<details><summary>npm</summary>'),
           node,
+          html('</details>'),
+          html('<details><summary>pnpm</summary>'),
+          { type: 'code', lang: 'sh', value: npmToPnpm(node.value) },
           html('</details>'),
           html('<details><summary>Yarn</summary>'),
           { type: 'code', lang: 'sh', value: npmToYarn(node.value) },
