@@ -18,7 +18,9 @@ export default async function installTypes(nextSteps) {
     await Promise.all(nextSteps())
     await run('Installing types dependecies', async () => {
       for (let dir of dirs) {
-        await exec('yarn install --production=false', { cwd: dir })
+        await exec('pnpm install --frozen-lockfile --ignore-scripts', {
+          cwd: dir
+        })
       }
     })
   }

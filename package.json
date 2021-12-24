@@ -7,13 +7,15 @@
   },
   "scripts": {
     "start:uikit": "parcel serve src/uikit.pug --open",
-    "test": "eslint . && stylelint src/**/*.sss && yarn build && size-limit",
+    "test": "eslint . && stylelint src/**/*.sss && pnpm build && size-limit",
     "clean": "rm -Rf dist/ .parcel-cache/",
     "build": "NODE_ENV=production ./scripts/build.js",
     "start": "serve dist/"
   },
   "dependencies": {
     "@babel/core": "^7.16.5",
+    "@parcel/config-default": "^2.0.1",
+    "@parcel/core": "^2.0.1",
     "@parcel/optimizer-cssnano": "2.0.1",
     "@parcel/optimizer-htmlnano": "2.0.1",
     "@parcel/packager-css": "2.0.1",

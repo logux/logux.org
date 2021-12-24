@@ -20,8 +20,8 @@ Design by [Aljona Kirdina](https://twitter.com/egodyston).
 You can build local version of website and open it in browser by:
 
 ```sh
-yarn build
-yarn start
+pnpm build
+pnpm start
 ```
 
 You need manually to re-build it on every changes.
@@ -29,11 +29,11 @@ You need manually to re-build it on every changes.
 For layout HTML and CSS development you can use UI kit with auto re-build:
 
 ```sh
-yarn start:uikit
+pnpm start:uikit
 ```
 
 To test nginx config, you will need to build and run Docker image:
 
 ```sh
-npx ssdeploy run
+pnpx ssdeploy run
 ```

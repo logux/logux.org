@@ -14,18 +14,18 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: 16
-          cache: yarn
+          cache: pnpm
       - name: Install build dependencies
-        run: yarn install --frozen-lockfile --production
+        run: pnpm install --frozen-lockfile --ignore-scripts --production
       - name: Build static files
-        run: yarn build
+        run: pnpm build
         env:
           FORCE_COLOR: 2
           GITTER_TOKEN: ${{ secrets.GITTER_TOKEN }}
           GITTER_ROOM_ID: ${{ secrets.GITTER_ROOM_ID }}
       - name: Check files changes
         id: hash
-        run: npx ssdeploy changed
+        run: pnpx ssdeploy changed
         env:
           FORCE_COLOR: 2
           WEBSITE_URL: ${{ secrets.WEBSITE_URL }}
