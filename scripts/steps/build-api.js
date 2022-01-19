@@ -75,7 +75,8 @@ const UTILITY_TYPES = new Set([
   'Omit',
   'ReturnType',
   'Ref',
-  'ReadonlyRef'
+  'ReadonlyRef',
+  'Unknown'
 ])
 
 const HIDE_CONSTRUCTOR = new Set([
