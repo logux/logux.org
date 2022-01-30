@@ -1,7 +1,7 @@
 import isSaveDate from '../../lib/is-save-data.js'
 
 function init() {
-  navigator.serviceWorker.register(new URL('../service.js', import.meta.url), {
+  navigator.serviceWorker.register(new URL('/service.js', import.meta.url), {
     type: 'module'
   })
 }

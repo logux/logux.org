@@ -20,7 +20,7 @@ function tag(tagName, properties) {
 
 async function updateHtml(assets, manifest, preloadFiles) {
   let [html] = await Promise.all([
-    readFile(join(DIST, 'uikit.html')),
+    readFile(join(DIST, 'index.html')),
     makeDir(join(DIST, 'uikit'))
   ])
   function optimizer() {
@@ -60,7 +60,7 @@ async function updateHtml(assets, manifest, preloadFiles) {
     .use(optimizer)
     .use(rehypeStringify)
     .process(html)
-  let oldFile = join(DIST, 'uikit.html')
+  let oldFile = join(DIST, 'index.html')
   let newFile = join(DIST, 'uikit', 'index.html')
   await Promise.all([writeFile(newFile, String(fixed)), unlink(oldFile)])
   assets.remove(oldFile)
