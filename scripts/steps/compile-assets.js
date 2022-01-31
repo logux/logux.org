@@ -7,7 +7,9 @@ import wrap from '../lib/spinner.js'
 import hash from '../lib/hash.js'
 
 async function compileAssets() {
-  await vite.build()
+  await vite.build({
+    logLevel: 'warn'
+  })
 
   let assets = await glob(join(DIST, '*'))
   let hashes = {}

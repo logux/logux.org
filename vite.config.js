@@ -7,7 +7,8 @@ export default defineConfig({
   root: SRC,
   build: {
     assetsInlineLimit: 0,
-    outDir: DIST,
+    emptyOutDir: true,
+    outDir: DIST
   },
-  plugins: [vitePluginPug()],
+  plugins: [vitePluginPug()]
 })
