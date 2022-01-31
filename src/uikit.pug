@@ -2,268 +2,248 @@ include switcher/switcher.pug
 include edit/edit.pug
 include title/title.pug
 
-doctype html
-html( lang="en" )
-  head
-    meta( charset="utf-8" )
-    title Logux.io UI Kit
-    meta( name="viewport" content="width=device-width" )
-    link( rel="icon" href="./base/favicon.svg" type="image/svg+xml" )
-    link( rel="apple-touch-icon" href="./base/apple.png" )
-    meta( name="apple-mobile-web-app-title" content="Logux" )
-    meta( name="description" content="Logux is a client-server communication tool for collaborative web applications with optimistics UI, offline first and live updates" )
-    script( defer type="module" src="./common.js" )
-    script( defer type="module" src="./switcher.js" )
-    link( rel="stylesheet" href="./common.sss" )
-    link( rel="stylesheet" href="./switcher.sss" )
-    link( rel="stylesheet" href="./branding.sss" )
-    link( rel="stylesheet" href="./video.sss" )
-    meta( property="og:image" content="./base/og.png" )
-    meta( name="twitter:site" content="@logux_io" )
-    link( rel="preconnect" href="https://sidecar.gitter.im/" media="(min-width:941px)" )
-  body.layout
-    nav.layout_aside
-      .layout_menu
-        ul.menu
-          li.menu_hidden
-            a.menu_skip( href="#main" ) Skip navigation
-          li
-            a.menu_home( rel="home" href="/" )
-              picture.menu_logotype
-                source( srcset="./menu/logotype-dark.svg" media="(prefers-color-scheme: dark)" )
-                img( src="./menu/logotype-light.svg" alt="Logux logotype" height="117" width="78" )
-            .menu_separator
-          li
-            a.menu_link.is-current( href="/guide/architecture/core/" ) Guide
-          li
-            a.menu_link( href="/recipes/authentication/" ) Recipes
-          li
-            a.menu_link( href="/web-api/" ) Web API
-          li
-            a.menu_link( href="/node-api/" ) Node API
-          li
-            a.menu_link( href="/protocols/ws/spec/" ) Protocols
-          li
-            a.menu_link( href="/branding/" ) Branding
-          li.is-separated
-            .menu_separator
-            a.menu_link( href="https://twitter.com/logux_io" rel="me" ) Twitter
-          li
-            a.menu_link( href="https://github.com/logux" rel="me" ) GitHub
-          li
-            a.menu_link( href="https://github.com/logux/logux/issues" ) Issues
-          li
-            a.menu_link.chat( href="https://gitter.im/logux/logux" rel="me" )
-              | Join chat
-              .menu_extra (10 people)
-      .layout_hover
-        .layout_submenu
-          ul.submenu
-            li.is-flat
-              a.submenu_link( href="#" ) Authentication
-            li.is-flat
-              a.submenu_link( href="#" ) Scaling
+nav.layout_aside
+  .layout_menu
+    ul.menu
+      li.menu_hidden
+        a.menu_skip( href="#main" ) Skip navigation
+      li
+        a.menu_home( rel="home" href="/" )
+          picture.menu_logotype
+            source( srcset="./menu/logotype-dark.svg" media="(prefers-color-scheme: dark)" )
+            img( src="./menu/logotype-light.svg" alt="Logux logotype" height="117" width="78" )
+        .menu_separator
+      li
+        a.menu_link.is-current( href="/guide/architecture/core/" ) Guide
+      li
+        a.menu_link( href="/recipes/authentication/" ) Recipes
+      li
+        a.menu_link( href="/web-api/" ) Web API
+      li
+        a.menu_link( href="/node-api/" ) Node API
+      li
+        a.menu_link( href="/protocols/ws/spec/" ) Protocols
+      li
+        a.menu_link( href="/branding/" ) Branding
+      li.is-separated
+        .menu_separator
+        a.menu_link( href="https://twitter.com/logux_io" rel="me" ) Twitter
+      li
+        a.menu_link( href="https://github.com/logux" rel="me" ) GitHub
+      li
+        a.menu_link( href="https://github.com/logux/logux/issues" ) Issues
+      li
+        a.menu_link.chat( href="https://gitter.im/logux/logux" rel="me" )
+          | Join chat
+          .menu_extra (10 people)
+  .layout_hover
+    .layout_submenu
+      ul.submenu
+        li.is-flat
+          a.submenu_link( href="#" ) Authentication
+        li.is-flat
+          a.submenu_link( href="#" ) Scaling
 
+        li
+          .submenu_text Logux architecture
+          ol
             li
-              .submenu_text Logux architecture
-              ol
-                li
-                  a.submenu_link( href="#" ) Core Concepts
-                li
-                  a.submenu_link.is-current Using Concepts in Practice
-                li
-                  a.submenu_link( href="#" ) Comparing Logux with AJAX and GraphQL
-                li
-                  a.submenu_link( href="#" ) Parts
-                li
-                  a.submenu_link( href="#" ) Choosing Right Architecture
+              a.submenu_link( href="#" ) Core Concepts
             li
-              a.submenu_link( href="#" ) TestTime
-              ul
-                li
-                  a.submenu_link( href="#" ) .getLog()
-                li
-                  a.submenu_link( href="#" ) #lastId
-                li
-                  a.submenu_link( href="#" ) #nextLog()
-                li
-                  a.submenu_link( href="#" ) #prevLog()
+              a.submenu_link.is-current Using Concepts in Practice
             li
-              .submenu_text Core Concepts and Small Secrets
-              ol
-                li
-                  a.submenu_link( href="#" ) Nodes
-                li
-                  a.submenu_link( href="#" ) Actions
-                li
-                  a.submenu_link( href="#" ) Meta
-                li
-                  a.submenu_link( href="#" ) Application State
-                li
-                  a.submenu_link( href="#" ) Channels and Subscriptions
-                li
-                  a.submenu_link( href="#" ) Cleaning Log and Action Reasons
-                li
-                  a.submenu_link( href="#" ) Subprotocols
+              a.submenu_link( href="#" ) Comparing Logux with AJAX and GraphQL
             li
-              .submenu_text Core Concepts and Small Secrets
-              ol
-                li
-                  a.submenu_link( href="#" ) Nodes
-                li
-                  a.submenu_link( href="#" ) Actions
-                li
-                  a.submenu_link( href="#" ) Meta
-                li
-                  a.submenu_link( href="#" ) Application State
-                li
-                  a.submenu_link( href="#" ) Channels and Subscriptions
-                li
-                  a.submenu_link( href="#" ) Cleaning Log and Action Reasons
-                li
-                  a.submenu_link( href="#" ) Subprotocols
+              a.submenu_link( href="#" ) Parts
+            li
+              a.submenu_link( href="#" ) Choosing Right Architecture
+        li
+          a.submenu_link( href="#" ) TestTime
+          ul
+            li
+              a.submenu_link( href="#" ) .getLog()
+            li
+              a.submenu_link( href="#" ) #lastId
+            li
+              a.submenu_link( href="#" ) #nextLog()
+            li
+              a.submenu_link( href="#" ) #prevLog()
+        li
+          .submenu_text Core Concepts and Small Secrets
+          ol
+            li
+              a.submenu_link( href="#" ) Nodes
+            li
+              a.submenu_link( href="#" ) Actions
+            li
+              a.submenu_link( href="#" ) Meta
+            li
+              a.submenu_link( href="#" ) Application State
+            li
+              a.submenu_link( href="#" ) Channels and Subscriptions
+            li
+              a.submenu_link( href="#" ) Cleaning Log and Action Reasons
+            li
+              a.submenu_link( href="#" ) Subprotocols
+        li
+          .submenu_text Core Concepts and Small Secrets
+          ol
+            li
+              a.submenu_link( href="#" ) Nodes
+            li
+              a.submenu_link( href="#" ) Actions
+            li
+              a.submenu_link( href="#" ) Meta
+            li
+              a.submenu_link( href="#" ) Application State
+            li
+              a.submenu_link( href="#" ) Channels and Subscriptions
+            li
+              a.submenu_link( href="#" ) Cleaning Log and Action Reasons
+            li
+              a.submenu_link( href="#" ) Subprotocols
 
-    .layout_float
-      button.layout_open.button.is-square( title="Open menu" )
-      button.layout_close.button.is-square( title="Close menu" hidden )
-      a.button( href="https://gitter.im/logux/logux" rel="me" )
-        .layout_chat
-        | Join chat
+.layout_float
+  button.layout_open.button.is-square( title="Open menu" )
+  button.layout_close.button.is-square( title="Close menu" hidden )
+  a.button( href="https://gitter.im/logux/logux" rel="me" )
+    .layout_chat
+    | Join chat
 
-    main.layout_main#main
-      article.text
-        +edit('https://github.com/logux/logux.io')
-          +title1('home')
-            | Logux.io UI Kit
-        p.text_block Logux #[strong actions] are very similar to #[strong #[a( href="#" ) Redux actions]]. JSON objects describe what was changed in #[a( href="#" ) the application state]. Logux Core provides #[code.code BaseNode] class, which will synchronize actions between two nodes. #[code.code ClientNode] and #[code.code ServerNode] classes extend this class with small behaviour changes.
-        +switcher('Node.js', 'Ruby on Rails')
-          +switcher_section
+main.layout_main#main
+  article.text
+    +edit('https://github.com/logux/logux.io')
+      +title1('home')
+        | Logux.io UI Kit
+    p.text_block Logux #[strong actions] are very similar to #[strong #[a( href="#" ) Redux actions]]. JSON objects describe what was changed in #[a( href="#" ) the application state]. Logux Core provides #[code.code BaseNode] class, which will synchronize actions between two nodes. #[code.code ClientNode] and #[code.code ServerNode] classes extend this class with small behaviour changes.
+    +switcher('Node.js', 'Ruby on Rails')
+      +switcher_section
+        p.text_block You can use only string, number, boolean, null, array, and object as values.
+        ol.list
+          li
+            p.text_block They must have type property with a string value.
+          li
             p.text_block You can use only string, number, boolean, null, array, and object as values.
-            ol.list
-              li
-                p.text_block They must have type property with a string value.
-              li
-                p.text_block You can use only string, number, boolean, null, array, and object as values.
-            ul.list
-              li
-                p.text_block The #[code.code standard Redux] way to dispatch actions. Action will not be sent to the server or another browser tab. There is no way to set action’s meta in this method.
-                pre.code-block
-                  :lowlight( lang="javascript" prefix="code-block_" )
-                    server.undo(meta, 'too late')
-              li
-                p.text_block #[code.code preadd]: action is going to be added to the log. It is the only way to set #[a.code( href="#" ) #[code meta.reasons]]. This event will not be called for cross-tab actions added in a different browser tab.
-            p.text_block To stop the server press #[kbd.code Ctrl]+#[kbd.code C] on Linux and Windows.
-          +switcher_section
-            p.text_block Clients can also create #[code.code logux/undo] to revert action and ask other clients to revert it (if the developer allowed to re-send these actions on the server).
-          .next
-            a.button( href="#" )
-              | Next chapter
-              span.next_icon
-        +title2('subtitle')
-          | Subtitle
-        p.text_block By default, the server state is opposite to client state. Because server-side cache could be very big, the database is the single source of truth. You can use any database with Logux.
-        .asset
-          a.asset_file( href="https://logux.io/branding/logo-light.svg" download )
-            img( src="https://logux.io/branding/logo-light.svg" height="150" width="150" )
-          a.asset_file( href="https://logux.io/branding/logo-dark.svg" download )
-            img.is-dark( src="https://logux.io/branding/logo-dark.svg" height="150" width="150" )
-        p.text_block Logux Server removes action after processing and always look to a database for the latest value. As a result, you can’t undo actions on the server.
-        +switcher('Node.js', 'Ruby on Rails', 'Any other HTTP server')
-          +switcher_section
-            p.text_block Using Logux Server
+        ul.list
+          li
+            p.text_block The #[code.code standard Redux] way to dispatch actions. Action will not be sent to the server or another browser tab. There is no way to set action’s meta in this method.
             pre.code-block
               :lowlight( lang="javascript" prefix="code-block_" )
-                const { Server } = require('@logux/server')
+                server.undo(meta, 'too late')
+          li
+            p.text_block #[code.code preadd]: action is going to be added to the log. It is the only way to set #[a.code( href="#" ) #[code meta.reasons]]. This event will not be called for cross-tab actions added in a different browser tab.
+        p.text_block To stop the server press #[kbd.code Ctrl]+#[kbd.code C] on Linux and Windows.
+      +switcher_section
+        p.text_block Clients can also create #[code.code logux/undo] to revert action and ask other clients to revert it (if the developer allowed to re-send these actions on the server).
+      .next
+        a.button( href="#" )
+          | Next chapter
+          span.next_icon
+    +title2('subtitle')
+      | Subtitle
+    p.text_block By default, the server state is opposite to client state. Because server-side cache could be very big, the database is the single source of truth. You can use any database with Logux.
+    .asset
+      a.asset_file( href="https://logux.io/branding/logo-light.svg" download )
+        img( src="https://logux.io/branding/logo-light.svg" height="150" width="150" )
+      a.asset_file( href="https://logux.io/branding/logo-dark.svg" download )
+        img.is-dark( src="https://logux.io/branding/logo-dark.svg" height="150" width="150" )
+    p.text_block Logux Server removes action after processing and always look to a database for the latest value. As a result, you can’t undo actions on the server.
+    +switcher('Node.js', 'Ruby on Rails', 'Any other HTTP server')
+      +switcher_section
+        p.text_block Using Logux Server
+        pre.code-block
+          :lowlight( lang="javascript" prefix="code-block_" )
+            const { Server } = require('@logux/server')
 
-                function usersReducers (state = { }, action) {
-                  if (action.type === 'user/name') {
-                    return { ...state, name: action.name }
-                  } else {
-                    return state
-                  }
-                }
+            function usersReducers (state = { }, action) {
+              if (action.type === 'user/name') {
+                return { ...state, name: action.name }
+              } else {
+                return state
+              }
+            }
 
-                server.auth((userId, token) => {
-                  // Allow only local users until we will have a proper authentication
-                  return process.env.NODE_ENV === 'development'
-                })
-            p.text_block However, you can change this behavior and have event sourcing on the server too.
-          +switcher_section
-            p.text_block Use Logux Rails gem
-          +switcher_section
-            p.text_block Write your own library
-        +title2('add')
-          code
-            | #[span.title_extra Class#]add#[span.title_extra (action, meta)]
-        +title3('parameters')
-          | Parameters
-        table.table
-          tr
-            th Name
-            th Type
-            th Description
-          tr
-            td: code.code log
-            td: code: a( href="#" ) Log
-            td Unique current machine name.
-          tr
-            td: code.code reason
-            td: code string = 'error'
-            td Optional code for reason.
-          tr
-            td: code.code opts.allowDangerousProtocol
-            td: code boolean?
-            td Do not show warning when using #[code.code ws://] in production
-          table.table
-            tr
-              th Name
-              th Type
-            tr
-              td: code.code log
-              td: code: a( href="#" ) Log
-            tr
-              td: code.code reason
-              td: code string = 'error'
-            tr
-              td: code.code opts.allowDangerousProtocol
-              td: code boolean?
-        +title3('returns')
-          | Returns
-        p.text_block: code #[a( href="#" ) Promise]&lt;#[a( href="#" ) boolean]&gt;
-        a.video( href="https://www.youtube.com/watch?v=c7t_YBNHkeo" )
-          picture
-            source( srcset="https://i.ytimg.com/vi_webp/c7t_YBNHkeo/maxresdefault.webp" type="image/webp" )
-            img( src="https://i.ytimg.com/vi/c7t_YBNHkeo/maxresdefault.jpg" alt="Talk test" )
-        hr.line
+            server.auth((userId, token) => {
+              // Allow only local users until we will have a proper authentication
+              return process.env.NODE_ENV === 'development'
+            })
+        p.text_block However, you can change this behavior and have event sourcing on the server too.
+      +switcher_section
+        p.text_block Use Logux Rails gem
+      +switcher_section
+        p.text_block Write your own library
+    +title2('add')
+      code
+        | #[span.title_extra Class#]add#[span.title_extra (action, meta)]
+    +title3('parameters')
+      | Parameters
+    table.table
+      tr
+        th Name
+        th Type
+        th Description
+      tr
+        td: code.code log
+        td: code: a( href="#" ) Log
+        td Unique current machine name.
+      tr
+        td: code.code reason
+        td: code string = 'error'
+        td Optional code for reason.
+      tr
+        td: code.code opts.allowDangerousProtocol
+        td: code boolean?
+        td Do not show warning when using #[code.code ws://] in production
+      table.table
+        tr
+          th Name
+          th Type
+        tr
+          td: code.code log
+          td: code: a( href="#" ) Log
+        tr
+          td: code.code reason
+          td: code string = 'error'
+        tr
+          td: code.code opts.allowDangerousProtocol
+          td: code boolean?
+    +title3('returns')
+      | Returns
+    p.text_block: code #[a( href="#" ) Promise]&lt;#[a( href="#" ) boolean]&gt;
+    a.video( href="https://www.youtube.com/watch?v=c7t_YBNHkeo" )
+      picture
+        source( srcset="https://i.ytimg.com/vi_webp/c7t_YBNHkeo/maxresdefault.webp" type="image/webp" )
+        img( src="https://i.ytimg.com/vi/c7t_YBNHkeo/maxresdefault.jpg" alt="Talk test" )
+    hr.line
 
-      article.text
-        +title1('h1')
-          | Title 1
-        p.text_block Logux architecture was designed to be peer-to-peer and flexible. You can build different architecture on top of core concepts depends on your needs.
-        +title2('h2')
-          | Title 2
-        p.text_block Logux architecture was designed to be peer-to-peer and flexible. You can build different architecture on top of core concepts depends on your needs.
-        +title3('h3')
-          | Title 3
-        p.text_block Logux architecture was designed to be peer-to-peer and flexible. You can build different architecture on top of core concepts depends on your needs.
-        hr.line
+  article.text
+    +title1('h1')
+      | Title 1
+    p.text_block Logux architecture was designed to be peer-to-peer and flexible. You can build different architecture on top of core concepts depends on your needs.
+    +title2('h2')
+      | Title 2
+    p.text_block Logux architecture was designed to be peer-to-peer and flexible. You can build different architecture on top of core concepts depends on your needs.
+    +title3('h3')
+      | Title 3
+    p.text_block Logux architecture was designed to be peer-to-peer and flexible. You can build different architecture on top of core concepts depends on your needs.
+    hr.line
 
-      footer.footer
-        section.footer_section
-          h3.footer_title About
-          .footer_link: a( href="/guide/" ) Guide
-          .footer_link: a( href="/recipes/" ) Recipes
-          .footer_link: a( href="/web-api/" ) Web API
-          .footer_link: a( href="/node-api/" ) Node API
-          .footer_link: a( href="/protocols/" ) Protocols
-          .footer_link: a( href="/branding/" ) Branding
-        section.footer_section
-          h3.footer_title Community
-          .footer_link: a( href="https://github.com/logux" ) GitHub
-          .footer_link: a( href="https://twitter.com/logux_io" ) Twitter
-          .footer_link: a( href="https://gitter.im/logux/logux" ) Gitter
-          .footer_link: a( href="https://twitter.com/linguopunk" ) Linguopunk
-        .footer_section.is-author
-          .footer_text Under the #[a( href="https://github.com/logux/logux.io/blob/main/LICENSE" rel="license" ) MIT] license
-          .footer_text Sponsored by #[a( href="https://evilmartians.com/" ) Evil Martians]
-          a.footer_lurkers( href="https://evilmartians.com/" aria-hidden="true" tabindex="-1" )
+  footer.footer
+    section.footer_section
+      h3.footer_title About
+      .footer_link: a( href="/guide/" ) Guide
+      .footer_link: a( href="/recipes/" ) Recipes
+      .footer_link: a( href="/web-api/" ) Web API
+      .footer_link: a( href="/node-api/" ) Node API
+      .footer_link: a( href="/protocols/" ) Protocols
+      .footer_link: a( href="/branding/" ) Branding
+    section.footer_section
+      h3.footer_title Community
+      .footer_link: a( href="https://github.com/logux" ) GitHub
+      .footer_link: a( href="https://twitter.com/logux_io" ) Twitter
+      .footer_link: a( href="https://gitter.im/logux/logux" ) Gitter
+      .footer_link: a( href="https://twitter.com/linguopunk" ) Linguopunk
+    .footer_section.is-author
+      .footer_text Under the #[a( href="https://github.com/logux/logux.io/blob/main/LICENSE" rel="license" ) MIT] license
+      .footer_text Sponsored by #[a( href="https://evilmartians.com/" ) Evil Martians]
+      a.footer_lurkers( href="https://evilmartians.com/" aria-hidden="true" tabindex="-1" )

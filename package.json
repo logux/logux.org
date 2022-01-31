@@ -6,26 +6,14 @@
     "node": ">=14.0.0"
   },
   "scripts": {
-    "start:uikit": "parcel serve src/uikit.pug --open",
+    "start:uikit": "vite --open",
     "test": "eslint . && stylelint src/**/*.sss && pnpm build && size-limit",
-    "clean": "rm -Rf dist/ .parcel-cache/",
+    "clean": "rm -Rf dist/",
     "build": "NODE_ENV=production ./scripts/build.js",
     "start": "serve dist/"
   },
   "dependencies": {
     "@babel/core": "^7.16.7",
-    "@parcel/config-default": "^2.2.1",
-    "@parcel/core": "^2.2.1",
-    "@parcel/optimizer-cssnano": "2.2.1",
-    "@parcel/optimizer-htmlnano": "2.2.1",
-    "@parcel/packager-css": "2.2.1",
-    "@parcel/packager-html": "2.2.1",
-    "@parcel/transformer-css": "2.2.1",
-    "@parcel/transformer-html": "2.2.1",
-    "@parcel/transformer-postcss": "2.2.1",
-    "@parcel/transformer-posthtml": "2.2.1",
-    "@parcel/transformer-pug": "2.2.1",
-    "@parcel/transformer-sugarss": "2.2.1",
     "autoprefixer": "^10.4.2",
     "capitalize": "^2.0.4",
     "del": "^6.0.0",
@@ -35,7 +23,6 @@
     "lowlight": "^2.5.0",
     "make-dir": "^3.1.0",
     "nanoevents": "^6.0.2",
-    "parcel": "2.2.1",
     "picocolors": "^1.0.0",
     "postcss": "^8.4.5",
     "postcss-combine-media-query": "^1.0.1",
@@ -65,7 +52,8 @@
     "unist-util-filter": "^4.0.0",
     "unist-util-flatmap": "^1.0.0",
     "unist-util-visit": "^4.1.0",
-    "unzipper": "^0.10.11"
+    "unzipper": "^0.10.11",
+    "vite": "^2.7.13"
   },
   "devDependencies": {
     "@logux/eslint-config": "^46.1.1",
@@ -117,7 +105,7 @@
     },
     "overrides": [
       {
-        "files": "src/service.js",
+        "files": "src/public/service.js",
         "globals": {
           "FILES": false
         }
@@ -132,8 +120,7 @@
   },
   "eslintIgnore": [
     "scripts/lib/dirs.js",
-    "dist",
-    ".parcel-cache"
+    "dist"
   ],
   "stylelint": {
     "extends": "@logux/stylelint-config",
@@ -164,26 +151,26 @@
       "name": "Files to download",
       "path": [
         "dist/uikit/index.html.gz",
-        "dist/*.woff2",
-        "dist/*.svg.gz",
-        "dist/*.js.gz",
-        "dist/*.css.gz",
+        "dist/assets/*.woff2",
+        "dist/assets/*.svg.gz",
+        "dist/assets/*.js.gz",
+        "dist/assets/*.css.gz",
         "!dist/service.js.gz",
-        "!dist/open.*.svg.gz",
-        "!dist/close.*.svg.gz",
-        "!dist/chat.*.svg.gz",
-        "!dist/pinned.*.svg.gz",
-        "!dist/favicon.*.svg.gz",
-        "!dist/chain-dark.*.svg.gz",
-        "!dist/lurkers-dark.*.svg.gz",
-        "!dist/logotype-dark.*.svg.gz"
+        "!dist/assets/open.*.svg.gz",
+        "!dist/assets/close.*.svg.gz",
+        "!dist/assets/chat.*.svg.gz",
+        "!dist/assets/pinned.*.svg.gz",
+        "!dist/assets/favicon.*.svg.gz",
+        "!dist/assets/chain-dark.*.svg.gz",
+        "!dist/assets/lurkers-dark.*.svg.gz",
+        "!dist/assets/logotype-dark.*.svg.gz"
       ],
       "limit": "90 KB"
     },
     {
       "name": "Scripts to execute",
       "path": [
-        "dist/*.js",
+        "dist/assets/*.js",
         "!dist/service.js"
       ],
       "limit": "5 KB"
