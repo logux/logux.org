@@ -143,6 +143,8 @@ const CLIENT_ENTITIES = new Set([
   'request'
 ])
 const SERVER_ENTITIES = new Set([
+  'addSyncMap',
+  'addSyncMapFilter',
   'ChannelContext',
   'Context',
   'ResponseError',
@@ -924,9 +926,13 @@ export default async function buildApi(assets, layout, title, nodes) {
       if (isSource(node, join('logux-client', 'vue'))) {
         node.name = 'Vue.' + node.name
       } else if (isSource(node, join('logux-client', 'react'))) {
-        node.name = 'React.' + node.name
+        if (!node.name.includes('React')) {
+          node.name = 'React.' + node.name
+        }
       } else if (isSource(node, join('logux-client', 'preact'))) {
-        node.name = 'Preact.' + node.name
+        if (!node.name.includes('Preact')) {
+          node.name = 'Preact.' + node.name
+        }
       }
     }
   }
