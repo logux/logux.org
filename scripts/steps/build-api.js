@@ -125,6 +125,7 @@ const CORE_ENTITIES = new Set([
 const CLIENT_ENTITIES = new Set([
   'Client',
   'CrossTabClient',
+  'syncMapTemplate',
   'IndexedStore',
   'attention',
   'badge',
