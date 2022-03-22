@@ -13,7 +13,7 @@
     "start": "serve dist/"
   },
   "dependencies": {
-    "@babel/core": "^7.17.7",
+    "@babel/core": "^7.17.8",
     "autoprefixer": "^10.4.4",
     "capitalize": "^2.0.4",
     "del": "^6.0.0",
@@ -70,7 +70,7 @@
     "serve": "^13.0.2",
     "simple-git-hooks": "^2.7.0",
     "size-limit": "^7.0.8",
-    "stylelint": "^14.5.3",
+    "stylelint": "^14.6.0",
     "svgo": "^2.8.0"
   },
   "repository": "logux/logux.io",
