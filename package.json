@@ -44,7 +44,7 @@
     "remark-rehype": "^10.1.0",
     "slugify": "^1.6.5",
     "spinnies": "^0.5.1",
-    "ssdeploy": "^0.8.0",
+    "ssdeploy": "^0.8.1",
     "sugarss": "^4.0.1",
     "typedoc": "^0.22.13",
     "typescript": "~4.6.2",
