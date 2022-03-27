@@ -106,12 +106,6 @@
     },
     "overrides": [
       {
-        "files": "src/public/service.js",
-        "globals": {
-          "FILES": false
-        }
-      },
-      {
         "files": "scripts/**/*.js",
         "rules": {
           "no-console": "off"
@@ -156,7 +150,6 @@
         "dist/assets/*.svg.gz",
         "dist/assets/*.js.gz",
         "dist/assets/*.css.gz",
-        "!dist/service.js.gz",
         "!dist/assets/open.*.svg.gz",
         "!dist/assets/close.*.svg.gz",
         "!dist/assets/chat.*.svg.gz",
@@ -170,10 +163,7 @@
     },
     {
       "name": "Scripts to execute",
-      "path": [
-        "dist/assets/*.js",
-        "!dist/service.js"
-      ],
+      "path": "dist/assets/*.js",
       "limit": "5 KB"
     }
   ]

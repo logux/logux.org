@@ -4,7 +4,6 @@ import dotenv from 'dotenv'
 import pico from 'picocolors'
 
 import generateWebManifest from './steps/generate-web-manifest.js'
-import injectCacheBuster from './steps/inject-cache-buster.js'
 import downloadProject from './steps/download-project.js'
 import cleanBuildDir from './steps/clean-build-dir.js'
 import copyWellKnown from './steps/copy-well-known.js'
@@ -70,7 +69,6 @@ async function build() {
     buildApi(assets, layout, 'Web API', webApi)
   ])
   exitOnErrors()
-  await injectCacheBuster(assets)
   await compressFiles(assets)
 }
 
