@@ -32,3 +32,11 @@ jobs:
       - test
     if: github.ref == 'refs/heads/main'
     uses: ./.github/workflows/deploy.yml
+    secrets:
+      GITTER_TOKEN: ${{ secrets.GITTER_TOKEN }}
+      GITTER_ROOM_ID: ${{ secrets.GITTER_ROOM_ID }}
+      WEBSITE_URL: ${{ secrets.WEBSITE_URL }}
+      GCLOUD_AUTH: ${{ secrets.GCLOUD_AUTH }}
+      GCLOUD_APP: ${{ secrets.GCLOUD_APP }}
+      CLOUDFLARE_ZONE: ${{ secrets.CLOUDFLARE_ZONE }}
+      CLOUDFLARE_TOKEN: ${{ secrets.CLOUDFLARE_TOKEN }}
