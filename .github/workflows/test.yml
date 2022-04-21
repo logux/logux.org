@@ -28,5 +28,4 @@ jobs:
           FORCE_COLOR: 2
       - name: Deploy
         if: github.ref == 'refs/heads/main'
-        run: |
-          curl -XPOST -u "${{ secrets.DEPLOY_USER }}:${{ secrets.DEPLOY_TOKEN }}" -H "Accept: application/vnd.github.everest-preview+json" -H "Content-Type: application/json" https://api.github.com/repos/logux/logux.io/dispatches --data '{"event_type": "deploy"}'
+        uses: ./.github/workflows/deploy
