@@ -44,8 +44,9 @@ const EXTERNAL_TYPES = {
     'basic/getting-started/function_components',
   ReactContext: 'https://reactjs.org/docs/context.html',
   PreactContext: 'https://preactjs.com/guide/v10/context/',
-  MapTemplate: 'https://github.com/ai/nanostores',
-  MapStore: 'https://github.com/ai/nanostores'
+  MapTemplate: 'https://github.com/nanostores/nanostores',
+  MapStore: 'https://github.com/nanostores/nanostores',
+  Atom: 'https://github.com/nanostores/nanostores'
 }
 
 const SIMPLE_TYPES = new Set([
@@ -76,7 +77,9 @@ const UTILITY_TYPES = new Set([
   'Omit',
   'ReturnType',
   'Ref',
-  'ReadonlyRef'
+  'ReadonlyRef',
+  'MapStore',
+  'Atom'
 ])
 
 const HIDE_CONSTRUCTOR = new Set([
@@ -403,6 +406,13 @@ function tsKindHtml(ctx, tsType) {
     ]
   } else if (tsType.kind === ts.SyntaxKind.LiteralType) {
     return [{ type: 'text', value: JSON.stringify(tsType.literal.text) }]
+  } else if (tsType.kind === ts.SyntaxKind.TypeLiteral) {
+    return [
+      {
+        type: 'text',
+        value: '{ ' + Array.from(tsType.symbol.members.keys()).join(', ') + ' }'
+      }
+    ]
   } else {
     console.log(tsType)
     throw new Error('Unknown TS kind ' + ts.SyntaxKind[tsType.kind])
@@ -443,8 +453,15 @@ function typeHtml(ctx, type) {
       return [{ type: 'text', value: 'Promise' }]
     }
     if (UTILITY_TYPES.has(type.name)) {
+      let prefix = { type: 'text', value: type.name }
+      if (EXTERNAL_TYPES[type.name]) {
+        prefix = tag('a', type.name, {
+          properties: { href: EXTERNAL_TYPES[type.name] }
+        })
+      }
       return [
-        { type: 'text', value: type.name + '<' },
+        prefix,
+        { type: 'text', value: '<' },
         ...joinTags(
           ',',
           type.typeArguments.map(i => typeHtml(ctx, i))
