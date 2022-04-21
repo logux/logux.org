@@ -26,6 +26,9 @@ jobs:
           CI: 1
           NO_CONTENT: 1
           FORCE_COLOR: 2
-      - name: Deploy
-        if: github.ref == 'refs/heads/main'
-        uses: ./.github/workflows/deploy.yml
+  deploy:
+    name: Deploy
+    needs:
+      - test
+    if: github.ref == 'refs/heads/main'
+    uses: ./.github/workflows/deploy.yml
