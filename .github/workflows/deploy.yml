@@ -1,8 +1,5 @@
 name: Deploy
 on:
-  push:
-    branches:
-      - main
   repository_dispatch:
 jobs:
   deploy:
