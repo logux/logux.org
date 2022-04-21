@@ -28,4 +28,4 @@ jobs:
           FORCE_COLOR: 2
       - name: Deploy
         if: github.ref == 'refs/heads/main'
-        uses: ./.github/workflows/deploy
+        uses: ./.github/workflows/deploy.yml
