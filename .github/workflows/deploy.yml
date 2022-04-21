@@ -11,6 +11,8 @@ on:
         required: true
       GCLOUD_AUTH:
         required: true
+      GCLOUD_PROJECT:
+        required: true
       GCLOUD_APP:
         required: true
       CLOUDFLARE_ZONE:
