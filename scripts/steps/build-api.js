@@ -64,7 +64,8 @@ const SIMPLE_TYPES = new Set([
   'StoreValues',
   'Builder',
   'Type',
-  'unknown'
+  'unknown',
+  'ReactNode'
 ])
 
 const UTILITY_TYPES = new Set([
