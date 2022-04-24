@@ -100,7 +100,6 @@
   "eslintConfig": {
     "extends": "@logux/eslint-config",
     "rules": {
-      "node/no-unpublished-require": "off",
       "no-loop-func": "off"
     },
     "overrides": [
