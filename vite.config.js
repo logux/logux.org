@@ -1,7 +1,7 @@
 import { defineConfig } from 'vite'
-import vitePluginPug from "vite-plugin-pug-transformer";
+import vitePluginPug from 'vite-plugin-pug-transformer'
 
-import { DIST, SRC } from "./scripts/lib/dirs.js";
+import { DIST, SRC } from './scripts/lib/dirs.js'
 
 export default defineConfig({
   root: SRC,
