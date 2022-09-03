@@ -48,6 +48,7 @@ jobs:
         run: pnpm install --frozen-lockfile --ignore-scripts --production
       - name: Build static files
         run: pnpm build
+        env:
           GITTER_TOKEN: ${{ secrets.GITTER_TOKEN }}
           GITTER_ROOM_ID: ${{ secrets.GITTER_ROOM_ID }}
       - name: Check files changes
