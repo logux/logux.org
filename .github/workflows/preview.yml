@@ -1,29 +1,12 @@
-name: Deploy
+name: Preview
 on:
-  repository_dispatch:
-  workflow_call:
-    secrets:
-      GITTER_TOKEN:
-        required: true
-      GITTER_ROOM_ID:
-        required: true
-      WEBSITE_URL:
-        required: true
-      GCLOUD_AUTH:
-        required: true
-      GCLOUD_PROJECT:
-        required: true
-      GCLOUD_APP:
-        required: true
-      CLOUDFLARE_ZONE:
-        required: true
-      CLOUDFLARE_TOKEN:
-        required: true
+  pull_request:
 permissions:
   contents: read
   deployments: write
 jobs:
-  deploy:
+  preview:
+    name: Deploy
     runs-on: ubuntu-latest
     steps:
       - name: Notify about new deployment
@@ -32,7 +15,8 @@ jobs:
         with:
           step: start
           token: ${{ secrets.GITHUB_TOKEN }}
-          env: production
+          ref: ${{ github.head_ref }}
+          env: preview-${{ github.event.number }}
       - name: Checkout the repository
         uses: actions/checkout@v3
       - name: Install pnpm
@@ -48,24 +32,17 @@ jobs:
         run: pnpm install --frozen-lockfile --ignore-scripts --production
       - name: Build static files
         run: pnpm build
-          GITTER_TOKEN: ${{ secrets.GITTER_TOKEN }}
-          GITTER_ROOM_ID: ${{ secrets.GITTER_ROOM_ID }}
-      - name: Check files changes
-        id: hash
-        run: ./node_modules/.bin/ssdeploy changed
-        env:
-          WEBSITE_URL: ${{ secrets.WEBSITE_URL }}
       - name: Auth Google Cloud
         uses: google-github-actions/auth@v0
         with:
           credentials_json: ${{ secrets.GCLOUD_AUTH }}
       - name: Install Google Cloud
-        if: "!steps.hash.outputs.noChanges"
         uses: google-github-actions/setup-gcloud@v0
       - name: Deploy files
-        if: "!steps.hash.outputs.noChanges"
-        run: ./node_modules/.bin/ssdeploy deploy --verbose
+        id: deploy
+        run: ./node_modules/.bin/ssdeploy preview $PR --verbose
         env:
+          PR: ${{ github.event.number }}
           GCLOUD_APP: ${{ secrets.GCLOUD_APP }}
           GCLOUD_PROJECT: ${{ secrets.GCLOUD_PROJECT }}
           CLOUDFLARE_ZONE: ${{ secrets.CLOUDFLARE_ZONE }}

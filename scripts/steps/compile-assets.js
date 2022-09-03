@@ -1,4 +1,4 @@
-import vite from 'vite'
+import { build } from 'vite'
 import { join } from 'path'
 import glob from 'fast-glob'
 
@@ -7,7 +7,7 @@ import wrap from '../lib/spinner.js'
 import hash from '../lib/hash.js'
 
 async function compileAssets() {
-  await vite.build({
+  await build({
     logLevel: 'warn'
   })
 
