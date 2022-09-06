@@ -2,23 +2,6 @@ name: Deploy
 on:
   repository_dispatch:
   workflow_call:
-    secrets:
-      GITTER_TOKEN:
-        required: true
-      GITTER_ROOM_ID:
-        required: true
-      WEBSITE_URL:
-        required: true
-      GCLOUD_AUTH:
-        required: true
-      GCLOUD_PROJECT:
-        required: true
-      GCLOUD_APP:
-        required: true
-      CLOUDFLARE_ZONE:
-        required: true
-      CLOUDFLARE_TOKEN:
-        required: true
 permissions:
   contents: read
   deployments: write
