@@ -9,7 +9,6 @@ import cleanBuildDir from './steps/clean-build-dir.js'
 import copyWellKnown from './steps/copy-well-known.js'
 import compressFiles from './steps/compress-files.js'
 import compileAssets from './steps/compile-assets.js'
-import getChatUsers from './steps/get-chat-users.js'
 import repackStyles from './steps/repack-styles.js'
 import createLayout from './steps/create-layout.js'
 import installTypes from './steps/install-types.js'
@@ -56,12 +55,11 @@ async function build() {
     await prepareHtml()
     return
   }
-  let [users, [assets, uikit], [guides, nodeApi, webApi]] = await Promise.all([
-    getChatUsers(),
+  let [[assets, uikit], [guides, nodeApi, webApi]] = await Promise.all([
     prepareHtml(),
     prepareContent()
   ])
-  let layout = await createLayout(uikit, users)
+  let layout = await createLayout(uikit)
   await Promise.all([
     buildDocs(assets, layout, guides),
     buildPages(assets, layout),

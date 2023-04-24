@@ -11,7 +11,7 @@ import wrap from '../lib/spinner.js'
 const SMALL_WORDS =
   /(^|\s)(the|a|for|in|an|to|if|so|when|with|by|and|or|is|this|any|from) /gi
 
-function cleaner({ chatUsers, removeAssets }) {
+function cleaner({ removeAssets }) {
   return tree => {
     visit(tree, 'element', node => {
       let cls = node.properties.className || []
@@ -23,8 +23,6 @@ function cleaner({ chatUsers, removeAssets }) {
         }
       } else if (cls[0] === 'submenu') {
         node.children = []
-      } else if (cls[0] === 'menu_extra') {
-        node.children = [{ type: 'text', value: `(${chatUsers} people)` }]
       }
     })
     let articles = 0
@@ -71,10 +69,10 @@ function checker(title) {
   }
 }
 
-async function cleanPage(html, chatUsers, removeAssets) {
+async function cleanPage(html, removeAssets) {
   let cleaned = await unified()
     .use(rehypeParse)
-    .use(cleaner, { chatUsers, removeAssets })
+    .use(cleaner, { removeAssets })
     .use(rehypeStringify)
     .process(html)
   return String(cleaned)
@@ -321,7 +319,7 @@ function generateSubmenu(links) {
   }
 }
 
-async function createLayout(uikit, chatUsers) {
+async function createLayout(uikit) {
   return async function (categoryUrl, links, title, tree) {
     let fixed = await unified().use(converter).use(checker, title).run(tree)
     let submenu = await unified()
@@ -334,7 +332,7 @@ async function createLayout(uikit, chatUsers) {
     if (!html.includes(' class="switcher"')) ignore.push('/switcher.')
     if (!html.includes(' class="asset"')) ignore.push('/branding.')
     if (!html.includes(' class="title_link"')) ignore.push('/link.')
-    let layout = await cleanPage(uikit, chatUsers, ignore)
+    let layout = await cleanPage(uikit, ignore)
     return layout
       .replace(
         `class="menu_link" href="${categoryUrl}"`,
