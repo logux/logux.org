@@ -111,9 +111,9 @@ nav.layout_aside
 
 main.layout_main#main
   article.text
-    +edit('https://github.com/logux/logux.io')
+    +edit('https://github.com/logux/logux.org')
       +title1('home')
-        | Logux.io UI Kit
+        | Logux.org UI Kit
     p.text_block Logux #[strong actions] are very similar to #[strong #[a( href="#" ) Redux actions]]. JSON objects describe what was changed in #[a( href="#" ) the application state]. Logux Core provides #[code.code BaseNode] class, which will synchronize actions between two nodes. #[code.code ClientNode] and #[code.code ServerNode] classes extend this class with small behaviour changes.
     +switcher('Node.js', 'Ruby on Rails')
       +switcher_section
@@ -142,10 +142,10 @@ main.layout_main#main
       | Subtitle
     p.text_block By default, the server state is opposite to client state. Because server-side cache could be very big, the database is the single source of truth. You can use any database with Logux.
     .asset
-      a.asset_file( href="https://logux.io/branding/logo-light.svg" download )
-        img( src="https://logux.io/branding/logo-light.svg" height="150" width="150" )
-      a.asset_file( href="https://logux.io/branding/logo-dark.svg" download )
-        img.is-dark( src="https://logux.io/branding/logo-dark.svg" height="150" width="150" )
+      a.asset_file( href="https://logux.org/branding/logo-light.svg" download )
+        img( src="https://logux.org/branding/logo-light.svg" height="150" width="150" )
+      a.asset_file( href="https://logux.org/branding/logo-dark.svg" download )
+        img.is-dark( src="https://logux.org/branding/logo-dark.svg" height="150" width="150" )
     p.text_block Logux Server removes action after processing and always look to a database for the latest value. As a result, you can’t undo actions on the server.
     +switcher('Node.js', 'Ruby on Rails', 'Any other HTTP server')
       +switcher_section
@@ -243,6 +243,6 @@ main.layout_main#main
       .footer_link: a( href="https://gitter.im/logux/logux" ) Gitter
       .footer_link: a( href="https://twitter.com/linguopunk" ) Linguopunk
     .footer_section.is-author
-      .footer_text Under the #[a( href="https://github.com/logux/logux.io/blob/main/LICENSE" rel="license" ) MIT] license
+      .footer_text Under the #[a( href="https://github.com/logux/logux.org/blob/main/LICENSE" rel="license" ) MIT] license
       .footer_text Sponsored by #[a( href="https://evilmartians.com/" ) Evil Martians]
       a.footer_lurkers( href="https://evilmartians.com/" aria-hidden="true" tabindex="-1" )

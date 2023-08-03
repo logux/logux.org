@@ -4,7 +4,7 @@ Hash: SHA256
 Contact: mailto:andrey@sitnik.ru
 Encryption: https://keybase.io/iskin/pgp_keys.asc
 Preferred-Languages: en, ru
-Canonical: https://logux.io/.well-known/security.txt
+Canonical: https://logux.org/.well-known/security.txt
 -----BEGIN PGP SIGNATURE-----
 
 iQIzBAEBCAAdFiEExG2lfbgJdcOF4YvFY7wk2Yx394YFAl/FlX8ACgkQY7wk2Yx3

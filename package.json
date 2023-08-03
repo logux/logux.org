@@ -1,5 +1,5 @@
 {
-  "name": "logux.io",
+  "name": "logux.org",
   "private": true,
   "type": "module",
   "engines": {
@@ -72,8 +72,8 @@
     "stylelint": "^15.6.0",
     "svgo": "^3.0.2"
   },
-  "repository": "logux/logux.io",
-  "homepage": "https://logux.io/",
+  "repository": "logux/logux.org",
+  "homepage": "https://logux.org/",
   "license": "MIT",
   "browserslist": [
     "defaults",
