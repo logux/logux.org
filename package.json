@@ -7,7 +7,10 @@
   },
   "scripts": {
     "start:uikit": "vite --open",
-    "test": "eslint . && stylelint src/**/*.sss && pnpm build && size-limit",
+    "test:js": "eslint .",
+    "test:css": "stylelint src/**/*.sss",
+    "test:build": "pnpm build && size-limit",
+    "test": "pnpm run /^test:/",
     "clean": "rm -Rf dist/",
     "build": "NODE_ENV=production ./scripts/build.js",
     "start": "serve dist/"
