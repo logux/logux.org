@@ -46,7 +46,9 @@ const EXTERNAL_TYPES = {
   ServerResponse:
     'https://nodejs.org/api/http.html#http_class_http_serverresponse',
   Unsubscribe: 'https://github.com/ai/nanoevents/#remove-listener',
-  WebSocket: 'https://developer.mozilla.org/en-US/docs/Web/API/WebSocket'
+  WebSocket: 'https://developer.mozilla.org/en-US/docs/Web/API/WebSocket',
+  RequestInfo: 'https://developer.mozilla.org/en-US/docs/Web/API/fetch',
+  URL: 'https://developer.mozilla.org/en-US/docs/Web/API/URL'
 }
 
 const SIMPLE_TYPES = new Set([
@@ -65,7 +67,8 @@ const SIMPLE_TYPES = new Set([
   'Builder',
   'Type',
   'unknown',
-  'ReactNode'
+  'ReactNode',
+  'ComponentChild'
 ])
 
 const UTILITY_TYPES = new Set([

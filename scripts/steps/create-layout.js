@@ -61,7 +61,6 @@ function checker(title) {
       let href = node.properties.href
       if (href && href.startsWith('#')) {
         if (!ids.has(href.slice(1))) {
-          console.error(node)
           addError(`${title.slice(0, -3)} has no ${href} ID`)
         }
       }
