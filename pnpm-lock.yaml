@@ -1,5 +1,9 @@
 lockfileVersion: '6.0'
 
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
+
 dependencies:
   autoprefixer:
     specifier: ^10.4.14
@@ -119,11 +123,11 @@ dependencies:
     specifier: ^0.10.11
     version: 0.10.11
   vite:
-    specifier: ^4.3.1
-    version: 4.3.1(sugarss@4.0.1)
+    specifier: ^4.3.9
+    version: 4.3.9(sugarss@4.0.1)
   vite-plugin-pug-transformer:
     specifier: ^1.0.3
-    version: 1.0.3(vite@4.3.1)
+    version: 1.0.3(vite@4.3.9)
 
 devDependencies:
   '@logux/eslint-config':
@@ -4704,7 +4708,7 @@ packages:
       vfile-message: 3.1.4
     dev: false
 
-  /vite-plugin-pug-transformer@1.0.3(vite@4.3.1):
+  /vite-plugin-pug-transformer@1.0.3(vite@4.3.9):
     resolution: {integrity: sha512-cndWLK7iQE/yryjRNGJAOxPYnL7v5miMbwCXUbkP754BILh5hwJKbE10X4QKDl1X46ntIb1oBMBYKcw4NVBnkg==}
     engines: {node: '>=12.22.0'}
     peerDependencies:
@@ -4712,11 +4716,11 @@ packages:
     dependencies:
       picocolors: 1.0.0
       pug: 3.0.2
-      vite: 4.3.1(sugarss@4.0.1)
+      vite: 4.3.9(sugarss@4.0.1)
     dev: false
 
-  /vite@4.3.1(sugarss@4.0.1):
-    resolution: {integrity: sha512-EPmfPLAI79Z/RofuMvkIS0Yr091T2ReUoXQqc5ppBX/sjFRhHKiPPF/R46cTdoci/XgeQpB23diiJxq5w30vdg==}
+  /vite@4.3.9(sugarss@4.0.1):
+    resolution: {integrity: sha512-qsTNZjO9NoJNW7KnOrgYwczm0WctJ8m/yqYAMAK9Lxt4SoySUfS5S8ia9K7JHpa3KEeMfyF8LoJ3c5NeBJy6pg==}
     engines: {node: ^14.18.0 || >=16.0.0}
     hasBin: true
     peerDependencies:

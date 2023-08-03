@@ -52,7 +52,7 @@
     "unist-util-flatmap": "^1.0.0",
     "unist-util-visit": "^4.1.2",
     "unzipper": "^0.10.11",
-    "vite": "^4.3.1",
+    "vite": "^4.3.9",
     "vite-plugin-pug-transformer": "^1.0.3"
   },
   "devDependencies": {
