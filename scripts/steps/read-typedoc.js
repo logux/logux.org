@@ -1,7 +1,7 @@
 import capitalize from 'capitalize'
+import glob from 'fast-glob'
 import { join } from 'path'
 import TypeDoc from 'typedoc'
-import glob from 'fast-glob'
 
 import { PROJECTS } from '../lib/dirs.js'
 import { run } from '../lib/spinner.js'
@@ -14,8 +14,8 @@ export default async function readTypedoc(...projects) {
       projects.map(i => {
         return glob('**/*.d.ts', {
           absolute: true,
-          ignore: ['node_modules', 'test', 'coverage'],
-          cwd: join(PROJECTS, i)
+          cwd: join(PROJECTS, i),
+          ignore: ['node_modules', 'test', 'coverage']
         })
       })
     )
@@ -32,8 +32,8 @@ export default async function readTypedoc(...projects) {
     let app = new TypeDoc.Application()
     app.bootstrap({
       entryPoints: files.flat(),
-      tsconfig: join(PROJECTS, 'logux-core', 'tsconfig.json'),
-      excludeExternals: true
+      excludeExternals: true,
+      tsconfig: join(PROJECTS, 'logux-core', 'tsconfig.json')
     })
     app.options.setCompilerOptions(files.flat(), {
       esModuleInterop: true,

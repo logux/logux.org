@@ -1,52 +1,52 @@
-import { join, dirname, sep } from 'path'
-import remarkHighlight from 'remark-highlight.js'
 import { writeFile } from 'fs/promises'
-import remarkRehype from 'remark-rehype'
-import { remark } from 'remark'
 import makeDir from 'make-dir'
+import { dirname, join, sep } from 'path'
+import { remark } from 'remark'
+import remarkHighlight from 'remark-highlight.js'
+import remarkRehype from 'remark-rehype'
 import slugify from 'slugify'
 import ts from 'typescript'
 
-import { step } from '../lib/spinner.js'
 import { DIST } from '../lib/dirs.js'
+import { step } from '../lib/spinner.js'
 
 const CAPITALIZED = /^[A-Z]/
 
 const EXTERNAL_TYPES = {
-  Observable: 'https://github.com/tc39/proposal-observable',
-  Process: 'https://nodejs.org/api/process.html#process_process',
-  HTTPServer: 'https://nodejs.org/api/http.html#http_class_http_server',
-  Unsubscribe: 'https://github.com/ai/nanoevents/#remove-listener',
+  App: 'https://v3.vuejs.org/api/global-api.html#createapp',
+  Atom: 'https://github.com/nanostores/nanostores',
   Component: 'https://reactjs.org/docs/react-component.html',
-  WebSocket: 'https://developer.mozilla.org/en-US/docs/Web/API/WebSocket',
   ComponentType:
     'https://github.com/DefinitelyTyped/DefinitelyTyped/blob/' +
     'master/types/react/index.d.ts#L81',
-  App: 'https://v3.vuejs.org/api/global-api.html#createapp',
-  InjectionKey: 'https://v3.vuejs.org/api/composition-api.html#provide-inject',
-  Ref: 'https://v3.vuejs.org/api/refs-api.html#ref',
   ComputedGetter: 'https://v3.vuejs.org/api/computed-watch-api.html#computed',
   ComputedRef: 'https://v3.vuejs.org/api/computed-watch-api.html#computed',
-  LogFn: 'https://getpino.io/#/docs/api?id=logging-method-parameters',
-  IncomingMessage:
-    'https://nodejs.org/api/http.html#http_class_http_incomingmessage',
-  ServerResponse:
-    'https://nodejs.org/api/http.html#http_class_http_serverresponse',
-  RequestInit:
-    'https://developer.mozilla.org/en-US/docs/Web/API/' +
-    'WindowOrWorkerGlobalScope/fetch',
-  fetch:
-    'https://developer.mozilla.org/en-US/docs/Web/API/' +
-    'WindowOrWorkerGlobalScope/fetch',
   Emitter: 'https://github.com/ai/nanoevents',
   FC:
     'https://react-typescript-cheatsheet.netlify.app/docs/' +
     'basic/getting-started/function_components',
-  ReactContext: 'https://reactjs.org/docs/context.html',
-  PreactContext: 'https://preactjs.com/guide/v10/context/',
-  MapTemplate: 'https://github.com/nanostores/nanostores',
+  fetch:
+    'https://developer.mozilla.org/en-US/docs/Web/API/' +
+    'WindowOrWorkerGlobalScope/fetch',
+  HTTPServer: 'https://nodejs.org/api/http.html#http_class_http_server',
+  IncomingMessage:
+    'https://nodejs.org/api/http.html#http_class_http_incomingmessage',
+  InjectionKey: 'https://v3.vuejs.org/api/composition-api.html#provide-inject',
+  LogFn: 'https://getpino.io/#/docs/api?id=logging-method-parameters',
   MapStore: 'https://github.com/nanostores/nanostores',
-  Atom: 'https://github.com/nanostores/nanostores'
+  MapTemplate: 'https://github.com/nanostores/nanostores',
+  Observable: 'https://github.com/tc39/proposal-observable',
+  PreactContext: 'https://preactjs.com/guide/v10/context/',
+  Process: 'https://nodejs.org/api/process.html#process_process',
+  ReactContext: 'https://reactjs.org/docs/context.html',
+  Ref: 'https://v3.vuejs.org/api/refs-api.html#ref',
+  RequestInit:
+    'https://developer.mozilla.org/en-US/docs/Web/API/' +
+    'WindowOrWorkerGlobalScope/fetch',
+  ServerResponse:
+    'https://nodejs.org/api/http.html#http_class_http_serverresponse',
+  Unsubscribe: 'https://github.com/ai/nanoevents/#remove-listener',
+  WebSocket: 'https://developer.mozilla.org/en-US/docs/Web/API/WebSocket'
 }
 
 const SIMPLE_TYPES = new Set([
@@ -94,10 +94,10 @@ const EMPTY = { type: 'text', value: '' }
 const OPTIONAL = [
   { type: 'text', value: ' ' },
   {
-    type: 'element',
-    tagName: 'span',
+    children: [{ type: 'text', value: '?' }],
     properties: { 'aria-title': 'Optional' },
-    children: [{ type: 'text', value: '?' }]
+    tagName: 'span',
+    type: 'element'
   }
 ]
 
@@ -186,15 +186,15 @@ const GROUPS = {
 
 // More specific group conditions should be placed higher
 const GROUPS_CONDITION = {
-  [GROUPS.React]: node => /^react\./i.test(node.name),
-  [GROUPS.Vue]: node => /^vue\./i.test(node.name),
-  [GROUPS.Preact]: node => /^preact\./i.test(node.name),
-  [GROUPS.Tests]: node => TEST_ENTITIES.has(node.name),
   [GROUPS.Client]: node =>
     CLIENT_ENTITIES.has(node.name) && isSource(node, 'logux-client'),
   [GROUPS.Core]: node => CORE_ENTITIES.has(node.name),
+  [GROUPS.Preact]: node => /^preact\./i.test(node.name),
+  [GROUPS.React]: node => /^react\./i.test(node.name),
   [GROUPS.Server]: node =>
-    SERVER_ENTITIES.has(node.name) && isSource(node, 'logux-server')
+    SERVER_ENTITIES.has(node.name) && isSource(node, 'logux-server'),
+  [GROUPS.Tests]: node => TEST_ENTITIES.has(node.name),
+  [GROUPS.Vue]: node => /^vue\./i.test(node.name)
 }
 
 const GROUPS_ORDER = [
@@ -241,7 +241,7 @@ function tag(tagName, children, opts) {
   children = children.map(i => {
     return typeof i === 'string' ? { type: 'text', value: i } : i
   })
-  return { type: 'element', tagName, properties: {}, children, ...opts }
+  return { children, properties: {}, tagName, type: 'element', ...opts }
 }
 
 function toHtml(content) {
@@ -335,9 +335,9 @@ function findTypeTemplate(type, name) {
 function typeLink(ctx, name) {
   if (name === 'Meta') {
     if (ctx.file === 'node-api') {
-      return typeHtml(ctx, { type: 'reference', name: 'ServerMeta' })
+      return typeHtml(ctx, { name: 'ServerMeta', type: 'reference' })
     } else {
-      return typeHtml(ctx, { type: 'reference', name: 'ClientMeta' })
+      return typeHtml(ctx, { name: 'ClientMeta', type: 'reference' })
     }
   } else if (SIMPLE_TYPES.has(name)) {
     return [{ type: 'text', value: name }]
@@ -765,8 +765,8 @@ function functionHtml(ctx, node) {
         )
       ],
       {
-        slug: toSlug(node.name),
-        properties: { className: ['is-function'] }
+        properties: { className: ['is-function'] },
+        slug: toSlug(node.name)
       }
     ),
     ...commentHtml(node.signatures[0].comment),
@@ -894,8 +894,8 @@ function toTree(ctx, nodes) {
   }).filter(group => group !== null)
 
   let tree = {
-    type: 'root',
-    children: treeChildren
+    children: treeChildren,
+    type: 'root'
   }
 
   return tree

@@ -1,9 +1,9 @@
 import { readFile, writeFile } from 'fs/promises'
 import { join } from 'path'
 
-import { SRC, DIST } from '../lib/dirs.js'
-import wrap from '../lib/spinner.js'
+import { DIST, SRC } from '../lib/dirs.js'
 import hash from '../lib/hash.js'
+import wrap from '../lib/spinner.js'
 
 async function generateWebManifest(assets) {
   let json = JSON.parse(
@@ -25,7 +25,7 @@ async function generateWebManifest(assets) {
   let name = `manifest.${hash(text)}.webmanifest`
   await writeFile(join(DIST, name), text)
   assets.add(join(DIST, name))
-  return { url: '/' + name, theme: json.theme_color }
+  return { theme: json.theme_color, url: '/' + name }
 }
 
 export default wrap(generateWebManifest, 'Generating web manifest')

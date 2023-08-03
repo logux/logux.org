@@ -1,14 +1,14 @@
-import { readFile, writeFile } from 'fs/promises'
-import rehypeParse from 'rehype-parse'
-import { unified } from 'unified'
 import capitalize from 'capitalize'
-import { visit } from 'unist-util-visit'
+import { readFile, writeFile } from 'fs/promises'
 import { join } from 'path'
-import slugify from 'slugify'
 import pug from 'pug'
+import rehypeParse from 'rehype-parse'
+import slugify from 'slugify'
+import { unified } from 'unified'
+import { visit } from 'unist-util-visit'
 
+import { DIST, SRC } from '../lib/dirs.js'
 import wrap from '../lib/spinner.js'
-import { SRC, DIST } from '../lib/dirs.js'
 
 const PAGES = ['branding']
 
@@ -17,7 +17,7 @@ function findHeaders(tree) {
   visit(tree, 'element', node => {
     if (node.tagName === 'h2') {
       let text = node.children[0].value
-      list.push({ text, link: '#' + slugify(text, { lower: true }) })
+      list.push({ link: '#' + slugify(text, { lower: true }), text })
     }
   })
   return list

@@ -3,6 +3,7 @@ mixin title1(slug)
     h1.title( id=slug )
       a.title_link( href='#' + slug title="Direct link to section" )
         block
+
   else
     h1.title
       block
@@ -12,6 +13,7 @@ mixin title2(slug)
     h2.title( id=slug )
       a.title_link( href='#' + slug title="Direct link to section" )
         block
+
   else
     h2.title
       block
@@ -21,6 +23,7 @@ mixin title3(slug)
     h3.title( id=slug )
       a.title_link( href='#' + slug title="Direct link to section" )
         block
+
   else
     h3.title
       block

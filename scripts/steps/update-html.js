@@ -1,21 +1,21 @@
-import { readFile, writeFile, unlink } from 'fs/promises'
-import { extname, join } from 'path'
-import rehypeStringify from 'rehype-stringify'
-import unistFlatmap from 'unist-util-flatmap'
-import rehypeParse from 'rehype-parse'
-import { unified } from 'unified'
+import { readFile, unlink, writeFile } from 'fs/promises'
 import makeDir from 'make-dir'
+import { extname, join } from 'path'
+import rehypeParse from 'rehype-parse'
+import rehypeStringify from 'rehype-stringify'
+import { unified } from 'unified'
+import unistFlatmap from 'unist-util-flatmap'
 
 import { DIST } from '../lib/dirs.js'
 import wrap from '../lib/spinner.js'
 
 const PRELOAD_TYPES = {
-  '.woff2': 'font',
-  '.svg': 'image'
+  '.svg': 'image',
+  '.woff2': 'font'
 }
 
 function tag(tagName, properties) {
-  return { type: 'element', tagName, properties, children: [] }
+  return { children: [], properties, tagName, type: 'element' }
 }
 
 async function updateHtml(assets, manifest, preloadFiles) {
@@ -29,24 +29,24 @@ async function updateHtml(assets, manifest, preloadFiles) {
         let props = node.properties || {}
         if (props.rel && props.rel[0] === 'icon' && props.sizes) {
           return [
-            tag('link', { rel: 'icon', sizes: 'any', href: '/favicon.ico' }),
+            tag('link', { href: '/favicon.ico', rel: 'icon', sizes: 'any' }),
             node
           ]
         } else if (props.name === 'apple-mobile-web-app-title') {
           return [
             node,
-            tag('link', { rel: 'manifest', href: manifest.url }),
-            tag('meta', { name: 'theme-color', content: manifest.theme })
+            tag('link', { href: manifest.url, rel: 'manifest' }),
+            tag('meta', { content: manifest.theme, name: 'theme-color' })
           ].concat(
             preloadFiles.map(([media, url]) => {
               let as = PRELOAD_TYPES[extname(url)]
               if (!as) throw new Error('Unknown type ' + extname(url))
               return tag('link', {
-                rel: 'preload',
-                href: url,
                 as,
+                crossorigin: as === 'font',
+                href: url,
                 media,
-                crossorigin: as === 'font'
+                rel: 'preload'
               })
             })
           )

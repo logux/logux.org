@@ -122,13 +122,6 @@ for (let switcher of switchers) {
     ArrowDown() {
       focusOnce(currentSection)
     },
-    ArrowRight() {
-      if (currentTab === lastTab) {
-        clickOnTab(firstTab)
-      } else {
-        clickOnTab(currentTab.parentNode.nextSibling.children[0])
-      }
-    },
     ArrowLeft() {
       if (currentTab === firstTab) {
         clickOnTab(lastTab)
@@ -136,11 +129,18 @@ for (let switcher of switchers) {
         clickOnTab(currentTab.parentNode.previousSibling.children[0])
       }
     },
-    Home() {
-      clickOnTab(firstTab)
+    ArrowRight() {
+      if (currentTab === lastTab) {
+        clickOnTab(firstTab)
+      } else {
+        clickOnTab(currentTab.parentNode.nextSibling.children[0])
+      }
     },
     End() {
       clickOnTab(lastTab)
+    },
+    Home() {
+      clickOnTab(firstTab)
     }
   })
 }

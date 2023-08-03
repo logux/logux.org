@@ -1,7 +1,7 @@
-import { existsSync } from 'fs'
-import { promisify } from 'util'
-import { join } from 'path'
 import child from 'child_process'
+import { existsSync } from 'fs'
+import { join } from 'path'
+import { promisify } from 'util'
 
 import { PROJECTS } from '../lib/dirs.js'
 import { run } from '../lib/spinner.js'

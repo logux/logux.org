@@ -1,9 +1,9 @@
 import { copyFile } from 'fs/promises'
+import makeDir from 'make-dir'
 import { join } from 'path'
 import copyDir from 'recursive-copy'
-import makeDir from 'make-dir'
 
-import { SRC, DIST } from '../lib/dirs.js'
+import { DIST, SRC } from '../lib/dirs.js'
 import wrap from '../lib/spinner.js'
 
 let FILES = ['branding/', 'favicon.ico', 'robots.txt', 'security.txt']

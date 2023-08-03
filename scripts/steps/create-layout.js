@@ -1,9 +1,9 @@
-import rehypeStringify from 'rehype-stringify'
 import rehypeParse from 'rehype-parse'
+import rehypeStringify from 'rehype-stringify'
+import slugify from 'slugify'
 import { unified } from 'unified'
 import { filter } from 'unist-util-filter'
 import { visit } from 'unist-util-visit'
-import slugify from 'slugify'
 
 import { addError } from '../lib/errors.js'
 import wrap from '../lib/spinner.js'
@@ -88,7 +88,7 @@ function tag(tagName, cls, properties = {}, children = []) {
   } else {
     properties.className = [cls]
   }
-  return { type: 'element', tagName, properties, children }
+  return { children, properties, tagName, type: 'element' }
 }
 
 function toText(nodes) {
@@ -120,12 +120,12 @@ function switcherToHTML(id, switchers) {
             tag(
               'button',
               {
+                'aria-controls': `sw${id}tab${i}body`,
+                'aria-selected': i === 0 && 'true',
+                'data-name': s[0] === 'React/Redux client' && 'React client',
                 'id': `sw${id}tab${i}`,
                 'role': 'tab',
-                'tabindex': i !== 0 && '-1',
-                'data-name': s[0] === 'React/Redux client' && 'React client',
-                'aria-controls': `sw${id}tab${i}body`,
-                'aria-selected': i === 0 && 'true'
+                'tabindex': i !== 0 && '-1'
               },
               [{ type: 'text', value: s[0] }]
             )
@@ -137,10 +137,10 @@ function switcherToHTML(id, switchers) {
       return tag(
         'section',
         {
-          'id': `sw${id}tab${i}body`,
-          'role': 'tabpanel',
+          'aria-labelledby': `sw${id}tab${i}`,
           'hidden': i !== 0,
-          'aria-labelledby': `sw${id}tab${i}`
+          'id': `sw${id}tab${i}body`,
+          'role': 'tabpanel'
         },
         s[1]
       )
@@ -196,9 +196,9 @@ function converter() {
       if (node.tagName === 'article') {
         node.properties.className = ['text']
         node.children.push({
-          type: 'element',
+          properties: { className: ['line'] },
           tagName: 'hr',
-          properties: { className: ['line'] }
+          type: 'element'
         })
       } else if (node.tagName === 'p') {
         node.properties.className = ['text_block']
@@ -234,8 +234,8 @@ function converter() {
               'a',
               'title_link',
               {
-                title: 'Direct link to section',
-                href: `#${slug}`
+                href: `#${slug}`,
+                title: 'Direct link to section'
               },
               node.children
             )
@@ -246,8 +246,8 @@ function converter() {
           node.children = [
             tag('h1', 'title', node.properties, node.children),
             tag('a', 'edit_link', {
-              title: 'Edit the page on GitHub',
-              href: node.editUrl
+              href: node.editUrl,
+              title: 'Edit the page on GitHub'
             })
           ]
           node.properties = { className: ['edit'] }
@@ -299,7 +299,6 @@ function submenuItem(node) {
 
 function generateSubmenu(links) {
   return {
-    type: 'root',
     children: links.map(i => {
       let list = []
       list.push(submenuItem(i))
@@ -315,7 +314,8 @@ function generateSubmenu(links) {
         )
       }
       return tag('li', { className: i.ul || i.ol ? [] : ['is-flat'] }, list)
-    })
+    }),
+    type: 'root'
   }
 }
 

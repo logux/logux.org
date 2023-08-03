@@ -1,7 +1,7 @@
-import { readFile, writeFile } from 'fs/promises'
-import { join, dirname, sep } from 'path'
 import capitalize from 'capitalize'
+import { readFile, writeFile } from 'fs/promises'
 import makeDir from 'make-dir'
+import { dirname, join, sep } from 'path'
 
 import { DIST, PROJECTS } from '../lib/dirs.js'
 import wrap from '../lib/spinner.js'
@@ -26,8 +26,8 @@ async function buildDocs(assets, layout, guides) {
   for (let category in order) {
     if (category === 'recipes') {
       submenus[category] = order[category].map(i => ({
-        text: toTitle(i),
-        link: `/${category}/${i}/`
+        link: `/${category}/${i}/`,
+        text: toTitle(i)
       }))
     } else {
       submenus[category] = []
@@ -38,14 +38,14 @@ async function buildDocs(assets, layout, guides) {
         if (section !== lastSection) {
           lastList = []
           submenus[category].push({
-            text: toTitle(section),
-            ol: lastList
+            ol: lastList,
+            text: toTitle(section)
           })
           lastSection = section
         }
         lastList.push({
-          text: toTitle(name),
-          link: `/${category}/${section}/${name}/`
+          link: `/${category}/${section}/${name}/`,
+          text: toTitle(name)
         })
       }
     }

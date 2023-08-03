@@ -1,13 +1,13 @@
-import remarkHighlight from 'remark-highlight.js'
-import remarkRehype from 'remark-rehype'
-import unistFlatmap from 'unist-util-flatmap'
-import { readFile } from 'fs/promises'
-import remarkParse from 'remark-parse'
-import { unified } from 'unified'
-import { visit } from 'unist-util-visit'
-import rehypeRaw from 'rehype-raw'
-import { join } from 'path'
 import glob from 'fast-glob'
+import { readFile } from 'fs/promises'
+import { join } from 'path'
+import rehypeRaw from 'rehype-raw'
+import remarkHighlight from 'remark-highlight.js'
+import remarkParse from 'remark-parse'
+import remarkRehype from 'remark-rehype'
+import { unified } from 'unified'
+import unistFlatmap from 'unist-util-flatmap'
+import { visit } from 'unist-util-visit'
 
 import { PROJECTS } from '../lib/dirs.js'
 import wrap from '../lib/spinner.js'
@@ -20,10 +20,10 @@ function text(value) {
 
 function span(cls, value) {
   return {
-    type: 'element',
-    tagName: 'span',
+    children: [text(value)],
     properties: { className: [cls] },
-    children: [text(value)]
+    tagName: 'span',
+    type: 'element'
   }
 }
 
@@ -88,23 +88,23 @@ function articler(file) {
   return tree => {
     tree.children = [
       {
-        type: 'element',
-        tagName: 'article',
-        properties: {},
         children: tree.children.filter(i => {
           if (i.tagName === 'h1') {
             i.editUrl = `https://github.com/logux/docs/edit/main/${file}`
             i.noSlug = true
           }
           return i.type !== 'text' || i.value !== '\n'
-        })
+        }),
+        properties: {},
+        tagName: 'article',
+        type: 'element'
       }
     ]
   }
 }
 
 function tag(tagName, properties, children) {
-  return { type: 'element', tagName, properties, children }
+  return { children, properties, tagName, type: 'element' }
 }
 
 function textContent(node) {
@@ -138,8 +138,8 @@ function videoInserter() {
                   type: 'image/webp'
                 }),
                 tag('img', {
-                  src: `https://i.ytimg.com/vi/${id}/maxresdefault.jpg`,
-                  alt
+                  alt,
+                  src: `https://i.ytimg.com/vi/${id}/maxresdefault.jpg`
                 })
               ])
             ]
@@ -187,10 +187,10 @@ function convertor({ file, onTitle }) {
           node,
           html('</details>'),
           html('<details><summary>pnpm</summary>'),
-          { type: 'code', lang: 'sh', value: npmToPnpm(node.value) },
+          { lang: 'sh', type: 'code', value: npmToPnpm(node.value) },
           html('</details>'),
           html('<details><summary>Yarn</summary>'),
-          { type: 'code', lang: 'sh', value: npmToYarn(node.value) },
+          { lang: 'sh', type: 'code', value: npmToYarn(node.value) },
           html('</details>')
         ]
       } else {
@@ -236,7 +236,7 @@ async function readDocs() {
         .use(articler, file)
         .use(videoInserter)
         .run(tree)
-      return { tree, title, file }
+      return { file, title, tree }
     })
   )
   return guides

@@ -1,7 +1,7 @@
 import { readFile, writeFile } from 'fs/promises'
+import postcss from 'postcss'
 import combineMedia from 'postcss-combine-media-query'
 import postcssUrl from 'postcss-url'
-import postcss from 'postcss'
 
 import wrap from '../lib/spinner.js'
 

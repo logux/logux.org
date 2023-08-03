@@ -1,5 +1,5 @@
-import Spinnies from 'spinnies'
 import pico from 'picocolors'
+import Spinnies from 'spinnies'
 
 let spinner = new Spinnies({ succeedColor: 'white' })
 let lastId = 0
