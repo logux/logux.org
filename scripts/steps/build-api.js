@@ -40,15 +40,15 @@ const EXTERNAL_TYPES = {
   Process: 'https://nodejs.org/api/process.html#process_process',
   ReactContext: 'https://reactjs.org/docs/context.html',
   Ref: 'https://v3.vuejs.org/api/refs-api.html#ref',
+  RequestInfo: 'https://developer.mozilla.org/en-US/docs/Web/API/fetch',
   RequestInit:
     'https://developer.mozilla.org/en-US/docs/Web/API/' +
     'WindowOrWorkerGlobalScope/fetch',
   ServerResponse:
     'https://nodejs.org/api/http.html#http_class_http_serverresponse',
   Unsubscribe: 'https://github.com/ai/nanoevents/#remove-listener',
-  WebSocket: 'https://developer.mozilla.org/en-US/docs/Web/API/WebSocket',
-  RequestInfo: 'https://developer.mozilla.org/en-US/docs/Web/API/fetch',
-  URL: 'https://developer.mozilla.org/en-US/docs/Web/API/URL'
+  URL: 'https://developer.mozilla.org/en-US/docs/Web/API/URL',
+  WebSocket: 'https://developer.mozilla.org/en-US/docs/Web/API/WebSocket'
 }
 
 const SIMPLE_TYPES = new Set([
