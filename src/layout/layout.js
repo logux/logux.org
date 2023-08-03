@@ -4,7 +4,6 @@ let aside = document.querySelector('.layout_aside')
 let links = document.querySelectorAll('.layout_aside a[href^="#"]')
 let close = document.querySelector('.layout_close')
 let open = document.querySelector('.layout_open')
-let chat = document.querySelector('.layout_float a')
 
 let prevScroll
 let closed = true
@@ -18,7 +17,6 @@ if (open && close && aside) {
 
     aside.classList.add('is-open')
     open.setAttribute('hidden', true)
-    chat.setAttribute('hidden', true)
     close.removeAttribute('hidden')
   })
 
@@ -31,7 +29,6 @@ if (open && close && aside) {
 
     aside.classList.remove('is-open')
     open.removeAttribute('hidden')
-    chat.removeAttribute('hidden')
     close.setAttribute('hidden', true)
   })
 }
