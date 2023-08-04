@@ -1,4 +1,4 @@
-import isSimpleClick from '../../lib/is-simple-click.js'
+import { isSimpleClick } from '../../lib/is-simple-click.js'
 
 let aside = document.querySelector('.layout_aside')
 let links = document.querySelectorAll('.layout_aside a[href^="#"]')
