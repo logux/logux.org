@@ -18,7 +18,7 @@ jobs:
           ref: ${{ github.head_ref }}
           env: preview-${{ github.event.number }}
       - name: Checkout the repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Install pnpm
         uses: pnpm/action-setup@v2
         with:
@@ -33,11 +33,11 @@ jobs:
       - name: Build static files
         run: pnpm build
       - name: Auth Google Cloud
-        uses: google-github-actions/auth@v0
+        uses: google-github-actions/auth@v1
         with:
           credentials_json: ${{ secrets.GCLOUD_AUTH }}
       - name: Install Google Cloud
-        uses: google-github-actions/setup-gcloud@v0
+        uses: google-github-actions/setup-gcloud@v1
       - name: Deploy files
         id: deploy
         run: ./node_modules/.bin/ssdeploy preview $PR --verbose
