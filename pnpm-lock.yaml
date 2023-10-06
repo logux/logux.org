@@ -7,7 +7,7 @@ settings:
 dependencies:
   autoprefixer:
     specifier: ^10.4.14
-    version: 10.4.14(postcss@8.4.27)
+    version: 10.4.14(postcss@8.4.31)
   capitalize:
     specifier: ^2.0.4
     version: 2.0.4
@@ -36,29 +36,29 @@ dependencies:
     specifier: ^1.0.0
     version: 1.0.0
   postcss:
-    specifier: ^8.4.27
-    version: 8.4.27
+    specifier: ^8.4.31
+    version: 8.4.31
   postcss-combine-media-query:
     specifier: ^1.0.1
     version: 1.0.1
   postcss-hexrgba:
     specifier: ^2.1.0
-    version: 2.1.0(postcss@8.4.27)
+    version: 2.1.0(postcss@8.4.31)
   postcss-media-minmax:
     specifier: ^5.0.0
-    version: 5.0.0(postcss@8.4.27)
+    version: 5.0.0(postcss@8.4.31)
   postcss-mixins:
     specifier: ^9.0.4
-    version: 9.0.4(postcss@8.4.27)
+    version: 9.0.4(postcss@8.4.31)
   postcss-momentum-scrolling:
     specifier: ^3.14.22
-    version: 3.14.22(postcss@8.4.27)
+    version: 3.14.22(postcss@8.4.31)
   postcss-nested:
     specifier: ^6.0.1
-    version: 6.0.1(postcss@8.4.27)
+    version: 6.0.1(postcss@8.4.31)
   postcss-url:
     specifier: ^10.1.3
-    version: 10.1.3(postcss@8.4.27)
+    version: 10.1.3(postcss@8.4.31)
   pug:
     specifier: ^3.0.2
     version: 3.0.2
@@ -100,7 +100,7 @@ dependencies:
     version: 0.9.3
   sugarss:
     specifier: ^4.0.1
-    version: 4.0.1(postcss@8.4.27)
+    version: 4.0.1(postcss@8.4.31)
   typedoc:
     specifier: 0.22.17
     version: 0.22.17(typescript@4.7.4)
@@ -922,7 +922,7 @@ packages:
     engines: {node: '>=8'}
     dev: true
 
-  /autoprefixer@10.4.14(postcss@8.4.27):
+  /autoprefixer@10.4.14(postcss@8.4.31):
     resolution: {integrity: sha512-FQzyfOsTlwVzjHxKEqRIAdJx9niO6VCBCoEwax/VLSoQF29ggECcPuBqUMZ+u8jCZOPSy8b8/8KnuFbp0SaFZQ==}
     engines: {node: ^10 || ^12 || >=14}
     hasBin: true
@@ -934,7 +934,7 @@ packages:
       fraction.js: 4.2.0
       normalize-range: 0.1.2
       picocolors: 1.0.0
-      postcss: 8.4.27
+      postcss: 8.4.31
       postcss-value-parser: 4.2.0
     dev: false
 
@@ -3515,63 +3515,63 @@ packages:
       postcss: 7.0.39
     dev: false
 
-  /postcss-hexrgba@2.1.0(postcss@8.4.27):
+  /postcss-hexrgba@2.1.0(postcss@8.4.31):
     resolution: {integrity: sha512-Bb8Ca/vTI/X2Pgq1O3VhOdXE0rg/hz6161MHMu93ebePw8d/I9GSOc+wbd151OGGxSyTz+z196tFeEpSafrJfA==}
     peerDependencies:
       postcss: ^8.1.4
     dependencies:
-      postcss: 8.4.27
+      postcss: 8.4.31
       postcss-value-parser: 4.2.0
     dev: false
 
-  /postcss-js@4.0.1(postcss@8.4.27):
+  /postcss-js@4.0.1(postcss@8.4.31):
     resolution: {integrity: sha512-dDLF8pEO191hJMtlHFPRa8xsizHaM82MLfNkUHdUtVEV3tgTp5oj+8qbEqYM57SLfc74KSbw//4SeJma2LRVIw==}
     engines: {node: ^12 || ^14 || >= 16}
     peerDependencies:
       postcss: ^8.4.21
     dependencies:
       camelcase-css: 2.0.1
-      postcss: 8.4.27
+      postcss: 8.4.31
     dev: false
 
-  /postcss-media-minmax@5.0.0(postcss@8.4.27):
+  /postcss-media-minmax@5.0.0(postcss@8.4.31):
     resolution: {integrity: sha512-yDUvFf9QdFZTuCUg0g0uNSHVlJ5X1lSzDZjPSFaiCWvjgsvu8vEVxtahPrLMinIDEEGnx6cBe6iqdx5YWz08wQ==}
     engines: {node: '>=10.0.0'}
     peerDependencies:
       postcss: ^8.1.0
     dependencies:
-      postcss: 8.4.27
+      postcss: 8.4.31
     dev: false
 
-  /postcss-mixins@9.0.4(postcss@8.4.27):
+  /postcss-mixins@9.0.4(postcss@8.4.31):
     resolution: {integrity: sha512-XVq5jwQJDRu5M1XGkdpgASqLk37OqkH4JCFDXl/Dn7janOJjCTEKL+36cnRVy7bMtoBzALfO7bV7nTIsFnUWLA==}
     engines: {node: '>=14.0'}
     peerDependencies:
       postcss: ^8.2.14
     dependencies:
       fast-glob: 3.3.1
-      postcss: 8.4.27
-      postcss-js: 4.0.1(postcss@8.4.27)
-      postcss-simple-vars: 7.0.1(postcss@8.4.27)
-      sugarss: 4.0.1(postcss@8.4.27)
+      postcss: 8.4.31
+      postcss-js: 4.0.1(postcss@8.4.31)
+      postcss-simple-vars: 7.0.1(postcss@8.4.31)
+      sugarss: 4.0.1(postcss@8.4.31)
     dev: false
 
-  /postcss-momentum-scrolling@3.14.22(postcss@8.4.27):
+  /postcss-momentum-scrolling@3.14.22(postcss@8.4.31):
     resolution: {integrity: sha512-f8TRdotrtZIDcWJItLsxBVygcCXDyT34umzwhrKBV3NE0dYfzrvzckR3WWvnmmPrpAvLRpxwJshappRK5rY6Uw==}
     engines: {node: '>=10.0.0'}
     peerDependencies:
       postcss: ^8.3.6
     dependencies:
-      postcss: 8.4.27
+      postcss: 8.4.31
     dev: false
 
-  /postcss-nested@6.0.1(postcss@8.4.27):
+  /postcss-nested@6.0.1(postcss@8.4.31):
     resolution: {integrity: sha512-mEp4xPMi5bSWiMbsgoPfcP74lsWLHkQbZc3sY+jWYd65CUwXrUaTp0fmNpa01ZcETKlIgUdFN/MpS2xZtqL9dQ==}
     engines: {node: '>=12.0'}
     peerDependencies:
       postcss: ^8.2.14
     dependencies:
-      postcss: 8.4.27
+      postcss: 8.4.31
       postcss-selector-parser: 6.0.13
     dev: false
 
@@ -3579,13 +3579,13 @@ packages:
     resolution: {integrity: sha512-HvExULSwLqHLgUy1rl3ANIqCsvMS0WHss2UOsXhXnQaZ9VCc2oBvIpXrl00IUFT5ZDITME0o6oiXeiHr2SAIfw==}
     dev: true
 
-  /postcss-safe-parser@6.0.0(postcss@8.4.27):
+  /postcss-safe-parser@6.0.0(postcss@8.4.31):
     resolution: {integrity: sha512-FARHN8pwH+WiS2OPCxJI8FuRJpTVnn6ZNFiqAM2aeW2LwTHWWmWgIyKC6cUo0L8aeKiF/14MNvnpls6R2PBeMQ==}
     engines: {node: '>=12.0'}
     peerDependencies:
       postcss: ^8.3.3
     dependencies:
-      postcss: 8.4.27
+      postcss: 8.4.31
     dev: true
 
   /postcss-selector-parser@6.0.13:
@@ -3595,24 +3595,24 @@ packages:
       cssesc: 3.0.0
       util-deprecate: 1.0.2
 
-  /postcss-simple-vars@7.0.1(postcss@8.4.27):
+  /postcss-simple-vars@7.0.1(postcss@8.4.31):
     resolution: {integrity: sha512-5GLLXaS8qmzHMOjVxqkk1TZPf1jMqesiI7qLhnlyERalG0sMbHIbJqrcnrpmZdKCLglHnRHoEBB61RtGTsj++A==}
     engines: {node: '>=14.0'}
     peerDependencies:
       postcss: ^8.2.1
     dependencies:
-      postcss: 8.4.27
+      postcss: 8.4.31
     dev: false
 
-  /postcss-sorting@8.0.2(postcss@8.4.27):
+  /postcss-sorting@8.0.2(postcss@8.4.31):
     resolution: {integrity: sha512-M9dkSrmU00t/jK7rF6BZSZauA5MAaBW4i5EnJXspMwt4iqTh/L9j6fgMnbElEOfyRyfLfVbIHj/R52zHzAPe1Q==}
     peerDependencies:
       postcss: ^8.4.20
     dependencies:
-      postcss: 8.4.27
+      postcss: 8.4.31
     dev: true
 
-  /postcss-url@10.1.3(postcss@8.4.27):
+  /postcss-url@10.1.3(postcss@8.4.31):
     resolution: {integrity: sha512-FUzyxfI5l2tKmXdYc6VTu3TWZsInayEKPbiyW+P6vmmIrrb4I6CGX0BFoewgYHLK+oIL5FECEK02REYRpBvUCw==}
     engines: {node: '>=10'}
     peerDependencies:
@@ -3621,7 +3621,7 @@ packages:
       make-dir: 3.1.0
       mime: 2.5.2
       minimatch: 3.0.8
-      postcss: 8.4.27
+      postcss: 8.4.31
       xxhashjs: 0.2.2
     dev: false
 
@@ -3636,8 +3636,8 @@ packages:
       source-map: 0.6.1
     dev: false
 
-  /postcss@8.4.27:
-    resolution: {integrity: sha512-gY/ACJtJPSmUFPDCHtX78+01fHa64FaU4zaaWfuh1MhGJISufJAH4cun6k/8fwsHYeK4UQmENQK+tRLCFJE8JQ==}
+  /postcss@8.4.31:
+    resolution: {integrity: sha512-PS08Iboia9mts/2ygV3eLpY5ghnUcfLV/EXTOW1E2qYxJKGGBUtNjN76FYHnMs36RmARn41bC0AZmn+rR0OVpQ==}
     engines: {node: ^10 || ^12 || >=14}
     dependencies:
       nanoid: 3.3.6
@@ -4431,8 +4431,8 @@ packages:
     peerDependencies:
       stylelint: ^14.0.0 || ^15.0.0
     dependencies:
-      postcss: 8.4.27
-      postcss-sorting: 8.0.2(postcss@8.4.27)
+      postcss: 8.4.31
+      postcss-sorting: 8.0.2(postcss@8.4.31)
       stylelint: 15.10.2
     dev: true
 
@@ -4468,9 +4468,9 @@ packages:
       micromatch: 4.0.5
       normalize-path: 3.0.0
       picocolors: 1.0.0
-      postcss: 8.4.27
+      postcss: 8.4.31
       postcss-resolve-nested-selector: 0.1.1
-      postcss-safe-parser: 6.0.0(postcss@8.4.27)
+      postcss-safe-parser: 6.0.0(postcss@8.4.31)
       postcss-selector-parser: 6.0.13
       postcss-value-parser: 4.2.0
       resolve-from: 5.0.0
@@ -4485,13 +4485,13 @@ packages:
       - supports-color
     dev: true
 
-  /sugarss@4.0.1(postcss@8.4.27):
+  /sugarss@4.0.1(postcss@8.4.31):
     resolution: {integrity: sha512-WCjS5NfuVJjkQzK10s8WOBY+hhDxxNt/N6ZaGwxFZ+wN3/lKKFSaaKUNecULcTTvE4urLcKaZFQD8vO0mOZujw==}
     engines: {node: '>=12.0'}
     peerDependencies:
       postcss: ^8.3.3
     dependencies:
-      postcss: 8.4.27
+      postcss: 8.4.31
     dev: false
 
   /supports-color@5.5.0:
@@ -4914,9 +4914,9 @@ packages:
         optional: true
     dependencies:
       esbuild: 0.18.17
-      postcss: 8.4.27
+      postcss: 8.4.31
       rollup: 3.27.2
-      sugarss: 4.0.1(postcss@8.4.27)
+      sugarss: 4.0.1(postcss@8.4.31)
     optionalDependencies:
       fsevents: 2.3.2
     dev: false
