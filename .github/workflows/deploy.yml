@@ -27,16 +27,16 @@ jobs:
         id: hash
         run: ./node_modules/.bin/ssdeploy changed
         env:
-          WEBSITE_URL: ${{ secrets.WEBSITE_URL }}
+          WEBSITE_URL: logux.org
       - name: Auth Google Cloud
         uses: google-github-actions/auth@v1
         with:
           credentials_json: ${{ secrets.GCLOUD_AUTH }}
       - name: Install Google Cloud
-        if: "!steps.hash.outputs.noChanges"
+        if: '!steps.hash.outputs.noChanges'
         uses: google-github-actions/setup-gcloud@v1
       - name: Deploy files
-        if: "!steps.hash.outputs.noChanges"
+        if: '!steps.hash.outputs.noChanges'
         run: ./node_modules/.bin/ssdeploy deploy --verbose
         env:
           GCLOUD_APP: ${{ secrets.GCLOUD_APP }}
