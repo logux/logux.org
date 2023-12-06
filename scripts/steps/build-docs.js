@@ -1,7 +1,7 @@
 import capitalize from 'capitalize'
-import { readFile, writeFile } from 'fs/promises'
 import makeDir from 'make-dir'
-import { dirname, join, sep } from 'path'
+import { readFile, writeFile } from 'node:fs/promises'
+import { dirname, join, sep } from 'node:path'
 
 import { DIST, PROJECTS } from '../lib/dirs.js'
 import wrap from '../lib/spinner.js'

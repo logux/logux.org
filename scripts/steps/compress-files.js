@@ -1,6 +1,6 @@
-import { readFile, writeFile } from 'fs/promises'
-import { promisify } from 'util'
-import zlib from 'zlib'
+import { readFile, writeFile } from 'node:fs/promises'
+import { promisify } from 'node:util'
+import zlib from 'node:zlib'
 
 import wrap from '../lib/spinner.js'
 

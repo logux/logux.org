@@ -1,4 +1,4 @@
-import { readFile, writeFile } from 'fs/promises'
+import { readFile, writeFile } from 'node:fs/promises'
 import postcss from 'postcss'
 import combineMedia from 'postcss-combine-media-query'
 import postcssUrl from 'postcss-url'

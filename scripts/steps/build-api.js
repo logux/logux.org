@@ -1,6 +1,6 @@
-import { writeFile } from 'fs/promises'
 import makeDir from 'make-dir'
-import { dirname, join, sep } from 'path'
+import { writeFile } from 'node:fs/promises'
+import { dirname, join, sep } from 'node:path'
 import { remark } from 'remark'
 import remarkHighlight from 'remark-highlight.js'
 import remarkRehype from 'remark-rehype'

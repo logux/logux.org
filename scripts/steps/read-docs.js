@@ -1,6 +1,6 @@
 import glob from 'fast-glob'
-import { readFile } from 'fs/promises'
-import { join } from 'path'
+import { readFile } from 'node:fs/promises'
+import { join } from 'node:path'
 import rehypeRaw from 'rehype-raw'
 import remarkHighlight from 'remark-highlight.js'
 import remarkParse from 'remark-parse'

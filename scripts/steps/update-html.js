@@ -1,6 +1,6 @@
-import { readFile, unlink, writeFile } from 'fs/promises'
 import makeDir from 'make-dir'
-import { extname, join } from 'path'
+import { readFile, unlink, writeFile } from 'node:fs/promises'
+import { extname, join } from 'node:path'
 import rehypeParse from 'rehype-parse'
 import rehypeStringify from 'rehype-stringify'
 import { unified } from 'unified'

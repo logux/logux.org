@@ -1,6 +1,6 @@
 import capitalize from 'capitalize'
 import glob from 'fast-glob'
-import { join } from 'path'
+import { join } from 'node:path'
 import TypeDoc from 'typedoc'
 
 import { PROJECTS } from '../lib/dirs.js'

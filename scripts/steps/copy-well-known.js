@@ -1,6 +1,6 @@
-import { copyFile } from 'fs/promises'
 import makeDir from 'make-dir'
-import { join } from 'path'
+import { copyFile } from 'node:fs/promises'
+import { join } from 'node:path'
 import copyDir from 'recursive-copy'
 
 import { DIST, SRC } from '../lib/dirs.js'
