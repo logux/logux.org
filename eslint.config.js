@@ -3,7 +3,7 @@ import globals from 'globals'
 
 export default [
   {
-    ignores: ['scripts/lib/dirs.js', 'dist']
+    ignores: ['scripts/lib/dirs.js', 'dist', 'projects']
   },
   ...loguxConfig,
   {
