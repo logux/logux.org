@@ -20,6 +20,7 @@ const EXTERNAL_TYPES = {
     'master/types/react/index.d.ts#L81',
   ComputedGetter: 'https://v3.vuejs.org/api/computed-watch-api.html#computed',
   ComputedRef: 'https://v3.vuejs.org/api/computed-watch-api.html#computed',
+  CryptoKey: 'https://developer.mozilla.org/en-US/docs/Web/API/CryptoKey',
   Emitter: 'https://github.com/ai/nanoevents',
   FC:
     'https://react-typescript-cheatsheet.netlify.app/docs/' +
@@ -38,6 +39,7 @@ const EXTERNAL_TYPES = {
   PreactContext: 'https://preactjs.com/guide/v10/context/',
   Process: 'https://nodejs.org/api/process.html#process_process',
   ReactContext: 'https://reactjs.org/docs/context.html',
+  ReadableAtom: 'https://github.com/nanostores/nanostores',
   Ref: 'https://v3.vuejs.org/api/refs-api.html#ref',
   RequestInfo: 'https://developer.mozilla.org/en-US/docs/Web/API/fetch',
   RequestInit:
