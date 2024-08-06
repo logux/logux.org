@@ -1,5 +1,5 @@
 import capitalize from 'capitalize'
-import { readFile, writeFile, mkdir } from 'node:fs/promises'
+import { mkdir, readFile, writeFile } from 'node:fs/promises'
 import { dirname, join, sep } from 'node:path'
 
 import { DIST, PROJECTS } from '../lib/dirs.js'

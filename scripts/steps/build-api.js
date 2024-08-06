@@ -1,4 +1,4 @@
-import { writeFile, mkdir } from 'node:fs/promises'
+import { mkdir, writeFile } from 'node:fs/promises'
 import { dirname, join, sep } from 'node:path'
 import { remark } from 'remark'
 import remarkHighlight from 'remark-highlight.js'
