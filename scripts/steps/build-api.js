@@ -1,5 +1,4 @@
-import makeDir from 'make-dir'
-import { writeFile } from 'node:fs/promises'
+import { writeFile, mkdir } from 'node:fs/promises'
 import { dirname, join, sep } from 'node:path'
 import { remark } from 'remark'
 import remarkHighlight from 'remark-highlight.js'
@@ -959,7 +958,7 @@ export default async function buildApi(assets, layout, title, nodes) {
     }
   }
 
-  await makeDir(dirname(path))
+  await mkdir(dirname(path), { recursive: true })
   let tree = toTree(ctx, nodes)
   let submenu = toSubmenu(nodes)
   let html = await layout(`/${file}/`, submenu, title + ' / ', tree)

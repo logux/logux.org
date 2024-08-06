@@ -1,5 +1,4 @@
-import makeDir from 'make-dir'
-import { readFile, unlink, writeFile } from 'node:fs/promises'
+import { readFile, unlink, writeFile, mkdir } from 'node:fs/promises'
 import { extname, join } from 'node:path'
 import rehypeParse from 'rehype-parse'
 import rehypeStringify from 'rehype-stringify'
@@ -21,7 +20,7 @@ function tag(tagName, properties) {
 async function updateHtml(assets, manifest, preloadFiles) {
   let [html] = await Promise.all([
     readFile(join(DIST, 'index.html')),
-    makeDir(join(DIST, 'uikit'))
+    mkdir(join(DIST, 'uikit'), { recursive: true })
   ])
   function optimizer() {
     return tree =>

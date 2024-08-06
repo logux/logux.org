@@ -1,6 +1,5 @@
 import capitalize from 'capitalize'
-import makeDir from 'make-dir'
-import { readFile, writeFile } from 'node:fs/promises'
+import { readFile, writeFile, mkdir } from 'node:fs/promises'
 import { dirname, join, sep } from 'node:path'
 
 import { DIST, PROJECTS } from '../lib/dirs.js'
@@ -60,7 +59,7 @@ async function buildDocs(assets, layout, guides) {
 
   await Promise.all(
     guides.map(async page => {
-      let title, categoryUrl, submenu
+      let categoryUrl, submenu, title
       let dirs = join(page.file.replace(/\.md$/, ''))
       if (page.file === 'README.md') {
         dirs = ''
@@ -88,7 +87,7 @@ async function buildDocs(assets, layout, guides) {
       if (title !== '') title += ' / '
       let html = await layout(categoryUrl, submenu, title, page.tree)
       let path = join(DIST, dirs, 'index.html')
-      await makeDir(dirname(path))
+      await mkdir(dirname(path), { recursive: true })
       await writeFile(path, html)
       assets.add(path, html)
     })

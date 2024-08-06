@@ -1,5 +1,4 @@
-import makeDir from 'make-dir'
-import { copyFile } from 'node:fs/promises'
+import { copyFile, mkdir } from 'node:fs/promises'
 import { join } from 'node:path'
 import copyDir from 'recursive-copy'
 
@@ -9,7 +8,7 @@ import wrap from '../lib/spinner.js'
 let FILES = ['branding/', 'favicon.ico', 'robots.txt', 'security.txt']
 
 async function copyWellKnown(assets) {
-  await makeDir(join(DIST, '.well-known'))
+  await mkdir(join(DIST, '.well-known'), { recursive: true })
   await Promise.all(
     FILES.map(async i => {
       if (i.endsWith('/')) {
