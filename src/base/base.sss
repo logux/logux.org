@@ -53,13 +53,10 @@ body
   line-height: 1.7
   -webkit-tap-highlight-color: rgba(#000, 0)
 
-*:focus
+*:focus-visible
   outline: none
   box-shadow: var(--base-focus)
   transition: box-shadow 200ms
-
-*:focus:not(:focus-visible)
-  box-shadow: none
 
 button
   display: inline-block
@@ -76,16 +73,13 @@ button
     border: 0
 
   &:hover,
-  &:focus
+  &:focus-visible
     --link-background: #fef2de
 
     background-color: var(--base-hover)
 
     @mixin dark
       --link-background: #3f331f
-
-  &:focus:not(:focus-visible)
-    background-color: inherit
 
   @mixin no-mobile
     &:active

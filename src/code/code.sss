@@ -6,39 +6,35 @@
   box-shadow: var(--base-above)
   transition: box-shadow 200ms
 
+  @mixin dark
+    background: rgba(#fff, 0.1)
+
   @media (prefers-color-scheme: light)
     &::selection
       background: var(--base-accent)
 
-  kbd&
-    font-size: 14px
-    border-bottom: 2px solid var(--base-accent)
+kbd.code
+  font-size: 14px
+  border-bottom: 2px solid var(--base-accent)
 
-    @mixin dark
-      border-bottom-color: #000
+  @mixin dark
+    border-bottom-color: #000
 
-  a&
-    color: var(--base-title)
-    text-decoration: underline
-    text-decoration-thickness: 0.5px
-    text-underline-offset: 0.4ex
+a.code
+  color: var(--base-title)
+  text-decoration: underline
+  text-decoration-thickness: 0.5px
+  text-underline-offset: 0.4ex
 
-  a&:hover,
-  a&:focus
+  &:hover,
+  &:focus-visible
     background: #f2cc61
 
     @mixin dark
       background: rgba(#fff, 0.3)
 
-  a&:focus
+  &:focus-visible
     box-shadow: var(--base-above-focus)
 
-  a&:active
+  &:active
     box-shadow: none
-
-  a&:focus:not(:focus-visible)
-    background: transparent
-    box-shadow: none
-
-  @mixin dark
-    background: rgba(#fff, 0.1)

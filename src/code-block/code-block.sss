@@ -7,11 +7,8 @@
   background: var(--base-panel)
   box-shadow: var(--base-above)
 
-  &:focus
+  &:focus-visible
     box-shadow: var(--base-above-focus)
-
-  &:focus:not(:focus-visible)
-    box-shadow: var(--base-above)
 
   @mixin no-mobile
     border-radius: 4px
