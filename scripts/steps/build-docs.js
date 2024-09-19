@@ -23,7 +23,7 @@ async function buildDocs(assets, layout, guides) {
 
   let submenus = {}
   for (let category in order) {
-    if (category === 'recipes') {
+    if (!order[category][0].includes('/')) {
       submenus[category] = order[category].map(i => ({
         link: `/${category}/${i}/`,
         text: toTitle(i)
@@ -67,6 +67,9 @@ async function buildDocs(assets, layout, guides) {
         submenu = submenus.guide
       } else if (dirname(page.file) === 'recipes') {
         categoryUrl = '/recipes/authentication/'
+        submenu = submenus.recipes.map(findCurrent(dirs))
+      } else if (dirname(page.file) === 'examples') {
+        categoryUrl = '/examples/list/'
         submenu = submenus.recipes.map(findCurrent(dirs))
       } else if (dirname(dirname(page.file)) === 'protocols') {
         categoryUrl = '/protocols/ws/spec/'
