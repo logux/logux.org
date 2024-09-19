@@ -53,38 +53,38 @@ const EXTERNAL_TYPES = {
 }
 
 const SIMPLE_TYPES = new Set([
-  'WebSocket',
-  'RegExp',
-  'Error',
-  'Array',
-  'Function',
-  'boolean',
-  'string',
-  'object',
-  'number',
   'any',
+  'Array',
+  'boolean',
+  'Builder',
+  'ComponentChild',
+  'Error',
+  'Function',
+  'number',
+  'object',
+  'ReactNode',
+  'RegExp',
   'StoreValue',
   'StoreValues',
-  'Builder',
+  'string',
   'Type',
   'unknown',
-  'ReactNode',
-  'ComponentChild'
+  'WebSocket'
 ])
 
 const UTILITY_TYPES = new Set([
+  'Atom',
+  'Exclude',
   'Map',
-  'Readonly',
-  'Promise',
+  'MapStore',
+  'Omit',
   'Partial',
   'Pick',
-  'Exclude',
-  'Omit',
-  'ReturnType',
-  'Ref',
+  'Promise',
+  'Readonly',
   'ReadonlyRef',
-  'MapStore',
-  'Atom'
+  'Ref',
+  'ReturnType'
 ])
 
 const HIDE_CONSTRUCTOR = new Set([
@@ -105,76 +105,76 @@ const OPTIONAL = [
   }
 ]
 
-const IGNORE_TYPES = new Set(['DefineAction', 'BuilderValue', 'Vue.Refable'])
+const IGNORE_TYPES = new Set(['BuilderValue', 'DefineAction', 'Vue.Refable'])
 const IGNORE_TYPE_TEMPLATES = new Set(['StoreExt'])
 const REPLACE_TYPE_TEMPLATE = {
   AppPages: 'Pages',
   Value: 'SyncMapValues'
 }
 const UNWRAP_UTILITIES = new Set([
-  'ReadonlyIfObject',
   'DeepReadonly',
-  'Readonly'
+  'Readonly',
+  'ReadonlyIfObject'
 ])
 
-const EXCLUDED_SUBMENU_KINDS = new Set(['Type alias', 'Interface', 'Namespace'])
+const EXCLUDED_SUBMENU_KINDS = new Set(['Interface', 'Namespace', 'Type alias'])
 const EXCLUDED_TREE_KINDS = new Set(['Namespace'])
 const CORE_ENTITIES = new Set([
   'BaseNode',
   'Connection',
-  'Log',
-  'MemoryStore',
-  'Reconnect',
-  'ServerConnection',
   'defineAction',
   'isFirstOlder',
-  'parseId'
+  'Log',
+  'MemoryStore',
+  'parseId',
+  'Reconnect',
+  'ServerConnection'
 ])
 const CLIENT_ENTITIES = new Set([
-  'Client',
-  'CrossTabClient',
-  'syncMapTemplate',
-  'IndexedStore',
   'attention',
   'badge',
   'buildNewSyncMap',
   'changeSyncMap',
   'changeSyncMapById',
+  'Client',
   'confirm',
   'createFilter',
   'createSyncMap',
+  'CrossTabClient',
   'defineSyncMap',
   'deleteSyncMap',
   'deleteSyncMapById',
   'encryptActions',
   'favicon',
+  'IndexedStore',
   'log',
-  'request'
+  'request',
+  'syncMapTemplate'
 ])
 const SERVER_ENTITIES = new Set([
   'addSyncMap',
   'addSyncMapFilter',
   'ChannelContext',
   'Context',
-  'ResponseError',
-  'Server',
-  'ServerClient',
   'del',
   'get',
   'patch',
   'post',
   'put',
-  'request'
+  'request',
+  'ResponseError',
+  'Server',
+  'ServerClient'
 ])
 const TEST_ENTITIES = new Set([
+  'cleanStores',
+  'emptyInTest',
+  'prepareForTest',
   'TestClient',
   'TestLog',
   'TestPair',
   'TestServer',
-  'TestTime',
-  'cleanStores',
-  'emptyInTest',
-  'prepareForTest'
+  'TestTime'
 ])
 
 const GROUPS = {
