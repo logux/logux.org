@@ -9,7 +9,6 @@ import buildDocs from './steps/build-docs.js'
 import buildPages from './steps/build-pages.js'
 import cleanBuildDir from './steps/clean-build-dir.js'
 import compileAssets from './steps/compile-assets.js'
-import compressFiles from './steps/compress-files.js'
 import copyWellKnown from './steps/copy-well-known.js'
 import createLayout from './steps/create-layout.js'
 import downloadProject from './steps/download-project.js'
@@ -67,7 +66,6 @@ async function build() {
     buildApi(assets, layout, 'Web API', webApi)
   ])
   exitOnErrors()
-  await compressFiles(assets)
 }
 
 build().catch(e => {

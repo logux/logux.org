@@ -1,0 +1,7 @@
+/guide/ /guide/architecture/core/ 302
+/guide/architecture/ /guide/architecture/core/ 302
+/guide/starting/ /guide/starting/creating-server/ 302
+/guide/concepts/ https://$http_host/guide/concepts/node/ 302
+/recipes/ /recipes/authentication/ 302
+/protocols/ /protocols/ws/spec/ 302
+/protocols/ws/  /protocols/ws/spec/ 302
