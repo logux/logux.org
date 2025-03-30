@@ -34,6 +34,6 @@ jobs:
     name: Deploy
     needs:
       - test
-    #if: github.ref == 'refs/heads/main'
+    if: github.ref == 'refs/heads/main'
     uses: ./.github/workflows/deploy.yml
     secrets: inherit
