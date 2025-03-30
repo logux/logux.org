@@ -56,9 +56,9 @@
     "vite-plugin-pug-transformer": "^1.0.7"
   },
   "devDependencies": {
-    "@logux/eslint-config": "^53.4.0",
+    "@logux/eslint-config": "^55.2.0",
     "@size-limit/file": "^11.2.0",
-    "eslint": "^9.10.0",
+    "eslint": "^9.23.0",
     "globals": "^16.0.0",
     "nano-staged": "^0.8.0",
     "serve": "^14.2.4",
