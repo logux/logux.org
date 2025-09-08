@@ -20,7 +20,7 @@ jobs:
       - name: Install Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version: 24
           cache: pnpm
       - name: Install all dependencies
         run: pnpm install --ignore-scripts
@@ -46,7 +46,7 @@ jobs:
       - name: Install Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version: 24
           cache: pnpm
       - name: Install build dependencies
         run: pnpm install --frozen-lockfile --ignore-scripts --production
