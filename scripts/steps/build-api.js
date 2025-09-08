@@ -14,6 +14,7 @@ const CAPITALIZED = /^[A-Z]/
 const EXTERNAL_TYPES = {
   App: 'https://v3.vuejs.org/api/global-api.html#createapp',
   Atom: 'https://github.com/nanostores/nanostores',
+  ClientNode: 'https://logux.org/web-api/#clientnode',
   Component: 'https://reactjs.org/docs/react-component.html',
   ComponentType:
     'https://github.com/DefinitelyTyped/DefinitelyTyped/blob/' +
@@ -45,6 +46,7 @@ const EXTERNAL_TYPES = {
   RequestInit:
     'https://developer.mozilla.org/en-US/docs/Web/API/' +
     'WindowOrWorkerGlobalScope/fetch',
+  Response: 'https://developer.mozilla.org/en-US/docs/Web/API/Response',
   ServerResponse:
     'https://nodejs.org/api/http.html#http_class_http_serverresponse',
   Unsubscribe: 'https://github.com/ai/nanoevents/#remove-listener',
@@ -791,7 +793,7 @@ function getChildren(type) {
 }
 
 function isSource(node, project) {
-  return node.sources.some(i => i.fileName.includes(project))
+  return node.sources?.some(i => i.fileName.includes(project))
 }
 
 function variableHtml(ctx, node) {
