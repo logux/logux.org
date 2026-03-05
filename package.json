@@ -64,7 +64,7 @@
     "serve": "^14.2.4",
     "simple-git-hooks": "^2.12.1",
     "size-limit": "^11.2.0",
-    "svgo": "^3.3.2"
+    "svgo": "^3.3.3"
   },
   "repository": "logux/logux.org",
   "homepage": "https://logux.org/",
