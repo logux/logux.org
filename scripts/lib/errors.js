@@ -1,4 +1,4 @@
-import pico from 'picocolors'
+import { styleText } from 'node:util'
 
 let errors = []
 
@@ -8,7 +8,9 @@ export function addError(text) {
 
 export function exitOnErrors() {
   if (errors.length > 0) {
-    process.stderr.write(pico.red(errors.join('\n')) + '\n')
+    process.stderr.write(
+      styleText('red', errors.join('\n'), { stream: process.stderr }) + '\n'
+    )
     process.exit(1)
   }
 }

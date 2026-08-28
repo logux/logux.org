@@ -1,4 +1,3 @@
-import glob from 'fast-glob'
 import { readFile } from 'node:fs/promises'
 import { join } from 'node:path'
 import rehypeRaw from 'rehype-raw'
@@ -10,6 +9,7 @@ import unistFlatmap from 'unist-util-flatmap'
 import { visit } from 'unist-util-visit'
 
 import { PROJECTS } from '../lib/dirs.js'
+import glob from '../lib/glob.js'
 import wrap from '../lib/spinner.js'
 
 const ROOT = join(PROJECTS, 'logux-docs')
@@ -213,7 +213,7 @@ function convertor({ file, onTitle }) {
 }
 
 async function readDocs() {
-  let files = await glob('**/*.md', { cwd: ROOT, ignore: ['node_modules'] })
+  let files = await glob('**/*.md', { cwd: ROOT, exclude: ['node_modules'] })
   let guides = await Promise.all(
     files.map(async file => {
       let title = ''

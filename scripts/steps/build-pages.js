@@ -1,4 +1,3 @@
-import capitalize from 'capitalize'
 import { readFile, writeFile } from 'node:fs/promises'
 import { join } from 'node:path'
 import pug from 'pug'
@@ -11,6 +10,10 @@ import { DIST, SRC } from '../lib/dirs.js'
 import wrap from '../lib/spinner.js'
 
 const PAGES = ['branding']
+
+function capitalize(str) {
+  return str.slice(0, 1).toUpperCase() + str.slice(1).toLowerCase()
+}
 
 function findHeaders(tree) {
   let list = []

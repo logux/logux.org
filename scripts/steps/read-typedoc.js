@@ -1,22 +1,26 @@
-import capitalize from 'capitalize'
-import glob from 'fast-glob'
 import { join } from 'node:path'
 import TypeDoc from 'typedoc'
 
 import { PROJECTS } from '../lib/dirs.js'
+import glob from '../lib/glob.js'
 import { run } from '../lib/spinner.js'
+
+function capitalize(str) {
+  return str.slice(0, 1).toUpperCase() + str.slice(1).toLowerCase()
+}
 
 export default async function readTypedoc(...projects) {
   let type = capitalize(projects[0].replace(/^logux-/, ''))
 
   let files = await run(`Reading ${type} TypeDoc`, async () => {
     return Promise.all(
-      projects.map(i => {
-        return glob('**/*.d.ts', {
-          absolute: true,
-          cwd: join(PROJECTS, i),
-          ignore: ['node_modules', 'test', 'coverage']
+      projects.map(async i => {
+        let cwd = join(PROJECTS, i)
+        let found = await glob('**/*.d.ts', {
+          cwd,
+          exclude: ['node_modules', 'test', 'coverage']
         })
+        return found.map(file => join(cwd, file))
       })
     )
   })

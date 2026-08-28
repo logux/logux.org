@@ -1,6 +1,5 @@
-import { copyFile, mkdir } from 'node:fs/promises'
+import { copyFile, cp, mkdir, readdir } from 'node:fs/promises'
 import { join } from 'node:path'
-import copyDir from 'recursive-copy'
 
 import { DIST, ROOT, SRC } from '../lib/dirs.js'
 import wrap from '../lib/spinner.js'
@@ -15,10 +14,11 @@ async function copyWellKnown(assets) {
       if (i.endsWith('/')) {
         let from = join(SRC, 'well-known', i.slice(0, -1))
         let to = join(DIST, i.slice(0, -1))
-        let files = await copyDir(from, to)
+        await cp(from, to, { recursive: true })
+        let files = await readdir(to, { recursive: true, withFileTypes: true })
         for (let file of files) {
-          if (file.dest !== to) {
-            assets.add(file.dest)
+          if (file.isFile()) {
+            assets.add(join(file.parentPath, file.name))
           }
         }
       } else {

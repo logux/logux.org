@@ -1,9 +1,12 @@
-import capitalize from 'capitalize'
 import { mkdir, readFile, writeFile } from 'node:fs/promises'
 import { dirname, join, sep } from 'node:path'
 
 import { DIST, PROJECTS } from '../lib/dirs.js'
 import wrap from '../lib/spinner.js'
+
+function capitalize(str) {
+  return str.slice(0, 1).toUpperCase() + str.slice(1).toLowerCase()
+}
 
 function toTitle(file) {
   if (file === 'starting') file = 'starting-project'

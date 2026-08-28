@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
-import dotenv from 'dotenv'
-import pico from 'picocolors'
+import { existsSync } from 'node:fs'
+import { styleText } from 'node:util'
 
 import { exitOnErrors } from './lib/errors.js'
 import buildApi from './steps/build-api.js'
@@ -19,7 +19,7 @@ import readTypedoc from './steps/read-typedoc.js'
 import repackStyles from './steps/repack-styles.js'
 import updateHtml from './steps/update-html.js'
 
-dotenv.config()
+if (existsSync('.env')) process.loadEnvFile()
 
 async function prepareHtml() {
   await cleanBuildDir()
@@ -69,10 +69,9 @@ async function build() {
 }
 
 build().catch(e => {
-  if (e.stack) {
-    process.stderr.write(pico.red(e.stack) + '\n')
-  } else {
-    process.stderr.write(pico.red(e) + '\n')
-  }
+  let message = e.stack ?? String(e)
+  process.stderr.write(
+    styleText('red', message, { stream: process.stderr }) + '\n'
+  )
   process.exit(1)
 })

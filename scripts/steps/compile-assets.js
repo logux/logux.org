@@ -1,8 +1,8 @@
-import glob from 'fast-glob'
 import { join } from 'node:path'
 import { build } from 'vite'
 
 import { DIST } from '../lib/dirs.js'
+import glob from '../lib/glob.js'
 import hash from '../lib/hash.js'
 import wrap from '../lib/spinner.js'
 

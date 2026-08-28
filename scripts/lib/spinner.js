@@ -1,8 +1,5 @@
-import pico from 'picocolors'
-import Spinnies from 'spinnies'
-
-let spinner = new Spinnies({ succeedColor: 'white' })
-let lastId = 0
+import { createSpinner } from 'nanospinner'
+import { styleText } from 'node:util'
 
 export let step
 if (process.env.CI || process.env.GITHUB_ACTIONS) {
@@ -11,28 +8,48 @@ if (process.env.CI || process.env.GITHUB_ACTIONS) {
     let start = Date.now()
     return e => {
       if (e) {
-        process.stdout.write(pico.red('✖ ') + text + '\n')
+        process.stdout.write(styleText('red', '✖ ') + text + '\n')
       } else {
         let time = Date.now() - start + ' ms'
         process.stdout.write(
-          pico.green('✓ ') + text + ' ' + pico.gray(time) + '\n'
+          styleText('green', '✓ ') + text + ' ' + styleText('gray', time) + '\n'
         )
       }
     }
   }
 } else {
+  // `nanospinner` shows a single spinner, but steps run in parallel.
+  // Keep all running steps in one spinner and print finished ones above it.
+  let spinner = createSpinner('', { stream: process.stdout })
+  let running = new Map()
+  let lastId = 0
+
+  let redraw = () => {
+    if (running.size === 0) {
+      spinner.stop()
+    } else {
+      spinner.update({ text: Array.from(running.values()).join('\n  ') })
+      if (!spinner.isSpinning()) spinner.start()
+    }
+  }
+
   step = text => {
-    lastId++
-    let id = lastId.toString()
+    let id = ++lastId
     let start = Date.now()
-    spinner.add(id, { text })
+    running.set(id, text)
+    redraw()
     return e => {
+      running.delete(id)
+      if (spinner.isSpinning()) spinner.clear()
       if (e) {
-        spinner.fail(id)
+        process.stdout.write(styleText('red', '✖ ') + text + '\n')
       } else {
-        let time = Date.now() - start
-        spinner.succeed(id, { text: text + pico.gray(` ${time} ms`) })
+        let time = Date.now() - start + ' ms'
+        process.stdout.write(
+          styleText('green', '✓ ') + text + ' ' + styleText('gray', time) + '\n'
+        )
       }
+      redraw()
     }
   }
 }
