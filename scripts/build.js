@@ -13,7 +13,6 @@ import copyWellKnown from './steps/copy-well-known.js'
 import createLayout from './steps/create-layout.js'
 import downloadProject from './steps/download-project.js'
 import generateWebManifest from './steps/generate-web-manifest.js'
-import installTypes from './steps/install-types.js'
 import readDocs from './steps/read-docs.js'
 import readTypedoc from './steps/read-typedoc.js'
 import repackStyles from './steps/repack-styles.js'
@@ -34,7 +33,7 @@ async function prepareHtml() {
 }
 
 async function prepareContent() {
-  await installTypes(() => [
+  await Promise.all([
     downloadProject('logux-docs'),
     downloadProject('logux-core'),
     downloadProject('logux-server'),

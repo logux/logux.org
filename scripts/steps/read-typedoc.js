@@ -1,5 +1,6 @@
+import { writeFile } from 'node:fs/promises'
 import { join } from 'node:path'
-import TypeDoc from 'typedoc'
+import { Application, ReflectionKind } from 'typedoc'
 
 import { PROJECTS } from '../lib/dirs.js'
 import glob from '../lib/glob.js'
@@ -33,17 +34,24 @@ export default async function readTypedoc(...projects) {
   }
 
   let docs = await run(`Generating ${type} TypeDoc`, async () => {
-    let app = new TypeDoc.Application()
-    app.bootstrap({
+    // TypeDoc 0.28 builds the program from `tsconfig` instead of the file
+    // list that `setCompilerOptions()` used to take, so limit it to the
+    // type definitions. Otherwise it type-checks the projects’ tests too.
+    let tsconfig = join(PROJECTS, `tsconfig.${type.toLowerCase()}.json`)
+    await writeFile(
+      tsconfig,
+      JSON.stringify({
+        extends: './logux-core/tsconfig.json',
+        files: files.flat(),
+        include: []
+      })
+    )
+    let app = await Application.bootstrap({
       entryPoints: files.flat(),
       excludeExternals: true,
-      tsconfig: join(PROJECTS, 'logux-core', 'tsconfig.json')
+      tsconfig
     })
-    app.options.setCompilerOptions(files.flat(), {
-      esModuleInterop: true,
-      skipLibCheck: true
-    })
-    let project = app.convert()
+    let project = await app.convert()
     if (!project || app.logger.hasErrors()) {
       throw new Error(`Error during ${type} types generation`)
     }
@@ -54,7 +62,9 @@ export default async function readTypedoc(...projects) {
     for (let file of project.children) {
       nodes.push(
         ...file.children.filter(i => {
-          return !ignore.includes(i.name) && i.kindString !== 'Reference'
+          return (
+            !ignore.includes(i.name) && i.kind !== ReflectionKind.Reference
+          )
         })
       )
     }

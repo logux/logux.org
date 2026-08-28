@@ -3,6 +3,7 @@ import { dirname, join, sep } from 'node:path'
 import { remark } from 'remark'
 import remarkRehype from 'remark-rehype'
 import slugify from 'slugify'
+import { ReflectionKind } from 'typedoc'
 import ts from 'typescript'
 
 import { DIST } from '../lib/dirs.js'
@@ -10,6 +11,23 @@ import remarkHighlight from '../lib/highlight.js'
 import { step } from '../lib/spinner.js'
 
 const CAPITALIZED = /^[A-Z]/
+
+// TypeDoc 0.25 removed `Reflection#kindString`, but its names are still
+// the clearest way to branch on what a node is
+const KIND_NAMES = {
+  [ReflectionKind.Class]: 'Class',
+  [ReflectionKind.Function]: 'Function',
+  [ReflectionKind.IndexSignature]: 'Index signature',
+  [ReflectionKind.Interface]: 'Interface',
+  [ReflectionKind.Method]: 'Method',
+  [ReflectionKind.Namespace]: 'Namespace',
+  [ReflectionKind.Reference]: 'Reference',
+  [ReflectionKind.TypeAlias]: 'Type alias'
+}
+
+function kindString(node) {
+  return KIND_NAMES[node.kind]
+}
 
 const EXTERNAL_TYPES = {
   App: 'https://v3.vuejs.org/api/global-api.html#createapp',
@@ -49,26 +67,43 @@ const EXTERNAL_TYPES = {
   Response: 'https://developer.mozilla.org/en-US/docs/Web/API/Response',
   ServerResponse:
     'https://nodejs.org/api/http.html#http_class_http_serverresponse',
+  Uint8Array:
+    'https://developer.mozilla.org/en-US/docs/Web/JavaScript/' +
+    'Reference/Global_Objects/Uint8Array',
   Unsubscribe: 'https://github.com/ai/nanoevents/#remove-listener',
   URL: 'https://developer.mozilla.org/en-US/docs/Web/API/URL',
-  WebSocket: 'https://developer.mozilla.org/en-US/docs/Web/API/WebSocket'
+  WebSocket: 'https://developer.mozilla.org/en-US/docs/Web/API/WebSocket',
+  WsConnection: 'https://logux.org/web-api/#wsconnection'
 }
 
 const SIMPLE_TYPES = new Set([
   'any',
   'Array',
+  'Awaited',
   'boolean',
   'Builder',
   'ComponentChild',
+  'CrdtIndexName',
+  'Database',
+  'DefineAction',
+  'Driver',
   'Error',
+  'ErrorOptions',
   'Function',
+  'Key',
+  'NoInfer',
+  'NonNullable',
   'number',
   'object',
+  'Packers',
+  'Parameters',
   'ReactNode',
   'RegExp',
+  'SqlStore',
   'StoreValue',
   'StoreValues',
   'string',
+  'TemplateStringsArray',
   'Type',
   'unknown',
   'WebSocket'
@@ -221,9 +256,9 @@ function toSlug(type) {
 }
 
 function byTypeAndName(a, b) {
-  if (a.kindString === 'Method' && b.kindString !== 'Method') {
+  if (kindString(a) === 'Method' && kindString(b) !== 'Method') {
     return 1
-  } else if (a.kindString !== 'Method' && b.kindString === 'Method') {
+  } else if (kindString(a) !== 'Method' && kindString(b) === 'Method') {
     return -1
   } else {
     return byName(a, b)
@@ -426,9 +461,22 @@ function tsKindHtml(ctx, tsType) {
   }
 }
 
+// TypeDoc 0.23 dropped the `typeParameter` type and sends type parameters
+// as references to a `TypeParameter` reflection. They have no own section,
+// so they must stay plain text instead of becoming a link.
+function isTypeParameter(type) {
+  return (
+    type.type === 'reference' &&
+    type.reflection &&
+    type.reflection.kind === ReflectionKind.TypeParameter
+  )
+}
+
 function typeHtml(ctx, type) {
   if (!type) {
     return []
+  } else if (isTypeParameter(type)) {
+    return [{ type: 'text', value: type.name }]
   } else if (type.type === 'reference') {
     let target = type._target
 
@@ -524,6 +572,21 @@ function typeHtml(ctx, type) {
       ),
       { type: 'text', value: ']' }
     ]
+  } else if (type.type === 'templateLiteral') {
+    return [
+      { type: 'text', value: '`' + type.head },
+      ...type.tail.flatMap(([subtype, text]) => [
+        { type: 'text', value: '${' },
+        ...typeHtml(ctx, subtype),
+        { type: 'text', value: '}' + text }
+      ]),
+      { type: 'text', value: '`' }
+    ]
+  } else if (type.type === 'namedTupleMember') {
+    return [
+      { type: 'text', value: type.name + (type.isOptional ? '?: ' : ': ') },
+      ...typeHtml(ctx, type.element)
+    ]
   } else if (type.type === 'intersection') {
     return joinTags(
       ' & ',
@@ -609,9 +672,25 @@ function extractChildren(nodes) {
   }
 }
 
+// TypeDoc 0.23 replaced `shortText`/`text` with an array of comment parts
+function commentText(parts) {
+  if (!parts) return ''
+  return parts
+    .map(part => {
+      if (part.kind === 'inline-tag') return `{${part.tag} ${part.text}}`
+      return part.text
+    })
+    .join('')
+}
+
+function commentReturns(comment) {
+  let block = (comment.blockTags || []).find(i => i.tag === '@returns')
+  return block ? commentText(block.content) : ''
+}
+
 function commentHtml(comment) {
   if (!comment) return []
-  return toHtml(comment.shortText + '\n\n' + comment.text)
+  return toHtml(commentText(comment.summary))
 }
 
 function propTypeHtml(ctx, type) {
@@ -635,12 +714,14 @@ function returnsHtml(ctx, node) {
       { type: 'text', value: 'Returns ' },
       tag('code', typeHtml(ctx, type), { noClass: true }),
       { type: 'text', value: '. ' },
-      ...extractChildren(toHtml(comment.returns || ''))
+      ...extractChildren(toHtml(commentReturns(comment)))
     ])
   ]
 }
 
-function tableHtml(ctx, name, list) {
+// `owner` makes each row a link target, so `{@link Interface#member}` in
+// the comments resolves the same way as a class member section does
+function tableHtml(ctx, name, list, owner) {
   let hasDesc = Array.from(list).some(i => i.comment)
   return [
     tag('table', [
@@ -667,21 +748,28 @@ function tableHtml(ctx, name, list) {
           type = typeHtml(ctx, i.type)
         }
         let itemName = i.name
-        if (i.kindString === 'Index signature') {
+        if (kindString(i) === 'Index signature') {
           itemName = [
             { type: 'text', value: '[' },
             ...declHtml(ctx, i.parameters[0]),
             { type: 'text', value: ']' }
           ]
         }
-        return tag('tr', [
-          tag('td', [
-            tag('code', itemName),
-            ...(i.flags.isOptional ? OPTIONAL : [EMPTY])
-          ]),
-          tag('td', [tag('code', type, { noClass: true })]),
-          hasDesc ? tag('td', extractChildren(commentHtml(i.comment))) : EMPTY
-        ])
+        let row = owner
+          ? { properties: { id: `${owner}-${i.name}`.toLowerCase() } }
+          : {}
+        return tag(
+          'tr',
+          [
+            tag('td', [
+              tag('code', itemName),
+              ...(i.flags.isOptional ? OPTIONAL : [EMPTY])
+            ]),
+            tag('td', [tag('code', type, { noClass: true })]),
+            hasDesc ? tag('td', extractChildren(commentHtml(i.comment))) : EMPTY
+          ],
+          row
+        )
       })
     ])
   ]
@@ -715,7 +803,7 @@ function membersHtml(ctx, className, members, separator) {
         }),
         { type: 'text', value: member.name }
       ]
-      if (member.kindString === 'Method') {
+      if (kindString(member) === 'Method') {
         name.push(
           tag('span', methodArgs(member), {
             properties: { className: ['title_extra'] }
@@ -802,10 +890,11 @@ function variableHtml(ctx, node) {
     body = tableHtml(
       ctx,
       'Property',
-      (node.children || []).concat([node.indexSignature])
+      (node.children || []).concat([node.indexSignature]),
+      node.name
     )
   } else if (node.children) {
-    body = tableHtml(ctx, 'Property', node.children)
+    body = tableHtml(ctx, 'Property', node.children, node.name)
   } else if (node.type) {
     let type = node.type
     if (
@@ -813,17 +902,19 @@ function variableHtml(ctx, node) {
       type.declaration.children &&
       type.declaration.children[0].comment
     ) {
-      body = tableHtml(ctx, 'Property', type.declaration.children)
+      body = tableHtml(ctx, 'Property', type.declaration.children, node.name)
     } else if (
       type.types &&
       type.types[1].declaration &&
       type.types[1].declaration.children &&
       type.types[1].declaration.children[0].comment
     ) {
-      body = tableHtml(ctx, 'Property', [
-        ...getChildren(type.types[0]),
-        ...type.types[1].declaration.children
-      ])
+      body = tableHtml(
+        ctx,
+        'Property',
+        [...getChildren(type.types[0]), ...type.types[1].declaration.children],
+        node.name
+      )
       if (type.types[0].reflection) {
         body = [
           tag('p', [
@@ -871,11 +962,13 @@ function groupNodes(nodes) {
 
 function toTree(ctx, nodes) {
   let treeNodes = nodes
-    .filter(node => !SIMPLE_TYPES.has(node.name))
+    // `@logux/client/db` exports `string()`, `number()` and `boolean()`
+    // column helpers, so only hide types named after the primitives
+    .filter(node => !SIMPLE_TYPES.has(node.name) || kindString(node) === 'Function')
     .filter(node => !IGNORE_TYPES.has(node.name))
     .filter(node => !UTILITY_TYPES.has(node.name))
     .filter(node => !UNWRAP_UTILITIES.has(node.name))
-    .filter(node => !EXCLUDED_TREE_KINDS.has(node.kindString))
+    .filter(node => !EXCLUDED_TREE_KINDS.has(kindString(node)))
     .toSorted(byName)
   let treeGroups = groupNodes(treeNodes)
 
@@ -889,7 +982,7 @@ function toTree(ctx, nodes) {
     return tag(
       'article',
       group.map(node => {
-        if (node.kindString === 'Class') {
+        if (kindString(node) === 'Class') {
           return classHtml(ctx, node)
         } else if (node.signatures) {
           return functionHtml(ctx, node)
@@ -911,12 +1004,12 @@ function toTree(ctx, nodes) {
 function submenuName(node) {
   let nodeNameWithoutPrefix = node.name.replace(/^(preact|react|vue)\./i, '')
 
-  return nodeNameWithoutPrefix + (node.kindString === 'Function' ? '()' : '')
+  return nodeNameWithoutPrefix + (kindString(node) === 'Function' ? '()' : '')
 }
 
 function toSubmenu(nodes) {
   let submenuNodes = nodes
-    .filter(node => !EXCLUDED_SUBMENU_KINDS.has(node.kindString))
+    .filter(node => !EXCLUDED_SUBMENU_KINDS.has(kindString(node)))
     .toSorted(byName)
   let submenuGroups = groupNodes(submenuNodes)
 
