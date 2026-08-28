@@ -107,14 +107,26 @@ function tag(tagName, properties, children) {
   return { children, properties, tagName, type: 'element' }
 }
 
+// Raw HTML is skipped: in Markdown sources it is layout, not text
 function textContent(node) {
-  if (node.type === 'text') {
-    return node.value
+  if (node.type === 'html') {
+    return ''
   } else if (node.children) {
     return node.children.map(i => textContent(i)).join('')
   } else {
-    return ''
+    return node.value ?? ''
   }
+}
+
+function firstSentence(tree) {
+  for (let node of tree.children) {
+    if (node.type === 'heading' && node.depth > 1) break
+    if (node.type !== 'paragraph') continue
+    let intro = textContent(node).replace(/\s+/g, ' ').trim()
+    let end = intro.match(/\.(\s|$)/)
+    if (end) return intro.slice(0, end.index + 1)
+  }
+  return ''
 }
 
 function videoInserter() {
@@ -217,8 +229,9 @@ async function readDocs() {
   let guides = await Promise.all(
     files.map(async file => {
       let title = ''
-      let md = await readFile(join(ROOT, file))
+      let md = await readFile(join(ROOT, file), 'utf8')
       let tree = await unified().use(remarkParse).parse(md)
+      let summary = firstSentence(tree)
       tree = await unified()
         .use(convertor, {
           file,
@@ -236,7 +249,7 @@ async function readDocs() {
         .use(articler, file)
         .use(videoInserter)
         .run(tree)
-      return { file, title, tree }
+      return { file, markdown: md, summary, title, tree }
     })
   )
   return guides

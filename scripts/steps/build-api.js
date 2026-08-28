@@ -8,6 +8,7 @@ import ts from 'typescript'
 
 import { DIST } from '../lib/dirs.js'
 import remarkHighlight from '../lib/highlight.js'
+import { markdownUrl, treeToMarkdown } from '../lib/markdown.js'
 import { step } from '../lib/spinner.js'
 
 const CAPITALIZED = /^[A-Z]/
@@ -1050,9 +1051,19 @@ export default async function buildApi(assets, layout, title, nodes) {
   await mkdir(dirname(path), { recursive: true })
   let tree = toTree(ctx, nodes)
   let submenu = toSubmenu(nodes)
-  let html = await layout(`/${file}/`, submenu, title + ' / ', tree)
-  await writeFile(path, html)
+  let mdUrl = markdownUrl(file)
+  let markdown = `# ${title}\n\n` + (await treeToMarkdown(tree, file))
+  let html = await layout({
+    categoryUrl: `/${file}/`,
+    links: submenu,
+    mdUrl,
+    title: title + ' / ',
+    tree
+  })
+  let mdPath = join(DIST, mdUrl.slice(1))
+  await Promise.all([writeFile(path, html), writeFile(mdPath, markdown)])
   assets.add(path, html)
+  assets.add(mdPath, markdown)
 
   end()
 }

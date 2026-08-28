@@ -7,6 +7,7 @@ import { unified } from 'unified'
 import { visit } from 'unist-util-visit'
 
 import { DIST, SRC } from '../lib/dirs.js'
+import { markdownUrl, treeToMarkdown } from '../lib/markdown.js'
 import wrap from '../lib/spinner.js'
 
 const PAGES = ['branding']
@@ -35,10 +36,20 @@ async function buildPages(assets, layout) {
       let inner = pug.render(template.toString(), { filename })
       let tree = await unified().use(rehypeParse).parse(inner)
       let submenu = findHeaders(tree)
-      let html = await layout(`/${i}/`, submenu, title, tree)
+      let mdUrl = markdownUrl(i)
+      let markdown = await treeToMarkdown(tree, i)
+      let html = await layout({
+        categoryUrl: `/${i}/`,
+        links: submenu,
+        mdUrl,
+        title,
+        tree
+      })
       let dest = join(DIST, i, 'index.html')
-      await writeFile(dest, html)
+      let mdDest = join(DIST, mdUrl.slice(1))
+      await Promise.all([writeFile(dest, html), writeFile(mdDest, markdown)])
       assets.add(dest)
+      assets.add(mdDest, markdown)
     })
   )
 }

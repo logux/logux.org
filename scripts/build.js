@@ -6,6 +6,7 @@ import { styleText } from 'node:util'
 import { exitOnErrors } from './lib/errors.js'
 import buildApi from './steps/build-api.js'
 import buildDocs from './steps/build-docs.js'
+import buildLlms from './steps/build-llms.js'
 import buildPages from './steps/build-pages.js'
 import cleanBuildDir from './steps/clean-build-dir.js'
 import compileAssets from './steps/compile-assets.js'
@@ -60,6 +61,7 @@ async function build() {
   let layout = await createLayout(uikit)
   await Promise.all([
     buildDocs(assets, layout, guides),
+    buildLlms(assets, guides),
     buildPages(assets, layout),
     buildApi(assets, layout, 'Node API', nodeApi),
     buildApi(assets, layout, 'Web API', webApi)

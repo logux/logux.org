@@ -6,6 +6,7 @@ import { filter } from 'unist-util-filter'
 import { visit } from 'unist-util-visit'
 
 import { addError } from '../lib/errors.js'
+import { SITE } from '../lib/markdown.js'
 import wrap from '../lib/spinner.js'
 
 const SMALL_WORDS =
@@ -318,8 +319,18 @@ function generateSubmenu(links) {
   }
 }
 
+// Hidden from the screen and from screen readers: the note is only there
+// for LLMs reading the page a person pasted into a chat.
+function markdownPointer(mdUrl) {
+  return (
+    '<div class="visually-hidden" aria-hidden="true">' +
+    `A Markdown version of this page is available at ${SITE}${mdUrl}.` +
+    '</div>'
+  )
+}
+
 async function createLayout(uikit) {
-  return async function (categoryUrl, links, title, tree) {
+  return async function ({ categoryUrl, links, mdUrl, title, tree }) {
     let fixed = await unified().use(converter).use(checker, title).run(tree)
     let submenu = await unified()
       .use(rehypeStringify)
@@ -332,6 +343,7 @@ async function createLayout(uikit) {
     if (!html.includes(' class="asset"')) ignore.push('/branding.')
     if (!html.includes(' class="title_link"')) ignore.push('/link.')
     let layout = await cleanPage(uikit, ignore)
+    let body = html + markdownPointer(mdUrl)
     return layout
       .replace(
         `class="menu_link" href="${categoryUrl}"`,
@@ -339,8 +351,12 @@ async function createLayout(uikit) {
       )
       .replace('<ul class="submenu">', '$&' + submenu)
       .replace(/<title>[^<]+/, `<title>${title}Logux`)
+      .replace(
+        '</head>',
+        `<link rel="alternate" type="text/markdown" href="${mdUrl}"></head>`
+      )
       .replace(/<\/article>/, '')
-      .replace(/<article[^>]+>/, html.replace(/\$/g, '$$$$'))
+      .replace(/<article[^>]+>/, body.replace(/\$/g, '$$$$'))
   }
 }
 

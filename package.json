@@ -31,11 +31,14 @@
     "pug": "^3.0.4",
     "rehype-parse": "^9.0.1",
     "rehype-raw": "^7.0.0",
+    "rehype-remark": "^10.0.1",
     "rehype-stringify": "^10.0.1",
     "remark": "^15.0.1",
+    "remark-gfm": "^4.0.1",
     "remark-html": "^16.0.1",
     "remark-parse": "^11.0.0",
     "remark-rehype": "^11.1.2",
+    "remark-stringify": "^11.0.0",
     "slugify": "^1.6.9",
     "sugarss": "^5.0.1",
     "typedoc": "0.28.20",
@@ -51,20 +54,11 @@
     "@logux/oxc-configs": "^1.1.0",
     "@size-limit/file": "^13.0.3",
     "eslint-plugin-prefer-let": "^4.2.2",
-    "nano-staged": "^1.0.2",
     "oxlint": "^1.80.0",
     "oxlint-tsgolint": "^7.0.2001",
     "serve": "^14.2.6",
-    "simple-git-hooks": "^2.13.1",
     "size-limit": "^13.0.3",
     "svgo": "^4.1.0"
-  },
-  "simple-git-hooks": {
-    "pre-commit": "./node_modules/.bin/nano-staged --config package.json"
-  },
-  "nano-staged": {
-    "*.svg": "svgo",
-    "*.sss": "stylelint --fix"
   },
   "browserslist": [
     "baseline widely available with downstream"

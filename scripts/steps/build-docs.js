@@ -2,6 +2,7 @@ import { mkdir, readFile, writeFile } from 'node:fs/promises'
 import { dirname, join, sep } from 'node:path'
 
 import { DIST, PROJECTS } from '../lib/dirs.js'
+import { markdownUrl } from '../lib/markdown.js'
 import wrap from '../lib/spinner.js'
 
 function capitalize(str) {
@@ -91,11 +92,23 @@ async function buildDocs(assets, layout, guides) {
         .map(i => toTitle(i))
         .join(' / ')
       if (title !== '') title += ' / '
-      let html = await layout(categoryUrl, submenu, title, page.tree)
+      let mdUrl = markdownUrl(dirs.split(sep).join('/'))
+      let html = await layout({
+        categoryUrl,
+        links: submenu,
+        mdUrl,
+        title,
+        tree: page.tree
+      })
       let path = join(DIST, dirs, 'index.html')
       await mkdir(dirname(path), { recursive: true })
-      await writeFile(path, html)
+      let mdPath = join(DIST, mdUrl.slice(1))
+      await Promise.all([
+        writeFile(path, html),
+        writeFile(mdPath, page.markdown)
+      ])
       assets.add(path, html)
+      assets.add(mdPath, page.markdown)
     })
   )
 }
