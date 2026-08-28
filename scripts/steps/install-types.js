@@ -8,7 +8,7 @@ import { run } from '../lib/spinner.js'
 
 let exec = promisify(child.exec)
 
-let NAMES = ['logux-core', 'logux-server', 'logux-client']
+const NAMES = ['logux-core', 'logux-server', 'logux-client']
 
 export default async function installTypes(nextSteps) {
   let dirs = NAMES.map(i => join(PROJECTS, i))

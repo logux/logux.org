@@ -707,7 +707,7 @@ function membersHtml(ctx, className, members, separator) {
   let slugSep = separator === '#' ? '-' : separator
   return members
     .filter(i => i.name !== 'constructor' && i.name !== 'Error')
-    .sort(byTypeAndName)
+    .toSorted(byTypeAndName)
     .map(member => {
       let name = [
         tag('span', className + separator, {
@@ -876,7 +876,7 @@ function toTree(ctx, nodes) {
     .filter(node => !UTILITY_TYPES.has(node.name))
     .filter(node => !UNWRAP_UTILITIES.has(node.name))
     .filter(node => !EXCLUDED_TREE_KINDS.has(node.kindString))
-    .sort(byName)
+    .toSorted(byName)
   let treeGroups = groupNodes(treeNodes)
 
   let treeChildren = GROUPS_ORDER.map(groupName => {
@@ -886,8 +886,9 @@ function toTree(ctx, nodes) {
       return null
     }
 
-    return tag('article', [
-      ...group.map(node => {
+    return tag(
+      'article',
+      group.map(node => {
         if (node.kindString === 'Class') {
           return classHtml(ctx, node)
         } else if (node.signatures) {
@@ -896,7 +897,7 @@ function toTree(ctx, nodes) {
           return variableHtml(ctx, node)
         }
       })
-    ])
+    )
   }).filter(group => group !== null)
 
   let tree = {
@@ -916,7 +917,7 @@ function submenuName(node) {
 function toSubmenu(nodes) {
   let submenuNodes = nodes
     .filter(node => !EXCLUDED_SUBMENU_KINDS.has(node.kindString))
-    .sort(byName)
+    .toSorted(byName)
   let submenuGroups = groupNodes(submenuNodes)
 
   let submenu = GROUPS_ORDER.map(groupName => {

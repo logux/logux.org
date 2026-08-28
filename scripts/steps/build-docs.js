@@ -17,6 +17,13 @@ function toTitle(file) {
     .replace(/Backend/g, 'Back-end')
 }
 
+function findCurrent(dirs) {
+  let url = '/' + dirs.split(sep).join('/') + '/'
+  return i => {
+    return { ...i, isCurrent: url === i.link }
+  }
+}
+
 async function buildDocs(assets, layout, guides) {
   let json = await readFile(join(PROJECTS, 'logux-docs', 'order.json'))
   let order = JSON.parse(json)
@@ -50,13 +57,6 @@ async function buildDocs(assets, layout, guides) {
     }
   }
 
-  function findCurrent(dirs) {
-    let url = '/' + dirs.split(sep).join('/') + '/'
-    return i => {
-      return { ...i, isCurrent: url === i.link }
-    }
-  }
-
   await Promise.all(
     guides.map(async page => {
       let categoryUrl, submenu, title
@@ -84,7 +84,7 @@ async function buildDocs(assets, layout, guides) {
       }
       title = dirs
         .split(sep)
-        .reverse()
+        .toReversed()
         .map(i => toTitle(i))
         .join(' / ')
       if (title !== '') title += ' / '

@@ -340,7 +340,7 @@ async function createLayout(uikit) {
       .replace('<ul class="submenu">', '$&' + submenu)
       .replace(/<title>[^<]+/, `<title>${title}Logux`)
       .replace(/<\/article>/, '')
-      .replace(/<article[^>]+>/, `${html.replace(/\$/g, '$$$$')}`)
+      .replace(/<article[^>]+>/, html.replace(/\$/g, '$$$$'))
   }
 }
 
