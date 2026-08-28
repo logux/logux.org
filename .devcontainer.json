@@ -1,0 +1,5 @@
+{
+  "image": "ghcr.io/ai/devcontainer:latest",
+  "forwardPorts": [3000],
+  "runArgs": ["-p=3000:3000"]
+}
