@@ -1,12 +1,12 @@
 import { mkdir, writeFile } from 'node:fs/promises'
 import { dirname, join, sep } from 'node:path'
 import { remark } from 'remark'
-import remarkHighlight from 'remark-highlight.js'
 import remarkRehype from 'remark-rehype'
 import slugify from 'slugify'
 import ts from 'typescript'
 
 import { DIST } from '../lib/dirs.js'
+import remarkHighlight from '../lib/highlight.js'
 import { step } from '../lib/spinner.js'
 
 const CAPITALIZED = /^[A-Z]/

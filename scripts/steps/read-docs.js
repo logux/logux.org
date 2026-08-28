@@ -1,7 +1,6 @@
 import { readFile } from 'node:fs/promises'
 import { join } from 'node:path'
 import rehypeRaw from 'rehype-raw'
-import remarkHighlight from 'remark-highlight.js'
 import remarkParse from 'remark-parse'
 import remarkRehype from 'remark-rehype'
 import { unified } from 'unified'
@@ -10,6 +9,7 @@ import { visit } from 'unist-util-visit'
 
 import { PROJECTS } from '../lib/dirs.js'
 import glob from '../lib/glob.js'
+import remarkHighlight from '../lib/highlight.js'
 import wrap from '../lib/spinner.js'
 
 const ROOT = join(PROJECTS, 'logux-docs')
