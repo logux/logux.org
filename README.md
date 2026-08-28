@@ -31,9 +31,3 @@ For layout HTML and CSS development you can use UI kit with auto re-build:
 ```sh
 pnpm start:uikit
 ```
-
-To test nginx config, you will need to build and run Docker image:
-
-```sh
-pnpx ssdeploy run
-```
