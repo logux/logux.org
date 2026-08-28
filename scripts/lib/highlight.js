@@ -3,7 +3,8 @@ import { visit } from 'unist-util-visit'
 
 let lowlight = createLowlight(all)
 
-// Replacement for deprecated `remark-highlight.js`.
+// Highlights Markdown code blocks into `hljs` spans during `remark`,
+// before `remark-rehype` turns the tree into HTML.
 export default function remarkHighlight({ exclude, prefix } = {}) {
   return tree => {
     visit(tree, 'code', node => {

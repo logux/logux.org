@@ -34,9 +34,6 @@ export default async function readTypedoc(...projects) {
   }
 
   let docs = await run(`Generating ${type} TypeDoc`, async () => {
-    // TypeDoc 0.28 builds the program from `tsconfig` instead of the file
-    // list that `setCompilerOptions()` used to take, so limit it to the
-    // type definitions. Otherwise it type-checks the projects’ tests too.
     let tsconfig = join(PROJECTS, `tsconfig.${type.toLowerCase()}.json`)
     await writeFile(
       tsconfig,
@@ -62,9 +59,7 @@ export default async function readTypedoc(...projects) {
     for (let file of project.children) {
       nodes.push(
         ...file.children.filter(i => {
-          return (
-            !ignore.includes(i.name) && i.kind !== ReflectionKind.Reference
-          )
+          return !ignore.includes(i.name) && i.kind !== ReflectionKind.Reference
         })
       )
     }

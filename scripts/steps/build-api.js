@@ -12,23 +12,6 @@ import { step } from '../lib/spinner.js'
 
 const CAPITALIZED = /^[A-Z]/
 
-// TypeDoc 0.25 removed `Reflection#kindString`, but its names are still
-// the clearest way to branch on what a node is
-const KIND_NAMES = {
-  [ReflectionKind.Class]: 'Class',
-  [ReflectionKind.Function]: 'Function',
-  [ReflectionKind.IndexSignature]: 'Index signature',
-  [ReflectionKind.Interface]: 'Interface',
-  [ReflectionKind.Method]: 'Method',
-  [ReflectionKind.Namespace]: 'Namespace',
-  [ReflectionKind.Reference]: 'Reference',
-  [ReflectionKind.TypeAlias]: 'Type alias'
-}
-
-function kindString(node) {
-  return KIND_NAMES[node.kind]
-}
-
 const EXTERNAL_TYPES = {
   App: 'https://v3.vuejs.org/api/global-api.html#createapp',
   Atom: 'https://github.com/nanostores/nanostores',
@@ -154,8 +137,12 @@ const UNWRAP_UTILITIES = new Set([
   'ReadonlyIfObject'
 ])
 
-const EXCLUDED_SUBMENU_KINDS = new Set(['Interface', 'Namespace', 'Type alias'])
-const EXCLUDED_TREE_KINDS = new Set(['Namespace'])
+const EXCLUDED_SUBMENU_KINDS = new Set([
+  ReflectionKind.Interface,
+  ReflectionKind.Namespace,
+  ReflectionKind.TypeAlias
+])
+const EXCLUDED_TREE_KINDS = new Set([ReflectionKind.Namespace])
 const CORE_ENTITIES = new Set([
   'BaseNode',
   'Connection',
@@ -256,9 +243,12 @@ function toSlug(type) {
 }
 
 function byTypeAndName(a, b) {
-  if (kindString(a) === 'Method' && kindString(b) !== 'Method') {
+  if (a.kind === ReflectionKind.Method && b.kind !== ReflectionKind.Method) {
     return 1
-  } else if (kindString(a) !== 'Method' && kindString(b) === 'Method') {
+  } else if (
+    a.kind !== ReflectionKind.Method &&
+    b.kind === ReflectionKind.Method
+  ) {
     return -1
   } else {
     return byName(a, b)
@@ -461,9 +451,6 @@ function tsKindHtml(ctx, tsType) {
   }
 }
 
-// TypeDoc 0.23 dropped the `typeParameter` type and sends type parameters
-// as references to a `TypeParameter` reflection. They have no own section,
-// so they must stay plain text instead of becoming a link.
 function isTypeParameter(type) {
   return (
     type.type === 'reference' &&
@@ -672,7 +659,7 @@ function extractChildren(nodes) {
   }
 }
 
-// TypeDoc 0.23 replaced `shortText`/`text` with an array of comment parts
+// A comment is an array of parts, where every `{@link}` is its own part
 function commentText(parts) {
   if (!parts) return ''
   return parts
@@ -748,7 +735,7 @@ function tableHtml(ctx, name, list, owner) {
           type = typeHtml(ctx, i.type)
         }
         let itemName = i.name
-        if (kindString(i) === 'Index signature') {
+        if (i.kind === ReflectionKind.IndexSignature) {
           itemName = [
             { type: 'text', value: '[' },
             ...declHtml(ctx, i.parameters[0]),
@@ -803,7 +790,7 @@ function membersHtml(ctx, className, members, separator) {
         }),
         { type: 'text', value: member.name }
       ]
-      if (kindString(member) === 'Method') {
+      if (member.kind === ReflectionKind.Method) {
         name.push(
           tag('span', methodArgs(member), {
             properties: { className: ['title_extra'] }
@@ -964,11 +951,14 @@ function toTree(ctx, nodes) {
   let treeNodes = nodes
     // `@logux/client/db` exports `string()`, `number()` and `boolean()`
     // column helpers, so only hide types named after the primitives
-    .filter(node => !SIMPLE_TYPES.has(node.name) || kindString(node) === 'Function')
+    .filter(
+      node =>
+        !SIMPLE_TYPES.has(node.name) || node.kind === ReflectionKind.Function
+    )
     .filter(node => !IGNORE_TYPES.has(node.name))
     .filter(node => !UTILITY_TYPES.has(node.name))
     .filter(node => !UNWRAP_UTILITIES.has(node.name))
-    .filter(node => !EXCLUDED_TREE_KINDS.has(kindString(node)))
+    .filter(node => !EXCLUDED_TREE_KINDS.has(node.kind))
     .toSorted(byName)
   let treeGroups = groupNodes(treeNodes)
 
@@ -982,7 +972,7 @@ function toTree(ctx, nodes) {
     return tag(
       'article',
       group.map(node => {
-        if (kindString(node) === 'Class') {
+        if (node.kind === ReflectionKind.Class) {
           return classHtml(ctx, node)
         } else if (node.signatures) {
           return functionHtml(ctx, node)
@@ -1004,12 +994,13 @@ function toTree(ctx, nodes) {
 function submenuName(node) {
   let nodeNameWithoutPrefix = node.name.replace(/^(preact|react|vue)\./i, '')
 
-  return nodeNameWithoutPrefix + (kindString(node) === 'Function' ? '()' : '')
+  let isFunction = node.kind === ReflectionKind.Function
+  return nodeNameWithoutPrefix + (isFunction ? '()' : '')
 }
 
 function toSubmenu(nodes) {
   let submenuNodes = nodes
-    .filter(node => !EXCLUDED_SUBMENU_KINDS.has(kindString(node)))
+    .filter(node => !EXCLUDED_SUBMENU_KINDS.has(node.kind))
     .toSorted(byName)
   let submenuGroups = groupNodes(submenuNodes)
 
