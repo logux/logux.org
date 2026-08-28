@@ -12,27 +12,53 @@ jobs:
       contents: read
     steps:
       - name: Checkout the repository
-        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
-      - name: Install pnpm
-        uses: pnpm/action-setup@a7487c7e89a18df4991f7f222e4898a00d66ddda # v4.1.0
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Install Node.js & pnpm
+        uses: pnpm/setup@84cb39b217b10273981911c288cd62326dc7c6d2 # v2.0.2
         with:
-          version: 10
-      - name: Install Node.js
-        uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5.0.0
-        with:
-          node-version: 24
-          cache: pnpm
-      - name: Install all dependencies
-        run: pnpm install --ignore-scripts
-      - name: Build and test
+          version: 12
+          runtime: node@24
+      - name: Install dependencies
+        run: pnpm ci
+      - name: Run tests
         run: pnpm test
         env:
-          CI: 1
           NO_CONTENT: 1
-  deploy:
+
+  build:
+    name: Build
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    if: github.ref == 'refs/heads/main'
     needs:
       - test
+    steps:
+      - name: Checkout the repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Install Node.js & pnpm
+        uses: pnpm/setup@84cb39b217b10273981911c288cd62326dc7c6d2 # v2.0.2
+        with:
+          version: 12
+          runtime: node@24
+      - name: Install dependencies
+        run: pnpm ci
+      - name: Install production dependencies
+        run: pnpm install --prod --ignore-scripts
+      - name: Build static files
+        run: pnpm build
+      - name: Pack build artifacts
+        run: tar -cf dist.tar dist
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: dist
+          path: dist.tar
+          retention-days: 1
+
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
     permissions:
       contents: read
       packages: write
@@ -41,22 +67,17 @@ jobs:
     concurrency:
       group: deploy
       cancel-in-progress: false
+    needs:
+      - build
     steps:
       - name: Checkout the repository
-        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
-      - name: Install pnpm
-        uses: pnpm/action-setup@a7487c7e89a18df4991f7f222e4898a00d66ddda # v4.1.0
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Download build artifacts
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
         with:
-          version: 10
-      - name: Install Node.js
-        uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5.0.0
-        with:
-          node-version: 24
-          cache: pnpm
-      - name: Install build dependencies
-        run: pnpm install --frozen-lockfile --ignore-scripts --production
-      - name: Build static files
-        run: pnpm build
+          name: dist
+      - name: Unpack build artifacts
+        run: tar -xf dist.tar && rm dist.tar
       - name: Build Docker image
         run: docker build -t ghcr.io/logux/logux.org:latest .
       - name: Login to GitHub Container Registry

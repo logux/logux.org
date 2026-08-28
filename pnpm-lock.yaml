@@ -80,6 +80,9 @@ importers:
       typedoc:
         specifier: 0.22.17
         version: 0.22.17(typescript@4.7.4)
+      typescript:
+        specifier: ~4.7.4
+        version: 4.7.4
       unified:
         specifier: ^11.0.5
         version: 11.0.5
@@ -129,9 +132,6 @@ importers:
       svgo:
         specifier: ^4.1.0
         version: 4.1.0
-      typescript:
-        specifier: ~4.7.4
-        version: 4.7.4
 
 packages:
 

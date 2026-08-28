@@ -40,7 +40,7 @@ if (process.env.CI || process.env.GITHUB_ACTIONS) {
     redraw()
     return e => {
       running.delete(id)
-      if (spinner.isSpinning()) spinner.clear()
+      if (spinner.isSpinning() && process.stdout.isTTY) spinner.clear()
       if (e) {
         process.stdout.write(styleText('red', '✖ ') + text + '\n')
       } else {
