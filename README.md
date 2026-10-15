@@ -34,7 +34,7 @@ pnpm start:uikit
 
 ## Deployment from other repositories
 
-The site builds from logux/docs, core, client, server, and actions.
+The site builds from `logux/docs`, `core`, `client`, `server`, and `actions`.
 Their workflows send:
 
 ```http
