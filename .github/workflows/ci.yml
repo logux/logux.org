@@ -4,6 +4,12 @@ on:
     branches:
       - main
   pull_request:
+  repository_dispatch:
+    types: [deploy]
+  workflow_dispatch:
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: false
 jobs:
   test:
     name: Test
@@ -64,9 +70,6 @@ jobs:
       packages: write
       id-token: write
     if: github.ref == 'refs/heads/main'
-    concurrency:
-      group: deploy
-      cancel-in-progress: false
     needs:
       - build
     steps:

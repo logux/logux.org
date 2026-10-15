@@ -31,3 +31,21 @@ For layout HTML and CSS development you can use UI kit with auto re-build:
 ```sh
 pnpm start:uikit
 ```
+
+## Deployment from other repositories
+
+The site builds from `logux/docs`, `core`, `client`, `server`, and `actions`.
+Their workflows send:
+
+```http
+POST https://api.github.com/repos/logux/logux.org/dispatches
+
+{"event_type":"deploy"}
+```
+
+See [the receiver](.github/workflows/ci.yml) and
+[a sender](https://github.com/logux/core/blob/main/.github/workflows/api.yml).
+
+To connect another repository, copy the sender workflow and configure
+`DEPLOY_USER` and `DEPLOY_TOKEN` with dispatch access to logux/logux.org.
+To include its API, also update [scripts/build.js](scripts/build.js).

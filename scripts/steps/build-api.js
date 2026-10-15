@@ -14,6 +14,7 @@ import { step } from '../lib/spinner.js'
 const CAPITALIZED = /^[A-Z]/
 
 const EXTERNAL_TYPES = {
+  AbortSignal: 'https://developer.mozilla.org/en-US/docs/Web/API/AbortSignal',
   App: 'https://v3.vuejs.org/api/global-api.html#createapp',
   Atom: 'https://github.com/nanostores/nanostores',
   ClientNode: 'https://logux.org/web-api/#clientnode',
@@ -87,6 +88,8 @@ const SIMPLE_TYPES = new Set([
   'StoreValue',
   'StoreValues',
   'string',
+  // Internal processing task, not an exported API entry.
+  'Task',
   'TemplateStringsArray',
   'Type',
   'unknown',
@@ -95,7 +98,10 @@ const SIMPLE_TYPES = new Set([
 
 const UTILITY_TYPES = new Set([
   'Atom',
+  // Private mapped helper from @logux/client; keep its type arguments.
+  'CrdtJsonObject',
   'Exclude',
+  'Extract',
   'Map',
   'MapStore',
   'Omit',
