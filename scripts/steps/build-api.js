@@ -84,6 +84,7 @@ const SIMPLE_TYPES = new Set([
   'Parameters',
   'ReactNode',
   'RegExp',
+  'SqlParam',
   'SqlStore',
   'StoreValue',
   'StoreValues',
@@ -99,6 +100,7 @@ const SIMPLE_TYPES = new Set([
 const UTILITY_TYPES = new Set([
   'Atom',
   // Private mapped helper from @logux/client; keep its type arguments.
+  'CrdtJsonItem',
   'CrdtJsonObject',
   'Exclude',
   'Extract',
