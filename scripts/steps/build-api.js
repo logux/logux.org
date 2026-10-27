@@ -534,6 +534,9 @@ function typeHtml(ctx, type) {
         }
       }
     }
+    if (type.refersToTypeParameter) {
+      return [{ type: 'text', value: type.name }]
+    }
     return typeLink(ctx, type.name)
   } else if (type.type === 'stringLiteral') {
     return [
@@ -593,10 +596,21 @@ function typeHtml(ctx, type) {
   } else if (type.type === 'conditional') {
     return [
       ...typeHtml(ctx, type.checkType),
+      tag('span', ' extends ', {
+        properties: { className: ['code-block_keyword'] }
+      }),
+      ...typeHtml(ctx, type.extendsType),
       { type: 'text', value: ' ? ' },
       ...typeHtml(ctx, type.trueType),
       { type: 'text', value: ' : ' },
       ...typeHtml(ctx, type.falseType)
+    ]
+  } else if (type.type === 'inferred') {
+    return [
+      tag('span', 'infer ', {
+        properties: { className: ['code-block_keyword'] }
+      }),
+      { type: 'text', value: type.name }
     ]
   } else if (type.type === 'typeOperator') {
     return [
